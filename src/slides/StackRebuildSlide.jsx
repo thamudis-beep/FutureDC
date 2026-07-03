@@ -201,7 +201,8 @@ function SiliconRow({ era }) {
       cells={[
         <div>
           <IconRow>{chips(4, "C", CPU)}</IconRow>
-          <div style={{ display: "flex", gap: 12, marginTop: 7 }}>
+          <Cap tone={CPU}>CPU-centric</Cap>
+          <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
             {[["C", "CPU", CPU], ["G", "GPU", GPU], ["M", "memory", MEM]].map(([l, name, tone]) => (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <Chip letter={l} tone={tone} size={13} />
