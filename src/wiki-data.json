@@ -1,0 +1,748 @@
+{
+  "pages": [
+    {
+      "slug": "concepts/compute-demand-drivers",
+      "path": "wiki/concepts/compute-demand-drivers.md",
+      "title": "Compute Demand Drivers",
+      "type": "concept",
+      "tags": [
+        "compute",
+        "demand",
+        "workloads",
+        "agents",
+        "inference",
+        "tokens"
+      ],
+      "links": [
+        "entities/anthropic",
+        "concepts/gpu-rental-market",
+        "concepts/gpu-useful-life",
+        "entities/anthropic",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index"
+      ],
+      "content": "# Compute Demand Drivers\n\nWhat is actually consuming GPU compute and driving the 2025–2026 rental\nprice surge. Organized by workload type.\n\n## Agentic / multi-step workflows\n\n- **Multi-agent workflows** executing multi-step plans, high concurrency,\n  continuous iteration → **parabolic growth in token + compute\n  consumption**. [^semi-2026-04]\n- Per-task token consumption dwarfs single-shot chat because each step\n  iterates on prior outputs.\n- **Claude Code** is the canonical example.\n\n### Claude Code\n\n- Developed by [Anthropic](../entities/anthropic.md).\n- SemiAnalysis self-report: billions of tokens consumed over 7 days at\n  ~$5/M tok avg; claims **return on tools ≥10x cost**. [^semi-2026-04]\n- Projected by SemiAnalysis to be **20%+ of all daily commits globally by\n  EOY 2026**. [^semi-2026-04]\n- Drove Anthropic ARR from ~$9B → $25B+ in a single quarter. [^semi-2026-04]\n\n## Open-weight model adoption\n\n- Models like **GLM** and **Kimi K2.5** drove a **late-2025 surge** in\n  open-model inference use cases. [^semi-2026-04]\n- Captured by Neoclouds/hyperscalers via inference endpoints and by AI\n  labs running internal training/inference on H100/H200. [^semi-2026-04]\n\n## Native media generation\n\n- **Seedance** (video) and **Nano Banana** (image/video) drove massive\n  token-throughput increases in early 2026 as users generate and refine\n  media at scale. [^semi-2026-04]\n- Inference-heavy, often on latest Blackwell systems (GB300 NVL72 for\n  large MoE). [^semi-2026-04]\n\n## Training demand\n\n- Training workloads often favor **H100** on a price-performance basis\n  (not Blackwell) → explains surprising persistence of H100 demand\n  post-Blackwell ramp. [^semi-2026-04]\n- Capital raises by Anthropic, OpenAI, and \"Neolabs\" translate directly\n  into GPU demand. [^semi-2026-04]\n\n## ROI argument\n\nSemiAnalysis thesis: if AI tools deliver **5–10x ROI** on user time, there\nis a long runway before prices curtail demand. The token demand curve is\nshifted up and out and is **relatively inelastic in the current regime**. [^semi-2026-04]\n\n## Demand-side feedbacks\n\n1. Memory-cost spike → OEM server repricing → project slow-rolls → supply\n   withholding → tighter market. [^semi-2026-04]\n2. Rental-price rise → Neoclouds race to lock hardware → tighter supply. [^semi-2026-04]\n3. Higher rental prices → longer GPU useful life → better Neocloud ROIC. [^semi-2026-04]\n\n## Related\n\n- [GPU rental market](gpu-rental-market.md), [GPU useful life](gpu-useful-life.md)\n- Entities: [Anthropic](../entities/anthropic.md)\n\n## Open questions\n\n- When (if) ROI-driven demand becomes price-elastic.\n- Inference vs. training split in the demand mix.\n- How much of agentic-workload growth is durable vs. experimentation.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)"
+    },
+    {
+      "slug": "concepts/gpu-rental-market",
+      "path": "wiki/concepts/gpu-rental-market.md",
+      "title": "GPU Rental Market",
+      "type": "concept",
+      "tags": [
+        "compute",
+        "gpu",
+        "rental",
+        "pricing",
+        "market-structure",
+        "ai-infrastructure"
+      ],
+      "links": [
+        "concepts/neocloud",
+        "concepts/gpu-useful-life",
+        "concepts/compute-demand-drivers",
+        "concepts/neocloud",
+        "concepts/hyperscaler-offtake",
+        "concepts/gpu-useful-life",
+        "concepts/compute-demand-drivers",
+        "entities/coreweave",
+        "entities/meta",
+        "entities/anthropic",
+        "entities/semianalysis",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index"
+      ],
+      "content": "# GPU Rental Market\n\nThe market for renting NVIDIA (and to a lesser extent AMD) accelerators —\nthe core input to AI training and inference. Supplied by **hyperscalers**\n(AWS, Azure, GCP, OCI), **[neoclouds](neocloud.md)** (CoreWeave, Nebius,\nIREN, Lambda, Runpod, etc.), and AI-lab captive capacity. Pricing is\ndollar-per-GPU-per-hour across a term structure.\n\n## Market structure (SemiAnalysis 2026)\n\nThree segments, differing by tenor, counterparty, and pricing\ndynamics: [^semi-2026-04]\n\n| Segment | Tenor | Buyers | Pricing mechanism |\n|---|---|---|---|\n| **Short-term** | on-demand, spot, <3mo | residual / burst demand; price-taking tenants | fixed posted price; provider adjusts ad-hoc in response to **utilization** (not price-discovered real-time) |\n| **Mid-term contracts** | 3mo–3yr+ | AI natives, smaller AI labs, non-AI-lab enterprise | **bilateral, price-discovered**, most volume by value; 1yr segment = marginal-demand indicator |\n| **Long-term offtakes** | 4–5yr (5yr dominant) | Large AI labs (Anthropic, OpenAI, etc.); often hyperscaler-backstopped | negotiated multi-party deals; 50–100MW clusters (~24k–48k GB300 NVL72); bare-metal; debt-financed |\n\n## Current state (Q1 2026)\n\n- **H100 1-yr contract**: ~$2.35/hr/GPU by Mar 2026, up ~40% from $1.70 in Oct 2025. [^semi-2026-04]\n- **On-demand sold out** across all major GPU types. [^semi-2026-04]\n- AWS p6-b200 **spot at $14/hr/GPU**. [^semi-2026-04]\n- **All Blackwell capacity through Aug–Sep 2026 booked**. [^semi-2026-04]\n- H100 contracts **renewing at original 2-3yr rates**; some extending to 4yr through 2028. [^semi-2026-04]\n- Reports of tenants **subletting** subdivided clusters (\"Monaco Grand Prix apartment\" analogy). [^semi-2026-04]\n\n## Pricing history\n\n- Before late 2025: consensus expected **Hopper rental prices to fall** as Blackwell ramped (lower Blackwell $/FLOP). [^semi-2026-04]\n- Actual: H100 rentals **firmed then accelerated upward** late 2025 → 1Q26. [^semi-2026-04]\n- Jan 2026: memory pricing (DRAM, NAND) went **parabolic** (LPDDR5 ~4x YoY, DDR5 ~5x YoY) → **OEM AI-server repricing above cost-pass-through** → supply slow-rolls → market tightens further. [^semi-2026-04]\n\n## Key debates\n\n- **Is this cycle different?** SemiAnalysis: self-reinforcing upcycle, ROIC and useful-life both improve. Public markets: still pricing \"oversupply + commoditization\" narrative (CoreWeave, Nebius, IREN at 6-12mo share-price lows). [^semi-2026-04]\n- **GPU terminal value / useful life** — see [GPU useful life](gpu-useful-life.md).\n- **Which tier of provider captures rents**: Neoclouds with short-duration roll-off vs. hyperscalers vs. AI-lab captive.\n\n## Demand drivers\n\nSee [compute demand drivers](compute-demand-drivers.md).\n\n## Related\n\n- [Neocloud](neocloud.md), [Hyperscaler offtake](hyperscaler-offtake.md), [GPU useful life](gpu-useful-life.md), [Compute demand drivers](compute-demand-drivers.md)\n- Entities: [CoreWeave](../entities/coreweave.md), [Meta](../entities/meta.md), [Anthropic](../entities/anthropic.md), [SemiAnalysis](../entities/semianalysis.md)\n\n## Open questions\n\n- When/if GB300 ramp outpaces token demand enough to loosen the 1yr segment.\n- How far up the price curve before ROI on AI tools (reportedly 5-10x) starts to bind.\n- Whether public-market sentiment recalibrates or fundamentals roll over first.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)"
+    },
+    {
+      "slug": "concepts/gpu-useful-life",
+      "path": "wiki/concepts/gpu-useful-life.md",
+      "title": "GPU Useful Life & Terminal Value",
+      "type": "concept",
+      "tags": [
+        "accounting",
+        "depreciation",
+        "terminal-value",
+        "compute",
+        "gpu",
+        "roic"
+      ],
+      "links": [
+        "concepts/gpu-rental-market",
+        "concepts/neocloud",
+        "concepts/hyperscaler-offtake",
+        "entities/semianalysis",
+        "entities/moodys",
+        "entities/coreweave",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# GPU Useful Life & Terminal Value\n\nLive debate on **how long AI GPUs (H100/H200/Blackwell) economically\nperform** — i.e., how long they generate rental cash flows at\ncommercially meaningful prices before being displaced by newer\naccelerators or commoditized.\n\n## Why it matters\n\n- Sets **depreciation schedules** on hyperscaler + Neocloud balance sheets\n  → affects reported earnings and ROIC. [^semi-2026-04]\n- Anchors **equity valuation** of Neoclouds (terminal-value tails). [^semi-2026-04]\n- Drives **debt tenor and DSCR** assumptions in project finance. [^moodys-2026-03]\n\n## Positions\n\n### Public-market (pre-2026) / financial-analyst consensus\n\n- **Steep fall in GPU rental rates** as successive generations ramp. [^semi-2026-04]\n- **6-year depreciation period** deemed aggressive; analysts \"chastised\"\n  Neoclouds/hyperscalers using it. [^semi-2026-04]\n- Expected Hopper prices to **drop sharply** as Blackwell ramped (lower\n  Blackwell $/FLOP). [^semi-2026-04]\n- Narrative: **oversupply + commoditization** → low terminal value.\n\n### SemiAnalysis (2026-04)\n\n- Exactly the opposite happened in late 2025: **H100 prices firmed and\n  then accelerated**. [^semi-2026-04]\n- **H100 contracts being renewed at original 2-3yr rates**, some\n  extending to 4yr through 2028. [^semi-2026-04]\n- Thesis: higher rental rates **extend economic useful life** of existing\n  GPUs → invested capital generates cash flows for longer before\n  reinvestment is needed. [^semi-2026-04]\n- Useful life is endogenous to demand, not fixed by generation cadence.\n\n### Moody's (2026-03, implied)\n\n- In rating CoreWeave SPV VIII A3 stable, Moody's flags **power costs,\n  install timelines, counterparty credit, force majeure** as primary\n  risks. [^moodys-2026-03]\n- **GPU obsolescence / terminal value is not in the primary risk list**. [^moodys-2026-03]\n- Debt is **fully amortizing inside the 6yr MSA** → terminal-value\n  question is structurally punted (no residual equity risk from GPUs\n  after debt retires). [^moodys-2026-03]\n\n## Evidence\n\n| Data point | Source |\n|---|---|\n| H100 1yr rentals +40% Oct-25 → Mar-26 | [^semi-2026-04] |\n| H100 renewals at original price, some to 2028 | [^semi-2026-04] |\n| Training workloads still prefer H100 on $/perf | [^semi-2026-04] |\n| GB300 NVL72 winning **inference-at-scale** on MoE | [^semi-2026-04] |\n| 6yr MSA structure (Meta-CoreWeave) treats GPU as productive through 2031 | [^moodys-2026-03] |\n\n## Open questions\n\n- What is the right **economic half-life** of H100/H200 in a high-demand\n  regime (vs. assumed 3–4yr)?\n- Does **training-vs-inference workload split** by generation persist\n  (H100 → training, Blackwell → inference MoE)?\n- If demand moderates, how quickly does pricing normalize — and does\n  useful life shorten symmetrically?\n- Will accounting depreciation schedules move to 6+ years across the\n  industry?\n\n## Related\n\n- [GPU rental market](gpu-rental-market.md), [Neocloud](neocloud.md), [Hyperscaler offtake](hyperscaler-offtake.md)\n- Entities: [SemiAnalysis](../entities/semianalysis.md), [Moody's](../entities/moodys.md), [CoreWeave](../entities/coreweave.md)\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "concepts/hyperscaler-offtake",
+      "path": "wiki/concepts/hyperscaler-offtake.md",
+      "title": "Hyperscaler Offtake",
+      "type": "concept",
+      "tags": [
+        "project-finance",
+        "contracting",
+        "compute",
+        "msa",
+        "credit-uplift"
+      ],
+      "links": [
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+        "concepts/neocloud",
+        "concepts/gpu-rental-market",
+        "concepts/gpu-useful-life",
+        "entities/coreweave",
+        "entities/meta",
+        "entities/moodys",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# Hyperscaler Offtake\n\nA **project-finance structure** for Neocloud GPU clusters where a\nhyperscaler (AWS, Azure, GCP, Meta, etc.) signs a long-term take-or-pay\nMaster Services Agreement (MSA) backstopping a bankruptcy-remote SPV that\nowns the GPU infrastructure. The SPV uses the MSA cash flows to service\ndebt.\n\n## Why it exists\n\n1. **Neoclouds** get AAA-adjacent credit counterparty → favorable debt\n   terms matched to contract tenor → locks in ~teens project IRR, removes\n   duration + GPU-price risk. [^semi-2026-04]\n2. **Hyperscalers** gain balance-sheet-light access to GPU capacity —\n   collect a slice of project economics without expanding their own\n   balance sheet. Can on-sell the compute to an AI Lab. [^semi-2026-04]\n3. **AI Labs** get massive compute allocations in one deal without having\n   to raise / deploy own project debt. [^semi-2026-04]\n\nStructure is a win-win-win in the current (tight) market. [^semi-2026-04]\n\n## Mechanics\n\n- Large bilateral contracts, typically 4–5yr (5yr preferred). [^semi-2026-04]\n- 50–100MW clusters (~24k–48k GB300 NVL72 GPUs per deal). [^semi-2026-04]\n- **Bare-metal** deals — AI Lab customizes storage, networking, CPU,\n  interconnect layers. [^semi-2026-04]\n- Common pattern: Hyperscaler = direct MSA offtaker → on-sells compute to\n  AI Lab downstream. [^semi-2026-04]\n\n## Credit-uplift mechanism\n\nThe ring-fenced SPV can be rated **multiple notches above the Neocloud\nparent** because: [^moodys-2026-03]\n\n- Revenue is fixed, usage-independent, non-terminable for convenience.\n- Counterparty is investment-grade hyperscaler.\n- Lender protections: direct agreement with offtaker, cure/step-in/replacement\n  rights, license of operator IP (continues through parent bankruptcy).\n- Fully amortizing debt inside MSA tenor → no refi risk.\n\n## Worked example: CoreWeave Compute Acquisition Co. VIII, LLC\n\n| Field | Value |\n|---|---|\n| Sponsor | CoreWeave (Ba3) |\n| Offtaker | Meta (Aa3) |\n| Integrator | Dell (Baa3) |\n| Assets | NVIDIA GB300 NVL72 |\n| Sites | VA, ND, GA |\n| Tenor | 6yr MSA |\n| Debt | $8.5B Senior Secured DDTL |\n| SPV rating | **A3 stable** |\n| Uplift | ~5 notches above sponsor |\n| DSCR (Moody's base) | 1.20x through 2031 |\n\nSource: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md).\n\n## Primary risks\n\n- **Power cost at unhedged sites** (dominant per Moody's — fixed MSA\n  payments mean all opex absorbed by project). [^moodys-2026-03]\n- Install/commissioning timeline → pricing penalties, termination rights. [^moodys-2026-03]\n- Offtaker credit deterioration. [^moodys-2026-03]\n- Force majeure events at the project site(s). [^moodys-2026-03]\n\nGPU obsolescence / terminal value is **notably absent** from Moody's\nprimary risk list.\n\n## Economic significance\n\nLong-term offtakes represent \"a very large proportion of the overall\nNeocloud GPU rental market\" by value. [^semi-2026-04] They are the\nchannel through which **frontier-AI capex shows up in credit markets** —\na distinct financing track from hyperscaler on-balance-sheet capex or\nAI-lab equity raises.\n\n## Related\n\n- [Neocloud](neocloud.md), [GPU rental market](gpu-rental-market.md), [GPU useful life](gpu-useful-life.md)\n- Entities: [CoreWeave](../entities/coreweave.md), [Meta](../entities/meta.md), [Moody's](../entities/moodys.md)\n\n## Open questions\n\n- How many such SPV structures exist across CoreWeave, Nebius, etc.\n- Aggregate dollar volume of hyperscaler-backstopped GPU project debt\n  outstanding.\n- Whether AI-lab-direct offtakes (no hyperscaler intermediation) can\n  achieve similar credit uplift.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "concepts/neocloud",
+      "path": "wiki/concepts/neocloud.md",
+      "title": "Neocloud",
+      "type": "concept",
+      "tags": [
+        "compute",
+        "gpu",
+        "cloud",
+        "market-structure",
+        "ai-infrastructure"
+      ],
+      "links": [
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+        "concepts/gpu-useful-life",
+        "concepts/gpu-rental-market",
+        "concepts/hyperscaler-offtake",
+        "concepts/gpu-useful-life",
+        "entities/coreweave",
+        "entities/meta",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# Neocloud\n\n**Specialty GPU-cloud providers** focused on renting NVIDIA (and AMD) AI\naccelerators to hyperscalers and AI labs. Distinct from classical\nhyperscalers (AWS, Azure, GCP, OCI) in that AI compute is the core\nproduct, not one service line among many.\n\n## Examples\n\n- **Public**: CoreWeave, Nebius, IREN. [^semi-2026-04]\n- **Private / other**: Lambda, Runpod (short-term/spot focus), Neolabs\n  tier. [^semi-2026-04]\n\n## Business model\n\n- Buy GPUs + datacenter capacity → rent at $/hr/GPU across tenors.\n- Revenue mix skews to **mid-term contracts (3mo–3yr)** and **long-term\n  offtakes (4–5yr)**; short-term/spot is residual-capacity monetization. [^semi-2026-04]\n- Prefer 1yr+ contracts; 2-3yr preferred; 5yr large offtakes ideal. [^semi-2026-04]\n- **Debt-financed** at the project level against long-duration offtake\n  contracts — typically via project-finance SPVs backstopped by\n  hyperscaler counterparties. [^moodys-2026-03]\n\n## Financing structure (worked example: CoreWeave SPV VIII)\n\n| Element | Value |\n|---|---|\n| Vehicle | Bankruptcy-remote Delaware SPV |\n| Debt | $8.5B Senior Secured DDTL (~47% fixed / 53% floating, 95%+ hedged) |\n| Offtaker | Meta (Aa3 stable) — 6yr take-or-pay MSA |\n| Assets | NVIDIA GB300 NVL72 across VA, ND, GA |\n| Integrator | Dell (Baa3 stable), turnkey |\n| SPV rating | A3 stable (vs. CoreWeave parent Ba3 stable) |\n| DSCR (Moody's base) | 1.20x through 2031 |\n| Structure | Fully amortizing, no refi risk, lender step-in rights, IP license |\n\nSource: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md).\n\n## Current positioning (Q1 2026)\n\n- \"In the driver's seat\" on negotiations — can demand **higher prepay\n  (>20% on 4yr+)**, longer tenors, favorable start/end dates. [^semi-2026-04]\n- Some **no longer sell single nodes**. [^semi-2026-04]\n- Public equity trading weak despite tightening — 6-12mo lows for\n  CoreWeave, Nebius, IREN. [^semi-2026-04]\n\n## Key risks\n\n- **Power-cost volatility** at unhedged sites — primary risk flagged by\n  Moody's for CoreWeave SPV VIII (fixed MSA payments mean all opex\n  absorbed by project). [^moodys-2026-03]\n- **GPU useful life / terminal value** — see [GPU useful life](gpu-useful-life.md).\n- **Customer concentration** around a handful of mega-offtakes.\n\n## Related\n\n- [GPU rental market](gpu-rental-market.md), [Hyperscaler offtake](hyperscaler-offtake.md), [GPU useful life](gpu-useful-life.md)\n- Entities: [CoreWeave](../entities/coreweave.md), [Meta](../entities/meta.md)\n\n## Open questions\n\n- Unit economics across Neoclouds as memory/server costs stay elevated.\n- Stranded-asset risk if silicon shortage eases + demand moderates.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "entities/anthropic",
+      "path": "wiki/entities/anthropic.md",
+      "title": "Anthropic",
+      "type": "entity",
+      "tags": [
+        "ai-lab",
+        "frontier-model",
+        "claude",
+        "revenue"
+      ],
+      "links": [
+        "concepts/compute-demand-drivers",
+        "concepts/compute-demand-drivers",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index"
+      ],
+      "content": "# Anthropic\n\nFrontier AI lab. Developer of **Claude** LLM family and **Claude Code**\ncoding agent.\n\n## Commercial trajectory\n\n- **ARR nearly tripled in one quarter**: ~$9B (EOY 2025) → **$25B+** (as of\n  early Apr 2026). [^semi-2026-04]\n- Claude 4.6 Opus and Claude Code are named as the primary demand drivers\n  in this surge. [^semi-2026-04]\n\n## Downstream compute impact\n\n- Identified as a **primary source of the 1Q26 GPU-rental demand surge**,\n  alongside OpenAI, \"Neolabs\", and open-weight adoption (GLM, Kimi K2.5). [^semi-2026-04]\n- Claude Code token usage growth is non-linear — agentic/multi-step\n  workflows iterate continuously, inflating token consumption per task. [^semi-2026-04]\n- SemiAnalysis projects **Claude Code at 20%+ of all daily commits\n  globally by EOY 2026**. [^semi-2026-04]\n\n## Related\n\n- [Claude Code](../concepts/compute-demand-drivers.md#claude-code) (covered under compute demand drivers for now)\n- [Compute demand drivers](../concepts/compute-demand-drivers.md)\n\n## Open questions\n\n- Compute-cost-of-goods-sold as share of $25B ARR.\n- Whether Anthropic sources capacity via hyperscaler (AWS/Google) or\n  direct Neocloud MSAs.\n- Gross margin path as agentic workloads scale token consumption.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)"
+    },
+    {
+      "slug": "entities/coreweave",
+      "path": "wiki/entities/coreweave.md",
+      "title": "CoreWeave",
+      "type": "entity",
+      "tags": [
+        "neocloud",
+        "gpu-cloud",
+        "public-company",
+        "ai-infrastructure"
+      ],
+      "links": [
+        "entities/semianalysis",
+        "concepts/neocloud",
+        "concepts/gpu-rental-market",
+        "concepts/hyperscaler-offtake",
+        "entities/meta",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# CoreWeave, Inc.\n\nPublicly-listed **Neocloud** — GPU-cloud specialist renting NVIDIA AI\ninfrastructure at scale to hyperscalers and AI labs.\n\n## Credit profile\n\n- **Parent rated Ba3 stable** by Moody's (speculative grade). [^moodys-2026-03]\n- Individual project-finance SPVs can achieve much higher ratings — e.g.\n  **A3 stable** for Compute Acquisition Co. VIII via Meta backstop —\n  approximately **5-notch uplift** from ring-fenced SPV + IG counterparty. [^moodys-2026-03]\n\n## Operating profile\n\n- ~3 years operating history in AI-focused GPU-as-a-service for large\n  hyperscalers. [^moodys-2026-03]\n- **Historical SLA breaches <1%** under large hyperscaler MSAs\n  (excluding scheduled maintenance, power failures, hardware failures,\n  force majeure, customer-side). [^moodys-2026-03]\n\n## Active deals\n\n| Project | Size | Counterparty | Assets | Sites | Tenor |\n|---|---|---|---|---|---|\n| Compute Acquisition Co. VIII | $8.5B DDTL | Meta (Aa3) | NVIDIA GB300 NVL72 | VA, ND, GA | 6yr MSA[^moodys-2026-03] |\n\n## Market positioning\n\n- Named by [SemiAnalysis](semianalysis.md) alongside **Nebius** and **IREN**\n  as public Neoclouds trading at low end of 6-12mo range despite\n  tightening GPU rental market (claimed mispricing). [^semi-2026-04]\n\n## Related\n\n- [Neocloud](../concepts/neocloud.md), [GPU rental market](../concepts/gpu-rental-market.md)\n- [Hyperscaler offtake](../concepts/hyperscaler-offtake.md)\n- [Meta](meta.md) — largest announced MSA counterparty (VIII project)\n\n## Open questions\n\n- Parent-level credit path: when/if CoreWeave moves to IG at parent level.\n- Customer concentration: how much of revenue/capacity is Meta-tied.\n- Power-cost exposure across sites beyond the hedged VA/ND/GA Project VIII.\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "entities/meta",
+      "path": "wiki/entities/meta.md",
+      "title": "Meta Platforms",
+      "type": "entity",
+      "tags": [
+        "hyperscaler",
+        "ai-lab",
+        "public-company",
+        "ai-infrastructure"
+      ],
+      "links": [
+        "entities/coreweave",
+        "concepts/hyperscaler-offtake",
+        "entities/coreweave",
+        "entities/moodys",
+        "concepts/hyperscaler-offtake",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# Meta Platforms, Inc.\n\nUS hyperscaler. Runs a large first-party AI compute footprint and is\nincreasingly an **offtaker of Neocloud-built GPU capacity**.\n\n## Credit profile\n\n- **Aa3 stable** (Moody's) — high investment grade. [^moodys-2026-03]\n\n## Active compute procurement\n\n| Counterparty | Structure | Assets | Tenor | Size | Sites |\n|---|---|---|---|---|---|\n| [CoreWeave](coreweave.md) | 6yr take-or-pay MSA | NVIDIA GB300 NVL72 | 6yr | backs $8.5B SPV | VA, ND, GA[^moodys-2026-03] |\n\n- Payments to SPV are **fixed, independent of usage, non-terminable for\n  convenience**; can terminate only under force majeure. [^moodys-2026-03]\n\n## Relevance\n\n- Meta's AAA-adjacent balance sheet is the credit-uplift engine for\n  Neocloud project finance — demonstrates how [hyperscaler\n  offtakes](../concepts/hyperscaler-offtake.md) work in practice.\n\n## Related\n\n- [CoreWeave](coreweave.md), [Moody's](moodys.md)\n- [Hyperscaler offtake](../concepts/hyperscaler-offtake.md)\n\n## Open questions\n\n- What share of Meta's total 2026 compute is on-balance-sheet vs. MSA offtake.\n- Whether Meta sources similar structures from other Neoclouds beyond CoreWeave.\n\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "entities/moodys",
+      "path": "wiki/entities/moodys.md",
+      "title": "Moody's Ratings",
+      "type": "entity",
+      "tags": [
+        "credit-rating",
+        "nrsro",
+        "financial-institution"
+      ],
+      "links": [
+        "entities/coreweave",
+        "entities/meta",
+        "concepts/hyperscaler-offtake",
+        "concepts/gpu-useful-life",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# Moody's Ratings\n\nOne of the \"Big Three\" NRSRO credit rating agencies (alongside S&P, Fitch).\nWholly-owned subsidiary of Moody's Corporation (MCO).\n\n## Relevance to AI Economics\n\n- Rates **project-finance SPVs** funding AI GPU clusters — ratings signal\n  how institutional credit markets assess GPU cluster durability, useful\n  life, and counterparty risk.\n- Has published rating actions on CoreWeave and CoreWeave-sponsored SPVs;\n  rated CoreWeave parent **Ba3 stable** and at least one GPU cluster SPV\n  (Compute Acquisition Co. VIII) **A3 stable**. [^moodys-2026-03]\n\n## Recent actions\n\n- **2026-03-31**: First-time A3 (stable) on CoreWeave Compute Acquisition\n  Co. VIII, LLC — $8.5B Senior Secured DDTL financing GB300 NVL72 servers\n  under a 6-year take-or-pay MSA with Meta. [^moodys-2026-03]\n\n## Methodology\n\n- Primary methodology used for CoreWeave SPV: **Generic Project Finance**\n  (published October 2024). [^moodys-2026-03]\n\n## Related\n\n- [CoreWeave](coreweave.md), [Meta](meta.md)\n- [Hyperscaler offtake](../concepts/hyperscaler-offtake.md)\n- [GPU useful life](../concepts/gpu-useful-life.md) — rating agency views inform this debate\n\n[^moodys-2026-03]: [Moody's 2026-03-31](../sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "entities/semianalysis",
+      "path": "wiki/entities/semianalysis.md",
+      "title": "SemiAnalysis",
+      "type": "entity",
+      "tags": [
+        "research",
+        "semiconductors",
+        "ai-compute",
+        "newsletter"
+      ],
+      "links": [
+        "entities/anthropic",
+        "entities/coreweave",
+        "concepts/gpu-rental-market",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index"
+      ],
+      "content": "# SemiAnalysis\n\nIndependent semiconductor and AI infrastructure research firm. Publishes a\npaid newsletter (Substack) + institutional data products. Founded/led by\n**Dylan Patel**.\n\n## Facts\n\n- Publications used as primary data source for GPU/datacenter market.\n- Maintains institutional data products: **AI Cloud TCO model**, **InferenceX / InferenceMAX**, **ClusterMAX**, **Tokenomics Dashboard**, **Memory Model**, **GPU Rental Price Dashboard**.\n- Launched **H100 1-year contract price index** publicly on 2026-04-02 (previously institutional-only since 2023). [^semi-2026-04]\n- Index methodology: monthly survey of 100+ Neocloud providers + compute buyers/sellers, 25th–75th percentile range, validated with transaction data. [^semi-2026-04]\n- Tracks contract prices across 3m–5y tenors for H100, H200, B200, B300, GB200, GB300, MI300, MI325, MI355. [^semi-2026-04]\n- Self-reported: consumed billions of tokens in 7 days at ~$5/M tok avg; uses agentic tools for dashboarding, scraping, data wrangling, financial modeling. [^semi-2026-04]\n- Publishes \"Claude Commits Daily\" tracker. [^semi-2026-04]\n\n## Claims / views\n\n- Thesis: GPU rental pricing is in a **self-reinforcing upcycle** through 2026. [^semi-2026-04]\n- Bullish on Neoclouds (CoreWeave, Nebius, IREN); believes public-market sentiment mispriced given tightening supply. [^semi-2026-04]\n- Predicts **Claude Code will be 20%+ of all daily commits globally by end of 2026**. [^semi-2026-04]\n\n## Related\n\n- [Anthropic](anthropic.md), [CoreWeave](coreweave.md) — subjects of recent coverage\n- [GPU rental market](../concepts/gpu-rental-market.md) — primary research focus\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](../sources/semianalysis-2026-04-02-h100-rental-price-index.md)"
+    },
+    {
+      "slug": "index",
+      "path": "wiki/index.md",
+      "title": "Wiki Index",
+      "type": "index",
+      "tags": [],
+      "links": [
+        "overview",
+        "entities/anthropic",
+        "entities/coreweave",
+        "entities/meta",
+        "entities/moodys",
+        "entities/semianalysis",
+        "concepts/compute-demand-drivers",
+        "concepts/gpu-rental-market",
+        "concepts/gpu-useful-life",
+        "concepts/hyperscaler-offtake",
+        "concepts/neocloud",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# Index\n\nCatalog of every page in the wiki. Maintained by the LLM. Re-read on every\nquery to find relevant pages before drilling in.\n\n## Overview\n\n- [overview.md](overview.md) — top-level synthesis; as of 2026-04-05 anchored on compute-supply-chain thesis (GPU rental upcycle, hyperscaler offtakes, demand drivers).\n\n## Entities\n\n- [Anthropic](entities/anthropic.md) — frontier AI lab; ARR ~$9B → $25B+ in 1 quarter; Claude 4.6 Opus + Claude Code are main demand drivers.\n- [CoreWeave](entities/coreweave.md) — public Neocloud (Ba3 parent); SPV VIII rated A3 via Meta MSA; ~3yr track record, SLA breaches <1%.\n- [Meta](entities/meta.md) — Aa3 hyperscaler; 6yr take-or-pay MSA with CoreWeave backing $8.5B SPV for GB300 NVL72 across VA/ND/GA.\n- [Moody's](entities/moodys.md) — rating agency; A3 stable on CoreWeave Compute Acquisition Co. VIII (2026-03-31).\n- [SemiAnalysis](entities/semianalysis.md) — semiconductor/AI-infra research; launched public H100 1yr rental price index 2026-04-02.\n\n## Concepts\n\n- [Compute demand drivers](concepts/compute-demand-drivers.md) — agentic workloads, open-weight models, media generation, training; ROI-driven and inelastic.\n- [GPU rental market](concepts/gpu-rental-market.md) — structure (short/mid/long-term segments), Q1 2026 state (+40% H100 1yr, sold out).\n- [GPU useful life](concepts/gpu-useful-life.md) — terminal-value debate; rising rents extend life per SemiAnalysis; Moody's sidesteps via amortization.\n- [Hyperscaler offtake](concepts/hyperscaler-offtake.md) — project-finance SPV structure; hyperscaler MSA backstops Neocloud debt; credit uplift mechanism.\n- [Neocloud](concepts/neocloud.md) — specialty GPU-cloud providers (CoreWeave, Nebius, IREN, Lambda, Runpod); debt-financed against long offtakes.\n\n## Sources\n\n- [SemiAnalysis 2026-04-02](sources/semianalysis-2026-04-02-h100-rental-price-index.md) — H100 1yr index launch; ~40% price rise Oct 2025 → Mar 2026; market structure primer.\n- [Moody's 2026-03-31](sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md) — A3 on $8.5B CoreWeave DDTL for Meta GB300 deployment (VA/ND/GA).\n\n## Syntheses\n\n_(none yet — added when non-trivial queries are filed back)_"
+    },
+    {
+      "slug": "log",
+      "path": "wiki/log.md",
+      "title": "Wiki Log",
+      "type": "log",
+      "tags": [],
+      "links": [],
+      "content": "# Log\n\nAppend-only chronological record. Every entry starts with\n`## [YYYY-MM-DD] <op> | <title>` so it is grep-parseable:\n\n```\ngrep \"^## \\[\" wiki/log.md | tail -10\n```\n\nNever edit past entries; only append.\n\n---\n\n## [2026-04-04] init | wiki scaffolded\n\nCreated initial wiki structure per `CLAUDE.md` schema. Empty\n`index.md`, `overview.md`, and directories `entities/`, `concepts/`,\n`sources/`, `syntheses/`. Ready for first ingest.\n\n## [2026-04-05] ingest | SemiAnalysis — The Great GPU Shortage (H100 1Y Rental Price Index)\n\nFirst ingest. Dated 2026-04-02. Established compute-supply-chain anchor for\nthe wiki: H100 1yr rentals +40% Oct-25 → Mar-26, on-demand sold out,\nAug-Sep 2026 capacity fully booked, self-reinforcing upcycle thesis.\nCreated source summary, 2 entities (SemiAnalysis, Anthropic), and 4\nconcept pages (gpu-rental-market, neocloud, compute-demand-drivers,\ngpu-useful-life). Rewrote `overview.md` with working thesis. Updated\n`index.md`.\n\n## [2026-04-05] ingest | Moody's — A3 on CoreWeave Compute Acquisition Co. VIII\n\nDated 2026-03-31. $8.5B SPV DDTL financing GB300 NVL72 under 6yr Meta MSA\nacross VA/ND/GA; Dell turnkey. SPV A3 vs. CoreWeave parent Ba3 — concrete\ninstance of the hyperscaler-backstopped offtake structure abstractly\ndescribed by SemiAnalysis (~5-notch uplift). Primary risk flagged: power\ncost, not GPU obsolescence. Created source summary + 3 entities (Moody's,\nCoreWeave, Meta) + `hyperscaler-offtake` concept; cross-linked and\nupdated `gpu-useful-life`, `neocloud`, `gpu-rental-market` with Moody's\nevidence. Updated `overview.md` and `index.md`."
+    },
+    {
+      "slug": "overview",
+      "path": "wiki/overview.md",
+      "title": "AI Economics — Overview",
+      "type": "overview",
+      "tags": [
+        "ai-economics"
+      ],
+      "links": [
+        "index",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+      ],
+      "content": "# AI Economics — Overview\n\nTop-level synthesis of the domain. Revised whenever a new source materially\nshifts the picture.\n\n## Scope\n\nHow artificial intelligence — broadly, systems that automate cognitive work —\nreshapes:\n\n- **Labor**: wages, skill demand, task composition, displacement, complementarity.\n- **Productivity**: firm-level and aggregate TFP, diffusion lags, measurement.\n- **Markets**: market structure, concentration, pricing, entry.\n- **Capital & compute**: GPUs as a factor of production, project finance, useful life, capex cycles.\n- **Institutions**: policy, regulation, education, safety nets.\n- **Distribution**: inequality, geography, winners and losers.\n\n## Working thesis (as of 2026-04-05)\n\nEarly seed sources anchor the **compute-supply-chain** side of the story:\n\n1. **The 2025–2026 GPU rental cycle is a self-reinforcing upcycle, not a\n   commoditization.** H100 1-yr contracts rose ~40% Oct-25 → Mar-26; all\n   capacity booked through Aug–Sep 2026; H100s renewing at original rates\n   through 2028. Public-market sentiment on Neoclouds (CoreWeave, Nebius,\n   IREN) lags fundamentals. [^semi-2026-04]\n2. **Demand is ROI-driven and currently inelastic.** Drivers: agentic\n   workloads (Claude Code → Anthropic ARR $9B → $25B+ in one quarter),\n   open-weight models (GLM, Kimi K2.5), native media generation (Seedance,\n   Nano Banana). Claimed 5–10x ROI on AI tools vs. cost → far runway\n   before prices curtail demand. [^semi-2026-04]\n3. **Capex is flowing through hyperscaler-backstopped project finance.**\n   Worked example: $8.5B CoreWeave SPV financing GB300 NVL72 for Meta on\n   6yr take-or-pay MSA — SPV rated **A3** vs. parent **Ba3** (~5-notch\n   uplift from ring-fenced structure + IG counterparty). Primary risk\n   flagged is **power-cost volatility**, not GPU obsolescence. [^moodys-2026-03]\n4. **GPU useful life is endogenous to demand.** SemiAnalysis: rising\n   rents extend economic life, improve ROIC. Moody's: amortizes inside\n   6yr MSA, terminal-value question sidestepped structurally. Public\n   markets: still pricing obsolescence risk. [^semi-2026-04] [^moodys-2026-03]\n\n## Open questions\n\n- **Demand durability**: How much of the agentic-workload surge is\n  experimentation vs. durable production?\n- **Elasticity**: At what price point does ROI-driven demand become\n  price-elastic?\n- **Power**: Power-cost volatility is the dominant project-finance risk\n  per Moody's — needs its own page once power sources accrue.\n- **Supply resolution**: Does GB300 ramp in 2026 + resolution of silicon\n  shortages ease pricing, or does token demand outrun supply additions?\n- **Labor & distribution side**: Still unrepresented in current sources.\n  Need ingests on productivity, wages, displacement, inequality.\n- **Public-market dislocation**: Does CoreWeave/Nebius/IREN share-price\n  narrative re-rate or do fundamentals revert first?\n\n## Key sources\n\nSee [sources/](sources/) and the [index](index.md).\n\n[^semi-2026-04]: [SemiAnalysis 2026-04-02](sources/semianalysis-2026-04-02-h100-rental-price-index.md)\n[^moodys-2026-03]: [Moody's 2026-03-31](sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md)"
+    },
+    {
+      "slug": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "path": "wiki/sources/moodys-2026-03-31-coreweave-dtl-a3-rating.md",
+      "title": "Moody's — A3 rating on CoreWeave Compute Acquisition Co. VIII ($8.5B DDTL)",
+      "type": "source",
+      "tags": [
+        "compute",
+        "gpu",
+        "project-finance",
+        "coreweave",
+        "meta",
+        "credit-rating",
+        "offtake",
+        "msa",
+        "gb300"
+      ],
+      "links": [
+        "entities/moodys",
+        "sources/semianalysis-2026-04-02-h100-rental-price-index",
+        "entities/moodys",
+        "entities/coreweave",
+        "entities/meta",
+        "concepts/hyperscaler-offtake",
+        "concepts/gpu-rental-market",
+        "concepts/gpu-useful-life",
+        "concepts/compute-demand-drivers"
+      ],
+      "content": "# Moody's — A3 on CoreWeave SPV ($8.5B DDTL for Meta GB300 cluster) (2026-03-31)\n\n## Bibliographic\n\n- **Analysts**: Radi Annab (VP Senior Analyst), Kurt Krummenacker (Associate MD)\n- **Publication**: [Moody's Ratings](../entities/moodys.md) (Moody's Canada Inc.)\n- **Date**: 2026-03-31\n- **Type**: rating action (first-time assignment)\n- **Raw**: [../../raw/moodys-2026-03-31-coreweave-dtl-a3-rating.md](../../raw/moodys-2026-03-31-coreweave-dtl-a3-rating.md)\n\n## TL;DR\n\nMoody's assigns **A3 (stable)** to a **$8.5B Senior Secured Delayed Draw Term Loan** for **CoreWeave Compute Acquisition Co. VIII, LLC** — a bankruptcy-remote SPV financing **NVIDIA GB300 NVL72 servers** deployed across three sites (VA/ND/GA) under a **6-year take-or-pay MSA with Meta**. Dell provides turnkey integration. **SPV gets investment-grade (A3) while CoreWeave parent is junk (Ba3)** — the credit uplift is the concrete mechanism of the \"hyperscaler backstop\" structure. Base-case DSCR **1.20x** (Moody's), stressed floor **1.11x**. Primary risk flagged: **power-price volatility**, not GPU obsolescence.\n\n## Key claims\n\n1. **Facility**: ~$8.5B Senior Secured DDTL, fully amortizing, matures <5yr after 15-month delayed-draw period.\n2. **Tranche mix**: $4,041M fixed + $4,459M floating (floating ≥95% hedged to maturity).\n3. **Assets**: NVIDIA GB300 NVL72 servers at 3 sites — Virginia, North Dakota, Georgia.\n4. **Counterparty**: 6-year take-or-pay MSA with **Meta Platforms (Aa3 stable)**. Payments are fixed and usage-independent. MSA cannot be terminated for convenience.\n5. **Ratings uplift**: SPV rated **A3** vs. CoreWeave parent **Ba3 stable** → ~5-notch uplift from the ring-fenced project-finance structure backed by Meta's Aa3 credit.\n6. **Structural protections**:\n   - Level-3 testing commissioning gate before drawdowns.\n   - Direct agreement with Meta granting lenders cure, assignment, replacement contract rights.\n   - License of CoreWeave operational IP → operations continue through CoreWeave bankruptcy.\n7. **OEM**: Dell Inc. (Baa3 stable) delivers turnkey integration.\n8. **Operating track record**: CoreWeave ~3 years in AI GPU-as-a-service at hyperscaler scale; historical **SLA breaches <1%** (excluding scheduled maintenance, power, hardware, FM, customer-side).\n9. **DSCR**: borrower base 1.26x (through 2031); Moody's base 1.20x; stressed downsides maintain floor **>1.11x**.\n10. **Primary risk**: **power-price volatility at unhedged sites**. Fixed Meta payments mean all opex (power, DC, capex) absorbed by project.\n11. **Power mitigations**: long-dated fixed-for-floating hedge at largest site; dynamic power-cost reserve mechanism; 3-month liquidity reserve covering debt service + opex + hedge settlements.\n12. **Refinancing risk**: none — fully amortizes inside MSA term.\n13. **Key downgrade triggers**: install-timeline failure, power-cost blowout, Meta credit deterioration, force majeure.\n14. SPV is Delaware-organized, bankruptcy-remote, ring-fenced from CoreWeave parent credit.\n\n## How this updates the wiki\n\n- **Instantiates** the hyperscaler-backstopped offtake structure described abstractly by [SemiAnalysis](semianalysis-2026-04-02-h100-rental-price-index.md) (claim #10) with **concrete numbers**: $8.5B, 6yr, Meta-CoreWeave-Dell, GB300 NVL72.\n- **Challenges** the public-market \"GPU terminal-value collapse\" narrative: Moody's stresses DSCRs under severe downside and maintains IG. GPU obsolescence is *not* flagged as a primary risk.\n- Introduces **power cost** as the dominant project-finance risk for AI clusters — a thread to pull on in future sources.\n- Confirms CoreWeave operating performance (SLA <1% breach rate) and limited track record (~3yr).\n\n## Entities touched\n\n- [Moody's](../entities/moodys.md) — rating agency\n- [CoreWeave](../entities/coreweave.md) — project sponsor, Ba3 stable\n- [Meta](../entities/meta.md) — MSA offtaker, Aa3 stable\n- (Dell, Baa3 stable — OEM integrator, mentioned inline)\n\n## Concepts touched\n\n- [Hyperscaler offtake](../concepts/hyperscaler-offtake.md) — concrete instantiation\n- [GPU rental market](../concepts/gpu-rental-market.md) — long-term-offtake segment\n- [GPU useful life](../concepts/gpu-useful-life.md) — Moody's credit view\n- [Compute demand drivers](../concepts/compute-demand-drivers.md) — Meta's build-out as signal"
+    },
+    {
+      "slug": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "path": "wiki/sources/semianalysis-2026-04-02-h100-rental-price-index.md",
+      "title": "SemiAnalysis — The Great GPU Shortage (H100 1Y Rental Price Index launch)",
+      "type": "source",
+      "tags": [
+        "compute",
+        "gpu",
+        "rental-market",
+        "neocloud",
+        "pricing",
+        "claude-code",
+        "inference",
+        "capex"
+      ],
+      "links": [
+        "entities/semianalysis",
+        "entities/semianalysis",
+        "entities/anthropic",
+        "entities/coreweave",
+        "entities/meta",
+        "concepts/gpu-rental-market",
+        "concepts/neocloud",
+        "concepts/hyperscaler-offtake",
+        "concepts/compute-demand-drivers",
+        "concepts/gpu-useful-life"
+      ],
+      "content": "# SemiAnalysis — The Great GPU Shortage (2026-04-02)\n\n## Bibliographic\n\n- **Authors**: Daniel Nishball, Jordan Nanos, Cheang Kang Wen + 2 others; guest post by Nigel Chiang\n- **Publication**: [SemiAnalysis](../entities/semianalysis.md) (research newsletter)\n- **Date**: 2026-04-02\n- **Raw**: [../../raw/semianalysis-2026-04-02-h100-rental-price-index.md](../../raw/semianalysis-2026-04-02-h100-rental-price-index.md)\n\n## TL;DR\n\nH100 1-year rental contracts up **~40%** (Oct 2025 → Mar 2026, $1.70 → $2.35/hr/GPU). On-demand sold out across all GPU types. All capacity coming online through **Aug-Sep 2026 already booked**. Drivers: agentic workloads (Claude Code), open-weight models (GLM, Kimi K2.5), native media generation (Seedance, Nano Banana), and Anthropic ARR tripling ($9B → $25B in one quarter). Public-market sentiment on Neoclouds (CoreWeave, Nebius, IREN) remains bearish despite tightening — the \"oversupply and commoditization\" narrative persists. SemiAnalysis thesis: **pricing is a self-reinforcing upcycle** (tight supply → secure hardware → tighter supply).\n\n## Key claims\n\n1. **H100 1-yr contract price rose ~40% in 6 months**, $1.70/hr (Oct 2025) → $2.35/hr (Mar 2026).\n2. **Anthropic ARR tripled in one quarter**: $9B (EOY 2025) → $25B+ (as of publication).\n3. **Blackwell supply is booked through Aug–Sep 2026**; Hopper capacity \"not coming off contract at all\" for most providers.\n4. H100 contracts being **renewed at original 2-3yr rates**; some renewed for 4 years through 2028.\n5. AWS p6-b200 **spot at $14/hr/GPU**.\n6. **Claude Code projected to be 20%+ of daily commits globally by end of 2026** (SemiAnalysis \"Claude Commits Daily\" tracker).\n7. Memory pricing parabolic in 1Q26: LPDDR5 tracking ~4x YoY, DDR5 ~5x YoY.\n8. OEMs repriced AI servers **above** component-cost inflation → margin-risk management → supply slow-rolls → further tightening.\n9. **Market structure** has three segments:\n   - **Short-term** (on-demand, spot, <3mo): fixed-price, utilization-adjusted (Runpod, Lambda).\n   - **Mid-term** (3mo–3yr+): price-discovered contracts, most volume by value, 1yr as marginal-demand indicator.\n   - **Long-term offtakes** (4–5yr, 5yr most popular): AI-lab-dominated, 50–100MW clusters (~24k–48k GB300 NVL72 GPUs), bare-metal, often hyperscaler-backstopped.\n10. Hyperscaler backstop structure: Hyperscaler acts as direct offtaker to Neocloud, on-sells to AI Lab. Gives Neocloud AAA-rated counterparty for debt financing, teens-IRR lock-in; Hyperscaler captures slice of project revenue without balance-sheet expansion.\n11. Index methodology: monthly survey of **100+ market participants** (Neoclouds, buyers), 25th–75th percentile range, validated by transaction data.\n12. **Public-market sentiment mispriced**: CoreWeave, Nebius, IREN at low end of 6-12mo trading range despite supply tightening.\n13. Beneficiaries with shorter-duration contracts + large H100 install bases + near-term capacity additions.\n14. Check-points to watch: (a) GB300 ramp pace vs. token demand, (b) silicon shortage (TSMC N3, HBM, DRAM, NAND), (c) AI-lab ARR growth.\n\n## How this updates the wiki\n\n- **Establishes the baseline state of the GPU rental market (Q1 2026)** — this is the first source, so all concept pages and the overview anchor on it.\n- Introduces the **neocloud / hyperscaler / AI-lab** market structure as the frame for future compute-economics sources.\n- Flags the **public-market-vs-private-market dislocation** on GPU terminal value as a live open question.\n\n## Entities touched\n\n- [SemiAnalysis](../entities/semianalysis.md) — publisher\n- [Anthropic](../entities/anthropic.md) — ARR data point\n- [CoreWeave](../entities/coreweave.md) — neocloud, share-price-sentiment example\n- [Meta](../entities/meta.md) — hyperscaler backstop reference\n\n## Concepts touched\n\n- [GPU rental market](../concepts/gpu-rental-market.md) — primary topic\n- [Neocloud](../concepts/neocloud.md) — core market actor\n- [Hyperscaler offtake](../concepts/hyperscaler-offtake.md) — backstop structure\n- [Compute demand drivers](../concepts/compute-demand-drivers.md) — Claude Code, agents, media gen\n- [GPU useful life](../concepts/gpu-useful-life.md) — terminal value / depreciation debate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "concepts/compute-demand-drivers",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "concepts/compute-demand-drivers",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "concepts/compute-demand-drivers",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/compute-demand-drivers",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "concepts/compute-demand-drivers",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "entities/meta"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "concepts/gpu-rental-market",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "concepts/gpu-useful-life",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "entities/meta"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "concepts/hyperscaler-offtake",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "entities/meta"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "concepts/neocloud",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "entities/anthropic",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "entities/anthropic",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "entities/anthropic",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "entities/meta"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "entities/coreweave",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "entities/meta",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "entities/meta",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "entities/meta",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "entities/meta",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "entities/meta",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "entities/meta",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "entities/moodys",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "entities/moodys",
+      "target": "entities/meta"
+    },
+    {
+      "source": "entities/moodys",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "entities/moodys",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "entities/moodys",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "entities/semianalysis",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "entities/semianalysis",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "entities/semianalysis",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "entities/semianalysis",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "index",
+      "target": "overview"
+    },
+    {
+      "source": "index",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "index",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "index",
+      "target": "entities/meta"
+    },
+    {
+      "source": "index",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "index",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "index",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "index",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "index",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "index",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "index",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "index",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "index",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "overview",
+      "target": "index"
+    },
+    {
+      "source": "overview",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "overview",
+      "target": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "sources/semianalysis-2026-04-02-h100-rental-price-index"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "entities/moodys"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "entities/meta"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "concepts/gpu-useful-life"
+    },
+    {
+      "source": "sources/moodys-2026-03-31-coreweave-dtl-a3-rating",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "entities/semianalysis"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "entities/anthropic"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "entities/coreweave"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "entities/meta"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "concepts/gpu-rental-market"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "concepts/neocloud"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "concepts/hyperscaler-offtake"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "concepts/compute-demand-drivers"
+    },
+    {
+      "source": "sources/semianalysis-2026-04-02-h100-rental-price-index",
+      "target": "concepts/gpu-useful-life"
+    }
+  ]
+}

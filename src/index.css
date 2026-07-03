@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 255 255 255;
+    --bg-surface: 248 248 248;
+    --bg-hover: 240 240 240;
+    --bg-border: 229 229 229;
+    --bg-border-light: 212 212 212;
+    --text: 26 26 26;
+    --text-secondary: 74 74 74;
+    --text-muted: 113 113 122;
+    --text-ghost: 161 161 170;
+    --slider-fill: 26 26 26;
+    --slider-track: 229 229 229;
+  }
+
+  .dark {
+    --bg: 10 10 13;
+    --bg-surface: 17 17 21;
+    --bg-hover: 26 26 32;
+    --bg-border: 48 48 56;
+    --bg-border-light: 72 72 84;
+    --text: 242 242 244;
+    --text-secondary: 185 185 196;
+    --text-muted: 145 145 158;
+    --text-ghost: 105 105 118;
+    --slider-fill: 242 242 244;
+    --slider-track: 48 48 56;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'tnum', 'cv02', 'cv03', 'cv04';
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--bg-border)) rgb(var(--bg));
+  }
+
+  ::selection {
+    background: rgba(37, 99, 235, 0.15);
+  }
+}
+
+/* Slider */
+.slider-track {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.slider-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(var(--text));
+  border: 2px solid rgb(var(--bg));
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgb(var(--text) / 0.2);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.slider-track::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 3px rgb(var(--text) / 0.12);
+  transform: scale(1.1);
+}
+
+.slider-track::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+}
+
+.slider-track::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(var(--text));
+  border: 2px solid rgb(var(--bg));
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgb(var(--text) / 0.2);
+}
+
+/* Smooth transitions */
+button, a, input {
+  transition: all 0.15s ease;
+}
