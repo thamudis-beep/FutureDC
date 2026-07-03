@@ -131,6 +131,26 @@ export default function Deck({ slides }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [next, prev, goTo, setDark, overview, last, slides]);
 
+  // wheel / trackpad — scroll down advances, up goes back.
+  // One gesture = one step: lock on the first delta, unlock only after the
+  // gesture (incl. trackpad momentum) goes quiet for a beat.
+  const wheelLock = useRef(false);
+  useEffect(() => {
+    let quiet;
+    const onWheel = (e) => {
+      const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (overview || Math.abs(d) < 12) return;
+      clearTimeout(quiet);
+      if (!wheelLock.current) {
+        wheelLock.current = true;
+        d > 0 ? next() : prev();
+      }
+      quiet = setTimeout(() => { wheelLock.current = false; }, 500);
+    };
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => { window.removeEventListener("wheel", onWheel); clearTimeout(quiet); };
+  }, [next, prev, overview]);
+
   // hash sync (write)
   useEffect(() => {
     const hash = `#${pos.i + 1}${pos.step ? "." + pos.step : ""}`;

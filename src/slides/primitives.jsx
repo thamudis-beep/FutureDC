@@ -24,9 +24,9 @@ export const T = {
 
 // The three eras — content-level metadata reused across slides.
 export const ERAS = [
-  { name: "BEFORE AI", years: "pre-2022", tone: T.e1 },
-  { name: "AI BUILDOUT", years: "2023 – now", tone: T.e2 },
-  { name: "AI-NATIVE", years: "2030+", tone: T.e3 },
+  { name: "PRE-AI", tone: T.e1 },
+  { name: "TODAY", tone: T.e2 },
+  { name: "FUTURE", tone: T.e3 },
 ];
 
 // ── primitives ───────────────────────────────────────────────
@@ -162,6 +162,25 @@ export const P = {
     <>
       <path d="M3 21V10l6 4v-4l6 4V7h4v14H3z" />
       <path d="M17 3v4" />
+    </>
+  ),
+  tower: (
+    <>
+      <path d="M6 21 L12 3 L18 21" />
+      <path d="M8.2 15 H15.8 M9.2 11 H14.8 M10.2 7 H13.8" />
+      <path d="M4 21 H20" />
+    </>
+  ),
+  bolt: <path d="M13 2 L4 14 h6 l-1 8 l9-12 h-6 z" />,
+  arm: (
+    <>
+      <path d="M5 21 h5" />
+      <path d="M7.5 21 v-6" />
+      <path d="M7.5 15 l6 -4" />
+      <path d="M13.5 11 l4 2.2" />
+      <path d="M17.5 13.2 l1.6 -1.1 M17.5 13.2 l1 1.7" />
+      <circle cx="7.5" cy="15" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="13.5" cy="11" r="1.1" fill="currentColor" stroke="none" />
     </>
   ),
   sun: (

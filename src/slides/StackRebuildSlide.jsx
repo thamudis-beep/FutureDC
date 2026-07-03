@@ -65,29 +65,29 @@ function WorkloadsRow({ era }) {
               <IconSvg key={i} d={P.globe} tone={T.e1} />
             ))}
           </IconRow>
-          <Cap tone={T.e1}>web · batch · enterprise</Cap>
+          <Cap tone={T.e1}>web · batch jobs</Cap>
         </div>,
         <div>
           <IconRow>
             {[0, 1, 2].map((i) => (
-              <IconSvg key={i} d={P.globe} tone={T.e1} size={12} />
+              <IconSvg key={i} d={P.brain} tone={T.e2} size={16} />
             ))}
-            {[0, 1, 2, 3, 4].map((i) => (
-              <IconSvg key={i} d={P.brain} tone={T.e2} size={17} />
+            {[0, 1, 2].map((i) => (
+              <IconSvg key={i} d={P.bot} tone={T.e2} size={14} />
             ))}
           </IconRow>
-          <Cap tone={T.e2}>training-dominated</Cap>
+          <Cap tone={T.e2}>training + search, chat, basic agents</Cap>
         </div>,
         <div>
           <IconRow>
-            {[0, 1].map((i) => (
-              <IconSvg key={i} d={P.brain} tone={T.e2} size={13} />
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+              <IconSvg key={i} d={P.bot} tone={T.e3} size={15} />
             ))}
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-              <IconSvg key={i} d={P.bot} tone={T.e3} size={16} />
+            {[0, 1].map((i) => (
+              <IconSvg key={i} d={P.arm} tone={T.e3} size={17} />
             ))}
           </IconRow>
-          <Cap tone={T.e3}>inference & agents dominate</Cap>
+          <Cap tone={T.e3}>swarms of agents 24/7 + physical AI</Cap>
         </div>,
       ]}
     />
@@ -118,9 +118,9 @@ function DesignRow({ era }) {
       label="Design Loop"
       sub="EDA · chip cycles"
       cells={[
-        <CycleBar w={170} tone={T.e1} label="manual · 2–3 yr cycle" />,
-        <CycleBar w={90} tone={T.e2} label="AI-assisted EDA" />,
-        <CycleBar w={34} tone={T.e3} label="models design models" spin />,
+        <CycleBar w={170} tone={T.e1} label="3–5 yr cycles · manual" />,
+        <CycleBar w={95} tone={T.e2} label="1–3 yr · modern EDA tools" />,
+        <CycleBar w={34} tone={T.e3} label="< 1 yr · AI-assisted EDA" spin />,
       ]}
     />
   );
@@ -223,25 +223,91 @@ function SiliconRow({ era }) {
   );
 }
 
-// 3 ▸ RACK DENSITY — bar chart, sqrt-ish scale
-function DensityBar({ h, tone, val, cap }) {
+// 3 ▸ RACK DENSITY + FOOTPRINT
+// A rack whose fill shows kW/rack, next to a footprint that grows from a
+// single in-city site → one large campus → many linked campuses + space + edge.
+function RackDensity({ kw, tone, level }) {
+  const units = 6;
+  const litFrom = units - level * 2; // level 1→2 lit, 2→4, 3→6 (from bottom)
   return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 10 }}>
-      <div style={{ width: 26, height: 48, display: "flex", alignItems: "flex-end" }}>
-        <div
-          style={{
-            width: "100%",
-            height: h,
-            background: `linear-gradient(180deg, ${solid(tone)}, ${tint(tone, 0.33)})`,
-            borderRadius: "3px 3px 0 0",
-            transition: "height .8s ease",
-          }}
-        />
-      </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <svg width="24" height="42" viewBox="0 0 24 42">
+        <rect x="2" y="1" width="20" height="40" rx="2" fill="none" stroke={solid(tone)} strokeWidth="1.3" />
+        {Array.from({ length: units }).map((_, i) => {
+          const lit = i >= litFrom;
+          return (
+            <rect key={i} x="5" y={3.5 + i * 6.1} width="14" height="4.4" rx="1" fill={lit ? tint(tone, 0.55) : "none"} stroke={solid(tone)} strokeWidth="0.8" opacity={lit ? 1 : 0.35} />
+          );
+        })}
+      </svg>
       <div>
-        <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 20, color: solid(tone) }}>{val}</div>
-        <Cap tone={tone}>{cap}</Cap>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, color: solid(tone), lineHeight: 1 }}>{kw}</div>
+        <Cap tone={tone}>per rack</Cap>
       </div>
+    </div>
+  );
+}
+
+// server-row block used for a data-center building
+const DCBlock = ({ x, y, w, h, tone, rows = 4 }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx="1.5" fill={tint(tone, 0.12)} stroke={solid(tone)} strokeWidth="1.2" />
+    {Array.from({ length: rows }).map((_, i) => (
+      <line key={i} x1={x + 3} y1={y + 4 + i * ((h - 6) / (rows - 1 || 1))} x2={x + w - 3} y2={y + 4 + i * ((h - 6) / (rows - 1 || 1))} stroke={solid(tone)} strokeWidth="0.7" opacity="0.8" />
+    ))}
+  </g>
+);
+
+function Footprint({ variant, tone, cap }) {
+  return (
+    <div>
+      {variant === "city" && (
+        <svg width="128" height="46" viewBox="0 0 128 46">
+          <g stroke={solid(T.muted)} strokeWidth="1" fill="none" opacity="0.3">
+            <rect x="6" y="24" width="12" height="17" />
+            <rect x="98" y="16" width="12" height="25" />
+            <rect x="114" y="27" width="9" height="14" />
+          </g>
+          <DCBlock x={48} y={20} w={26} h={21} tone={tone} rows={3} />
+          <line x1="0" y1="41.5" x2="128" y2="41.5" stroke={tint(T.line, 0.7)} strokeWidth="1" />
+        </svg>
+      )}
+      {variant === "campus" && (
+        <svg width="128" height="46" viewBox="0 0 128 46">
+          <DCBlock x={34} y={9} w={60} h={32} tone={tone} rows={5} />
+          <rect x={40} y={4} width="8" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.9" opacity="0.7" />
+          <rect x={54} y={4} width="8" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.9" opacity="0.7" />
+          <line x1="0" y1="41.5" x2="128" y2="41.5" stroke={tint(T.line, 0.7)} strokeWidth="1" />
+        </svg>
+      )}
+      {variant === "cluster" && (
+        <svg width="168" height="52" viewBox="0 0 168 52">
+          {/* orbital / inference in space */}
+          <g transform="translate(20 9)" opacity="0.85">
+            <rect x="-4" y="-3" width="8" height="6" rx="1" fill={tint(tone, 0.12)} stroke={solid(tone)} strokeWidth="1" />
+            <rect x="-13" y="-3" width="7" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.8" />
+            <rect x="6" y="-3" width="7" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.8" />
+          </g>
+          {/* links between campuses + down from space */}
+          <g stroke={solid(tone)} strokeWidth="1" strokeDasharray="3 4" fill="none" opacity="0.55" className="flow">
+            <line x1="20" y1="15" x2="58" y2="30" />
+            <line x1="58" y1="34" x2="104" y2="34" />
+            <line x1="104" y1="34" x2="140" y2="30" />
+            <line x1="140" y1="34" x2="156" y2="42" />
+          </g>
+          {/* several large campuses */}
+          <DCBlock x={44} y={26} w={28} h={18} tone={tone} rows={3} />
+          <DCBlock x={90} y={22} w={30} h={22} tone={tone} rows={4} />
+          <DCBlock x={128} y={28} w={24} h={16} tone={tone} rows={3} />
+          {/* edge node */}
+          <g transform="translate(156 40)">
+            <rect x="-4" y="-4" width="8" height="8" rx="1.5" fill="none" stroke={solid(tone)} strokeWidth="1" />
+          </g>
+          <text x="150" y="52" fontFamily="var(--font-mono)" fontSize="6.5" fill={solid(T.muted)}>edge</text>
+          <line x1="0" y1="47" x2="168" y2="47" stroke={tint(T.line, 0.7)} strokeWidth="1" />
+        </svg>
+      )}
+      <Cap tone={tone}>{cap}</Cap>
     </div>
   );
 }
@@ -251,11 +317,20 @@ function DensityRow({ era }) {
     <RowShell
       era={era}
       label="Rack & Footprint"
-      sub="kW per rack · where"
+      sub="kW / rack · where it lives"
       cells={[
-        <DensityBar h={4} tone={T.e1} val="3 kW" cap="metro colo" />,
-        <DensityBar h={19} tone={T.e2} val="150 kW" cap="West Texas gigacampus" />,
-        <DensityBar h={48} tone={T.e3} val="1 MW" cap="GW campus + edge sites" />,
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <RackDensity kw="3 kW" tone={T.e1} level={1} />
+          <Footprint variant="city" tone={T.e1} cap="one small site, in the city" />
+        </div>,
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <RackDensity kw="150 kW" tone={T.e2} level={2} />
+          <Footprint variant="campus" tone={T.e2} cap="one large campus" />
+        </div>,
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <RackDensity kw="1 MW" tone={T.e3} level={3} />
+          <Footprint variant="cluster" tone={T.e3} cap="many campuses linked · + space & edge" />
+        </div>,
       ]}
     />
   );
@@ -304,15 +379,14 @@ function CoolingRow({ era }) {
   );
 }
 
-// 1 ▸ POWER — full-width growing line chart (signature element)
+// 1 ▸ POWER — stacked-area story: where the growth comes from.
+// grid grows then stalls · behind-the-meter adds then stalls ·
+// nuclear + orbital drive the continued climb.
 function PowerRow({ era }) {
-  const seg = (n) => ({
-    strokeDasharray: 1,
-    strokeDashoffset: era >= n ? 0 : 1,
-    transition: `stroke-dashoffset 1.1s ease ${n === 1 ? 0.15 : 0.25}s`,
-  });
+  // reveal the chart left-to-right, one era third at a time
+  const revealW = era >= 3 ? 1000 : era >= 2 ? 666 : era >= 1 ? 333 : 0;
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "190px 1fr", borderTop: `1px solid ${tint(T.line, 0.7)}`, minHeight: 118 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "190px 1fr", borderTop: `1px solid ${tint(T.line, 0.7)}`, minHeight: 156 }}>
       <div style={{ padding: "14px 14px 10px 0", display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <div
           style={{
@@ -328,28 +402,70 @@ function PowerRow({ era }) {
         </div>
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: solid(T.muted), marginTop: 3 }}>the binding constraint</div>
       </div>
-      <div style={{ position: "relative", padding: "8px 16px 6px" }}>
-        <svg width="100%" height="78" viewBox="0 0 1000 78" preserveAspectRatio="none" style={{ display: "block" }}>
-          <path d="M 8 68 L 330 60" pathLength="1" stroke={solid(T.e1)} strokeWidth="2.5" fill="none" style={seg(1)} />
-          <path d="M 330 60 C 430 56, 540 44, 662 28" pathLength="1" stroke={solid(T.e2)} strokeWidth="2.5" fill="none" style={seg(2)} />
-          <path d="M 662 28 C 760 14, 860 8, 992 4" pathLength="1" stroke={solid(T.e3)} strokeWidth="2.5" fill="none" style={seg(3)} />
+      <div style={{ position: "relative", padding: "8px 16px 4px" }}>
+        <svg width="100%" height="104" viewBox="0 0 1000 120" preserveAspectRatio="none" style={{ display: "block" }}>
+          <defs>
+            <clipPath id="pwrReveal">
+              <rect x="0" y="0" height="120" width={revealW} style={{ transition: "width 1s ease" }} />
+            </clipPath>
+          </defs>
+          {/* era divider guides */}
+          <line x1="333" y1="6" x2="333" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
+          <line x1="666" y1="6" x2="666" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
+
+          <g clipPath="url(#pwrReveal)">
+            {/* grid band — slow, then flat (stalls) in the future */}
+            <path
+              d="M0,112 L0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66 L1000,112 Z"
+              fill={tint(T.e1, 0.18)}
+            />
+            {/* behind-the-meter band — adds from Today, then flat (stalls) */}
+            <path
+              d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44 L1000,66 C900,66 800,66 666,68 C560,74 470,80 333,86 Z"
+              fill={tint(T.e2, 0.22)}
+            />
+            {/* nuclear + orbital band — appears in the Future, drives the climb */}
+            <path d="M666,48 C800,32 900,18 1000,7 L1000,44 C900,45 800,46 666,48 Z" fill={tint(T.e3, 0.26)} />
+
+            {/* top edges */}
+            <path
+              d="M0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66"
+              fill="none"
+              stroke={solid(T.e1)}
+              strokeWidth="1.5"
+              opacity="0.75"
+            />
+            <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
+            <path d="M666,48 C800,32 900,18 1000,7" fill="none" stroke={solid(T.e3)} strokeWidth="2.75" />
+          </g>
         </svg>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 2 }}>
+
+        {/* source icons + narrative per era */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 4 }}>
           <Reveal on={era >= 1} delay={200}>
-            <Cap tone={T.e1}>grid · slow interconnect</Cap>
-          </Reveal>
-          <Reveal on={era >= 2} delay={300}>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <IconSvg d={P.factory} tone={T.e2} size={15} />
-              <IconSvg d={P.sun} tone={T.e2} size={15} />
-              <Cap tone={T.e2}>grid + behind-the-meter</Cap>
+            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
+              <IconSvg d={P.tower} tone={T.e1} size={16} />
+              <Cap tone={T.e1}>grid · slow growth</Cap>
             </div>
           </Reveal>
-          <Reveal on={era >= 3} delay={400}>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <IconSvg d={P.atom} tone={T.e3} size={15} />
-              <IconSvg d={P.sat} tone={T.e3} size={15} />
-              <Cap tone={T.e3}>dedicated nuclear · orbital</Cap>
+          <Reveal on={era >= 2} delay={280}>
+            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
+              <IconSvg d={P.tower} tone={T.e1} size={15} />
+              <IconSvg d={P.factory} tone={T.e2} size={15} />
+              <Cap tone={T.e2}>faster grid + behind-the-meter</Cap>
+            </div>
+          </Reveal>
+          <Reveal on={era >= 3} delay={360}>
+            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
+              {/* prior sources stall — dimmed */}
+              <span style={{ display: "flex", gap: 4, opacity: 0.35 }}>
+                <IconSvg d={P.tower} tone={T.e1} size={14} />
+                <IconSvg d={P.factory} tone={T.e2} size={14} />
+              </span>
+              <span style={{ color: solid(T.muted), fontFamily: "var(--font-mono)", fontSize: 12 }}>→</span>
+              <IconSvg d={P.atom} tone={T.e3} size={16} />
+              <IconSvg d={P.sat} tone={T.e3} size={16} />
+              <Cap tone={T.e3}>grid & BTM stall — nuclear + orbital drive growth</Cap>
             </div>
           </Reveal>
         </div>
@@ -362,7 +478,6 @@ function PowerRow({ era }) {
 
 export default function StackRebuildSlide({ step = 0 }) {
   const era = Math.min(step, 3);
-  const done = step >= StackRebuildSlide.steps;
 
   return (
     <div
@@ -378,23 +493,18 @@ export default function StackRebuildSlide({ step = 0 }) {
       }}
     >
       {/* header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 14 }}>
-        <div>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: solid(T.muted), letterSpacing: "0.18em" }}>
-            THE FUTURE OF DATA CENTERS
-          </div>
-          <div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 40,
-              lineHeight: 1.05,
-              letterSpacing: "0.02em",
-              textTransform: "uppercase",
-            }}
-          >
-            Seven layers, rebuilt three times
-          </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 16 }}>
+        <div
+          style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 700,
+            fontSize: 46,
+            lineHeight: 1.02,
+            letterSpacing: "0.02em",
+            textTransform: "uppercase",
+          }}
+        >
+          Future of the Data Center
         </div>
       </div>
 
@@ -408,7 +518,6 @@ export default function StackRebuildSlide({ step = 0 }) {
                 <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, letterSpacing: "0.09em", color: solid(e.tone) }}>
                   {e.name}
                 </span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: solid(T.muted) }}>{e.years}</span>
               </div>
             </Reveal>
           </div>
@@ -440,24 +549,10 @@ export default function StackRebuildSlide({ step = 0 }) {
         <CoolingRow era={era} />
         <PowerRow era={era} />
       </div>
-
-      {/* takeaway */}
-      <div style={{ marginTop: 12, borderTop: `1px solid ${tint(T.line, 0.7)}`, paddingTop: 12, display: "flex", justifyContent: "center", minHeight: 44 }}>
-        <Reveal on={done}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 34, height: 2, background: solid(T.e3) }} />
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 23, letterSpacing: "0.05em", textTransform: "uppercase", textAlign: "center" }}>
-              Every layer is being redesigned at once —{" "}
-              <span style={{ color: solid(T.e3) }}>the data center becomes the computer</span>
-            </div>
-            <div style={{ width: 34, height: 2, background: solid(T.e3) }} />
-          </div>
-        </Reveal>
-      </div>
     </div>
   );
 }
 
 // Number of intra-slide advances (fragments) the deck should step through.
-StackRebuildSlide.steps = 4;
-StackRebuildSlide.title = "Seven layers, rebuilt three times";
+StackRebuildSlide.steps = 3;
+StackRebuildSlide.title = "Future of the Data Center";
