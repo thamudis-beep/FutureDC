@@ -224,7 +224,7 @@ function SiliconRow({ era }) {
             {chips(8, "G", GPU)}
             {chips(11, "M", MEM)}
           </IconRow>
-          <Cap tone={MEM}>memory-tiered · ratios per workload</Cap>
+          <Cap tone={MEM}>memory is the fabric · bandwidth + capacity define the system</Cap>
         </div>,
       ]}
     />
@@ -289,30 +289,34 @@ function Footprint({ variant, tone, cap }) {
         </svg>
       )}
       {variant === "cluster" && (
-        <svg width="168" height="52" viewBox="0 0 168 52">
-          {/* orbital / inference in space */}
-          <g transform="translate(20 9)" opacity="0.85">
-            <rect x="-4" y="-3" width="8" height="6" rx="1" fill={tint(tone, 0.12)} stroke={solid(tone)} strokeWidth="1" />
-            <rect x="-13" y="-3" width="7" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.8" />
-            <rect x="6" y="-3" width="7" height="6" fill="none" stroke={solid(tone)} strokeWidth="0.8" />
+        <svg width="210" height="66" viewBox="0 0 210 66">
+          {/* orbital — inference in space */}
+          <g transform="translate(150 10)" opacity="0.95">
+            <rect x="-5" y="-3.5" width="10" height="7" rx="1" fill={tint(tone, 0.14)} stroke={solid(tone)} strokeWidth="1.1" />
+            <rect x="-15" y="-4" width="8" height="8" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
+            <rect x="7" y="-4" width="8" height="8" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
           </g>
-          {/* links between campuses + down from space */}
-          <g stroke={solid(tone)} strokeWidth="1" strokeDasharray="3 4" fill="none" opacity="0.55" className="flow">
-            <line x1="20" y1="15" x2="58" y2="30" />
-            <line x1="58" y1="34" x2="104" y2="34" />
-            <line x1="104" y1="34" x2="140" y2="30" />
-            <line x1="140" y1="34" x2="156" y2="42" />
-          </g>
-          {/* several large campuses */}
-          <DCBlock x={44} y={26} w={28} h={18} tone={tone} rows={3} />
-          <DCBlock x={90} y={22} w={30} h={22} tone={tone} rows={4} />
-          <DCBlock x={128} y={28} w={24} h={16} tone={tone} rows={3} />
+          <text x="166" y="13" fontFamily="var(--font-mono)" fontSize="7.5" fill={solid(T.muted)}>orbital</text>
+          {/* satellite downlink to the network */}
+          <line x1="150" y1="15" x2="150" y2="30" stroke={solid(tone)} strokeWidth="1" strokeDasharray="2 3" opacity="0.6" className="flow" />
+
+          {/* fiber backbone linking the campuses */}
+          <path d="M32 30 L84 24 L136 30 L172 44" fill="none" stroke={solid(tone)} strokeWidth="1.2" strokeDasharray="4 4" opacity="0.6" className="flow" />
+
+          {/* three large campuses */}
+          <DCBlock x={12} y={30} w={40} h={24} tone={tone} rows={5} />
+          <DCBlock x={64} y={22} w={44} h={32} tone={tone} rows={6} />
+          <DCBlock x={118} y={30} w={38} h={24} tone={tone} rows={5} />
+
           {/* edge node */}
-          <g transform="translate(156 40)">
-            <rect x="-4" y="-4" width="8" height="8" rx="1.5" fill="none" stroke={solid(tone)} strokeWidth="1" />
+          <g transform="translate(178 42)">
+            <rect x="-6" y="-6" width="12" height="12" rx="1.5" fill={tint(tone, 0.1)} stroke={solid(tone)} strokeWidth="1.1" />
+            <line x1="-3" y1="-2" x2="3" y2="-2" stroke={solid(tone)} strokeWidth="0.7" />
+            <line x1="-3" y1="2" x2="3" y2="2" stroke={solid(tone)} strokeWidth="0.7" />
           </g>
-          <text x="150" y="52" fontFamily="var(--font-mono)" fontSize="6.5" fill={solid(T.muted)}>edge</text>
-          <line x1="0" y1="47" x2="168" y2="47" stroke={tint(T.line, 0.7)} strokeWidth="1" />
+          <text x="178" y="64" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="7.5" fill={solid(T.muted)}>edge</text>
+
+          <line x1="0" y1="56" x2="210" y2="56" stroke={tint(T.line, 0.7)} strokeWidth="1" />
         </svg>
       )}
       <Cap tone={tone}>{cap}</Cap>
@@ -332,7 +336,7 @@ function DensityRow({ era }) {
           <Footprint variant="city" tone={T.e1} cap="one small site, in the city" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <RackDensity kw="~270 kW" tone={T.e2} level={2} />
+          <RackDensity kw="150 kW" tone={T.e2} level={2} />
           <Footprint variant="campus" tone={T.e2} cap="one large campus" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -386,6 +390,16 @@ function CoolingRow({ era }) {
         </div>,
       ]}
     />
+  );
+}
+
+// power caption with a bold GW/yr figure
+function PwrCap({ tone, gw, children }) {
+  return (
+    <div>
+      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, color: solid(tone), letterSpacing: "0.01em", lineHeight: 1 }}>{gw}</div>
+      <Cap tone={tone}>{children}</Cap>
+    </div>
   );
 }
 
@@ -495,16 +509,16 @@ function PowerRow({ era }) {
           )}
         </div>
 
-        {/* one-line narrative per era */}
+        {/* one-line narrative per era, quantified in GW/yr added */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 6 }}>
           <Reveal on={era >= 1} delay={200}>
-            <Cap tone={T.e1}>grid · very slow</Cap>
+            <PwrCap tone={T.e1} gw="< 5 GW/yr">grid · slow</PwrCap>
           </Reveal>
           <Reveal on={era >= 2} delay={280}>
-            <Cap tone={T.e2}>grid accelerates hard + behind-the-meter</Cap>
+            <PwrCap tone={T.e2} gw="> 20 GW/yr">grid accelerates + behind-the-meter</PwrCap>
           </Reveal>
           <Reveal on={era >= 3} delay={360}>
-            <Cap tone={T.e3}>step change — nuclear + orbital</Cap>
+            <PwrCap tone={T.e3} gw="> 100 GW/yr">step change — nuclear + orbital</PwrCap>
           </Reveal>
         </div>
       </div>
