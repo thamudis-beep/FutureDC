@@ -174,8 +174,13 @@ export default function Deck({ slides }) {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden bg-bg text-text">
-      {/* stage — click anywhere to advance */}
-      <div ref={stageRef} className="relative flex-1 flex items-center justify-center overflow-hidden" style={{ cursor: "pointer" }} onClick={() => next()}>
+      {/* stage — click left third to go back, right two-thirds to advance */}
+      <div
+        ref={stageRef}
+        className="relative flex-1 flex items-center justify-center overflow-hidden"
+        style={{ cursor: "pointer" }}
+        onClick={(e) => (e.clientX < window.innerWidth * 0.35 ? prev() : next())}
+      >
         <div style={{ width: DESIGN.w, height: DESIGN.h, transform: `scale(${scale})`, transformOrigin: "center center", flex: "none" }}>
           <Slide step={pos.step} />
         </div>

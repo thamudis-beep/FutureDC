@@ -61,22 +61,23 @@ export const Cap = ({ tone, children }) => (
 );
 
 // small labeled chip square (C = CPU, G = GPU, M = memory)
-export const Chip = ({ letter, tone, dim }) => (
+export const Chip = ({ letter, tone, dim, size = 16 }) => (
   <div
     style={{
-      width: 16,
-      height: 16,
-      borderRadius: 3,
+      width: size,
+      height: size,
+      borderRadius: Math.max(3, size * 0.18),
       border: `1px solid ${solid(tone)}`,
       color: solid(tone),
-      background: tint(tone, 0.09),
+      background: tint(tone, 0.14),
       fontFamily: "var(--font-mono)",
-      fontSize: 9,
-      fontWeight: 600,
+      fontSize: Math.round(size * 0.52),
+      fontWeight: 700,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      opacity: dim ? 0.45 : 1,
+      opacity: dim ? 0.4 : 1,
+      flex: "none",
     }}
   >
     {letter}

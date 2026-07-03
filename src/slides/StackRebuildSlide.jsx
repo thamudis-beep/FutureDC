@@ -34,7 +34,6 @@ function RowShell({ label, sub, cells, era }) {
         >
           {label}
         </div>
-        {sub && <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: solid(T.muted), marginTop: 3 }}>{sub}</div>}
       </div>
       {cells.map((cell, i) => (
         <div key={i} style={{ padding: "12px 16px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -187,36 +186,45 @@ function NetworkingRow({ era }) {
   );
 }
 
-// 4 ▸ SILICON — accumulating chips
+// 4 ▸ SILICON — chips colored by TYPE so C / G / M read at a glance
+const CPU = T.e1; // steel
+const GPU = T.e2; // amber
+const MEM = T.e3; // cyan
+const SZ = 19;
+
 function SiliconRow({ era }) {
-  const cpus = (n, tone, dim) => Array.from({ length: n }, (_, i) => <Chip key={"c" + i} letter="C" tone={tone} dim={dim} />);
-  const gpus = (n, tone) => Array.from({ length: n }, (_, i) => <Chip key={"g" + i} letter="G" tone={tone} />);
-  const mems = (n, tone) => Array.from({ length: n }, (_, i) => <Chip key={"m" + i} letter="M" tone={tone} />);
+  const chips = (n, letter, tone, dim) => Array.from({ length: n }, (_, i) => <Chip key={letter + i} letter={letter} tone={tone} dim={dim} size={SZ} />);
   return (
     <RowShell
       era={era}
       label="Silicon"
-      sub="compute · memory wall"
       cells={[
         <div>
-          <IconRow>{cpus(4, T.e1)}</IconRow>
-          <Cap tone={T.e1}>CPU scale-out</Cap>
+          <IconRow>{chips(4, "C", CPU)}</IconRow>
+          <div style={{ display: "flex", gap: 12, marginTop: 7 }}>
+            {[["C", "CPU", CPU], ["G", "GPU", GPU], ["M", "memory", MEM]].map(([l, name, tone]) => (
+              <div key={l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Chip letter={l} tone={tone} size={13} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: solid(T.muted) }}>{name}</span>
+              </div>
+            ))}
+          </div>
         </div>,
         <div>
           <IconRow>
-            {cpus(2, T.e1, true)}
-            {gpus(8, T.e2)}
-            {mems(4, T.e2)}
+            {chips(2, "C", CPU, true)}
+            {chips(8, "G", GPU)}
+            {chips(4, "M", MEM)}
           </IconRow>
-          <Cap tone={T.e2}>GPU-centric · HBM bottleneck</Cap>
+          <Cap tone={GPU}>GPU-centric · HBM memory wall</Cap>
         </div>,
         <div>
           <IconRow>
-            {gpus(4, T.e2)}
-            {mems(9, T.e3)}
-            {cpus(5, T.e3)}
+            {chips(5, "C", CPU)}
+            {chips(4, "G", GPU)}
+            {chips(9, "M", MEM)}
           </IconRow>
-          <Cap tone={T.e3}>memory-tiered fleets · ratios per workload</Cap>
+          <Cap tone={MEM}>memory-tiered · ratios per workload</Cap>
         </div>,
       ]}
     />
@@ -379,6 +387,32 @@ function CoolingRow({ era }) {
   );
 }
 
+// an icon node pinned onto a growth line
+function PwrNode({ on, left, top, d, tone, size = 15, dim, delay = 0 }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left,
+        top,
+        transform: "translate(-50%, -50%)",
+        width: size + 11,
+        height: size + 11,
+        borderRadius: 999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgb(var(--bg))",
+        border: `1px solid ${tint(tone, dim ? 0.3 : 0.55)}`,
+        opacity: on ? (dim ? 0.4 : 1) : 0,
+        transition: `opacity .55s ease ${delay}ms`,
+      }}
+    >
+      <IconSvg d={d} tone={tone} size={size} />
+    </div>
+  );
+}
+
 // 1 ▸ POWER — stacked-area story: where the growth comes from.
 // grid grows then stalls · behind-the-meter adds then stalls ·
 // nuclear + orbital drive the continued climb.
@@ -400,73 +434,54 @@ function PowerRow({ era }) {
         >
           Power
         </div>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: solid(T.muted), marginTop: 3 }}>the binding constraint</div>
       </div>
       <div style={{ position: "relative", padding: "8px 16px 4px" }}>
-        <svg width="100%" height="104" viewBox="0 0 1000 120" preserveAspectRatio="none" style={{ display: "block" }}>
-          <defs>
-            <clipPath id="pwrReveal">
-              <rect x="0" y="0" height="120" width={revealW} style={{ transition: "width 1s ease" }} />
-            </clipPath>
-          </defs>
-          {/* era divider guides */}
-          <line x1="333" y1="6" x2="333" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
-          <line x1="666" y1="6" x2="666" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
+        <div style={{ position: "relative" }}>
+          <svg width="100%" height="104" viewBox="0 0 1000 120" preserveAspectRatio="none" style={{ display: "block" }}>
+            <defs>
+              <clipPath id="pwrReveal">
+                <rect x="0" y="0" height="120" width={revealW} style={{ transition: "width 1s ease" }} />
+              </clipPath>
+            </defs>
+            {/* era divider guides */}
+            <line x1="333" y1="6" x2="333" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
+            <line x1="666" y1="6" x2="666" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
 
-          <g clipPath="url(#pwrReveal)">
-            {/* grid band — slow, then flat (stalls) in the future */}
-            <path
-              d="M0,112 L0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66 L1000,112 Z"
-              fill={tint(T.e1, 0.18)}
-            />
-            {/* behind-the-meter band — adds from Today, then flat (stalls) */}
-            <path
-              d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44 L1000,66 C900,66 800,66 666,68 C560,74 470,80 333,86 Z"
-              fill={tint(T.e2, 0.22)}
-            />
-            {/* nuclear + orbital band — appears in the Future, drives the climb */}
-            <path d="M666,48 C800,32 900,18 1000,7 L1000,44 C900,45 800,46 666,48 Z" fill={tint(T.e3, 0.26)} />
+            <g clipPath="url(#pwrReveal)">
+              {/* grid band — slow, then flat (stalls) in the future */}
+              <path d="M0,112 L0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66 L1000,112 Z" fill={tint(T.e1, 0.18)} />
+              {/* behind-the-meter band — adds from Today, then flat (stalls) */}
+              <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44 L1000,66 C900,66 800,66 666,68 C560,74 470,80 333,86 Z" fill={tint(T.e2, 0.22)} />
+              {/* nuclear + orbital band — appears in the Future, drives the climb */}
+              <path d="M666,48 C800,32 900,18 1000,7 L1000,44 C900,45 800,46 666,48 Z" fill={tint(T.e3, 0.26)} />
 
-            {/* top edges */}
-            <path
-              d="M0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66"
-              fill="none"
-              stroke={solid(T.e1)}
-              strokeWidth="1.5"
-              opacity="0.75"
-            />
-            <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
-            <path d="M666,48 C800,32 900,18 1000,7" fill="none" stroke={solid(T.e3)} strokeWidth="2.75" />
-          </g>
-        </svg>
+              {/* top edges */}
+              <path d="M0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66" fill="none" stroke={solid(T.e1)} strokeWidth="1.5" opacity="0.75" />
+              <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
+              <path d="M666,48 C800,32 900,18 1000,7" fill="none" stroke={solid(T.e3)} strokeWidth="2.75" />
+            </g>
+          </svg>
 
-        {/* source icons + narrative per era */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 4 }}>
+          {/* icon-nodes sitting on the growth lines */}
+          <PwrNode on={era >= 1} left="18%" top={79} d={P.tower} tone={T.e1} delay={250} />
+          <PwrNode on={era >= 2} left="49%" top={52} d={P.factory} tone={T.e2} delay={250} />
+          {/* future: prior sources stall (dim, on their plateau) → nuclear + orbital drive the climb */}
+          <PwrNode on={era >= 3} left="83%" top={57} d={P.tower} tone={T.e1} dim delay={200} />
+          <PwrNode on={era >= 3} left="72%" top={41} d={P.factory} tone={T.e2} dim delay={200} />
+          <PwrNode on={era >= 3} left="82%" top={26} d={P.atom} tone={T.e3} delay={350} />
+          <PwrNode on={era >= 3} left="92%" top={13} d={P.sat} tone={T.e3} delay={450} />
+        </div>
+
+        {/* one-line narrative per era */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 6 }}>
           <Reveal on={era >= 1} delay={200}>
-            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-              <IconSvg d={P.tower} tone={T.e1} size={16} />
-              <Cap tone={T.e1}>grid · slow growth</Cap>
-            </div>
+            <Cap tone={T.e1}>grid · slow growth</Cap>
           </Reveal>
           <Reveal on={era >= 2} delay={280}>
-            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-              <IconSvg d={P.tower} tone={T.e1} size={15} />
-              <IconSvg d={P.factory} tone={T.e2} size={15} />
-              <Cap tone={T.e2}>faster grid + behind-the-meter</Cap>
-            </div>
+            <Cap tone={T.e2}>+ behind-the-meter</Cap>
           </Reveal>
           <Reveal on={era >= 3} delay={360}>
-            <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-              {/* prior sources stall — dimmed */}
-              <span style={{ display: "flex", gap: 4, opacity: 0.35 }}>
-                <IconSvg d={P.tower} tone={T.e1} size={14} />
-                <IconSvg d={P.factory} tone={T.e2} size={14} />
-              </span>
-              <span style={{ color: solid(T.muted), fontFamily: "var(--font-mono)", fontSize: 12 }}>→</span>
-              <IconSvg d={P.atom} tone={T.e3} size={16} />
-              <IconSvg d={P.sat} tone={T.e3} size={16} />
-              <Cap tone={T.e3}>grid & BTM stall — nuclear + orbital drive growth</Cap>
-            </div>
+            <Cap tone={T.e3}>grid & BTM stall — nuclear + orbital drive growth</Cap>
           </Reveal>
         </div>
       </div>

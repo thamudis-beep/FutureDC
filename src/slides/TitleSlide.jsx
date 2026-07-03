@@ -167,9 +167,6 @@ export default function TitleSlide() {
 
       {/* title */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.24em", color: solid(T.e3), marginBottom: 20 }}>
-          A PRESENTATION
-        </div>
         <h1
           style={{
             fontFamily: "var(--font-display)",
