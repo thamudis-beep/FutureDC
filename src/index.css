@@ -13,22 +13,33 @@
     --text-secondary: 74 74 74;
     --text-muted: 113 113 122;
     --text-ghost: 161 161 170;
-    --slider-fill: 26 26 26;
-    --slider-track: 229 229 229;
+
+    /* Era accents — the deck's three eras. Tuned darker in light mode for contrast. */
+    --e1: 85 96 110;    /* Before AI — steel */
+    --e2: 178 106 0;    /* AI Buildout — amber */
+    --e3: 14 143 166;   /* AI-Native — cyan */
+    --dead: 209 53 43;  /* retired / crossed-out */
+
+    /* Deck typography */
+    --font-display: 'Barlow Condensed', 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   }
 
   .dark {
-    --bg: 10 10 13;
-    --bg-surface: 17 17 21;
+    --bg: 11 15 23;
+    --bg-surface: 16 22 35;
     --bg-hover: 26 26 32;
     --bg-border: 48 48 56;
     --bg-border-light: 72 72 84;
-    --text: 242 242 244;
+    --text: 233 237 244;
     --text-secondary: 185 185 196;
-    --text-muted: 145 145 158;
+    --text-muted: 139 149 167;
     --text-ghost: 105 105 118;
-    --slider-fill: 242 242 244;
-    --slider-track: 48 48 56;
+
+    --e1: 124 135 152;  /* steel */
+    --e2: 245 165 36;   /* amber */
+    --e3: 79 217 235;   /* cyan */
+    --dead: 229 72 77;
   }
 
   body {
@@ -38,6 +49,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'tnum', 'cv02', 'cv03', 'cv04';
+    overflow: hidden; /* the deck owns the viewport */
   }
 
   * {
@@ -46,53 +58,17 @@
   }
 
   ::selection {
-    background: rgba(37, 99, 235, 0.15);
+    background: rgba(79, 217, 235, 0.2);
   }
 }
 
-/* Slider */
-.slider-track {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+/* ── Deck animations ─────────────────────────────────────────── */
+.flow { animation: deck-dash 1.4s linear infinite; }
+@keyframes deck-dash { to { stroke-dashoffset: -22; } }
 
-.slider-track::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: rgb(var(--text));
-  border: 2px solid rgb(var(--bg));
-  cursor: pointer;
-  box-shadow: 0 0 0 1px rgb(var(--text) / 0.2);
-  transition: box-shadow 0.2s, transform 0.15s;
-}
+.spin { animation: deck-rot 2.6s linear infinite; }
+@keyframes deck-rot { to { transform: rotate(360deg); } }
 
-.slider-track::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 3px rgb(var(--text) / 0.12);
-  transform: scale(1.1);
-}
-
-.slider-track::-webkit-slider-thumb:active {
-  transform: scale(0.95);
-}
-
-.slider-track::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: rgb(var(--text));
-  border: 2px solid rgb(var(--bg));
-  cursor: pointer;
-  box-shadow: 0 0 0 1px rgb(var(--text) / 0.2);
-}
-
-/* Smooth transitions */
-button, a, input {
-  transition: all 0.15s ease;
+@media (prefers-reduced-motion: reduce) {
+  .rv, .flow, .spin { transition: none !important; animation: none !important; }
 }
