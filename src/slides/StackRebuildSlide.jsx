@@ -334,15 +334,15 @@ function DensityRow({ era }) {
       cells={[
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <RackDensity kw="3 kW" tone={T.e1} level={1} />
-          <Footprint variant="city" tone={T.e1} cap="one small site, in the city" />
+          <Footprint variant="city" tone={T.e1} cap="small sites in metro areas" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <RackDensity kw="150 kW" tone={T.e2} level={2} />
-          <Footprint variant="campus" tone={T.e2} cap="one large campus" />
+          <Footprint variant="campus" tone={T.e2} cap="large GW campuses" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <RackDensity kw="1 MW" tone={T.e3} level={3} />
-          <Footprint variant="cluster" tone={T.e3} cap="many campuses linked · + space & edge" />
+          <Footprint variant="cluster" tone={T.e3} cap="multi-GW campuses linked + space + edge" />
         </div>,
       ]}
     />
