@@ -114,7 +114,7 @@ function DesignRow({ era }) {
   return (
     <RowShell
       era={era}
-      label="Design Loop"
+      label="Design"
       sub="EDA · chip cycles"
       cells={[
         <CycleBar w={170} tone={T.e1} label="3–5 yr cycles · manual" />,
