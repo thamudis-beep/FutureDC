@@ -146,12 +146,6 @@ export default function TitleSlide() {
           Future of the<br />
           <span style={{ color: solid(T.e3) }}>Data Center</span>
         </h1>
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 34 }}>
-          <div style={{ width: 52, height: 2, background: solid(T.e3) }} />
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: solid(T.muted), letterSpacing: "0.14em" }}>
-            THE FULL-STACK REBUILD
-          </span>
-        </div>
       </div>
     </div>
   );
