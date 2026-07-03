@@ -212,17 +212,17 @@ function SiliconRow({ era }) {
         </div>,
         <div>
           <IconRow>
-            {chips(2, "C", CPU, true)}
+            {chips(4, "C", CPU)}
             {chips(8, "G", GPU)}
-            {chips(4, "M", MEM)}
+            {chips(3, "M", MEM)}
           </IconRow>
           <Cap tone={GPU}>GPU-centric · HBM memory wall</Cap>
         </div>,
         <div>
           <IconRow>
             {chips(5, "C", CPU)}
-            {chips(4, "G", GPU)}
-            {chips(9, "M", MEM)}
+            {chips(8, "G", GPU)}
+            {chips(11, "M", MEM)}
           </IconRow>
           <Cap tone={MEM}>memory-tiered · ratios per workload</Cap>
         </div>,
@@ -332,7 +332,7 @@ function DensityRow({ era }) {
           <Footprint variant="city" tone={T.e1} cap="one small site, in the city" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <RackDensity kw="150 kW" tone={T.e2} level={2} />
+          <RackDensity kw="~270 kW" tone={T.e2} level={2} />
           <Footprint variant="campus" tone={T.e2} cap="one large campus" />
         </div>,
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -354,33 +354,35 @@ function CoolingRow({ era }) {
       sub="thermal · distribution"
       cells={[
         <div>
-          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
             <EqBox label="XFMR" tone={T.e1} />
+            <EqBox label="SWGR" tone={T.e1} />
             <EqBox label="UPS" tone={T.e1} />
             <EqBox label="PDU" tone={T.e1} />
             <IconSvg d={P.fan} tone={T.e1} size={17} />
           </div>
-          <Cap tone={T.e1}>air-cooled · 415 V AC chain</Cap>
+          <Cap tone={T.e1}>air-cooled · 480 VAC chain · 4 steps</Cap>
         </div>,
         <div>
-          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
             <EqBox label="XFMR" tone={T.e1} />
+            <EqBox label="SWGR" tone={T.e1} />
             <EqBox label="UPS" tone={T.e1} />
             <EqBox label="PDU" tone={T.e1} />
             <IconSvg d={P.drop} tone={T.e2} size={16} />
-            <IconSvg d={P.drop} tone={T.e2} size={16} />
           </div>
-          <Cap tone={T.e2}>+ direct-to-chip liquid</Cap>
+          <Cap tone={T.e2}>same chain + direct-to-chip liquid</Cap>
         </div>,
         <div>
-          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
             <EqBox label="XFMR" tone={T.e1} dead={dead} />
+            <EqBox label="SWGR" tone={T.e1} dead={dead} />
             <EqBox label="UPS" tone={T.e1} dead={dead} />
             <EqBox label="PDU" tone={T.e1} dead={dead} />
             <span style={{ color: solid(T.e3), fontFamily: "var(--font-mono)", fontSize: 12 }}>→</span>
-            <EqBox label="SST · 800 V DC" tone={T.e3} wide />
+            <EqBox label="SST · 800 VDC" tone={T.e3} wide />
           </div>
-          <Cap tone={T.e3}>solid-state transformer replaces the chain</Cap>
+          <Cap tone={T.e3}>one stage · MV→800 VDC · no electrical room</Cap>
         </div>,
       ]}
     />
@@ -448,40 +450,61 @@ function PowerRow({ era }) {
             <line x1="666" y1="6" x2="666" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
 
             <g clipPath="url(#pwrReveal)">
-              {/* grid band — slow, then flat (stalls) in the future */}
-              <path d="M0,112 L0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66 L1000,112 Z" fill={tint(T.e1, 0.18)} />
-              {/* behind-the-meter band — adds from Today, then flat (stalls) */}
-              <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44 L1000,66 C900,66 800,66 666,68 C560,74 470,80 333,86 Z" fill={tint(T.e2, 0.22)} />
-              {/* nuclear + orbital band — appears in the Future, drives the climb */}
-              <path d="M666,48 C800,32 900,18 1000,7 L1000,44 C900,45 800,46 666,48 Z" fill={tint(T.e3, 0.26)} />
+              {/* grid band — crawls in Pre-AI, then accelerates hard in Today, flattens in the Future */}
+              <path d="M0,112 L0,106 C160,105 250,103 333,100 C450,94 560,80 666,64 C800,60 900,59 1000,58 L1000,112 Z" fill={tint(T.e1, 0.18)} />
+              {/* behind-the-meter band — adds in Today, then flat */}
+              <path d="M333,100 C450,86 560,64 666,50 C800,48 900,46 1000,44 L1000,58 C900,59 800,60 666,64 C560,80 450,94 333,100 Z" fill={tint(T.e2, 0.22)} />
+              {/* nuclear + orbital band — Future step-change; drives a sharp climb */}
+              <path d="M666,50 C696,36 726,26 770,22 C858,14 930,9 1000,6 L1000,44 C900,46 800,48 666,50 Z" fill={tint(T.e3, 0.26)} />
 
               {/* top edges */}
-              <path d="M0,102 C160,94 210,90 333,86 C470,80 560,74 666,68 C800,66 900,66 1000,66" fill="none" stroke={solid(T.e1)} strokeWidth="1.5" opacity="0.75" />
-              <path d="M333,86 C470,72 560,60 666,48 C800,46 900,45 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
-              <path d="M666,48 C800,32 900,18 1000,7" fill="none" stroke={solid(T.e3)} strokeWidth="2.75" />
+              <path d="M0,106 C160,105 250,103 333,100 C450,94 560,80 666,64 C800,60 900,59 1000,58" fill="none" stroke={solid(T.e1)} strokeWidth="1.5" opacity="0.75" />
+              <path d="M333,100 C450,86 560,64 666,50 C800,48 900,46 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
+              <path d="M666,50 C696,36 726,26 770,22 C858,14 930,9 1000,6" fill="none" stroke={solid(T.e3)} strokeWidth="3" />
             </g>
           </svg>
 
           {/* icon-nodes sitting on the growth lines */}
-          <PwrNode on={era >= 1} left="18%" top={79} d={P.tower} tone={T.e1} delay={250} />
-          <PwrNode on={era >= 2} left="49%" top={52} d={P.factory} tone={T.e2} delay={250} />
-          {/* future: prior sources stall (dim, on their plateau) → nuclear + orbital drive the climb */}
-          <PwrNode on={era >= 3} left="83%" top={57} d={P.tower} tone={T.e1} dim delay={200} />
-          <PwrNode on={era >= 3} left="72%" top={41} d={P.factory} tone={T.e2} dim delay={200} />
-          <PwrNode on={era >= 3} left="82%" top={26} d={P.atom} tone={T.e3} delay={350} />
-          <PwrNode on={era >= 3} left="92%" top={13} d={P.sat} tone={T.e3} delay={450} />
+          <PwrNode on={era >= 1} left="20%" top={88} d={P.tower} tone={T.e1} delay={250} />
+          {/* today: grid accelerates + behind-the-meter (generation + storage) */}
+          <PwrNode on={era >= 2} left="52%" top={57} d={P.factory} tone={T.e2} delay={220} />
+          <PwrNode on={era >= 2} left="62%" top={50} d={P.battery} tone={T.e2} delay={320} />
+          {/* future: prior sources stall (dim, on their plateau) → nuclear + orbital step-change */}
+          <PwrNode on={era >= 3} left="84%" top={49} d={P.tower} tone={T.e1} dim delay={200} />
+          <PwrNode on={era >= 3} left="75%" top={39} d={P.factory} tone={T.e2} dim delay={200} />
+          <PwrNode on={era >= 3} left="80%" top={18} d={P.atom} tone={T.e3} delay={350} />
+          <PwrNode on={era >= 3} left="91%" top={9} d={P.sat} tone={T.e3} delay={450} />
+
+          {/* step-change callout */}
+          {era >= 3 && (
+            <div
+              style={{
+                position: "absolute",
+                left: "68.5%",
+                top: 20,
+                transform: "translate(-100%, -50%)",
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                color: solid(T.e3),
+                whiteSpace: "nowrap",
+                opacity: 0.9,
+              }}
+            >
+              step change ↗
+            </div>
+          )}
         </div>
 
         {/* one-line narrative per era */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", marginTop: 6 }}>
           <Reveal on={era >= 1} delay={200}>
-            <Cap tone={T.e1}>grid · slow growth</Cap>
+            <Cap tone={T.e1}>grid · very slow</Cap>
           </Reveal>
           <Reveal on={era >= 2} delay={280}>
-            <Cap tone={T.e2}>+ behind-the-meter</Cap>
+            <Cap tone={T.e2}>grid accelerates hard + behind-the-meter</Cap>
           </Reveal>
           <Reveal on={era >= 3} delay={360}>
-            <Cap tone={T.e3}>grid & BTM stall — nuclear + orbital drive growth</Cap>
+            <Cap tone={T.e3}>step change — nuclear + orbital</Cap>
           </Reveal>
         </div>
       </div>

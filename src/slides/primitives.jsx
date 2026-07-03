@@ -211,4 +211,11 @@ export const P = {
     </>
   ),
   drop: <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" />,
+  battery: (
+    <>
+      <rect x="3" y="8" width="16" height="10" rx="1.5" />
+      <path d="M21 11v4" />
+      <path d="M11 10.5 L8.5 13.5 H11.5 L9 16.5" />
+    </>
+  ),
 };
