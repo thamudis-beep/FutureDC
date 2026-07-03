@@ -224,7 +224,7 @@ function SiliconRow({ era }) {
             {chips(8, "G", GPU)}
             {chips(11, "M", MEM)}
           </IconRow>
-          <Cap tone={MEM}>increasingly memory-bound</Cap>
+          <Cap tone={MEM}>compute waits on memory</Cap>
         </div>,
       ]}
     />
