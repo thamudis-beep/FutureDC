@@ -1,9 +1,9 @@
 import React from "react";
-import { T, solid, tint } from "./primitives";
+import { T, solid, tint, P } from "./primitives";
 
 // ── background glyphs ────────────────────────────────────────
 
-const Chip = ({ x, y, s = 1, tone = T.muted, op = 0.28 }) => (
+const Chip = ({ x, y, s = 1, tone = T.muted, op = 0.16 }) => (
   <g transform={`translate(${x} ${y}) scale(${s})`} opacity={op}>
     <rect x="-8" y="-8" width="16" height="16" rx="2" fill="none" stroke={solid(tone)} strokeWidth="1.1" />
     <rect x="-3.5" y="-3.5" width="7" height="7" rx="1" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
@@ -18,25 +18,21 @@ const Chip = ({ x, y, s = 1, tone = T.muted, op = 0.28 }) => (
   </g>
 );
 
-const Sat = ({ tone = T.muted, op = 0.6, s = 1 }) => (
+const Sat = ({ tone = T.muted, op = 0.55, s = 1 }) => (
   <g opacity={op} transform={`scale(${s})`}>
     <rect x="-5" y="-3.5" width="10" height="7" rx="1" fill={tint(tone, 0.12)} stroke={solid(tone)} strokeWidth="1.1" />
-    <line x1="-5" y1="0" x2="-9" y2="0" stroke={solid(tone)} strokeWidth="0.9" />
-    <line x1="5" y1="0" x2="9" y2="0" stroke={solid(tone)} strokeWidth="0.9" />
-    <rect x="-22" y="-4.5" width="13" height="9" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
-    <rect x="9" y="-4.5" width="13" height="9" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
-    <line x1="-15.5" y1="-4.5" x2="-15.5" y2="4.5" stroke={solid(tone)} strokeWidth="0.6" />
-    <line x1="15.5" y1="-4.5" x2="15.5" y2="4.5" stroke={solid(tone)} strokeWidth="0.6" />
+    <rect x="-20" y="-4" width="12" height="8" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
+    <rect x="8" y="-4" width="12" height="8" fill="none" stroke={solid(tone)} strokeWidth="0.9" />
   </g>
 );
 
-const Orbit = ({ cx, cy, r, dur, dir = 1, tone = T.muted, satOp = 0.6, satS = 1 }) => (
+const Orbit = ({ cx, cy, r, dur, dir = 1 }) => (
   <g>
     <circle cx={cx} cy={cy} r={r} fill="none" stroke={tint(T.text, 0.06)} strokeWidth="1" />
     <g>
       <animateTransform attributeName="transform" type="rotate" from={`${dir > 0 ? 0 : 360} ${cx} ${cy}`} to={`${dir > 0 ? 360 : 0} ${cx} ${cy}`} dur={`${dur}s`} repeatCount="indefinite" />
       <g transform={`translate(${cx} ${cy - r})`}>
-        <Sat tone={tone} op={satOp} s={satS} />
+        <Sat tone={T.muted} op={0.4} s={0.8} />
       </g>
     </g>
   </g>
@@ -58,22 +54,15 @@ const RecursiveCore = ({ cx, cy }) => (
   </g>
 );
 
-const Atom = ({ x, y, tone = T.e3, op = 0.5 }) => (
-  <g transform={`translate(${x} ${y})`} opacity={op} stroke={solid(tone)} strokeWidth="1.1" fill="none">
-    <circle cx="0" cy="0" r="2" fill={solid(tone)} stroke="none" />
-    <ellipse cx="0" cy="0" rx="19" ry="7.5" />
-    <ellipse cx="0" cy="0" rx="19" ry="7.5" transform="rotate(60)" />
-    <ellipse cx="0" cy="0" rx="19" ry="7.5" transform="rotate(120)" />
-  </g>
-);
-
-// a blueprint-style callout: tick dot + leader line + mono label
-const Label = ({ x, y, tx, ty, text, anchor = "start", tone = T.muted }) => (
+// a labeled node: icon in a circle + mono label
+const ThemeNode = ({ x, y, d, label, side = "right", tone = T.e3 }) => (
   <g>
-    <line x1={x} y1={y} x2={tx} y2={ty} stroke={tint(T.text, 0.18)} strokeWidth="1" />
-    <circle cx={x} cy={y} r="2" fill={solid(tone)} />
-    <text x={anchor === "end" ? tx - 6 : tx + 6} y={ty + 3} textAnchor={anchor} fontFamily="var(--font-mono)" fontSize="12.5" letterSpacing="0.08em" fill={solid(T.muted)}>
-      {text}
+    <circle cx={x} cy={y} r="15" fill="rgb(var(--bg))" stroke={tint(tone, 0.55)} strokeWidth="1" />
+    <svg x={x - 9} y={y - 9} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={solid(tone)} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      {d}
+    </svg>
+    <text x={side === "right" ? x + 23 : x - 23} y={y + 4} textAnchor={side === "right" ? "start" : "end"} fontFamily="var(--font-mono)" fontSize="12.5" letterSpacing="0.07em" fill={solid(T.muted)}>
+      {label}
     </text>
   </g>
 );
@@ -81,10 +70,17 @@ const Label = ({ x, y, tx, ty, text, anchor = "start", tone = T.muted }) => (
 function CoverBackground() {
   const cx = 1000;
   const cy = 452;
+  const nodes = [
+    { x: 1000, y: 246, d: P.sat, label: "ORBITAL COMPUTE", side: "right" },
+    { x: 1190, y: 342, d: P.mem, label: "MEMORY FABRIC", side: "right" },
+    { x: 1216, y: 452, d: P.cpu, label: "CUSTOM SILICON", side: "right" },
+    { x: 1190, y: 562, d: P.arm, label: "PHYSICAL AI", side: "right" },
+    { x: 1064, y: 648, d: P.bot, label: "AGENT SWARMS", side: "right" },
+    { x: 858, y: 648, d: P.atom, label: "NUCLEAR POWER", side: "left" },
+  ];
   return (
     <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
       <defs>
-        {/* blueprint grid */}
         <pattern id="bpGrid" width="48" height="48" patternUnits="userSpaceOnUse">
           <path d="M48 0 H0 V48" fill="none" stroke={tint(T.text, 0.035)} strokeWidth="1" />
         </pattern>
@@ -92,26 +88,25 @@ function CoverBackground() {
       <rect width="1440" height="900" fill="url(#bpGrid)" />
 
       {/* faint chip lattice */}
-      {[[250, 150, 0.85], [1330, 250, 0.8], [1360, 620, 0.9], [300, 760, 0.8], [1180, 780, 0.85]].map(([x, y, s], i) => (
-        <Chip key={i} x={x} y={y} s={s} tone={T.muted} op={0.16} />
+      {[[250, 150, 0.85], [1330, 250, 0.8], [1360, 700, 0.9], [300, 770, 0.8]].map(([x, y, s], i) => (
+        <Chip key={i} x={x} y={y} s={s} />
       ))}
 
-      {/* orbital system */}
-      <Orbit cx={cx} cy={cy} r={132} dur={34} dir={1} tone={T.e3} satOp={0.95} />
-      <Orbit cx={cx} cy={cy} r={224} dur={58} dir={-1} tone={T.muted} satOp={0.65} satS={0.95} />
-      <Orbit cx={cx} cy={cy} r={314} dur={82} dir={1} tone={T.muted} satOp={0.5} satS={0.9} />
+      {/* orbital scaffold */}
+      <Orbit cx={cx} cy={cy} r={132} dur={34} dir={1} />
+      <Orbit cx={cx} cy={cy} r={224} dur={58} dir={-1} />
+      <Orbit cx={cx} cy={cy} r={314} dur={82} dir={1} />
 
       {/* self-recursive AI core */}
       <RecursiveCore cx={cx} cy={cy} />
+      <text x={cx} y={cy + 74} textAnchor="middle" fontFamily="var(--font-mono)" fontSize="12.5" letterSpacing="0.07em" fill={solid(T.e3)} opacity="0.9">
+        SELF-IMPROVING AI
+      </text>
 
-      {/* nuclear */}
-      <Atom x={cx - 40} y={cy + 250} tone={T.e3} op={0.5} />
-
-      {/* blueprint callouts */}
-      <Label x={cx} y={cy} tx={cx + 200} ty={cy + 150} text="SELF-IMPROVING AI" tone={T.e3} />
-      <Label x={cx} y={cy - 132} tx={cx + 232} ty={cy - 150} text="ORBITAL COMPUTE" tone={T.e3} />
-      <Label x={cx - 40} y={cy + 250} tx={cx - 250} ty={cy + 250} text="NUCLEAR POWER" anchor="end" tone={T.e3} />
-      <Label x={cx + 224} y={cy + 20} tx={cx + 150} ty={cy + 210} text="800 VDC · 1 MW RACKS" anchor="end" tone={T.muted} />
+      {/* themed nodes around the core */}
+      {nodes.map((n, i) => (
+        <ThemeNode key={i} {...n} />
+      ))}
     </svg>
   );
 }
@@ -145,7 +140,7 @@ export default function TitleSlide() {
             lineHeight: 1.0,
             letterSpacing: "-0.035em",
             margin: 0,
-            maxWidth: 760,
+            maxWidth: 720,
           }}
         >
           Future of the<br />

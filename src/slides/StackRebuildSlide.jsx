@@ -224,7 +224,7 @@ function SiliconRow({ era }) {
             {chips(8, "G", GPU)}
             {chips(11, "M", MEM)}
           </IconRow>
-          <Cap tone={MEM}>memory is the fabric · bandwidth + capacity define the system</Cap>
+          <Cap tone={MEM}>memory is the fabric</Cap>
         </div>,
       ]}
     />
@@ -464,38 +464,38 @@ function PowerRow({ era }) {
             <line x1="666" y1="6" x2="666" y2="112" stroke={tint(T.line, 0.6)} strokeWidth="1" strokeDasharray="3 5" />
 
             <g clipPath="url(#pwrReveal)">
-              {/* grid band — crawls in Pre-AI, then accelerates hard in Today, flattens in the Future */}
-              <path d="M0,112 L0,106 C160,105 250,103 333,100 C450,94 560,80 666,64 C800,60 900,59 1000,58 L1000,112 Z" fill={tint(T.e1, 0.18)} />
-              {/* behind-the-meter band — adds in Today, then flat */}
-              <path d="M333,100 C450,86 560,64 666,50 C800,48 900,46 1000,44 L1000,58 C900,59 800,60 666,64 C560,80 450,94 333,100 Z" fill={tint(T.e2, 0.22)} />
-              {/* nuclear + orbital band — Future step-change; drives a sharp climb */}
-              <path d="M666,50 C696,36 726,26 770,22 C858,14 930,9 1000,6 L1000,44 C900,46 800,48 666,50 Z" fill={tint(T.e3, 0.26)} />
+              {/* grid band — crawls in Pre-AI, accelerates in Today, plateaus in the Future */}
+              <path d="M0,112 L0,106 C150,105 240,103 333,100 C450,93 560,80 666,68 C800,66 900,65 1000,64 L1000,112 Z" fill={tint(T.e1, 0.16)} />
+              {/* grid + behind-the-meter — adds in Today, then plateaus (this is the ceiling without new sources) */}
+              <path d="M333,100 C450,84 560,64 666,52 C800,50 900,49 1000,48 L1000,64 C900,65 800,66 666,68 C560,80 450,93 333,100 Z" fill={tint(T.e2, 0.2)} />
+              {/* nuclear + orbital — Future divergence above the plateau; smooth take-off */}
+              <path d="M666,52 C720,48 770,40 820,28 C880,18 945,11 1000,8 L1000,48 C900,49 800,50 666,52 Z" fill={tint(T.e3, 0.26)} />
 
               {/* top edges */}
-              <path d="M0,106 C160,105 250,103 333,100 C450,94 560,80 666,64 C800,60 900,59 1000,58" fill="none" stroke={solid(T.e1)} strokeWidth="1.5" opacity="0.75" />
-              <path d="M333,100 C450,86 560,64 666,50 C800,48 900,46 1000,44" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
-              <path d="M666,50 C696,36 726,26 770,22 C858,14 930,9 1000,6" fill="none" stroke={solid(T.e3)} strokeWidth="3" />
+              <path d="M0,106 C150,105 240,103 333,100 C450,93 560,80 666,68 C800,66 900,65 1000,64" fill="none" stroke={solid(T.e1)} strokeWidth="1.5" opacity="0.7" />
+              <path d="M333,100 C450,84 560,64 666,52 C800,50 900,49 1000,48" fill="none" stroke={solid(T.e2)} strokeWidth="1.5" opacity="0.85" />
+              <path d="M666,52 C720,48 770,40 820,28 C880,18 945,11 1000,8" fill="none" stroke={solid(T.e3)} strokeWidth="3" />
             </g>
           </svg>
 
           {/* icon-nodes sitting on the growth lines */}
           <PwrNode on={era >= 1} left="20%" top={88} d={P.tower} tone={T.e1} delay={250} />
           {/* today: grid accelerates + behind-the-meter (generation + storage) */}
-          <PwrNode on={era >= 2} left="52%" top={57} d={P.factory} tone={T.e2} delay={220} />
-          <PwrNode on={era >= 2} left="62%" top={50} d={P.battery} tone={T.e2} delay={320} />
-          {/* future: prior sources stall (dim, on their plateau) → nuclear + orbital step-change */}
-          <PwrNode on={era >= 3} left="84%" top={49} d={P.tower} tone={T.e1} dim delay={200} />
-          <PwrNode on={era >= 3} left="75%" top={39} d={P.factory} tone={T.e2} dim delay={200} />
-          <PwrNode on={era >= 3} left="80%" top={18} d={P.atom} tone={T.e3} delay={350} />
-          <PwrNode on={era >= 3} left="91%" top={9} d={P.sat} tone={T.e3} delay={450} />
+          <PwrNode on={era >= 2} left="52%" top={58} d={P.factory} tone={T.e2} delay={220} />
+          <PwrNode on={era >= 2} left="63%" top={49} d={P.battery} tone={T.e2} delay={320} />
+          {/* future: prior sources plateau (dim) → nuclear + orbital diverge upward */}
+          <PwrNode on={era >= 3} left="87%" top={54} d={P.tower} tone={T.e1} dim delay={200} />
+          <PwrNode on={era >= 3} left="78%" top={42} d={P.factory} tone={T.e2} dim delay={200} />
+          <PwrNode on={era >= 3} left="82%" top={22} d={P.atom} tone={T.e3} delay={350} />
+          <PwrNode on={era >= 3} left="93%" top={9} d={P.sat} tone={T.e3} delay={450} />
 
-          {/* step-change callout */}
+          {/* step-change callout, pointing at the divergence */}
           {era >= 3 && (
             <div
               style={{
                 position: "absolute",
-                left: "68.5%",
-                top: 20,
+                left: "70%",
+                top: 26,
                 transform: "translate(-100%, -50%)",
                 fontFamily: "var(--font-mono)",
                 fontSize: 10,

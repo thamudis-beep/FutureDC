@@ -211,6 +211,20 @@ export const P = {
     </>
   ),
   drop: <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" />,
+  cpu: (
+    <>
+      <rect x="6" y="6" width="12" height="12" rx="1.5" />
+      <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
+      <path d="M9 6V3M15 6V3M9 21v-3M15 21v-3M6 9H3M6 15H3M21 9h-3M21 15h-3" />
+    </>
+  ),
+  mem: (
+    <>
+      <rect x="3.5" y="5" width="17" height="4" rx="1" />
+      <rect x="3.5" y="11" width="17" height="4" rx="1" />
+      <rect x="3.5" y="17" width="17" height="3" rx="1" />
+    </>
+  ),
   battery: (
     <>
       <rect x="3" y="8" width="16" height="10" rx="1.5" />
