@@ -92,50 +92,31 @@ function OrbStructure({ c }) {
   );
 }
 
-// OPERATIONS — power plant + cooling towers vs sun/solar/compute/radiator
+// OPERATIONS — the three recurring cost drivers: power · cooling+water · people
+function Driver({ d, label, c, dim }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flex: "none", opacity: dim ? 0.5 : 1 }}>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{d}</svg>
+      <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.02em", color: solid(T.muted), whiteSpace: "nowrap" }}>{label}</span>
+    </div>
+  );
+}
 function TerrOps({ c }) {
   return (
-    <svg {...svgProps(c)}>
-      <rect x="16" y="50" width="42" height="40" />
-      <rect x="26" y="34" width="9" height="16" />
-      <path className="pulse" d="M30 32c-4-4 4-8 0-13" strokeWidth="1.4" />
-      <path d="M64 68h26" />
-      <path d="M90 68l-9-4.5v9z" fill={c} stroke="none" />
-      <path d="M106 90C110 66 110 66 116 48L136 48C142 66 142 66 146 90" />
-      <ellipse cx="126" cy="48" rx="10" ry="3" />
-      <path d="M160 90C164 68 164 68 169 52L185 52C190 68 190 68 194 90" />
-      <ellipse cx="177" cy="52" rx="8" ry="2.6" />
-      <g className="pulse">
-        <path d="M122 46c-4-5 4-9 0-15M174 50c-4-5 4-9 0-14" strokeWidth="1.4" />
-      </g>
-      <path d="M8 90h224" strokeWidth="1.3" />
-    </svg>
+    <div style={{ display: "flex", gap: 24 }}>
+      <Driver c={c} d={P.meter} label="grid power" />
+      <Driver c={c} d={P.drop} label="water + chillers" />
+      <Driver c={c} d={P.person} label="staff" />
+    </div>
   );
 }
 function OrbOps({ c }) {
-  const arw = (x) => (
-    <g key={x}>
-      <path d={`M${x} 44h16`} />
-      <path d={`M${x + 16} 44l-7-4v8z`} fill={c} stroke="none" />
-    </g>
-  );
   return (
-    <svg {...svgProps(c)}>
-      <circle cx="24" cy="44" r="9" />
-      <path className="pulse" d="M24 30v-6M24 58v6M10 44H4M38 44h6M14 34l-4-4M34 54l4 4M34 34l4-4M14 54l-4 4" strokeWidth="1.3" />
-      {arw(40)}
-      <rect x="66" y="32" width="32" height="24" rx="2" />
-      <path d="M77 32v24M87 32v24M66 44h32" strokeWidth="1.2" />
-      {arw(102)}
-      <rect x="128" y="32" width="24" height="24" rx="2" />
-      <rect x="135" y="39" width="10" height="10" />
-      {arw(156)}
-      <rect x="182" y="30" width="28" height="28" rx="2" />
-      <path d="M191 30v28M200 30v28" strokeWidth="1.2" />
-      <g className="pulse">
-        <path d="M216 36c5 3 5 6 0 9M216 48c5 3 5 6 0 9" strokeWidth="1.4" />
-      </g>
-    </svg>
+    <div style={{ display: "flex", gap: 24 }}>
+      <Driver c={c} d={P.sun} label="free sun" />
+      <Driver c={c} d={P.radiator} label="passive radiator" />
+      <Driver c={c} d={P.personoff} label="unmanned" />
+    </div>
   );
 }
 

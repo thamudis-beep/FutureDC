@@ -292,6 +292,21 @@ export const P = {
       <path d="M5.5 21v-1a6.5 6.5 0 0 1 13 0v1" />
     </>
   ),
+  personoff: (
+    <>
+      <circle cx="12" cy="7" r="3.2" />
+      <path d="M5.5 21v-1a6.5 6.5 0 0 1 11-4.9" />
+      <path d="M4 4l16 16" />
+    </>
+  ),
+  meter: (
+    <>
+      <circle cx="12" cy="13" r="8.5" />
+      <path d="M12 13l4.5-3.6" />
+      <path d="M12 4.5v-1.5M20.5 13H22M2 13h1.5" />
+      <circle cx="12" cy="13" r="1.2" fill="currentColor" stroke="none" />
+    </>
+  ),
   battery: (
     <>
       <rect x="3" y="8" width="16" height="10" rx="1.5" />
