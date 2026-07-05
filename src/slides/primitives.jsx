@@ -225,6 +225,65 @@ export const P = {
       <rect x="3.5" y="17" width="17" height="3" rx="1" />
     </>
   ),
+  building: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="1" />
+      <path d="M9 7h1.5M13.5 7h1.5M9 11h1.5M13.5 11h1.5M9 15h1.5M13.5 15h1.5" />
+    </>
+  ),
+  doc: (
+    <>
+      <path d="M7 3h7l4 4v14H7z" />
+      <path d="M14 3v4h4" />
+      <path d="M10 13h5M10 16.5h4" />
+    </>
+  ),
+  rocket: (
+    <>
+      <path d="M12 2c2.8 2.2 4 5.2 4 8.5 0 2-.5 3.8-1.4 5.5H9.4C8.5 14.3 8 12.5 8 10.5 8 7.2 9.2 4.2 12 2z" />
+      <circle cx="12" cy="9" r="1.6" />
+      <path d="M9.4 16l-2.4 3 3-1M14.6 16l2.4 3-3-1" />
+    </>
+  ),
+  radiator: (
+    <>
+      <rect x="4" y="5" width="16" height="14" rx="1" />
+      <path d="M8 5v14M12 5v14M16 5v14" />
+    </>
+  ),
+  link: (
+    <>
+      <path d="M9.5 12a3.5 3.5 0 0 1 3.5-3.5h2a3.5 3.5 0 0 1 0 7h-1" />
+      <path d="M14.5 12a3.5 3.5 0 0 1-3.5 3.5H9a3.5 3.5 0 0 1 0-7h1" />
+    </>
+  ),
+  laser: (
+    <>
+      <circle cx="5" cy="12" r="2" />
+      <path d="M7 12h9" />
+      <path d="M20 12l-4-2.4v4.8z" fill="currentColor" stroke="none" />
+    </>
+  ),
+  dish: (
+    <>
+      <ellipse cx="9" cy="9" rx="7" ry="4.5" transform="rotate(-35 9 9)" />
+      <circle cx="9" cy="9" r="1" fill="currentColor" stroke="none" />
+      <path d="M11.5 12.5 L15 20 M11 20h8" />
+    </>
+  ),
+  shield: <path d="M12 3l7 3v5c0 4.2-3 7.4-7 8.5-4-1.1-7-4.3-7-8.5V6l7-3z" />,
+  dollar: (
+    <>
+      <path d="M12 2.5v19" />
+      <path d="M16 6a4 3 0 0 0-4-2c-2.2 0-4 1.2-4 3s1.8 2.6 4 3 4 1.3 4 3.2-1.8 3.2-4 3.2a4 3 0 0 1-4-2" />
+    </>
+  ),
+  person: (
+    <>
+      <circle cx="12" cy="7" r="3.2" />
+      <path d="M5.5 21v-1a6.5 6.5 0 0 1 13 0v1" />
+    </>
+  ),
   battery: (
     <>
       <rect x="3" y="8" width="16" height="10" rx="1.5" />
