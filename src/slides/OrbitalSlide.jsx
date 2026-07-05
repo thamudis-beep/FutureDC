@@ -40,33 +40,45 @@ function Scene({ live }) {
         </g>
       ))}
 
-      {/* rocket bridging earth -> orbit */}
-      <g style={{ opacity: live ? 0.75 : 0, transition: "opacity .8s ease .7s" }}>
-        <path d="M430 612 Q520 470 610 300" stroke={solid(ORB)} strokeWidth="1.3" strokeDasharray="2 9" fill="none" />
-        <g transform="translate(610 294)"><path d="M0 0c4-6 4-14 0-21c-4 7-4 15 0 21z" fill="none" stroke={solid(ORB)} strokeWidth="1.6" /><path d="M-3 -2l-5 6M3 -2l5 6" stroke={solid(ORB)} strokeWidth="1.6" fill="none" /></g>
+      {/* rocket bridging earth -> orbit — subtle looping launch */}
+      <g style={{ opacity: live ? 1 : 0, transition: "opacity .8s ease .7s" }}>
+        <path d="M430 612 Q520 470 610 300" stroke={solid(ORB)} strokeWidth="1.2" strokeDasharray="2 9" fill="none" opacity="0.45" />
+        <g fill="none" stroke={solid(ORB)} strokeWidth="1.6">
+          <animateMotion dur="4.8s" repeatCount="indefinite" path="M430 612 Q520 470 610 300" />
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="4.8s" repeatCount="indefinite" />
+          <path d="M0 0c4-6 4-14 0-21c-4 7-4 15 0 21z" />
+          <path d="M-3 -2l-5 6M3 -2l5 6" />
+          <path className="pulse" d="M-2 1q2 6 2 0M2 1q-2 6-2 0" strokeWidth="1.3" />
+        </g>
       </g>
 
       {/* Earth surface */}
       <rect x="0" y="622" width="1440" height="278" fill="rgb(var(--bg-surface))" />
       <line x1="0" y1="622" x2="1440" y2="622" stroke={solid(ORB)} strokeWidth="1.5" opacity="0.3" />
 
-      {/* heavy terrestrial GW campus */}
+      {/* heavy terrestrial GW campus (dense) */}
       <g stroke={solid(TERR)} strokeWidth="2" fill="none">
         {/* power plant + smokestacks */}
-        <rect x="70" y="574" width="60" height="48" />
-        <rect x="84" y="552" width="10" height="22" /><rect x="104" y="552" width="10" height="22" />
-        <g className="pulse" opacity="0.7"><path d="M89 550c-5-6 5-10 0-17M109 550c-5-6 5-10 0-17" strokeWidth="1.3" /></g>
-        {/* cooling towers */}
-        <path d="M150 622C156 596 156 596 164 574L192 574C200 596 200 596 206 622" /><ellipse cx="178" cy="574" rx="14" ry="3.5" />
-        <path d="M220 622C226 600 226 600 233 580L257 580C264 600 264 600 270 622" /><ellipse cx="245" cy="580" rx="12" ry="3" />
-        <g className="pulse" opacity="0.7"><path d="M172 572c-6-7 6-12 0-20M240 578c-6-7 6-12 0-18" strokeWidth="1.4" /></g>
-        {/* data-center halls */}
-        <rect x="320" y="576" width="150" height="46" rx="2" /><path d="M334 590h122M334 604h122" strokeWidth="1" opacity="0.55" />
-        <rect x="486" y="582" width="120" height="40" rx="2" /><path d="M500 596h92M500 608h92" strokeWidth="1" opacity="0.55" />
+        <rect x="56" y="568" width="62" height="54" />
+        <rect x="70" y="544" width="11" height="24" /><rect x="92" y="544" width="11" height="24" />
+        <g className="pulse" opacity="0.7"><path d="M75 542c-5-6 5-10 0-17M97 542c-5-6 5-10 0-17" strokeWidth="1.3" /></g>
+        {/* cooling towers x3 */}
+        <path d="M130 622C136 598 136 598 143 578L167 578C174 598 174 598 180 622" /><ellipse cx="155" cy="578" rx="12" ry="3" />
+        <path d="M188 622C194 600 194 600 200 582L222 582C229 600 229 600 234 622" /><ellipse cx="211" cy="582" rx="11" ry="2.8" />
+        <path d="M242 622C248 602 248 602 254 586L274 586C281 602 281 602 286 622" /><ellipse cx="264" cy="586" rx="10" ry="2.6" />
+        <g className="pulse" opacity="0.7"><path d="M149 576c-6-7 6-12 0-20M205 580c-6-7 6-11 0-18M258 584c-5-6 5-10 0-16" strokeWidth="1.3" /></g>
+        {/* substation / transformer yard */}
+        <rect x="306" y="596" width="18" height="26" /><rect x="328" y="596" width="18" height="26" />
+        <path d="M315 596v-9M337 596v-9M308 587h44" strokeWidth="1.1" opacity="0.8" />
+        {/* data-center halls x4 */}
+        <rect x="370" y="580" width="118" height="42" rx="2" /><path d="M382 594h94M382 608h94" strokeWidth="1" opacity="0.5" />
+        <rect x="498" y="584" width="110" height="38" rx="2" /><path d="M510 598h86M510 610h86" strokeWidth="1" opacity="0.5" />
+        <rect x="618" y="580" width="118" height="42" rx="2" /><path d="M630 594h94M630 608h94" strokeWidth="1" opacity="0.5" />
+        <rect x="746" y="586" width="104" height="36" rx="2" /><path d="M758 600h80" strokeWidth="1" opacity="0.5" />
         {/* transmission pylons + wires */}
-        <path d="M700 622L692 576M700 622L708 576M694 590h12M695 604h10M692 576h16" strokeWidth="1.5" />
-        <path d="M810 622L802 570M810 622L818 570M804 586h12M805 602h10M802 570h16" strokeWidth="1.5" />
-        <g strokeWidth="1" opacity="0.65"><path d="M606 596c40 -6 62 -16 86 -18M708 578c34 0 56 -4 94 -6M606 606c40 0 62 -4 86 -4M708 590c34 2 56 8 94 10" /></g>
+        <path d="M900 622L892 574M900 622L908 574M894 590h12M895 604h10M892 574h16" strokeWidth="1.5" />
+        <path d="M1004 622L996 568M1004 622L1012 568M998 584h12M999 600h10M996 568h16" strokeWidth="1.5" />
+        <g strokeWidth="1" opacity="0.6"><path d="M850 598c24 -6 32 -18 42 -20M908 576c34 0 62 -4 88 -6M850 608c24 0 32 -4 42 -6M908 590c34 2 62 6 88 8" /></g>
       </g>
     </svg>
   );
@@ -105,7 +117,7 @@ function CurveCard({ live }) {
           </g>
         )}
         <path d={earth} fill="none" stroke={solid(TERR)} strokeWidth="2.5" />
-        <text x="504" y="26" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" fill={solid(T.dead)}>EARTH — PAY FOREVER ↑</text>
+        <text x="504" y="26" textAnchor="end" fontFamily="var(--font-mono)" fontSize="12" fill={solid(T.muted)}>terrestrial</text>
         <path d={orbit} fill="none" stroke={solid(ORB)} strokeWidth="2.5" pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: live ? 0 : 1, transition: "stroke-dashoffset 1.1s ease .3s" }} />
         <text x="504" y="118" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" fill={solid(ORB)} style={{ opacity: live ? 1 : 0, transition: "opacity .5s ease 1s" }}>ORBIT — PAY ONCE ↓</text>
       </svg>
