@@ -247,8 +247,9 @@ export const P = {
   ),
   radiator: (
     <>
-      <rect x="4" y="5" width="16" height="14" rx="1" />
-      <path d="M8 5v14M12 5v14M16 5v14" />
+      <rect x="3" y="5" width="11" height="14" rx="1" />
+      <path d="M6.7 5v14M10.3 5v14" />
+      <path d="M16.5 7c1.4 1.4 1.4 3.2 0 4.6M20 6c1.8 1.8 1.8 4.2 0 6M16.5 13.4c1.4 1.4 1.4 3.2 0 4.6" />
     </>
   ),
   link: (
