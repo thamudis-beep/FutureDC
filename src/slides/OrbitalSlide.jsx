@@ -120,28 +120,50 @@ function OrbPower({ c }) {
   );
 }
 
-// COOLING — evaporative cooling towers (water) vs a passive radiator to space
+// COOLING — a whole thermal-management chain (CDU -> chiller -> tower + water)
+// vs a single passive radiator. Earth cooling is an entire equipment ecosystem.
 function TerrCooling({ c }) {
   return (
     <svg {...svgProps(c)}>
-      <path d="M42 90C48 62 48 62 56 40L86 40C94 62 94 62 100 90" />
-      <ellipse cx="71" cy="40" rx="15" ry="4" />
-      <path d="M122 90C128 64 128 64 135 46L161 46C168 64 168 64 174 90" />
-      <ellipse cx="148" cy="46" rx="13" ry="3.5" />
-      <g className="pulse"><path d="M64 38c-5-6 5-11 0-18M141 44c-5-6 5-11 0-16" strokeWidth="1.5" /></g>
+      {/* CDU / pump */}
+      <rect x="10" y="46" width="30" height="36" rx="2" />
+      <circle cx="25" cy="64" r="7" />
+      <path d="M25 60v8M21 64h8" strokeWidth="1.1" />
+      <path d="M40 64h16" />
+      {/* chiller */}
+      <rect x="56" y="42" width="34" height="42" rx="2" />
+      <path d="M62 52h22M62 60h22M62 68h22M62 76h22" strokeWidth="1.1" />
+      <path d="M90 62h14" />
+      {/* cooling tower */}
+      <path d="M110 84C115 64 115 64 121 48L143 48C150 64 150 64 155 84" />
+      <ellipse cx="132" cy="48" rx="11" ry="3" />
+      <g className="pulse"><path d="M127 46c-4-5 4-9 0-15" strokeWidth="1.4" /></g>
+      <path d="M155 62h12" />
+      {/* dry cooler / fans */}
+      <rect x="167" y="48" width="30" height="30" rx="2" />
+      <circle cx="176" cy="63" r="4" /><circle cx="188" cy="63" r="4" />
       {/* water */}
-      <g strokeWidth="1.3" opacity="0.85"><path d="M198 46c3 4 3 7 0 7s-3-3 0-7M212 56c3 4 3 7 0 7s-3-3 0-7M202 68c3 4 3 7 0 7s-3-3 0-7" /></g>
-      <path d="M8 90h228" strokeWidth="1.3" />
+      <g strokeWidth="1.3" opacity="0.85"><path d="M208 52c3 4 3 7 0 7s-3-3 0-7M220 64c3 4 3 7 0 7s-3-3 0-7" /></g>
+      <path d="M6 84h230" strokeWidth="1.3" />
     </svg>
   );
 }
 function OrbCooling({ c }) {
   return (
     <svg {...svgProps(c)}>
-      <rect x="30" y="30" width="92" height="52" rx="2" />
-      <path d="M48 30v52M66 30v52M84 30v52M104 30v52" strokeWidth="1.2" />
-      <g className="pulse"><path d="M130 40c8 5 8 10 0 15M146 34c10 6 10 14 0 20M162 42c7 4 7 9 0 13" strokeWidth="1.5" /></g>
-      <g fill={c} stroke="none"><circle cx="198" cy="34" r="1.7" /><circle cx="220" cy="50" r="1.5" /><circle cx="202" cy="68" r="1.4" /><circle cx="226" cy="30" r="1.3" /></g>
+      {/* compute node */}
+      <rect x="10" y="46" width="20" height="20" rx="2" />
+      <rect x="15" y="51" width="10" height="10" rx="1" />
+      {/* long thin aluminum radiator sheet */}
+      <rect x="30" y="51" width="188" height="10" rx="2" fill={c} fillOpacity="0.12" />
+      <path d="M38 56h172" strokeWidth="0.8" opacity="0.5" />
+      {/* heat radiating off both faces */}
+      <g className="pulse" strokeWidth="1.3" opacity="0.85">
+        <path d="M66 50c1-5 5-6 5-11M104 50c1-5 5-6 5-11M142 50c1-5 5-6 5-11M180 50c1-5 5-6 5-11" />
+        <path d="M66 62c1 5 5 6 5 11M104 62c1 5 5 6 5 11M142 62c1 5 5 6 5 11M180 62c1 5 5 6 5 11" />
+      </g>
+      {/* stars */}
+      <g fill={c} stroke="none"><circle cx="120" cy="28" r="1.4" /><circle cx="196" cy="86" r="1.3" /><circle cx="150" cy="90" r="1.2" /></g>
     </svg>
   );
 }
@@ -232,8 +254,8 @@ export default function OrbitalSlide({ step = 0 }) {
           <Row
             step={step}
             label="Cooling"
-            terr={{ schem: TerrCooling, value: "$/yr", note: "chillers + water" }}
-            orbit={{ schem: OrbCooling, value: "$0", note: "radiator · passive" }}
+            terr={{ schem: TerrCooling, value: "$/yr", note: "CDUs · chillers · towers · pumps · water" }}
+            orbit={{ schem: OrbCooling, value: "$0", note: "one thin aluminum radiator · passive" }}
           />
         </Group>
 
