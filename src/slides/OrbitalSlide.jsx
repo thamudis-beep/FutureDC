@@ -92,31 +92,57 @@ function OrbStructure({ c }) {
   );
 }
 
-// OPERATIONS — the three recurring cost drivers: power · cooling+water · people
-function Driver({ d, label, c, dim }) {
+// POWER — a fuel-burning plant + grid vs sunlight on solar cells
+function TerrPower({ c }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flex: "none", opacity: dim ? 0.5 : 1 }}>
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{d}</svg>
-      <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.02em", color: solid(T.muted), whiteSpace: "nowrap" }}>{label}</span>
-    </div>
+    <svg {...svgProps(c)}>
+      <rect x="24" y="48" width="58" height="42" />
+      <rect x="36" y="32" width="10" height="16" />
+      <rect x="60" y="32" width="10" height="16" />
+      <g className="pulse"><path d="M41 30c-4-4 4-8 0-13M65 30c-4-4 4-8 0-13" strokeWidth="1.4" /></g>
+      {/* pylon */}
+      <path d="M152 90L145 46M152 90L159 46M147 58h10M148 70h8M145 46h14" strokeWidth="1.6" />
+      {/* wires */}
+      <g strokeWidth="1.1" opacity="0.8"><path d="M82 60c34 0 40 -8 63 -8M82 72c34 2 40 -4 63 -6M159 52c22 0 36 6 62 6M159 62c22 2 36 8 62 8" /></g>
+      <path d="M8 90h228" strokeWidth="1.3" />
+    </svg>
   );
 }
-function TerrOps({ c }) {
+function OrbPower({ c }) {
   return (
-    <div style={{ display: "flex", gap: 24 }}>
-      <Driver c={c} d={P.meter} label="grid power" />
-      <Driver c={c} d={P.drop} label="water + chillers" />
-      <Driver c={c} d={P.person} label="staff" />
-    </div>
+    <svg {...svgProps(c)}>
+      <circle cx="38" cy="30" r="10" />
+      <g className="pulse"><path d="M38 16v-6M22 30h-6M27 19l-4-4M27 41l-4 4M49 19l4-4" strokeWidth="1.3" /></g>
+      <g className="flow" strokeDasharray="3 4" opacity="0.6"><path d="M47 38l42 12M50 32l40 8" strokeWidth="1" /></g>
+      <rect x="92" y="40" width="132" height="48" rx="2" />
+      <path d="M114 40v48M136 40v48M158 40v48M180 40v48M202 40v48M92 64h132" strokeWidth="1.1" />
+    </svg>
   );
 }
-function OrbOps({ c }) {
+
+// COOLING — evaporative cooling towers (water) vs a passive radiator to space
+function TerrCooling({ c }) {
   return (
-    <div style={{ display: "flex", gap: 24 }}>
-      <Driver c={c} d={P.sun} label="free sun" />
-      <Driver c={c} d={P.radiator} label="passive radiator" />
-      <Driver c={c} d={P.personoff} label="unmanned" />
-    </div>
+    <svg {...svgProps(c)}>
+      <path d="M42 90C48 62 48 62 56 40L86 40C94 62 94 62 100 90" />
+      <ellipse cx="71" cy="40" rx="15" ry="4" />
+      <path d="M122 90C128 64 128 64 135 46L161 46C168 64 168 64 174 90" />
+      <ellipse cx="148" cy="46" rx="13" ry="3.5" />
+      <g className="pulse"><path d="M64 38c-5-6 5-11 0-18M141 44c-5-6 5-11 0-16" strokeWidth="1.5" /></g>
+      {/* water */}
+      <g strokeWidth="1.3" opacity="0.85"><path d="M198 46c3 4 3 7 0 7s-3-3 0-7M212 56c3 4 3 7 0 7s-3-3 0-7M202 68c3 4 3 7 0 7s-3-3 0-7" /></g>
+      <path d="M8 90h228" strokeWidth="1.3" />
+    </svg>
+  );
+}
+function OrbCooling({ c }) {
+  return (
+    <svg {...svgProps(c)}>
+      <rect x="30" y="30" width="92" height="52" rx="2" />
+      <path d="M48 30v52M66 30v52M84 30v52M104 30v52" strokeWidth="1.2" />
+      <g className="pulse"><path d="M130 40c8 5 8 10 0 15M146 34c10 6 10 14 0 20M162 42c7 4 7 9 0 13" strokeWidth="1.5" /></g>
+      <g fill={c} stroke="none"><circle cx="198" cy="34" r="1.7" /><circle cx="220" cy="50" r="1.5" /><circle cx="202" cy="68" r="1.4" /><circle cx="226" cy="30" r="1.3" /></g>
+    </svg>
   );
 }
 
@@ -143,7 +169,7 @@ function Cell({ schem: Schem, c, value, unit, big, note, border, reveal, step })
 
 function Row({ label, terr, orbit, step, first }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: `${LABEL}px 1fr 1fr`, borderTop: first ? "none" : `1px solid ${tint(T.line, 0.6)}`, minHeight: 178, alignItems: "center" }}>
+    <div style={{ display: "grid", gridTemplateColumns: `${LABEL}px 1fr 1fr`, borderTop: first ? "none" : `1px solid ${tint(T.line, 0.6)}`, minHeight: 142, alignItems: "center" }}>
       <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 19, letterSpacing: "0.06em", color: solid(T.text), textTransform: "uppercase", paddingRight: 10 }}>{label}</div>
       <Cell {...terr} c={solid(TERR)} />
       <Cell {...orbit} c={solid(ORB)} border reveal step={step} />
@@ -195,13 +221,19 @@ export default function OrbitalSlide({ step = 0 }) {
       </div>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <Group label="OPERATIONS · /GW·YR" tone={ORB}>
+        <Group label="OPERATIONS · /YR" tone={ORB}>
           <Row
             first
             step={step}
-            label="Operations"
-            terr={{ schem: TerrOps, value: "$0.5–1B", unit: "/ yr" }}
-            orbit={{ schem: OrbOps, value: "≈ $0", big: true }}
+            label="Power"
+            terr={{ schem: TerrPower, value: "$/yr", note: "grid · fuel · $/kWh" }}
+            orbit={{ schem: OrbPower, value: "$0", note: "solar cells · free" }}
+          />
+          <Row
+            step={step}
+            label="Cooling"
+            terr={{ schem: TerrCooling, value: "$/yr", note: "chillers + water" }}
+            orbit={{ schem: OrbCooling, value: "$0", note: "radiator · passive" }}
           />
         </Group>
 
@@ -216,8 +248,8 @@ export default function OrbitalSlide({ step = 0 }) {
           <Row
             step={step}
             label="Structure"
-            terr={{ schem: TerrStructure, value: "$10–15B", unit: "/ GW" }}
-            orbit={{ schem: OrbStructure, value: "≈ $11B", unit: "/ GW" }}
+            terr={{ schem: TerrStructure, value: "$10–15B", unit: "/ GW", note: "shell + land + permits" }}
+            orbit={{ schem: OrbStructure, value: "≈ $11B", unit: "/ GW", note: "launch + bus" }}
           />
         </Group>
       </div>
