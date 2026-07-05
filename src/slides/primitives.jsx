@@ -272,6 +272,13 @@ export const P = {
     </>
   ),
   shield: <path d="M12 3l7 3v5c0 4.2-3 7.4-7 8.5-4-1.1-7-4.3-7-8.5V6l7-3z" />,
+  solar: (
+    <>
+      <rect x="3" y="4" width="18" height="11" rx="1" />
+      <path d="M9 4v11M15 4v11M3 7.7h18M3 11.3h18" />
+      <path d="M12 15v5M8.5 20h7" />
+    </>
+  ),
   dollar: (
     <>
       <path d="M12 2.5v19" />
