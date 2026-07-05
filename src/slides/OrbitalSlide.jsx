@@ -77,20 +77,20 @@ export default function OrbitalSlide({ step = 0 }) {
         <ColHeader icon={P.rocket} label="ORBITAL" tone={ORB} border />
       </div>
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 24 }}>
         <Group label="CAPEX · /GW" tone={T.text}>
           <BigRow
             first
             step={step}
-            label="Structure"
-            earth={{ icons: [P.building], value: "$10–15B", unit: "/ GW" }}
-            orbit={{ icons: [P.rocket, P.sat], value: "launch + bus" }}
-          />
-          <BigRow
-            step={step}
             label="Compute"
             earth={{ icons: [P.cpu, P.link], value: "$30B", unit: "/ GW" }}
             orbit={{ icons: [P.cpu, P.laser], value: "$30B", unit: "/ GW" }}
+          />
+          <BigRow
+            step={step}
+            label="Structure"
+            earth={{ icons: [P.building], value: "$10–15B", unit: "/ GW" }}
+            orbit={{ icons: [P.rocket, P.sat], value: "≈ $11B", unit: "/ GW" }}
           />
         </Group>
 
@@ -98,12 +98,17 @@ export default function OrbitalSlide({ step = 0 }) {
           <BigRow
             first
             step={step}
-            minH={210}
+            minH={200}
             label="Operations"
             earth={{ icons: [P.factory, P.person], value: "$0.5–1B", unit: "/ yr" }}
             orbit={{ icons: [P.solar, P.radiator], value: "≈ $0", big: true }}
           />
         </Group>
+      </div>
+
+      {/* methodology */}
+      <div style={{ fontFamily: "var(--font-mono)", fontSize: 10.5, lineHeight: 1.5, color: solid(T.muted), opacity: 0.8, marginTop: 6, maxWidth: 1180 }}>
+        Structure ≈ $11B/GW — Starship: 100 t &amp; 5 MW per launch at $200/kg = $20M → $4B/GW launch; buses 1.5 t @ $500K → $6.7B/GW. Compute held equal to terrestrial; operations = amortized solar + passive radiator.
       </div>
     </div>
   );

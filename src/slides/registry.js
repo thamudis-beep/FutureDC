@@ -7,4 +7,4 @@ import StackRebuildSlide from "./StackRebuildSlide";
 //   .steps  — number of intra-slide fragment advances (default 0)
 //   .title  — label shown in the overview / counter
 // Add a slide by importing it and dropping it into this array.
-export const slides = [TitleSlide, OrbitalSlide, StackRebuildSlide];
+export const slides = [TitleSlide, StackRebuildSlide, OrbitalSlide];
