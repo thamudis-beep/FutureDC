@@ -117,9 +117,9 @@ function CurveCard({ live }) {
           </g>
         )}
         <path d={earth} fill="none" stroke={solid(TERR)} strokeWidth="2.5" />
-        <text x="504" y="26" textAnchor="end" fontFamily="var(--font-mono)" fontSize="12" fill={solid(T.muted)}>terrestrial</text>
+        <text x="504" y="26" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" letterSpacing="0.02em" fill={solid(TERR)}>TERRESTRIAL — EVERY GW HARDER ↑</text>
         <path d={orbit} fill="none" stroke={solid(ORB)} strokeWidth="2.5" pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: live ? 0 : 1, transition: "stroke-dashoffset 1.1s ease .3s" }} />
-        <text x="504" y="118" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" fill={solid(ORB)} style={{ opacity: live ? 1 : 0, transition: "opacity .5s ease 1s" }}>ORBIT — PAY ONCE ↓</text>
+        <text x="504" y="118" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" letterSpacing="0.02em" fill={solid(ORB)} style={{ opacity: live ? 1 : 0, transition: "opacity .5s ease 1s" }}>ORBITAL — EVERY GW EASIER ↓</text>
       </svg>
     </div>
   );
