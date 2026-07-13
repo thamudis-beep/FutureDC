@@ -63,15 +63,18 @@ function Scene({ live }) {
           <path d="M458 446v22M470 446v22M482 446v22M446 457h46" strokeWidth="0.7" opacity="0.7" />
           <line x1="368" y1="457" x2="384" y2="457" /><line x1="430" y1="457" x2="446" y2="457" />
         </g>
-        {/* body */}
+        {/* body — compute */}
         <rect x="384" y="444" width="46" height="26" rx="2" strokeWidth="1.8" fill="rgb(var(--bg))" />
-        <rect x="396" y="451" width="22" height="12" rx="1" strokeWidth="1" />
+        <rect x="394" y="450" width="26" height="14" rx="1" strokeWidth="1" />
+        <path d="M401 444v-4M414 444v-4M401 470v3M414 470v3" strokeWidth="0.9" opacity="0.7" />
         {/* thin aluminum radiator — long thin sheet */}
-        <rect x="403" y="470" width="8" height="92" rx="1" fill={solid(ORB)} fillOpacity="0.12" strokeWidth="1.3" />
-        <g strokeWidth="1" opacity="0.75"><path d="M415 486c6 3 6 6 0 9M415 508c6 3 6 6 0 9M415 530c6 3 6 6 0 9" /></g>
+        <rect x="403" y="473" width="8" height="90" rx="1" fill={solid(ORB)} fillOpacity="0.12" strokeWidth="1.3" />
+        <g strokeWidth="1" opacity="0.75"><path d="M415 489c6 3 6 6 0 9M415 511c6 3 6 6 0 9M415 533c6 3 6 6 0 9" /></g>
         {/* labels */}
-        <text x="345" y="438" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>solar panels</text>
-        <text x="424" y="516" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>thin aluminum radiator</text>
+        <g stroke={solid(T.muted)} strokeWidth="1" opacity="0.6"><path d="M262 457h56" /></g>
+        <text x="256" y="461" textAnchor="end" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>solar panels</text>
+        <text x="407" y="432" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(ORB)}>compute</text>
+        <text x="424" y="522" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>thin aluminum radiator</text>
         <text x="470" y="330" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(ORB)}>optical link</text>
       </g>
 
@@ -121,9 +124,9 @@ function AttrBlock({ title, tone, items, dim }) {
   );
 }
 
-function LegendItem({ tone, text }) {
+function LegendItem({ tone, text, show = true }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 8, opacity: show ? 1 : 0, transition: "opacity .5s ease .9s" }}>
       <span style={{ width: 18, height: 3, borderRadius: 2, background: solid(tone), flex: "none" }} />
       <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, letterSpacing: "0.03em", textTransform: "uppercase", color: solid(tone) }}>{text}</span>
     </div>
@@ -137,7 +140,7 @@ function CurveCard({ live }) {
       <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", color: solid(T.muted), marginBottom: 9 }}>COST PER GW · OVER TIME</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 8 }}>
         <LegendItem tone={TERR} text="Terrestrial · every GW harder ↑" />
-        <LegendItem tone={ORB} text="Orbital · every GW easier ↓" />
+        <LegendItem tone={ORB} text="Orbital · every GW easier ↓" show={live} />
       </div>
       <svg viewBox="0 0 520 150" width="100%" style={{ display: "block" }}>
         <line x1="46" y1="6" x2="46" y2="128" stroke={tint(T.line, 0.8)} strokeWidth="1" />
@@ -166,10 +169,19 @@ export default function OrbitalSlide({ step = 0 }) {
       {/* multiple rockets, each launching once when orbit is revealed */}
       {live && ROCKET_PATHS.map((d, i) => (
         <div key={i} className="launch" style={{ position: "absolute", left: 0, top: 0, width: 0, height: 0, zIndex: 1, offsetPath: `path('${d}')`, animationDelay: `${[0, 0.5, 0.22, 0.74][i]}s` }}>
-          <svg width="14" height="20" viewBox="0 0 14 20" style={{ transform: "translate(-7px,-10px)", display: "block" }} fill="none" stroke="rgb(var(--e3))" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 0c3 3 3 8 0 12c-3-4-3-9 0-12z" />
-            <path d="M4 9l-3 5M10 9l3 5" />
-            <path d="M5.5 12q1.5 5 1.5 0M8.5 12q-1.5 5-1.5 0" />
+          <svg width="17" height="36" viewBox="0 0 17 36" style={{ transform: "translate(-8.5px,-19px)", display: "block" }} fill="none" stroke="rgb(var(--e3))" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+            {/* Starship: ogive nose + cylindrical body */}
+            <path d="M6 24 L6 8.5 C6 3.5 8.5 1 8.5 1 C8.5 1 11 3.5 11 8.5 L11 24 Z" fill="rgb(var(--bg))" />
+            {/* forward flaps */}
+            <path d="M6 10 L3.2 12 L6 14.5" />
+            <path d="M11 10 L13.8 12 L11 14.5" />
+            {/* aft flaps */}
+            <path d="M6 19.5 L2 27 L6 24.5" />
+            <path d="M11 19.5 L15 27 L11 24.5" />
+            {/* body bands */}
+            <path d="M6 16 H11 M6 20 H11" strokeWidth="0.6" opacity="0.55" />
+            {/* engine flame */}
+            <path className="pulse" d="M6.8 24 Q8.5 32 10.2 24" strokeWidth="1.2" />
           </svg>
         </div>
       ))}
