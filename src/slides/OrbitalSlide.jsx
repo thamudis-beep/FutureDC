@@ -14,6 +14,12 @@ const STARS = Array.from({ length: 90 }, (_, i) => ({ x: Math.random() * 1440, y
 const MICRO = Array.from({ length: 150 }, (_, i) => ({ x: 500 + Math.random() * 520, y: 110 + Math.random() * 210, r: Math.random() * 0.8 + 0.3, o: Math.random() * 0.35 + 0.1, d: (i % 13) * 0.2 }));
 const CN = [[540, 205], [615, 140], [702, 208], [632, 268], [636, 205], [782, 168], [862, 220], [792, 274], [892, 150], [972, 202], [944, 268], [716, 296], [846, 292], [1000, 250]];
 const CL = [[0, 4], [1, 4], [2, 4], [3, 4], [4, 5], [5, 6], [6, 7], [5, 8], [8, 9], [9, 10], [6, 10], [3, 11], [7, 12], [10, 13], [6, 12], [9, 13]];
+const ROCKET_PATHS = [
+  "M280 610 C360 480 470 340 540 205",
+  "M470 612 C540 458 660 316 702 208",
+  "M660 610 C730 440 835 296 862 220",
+  "M830 612 C905 420 962 288 972 202",
+];
 
 function Scene({ live }) {
   return (
@@ -27,10 +33,11 @@ function Scene({ live }) {
         ))}
       </g>
 
-      {/* constellation */}
-      <g stroke={solid(ORB)} strokeWidth="1" strokeDasharray="4 5" fill="none" style={{ opacity: live ? 0.5 : 0, transition: "opacity 1s ease .5s" }}>
+      {/* constellation — optical mesh */}
+      <g stroke={solid(ORB)} strokeWidth="1.3" strokeDasharray="5 4" fill="none" style={{ opacity: live ? 0.7 : 0, transition: "opacity 1s ease .5s" }}>
         {CL.map(([a, b], i) => <line key={i} x1={CN[a][0]} y1={CN[a][1]} x2={CN[b][0]} y2={CN[b][1]} />)}
       </g>
+      <text x="1030" y="150" fontFamily="var(--font-mono)" fontSize="12" letterSpacing="0.08em" fill={solid(ORB)} style={{ opacity: live ? 0.9 : 0, transition: "opacity .6s ease .8s" }}>optical mesh</text>
       {CN.map(([x, y], i) => (
         <g key={i} style={{ opacity: live ? 1 : 0, transition: `opacity .4s ease ${i * 40}ms` }}>
           <circle cx={x} cy={y} r="9" fill={solid(ORB)} opacity="0.12" />
@@ -40,16 +47,32 @@ function Scene({ live }) {
         </g>
       ))}
 
-      {/* rocket bridging earth -> orbit — subtle looping launch */}
-      <g style={{ opacity: live ? 1 : 0, transition: "opacity .8s ease .7s" }}>
-        <path d="M430 612 Q520 470 610 300" stroke={solid(ORB)} strokeWidth="1.2" strokeDasharray="2 9" fill="none" opacity="0.45" />
-        <g fill="none" stroke={solid(ORB)} strokeWidth="1.6">
-          <animateMotion dur="4.8s" repeatCount="indefinite" path="M430 612 Q520 470 610 300" />
-          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="4.8s" repeatCount="indefinite" />
-          <path d="M0 0c4-6 4-14 0-21c-4 7-4 15 0 21z" />
-          <path d="M-3 -2l-5 6M3 -2l5 6" />
-          <path className="pulse" d="M-2 1q2 6 2 0M2 1q-2 6-2 0" strokeWidth="1.3" />
+      {/* faint launch corridors (rockets fly along these once, drawn in HTML) */}
+      <g stroke={solid(ORB)} strokeWidth="1" strokeDasharray="2 10" fill="none" style={{ opacity: live ? 0.28 : 0, transition: "opacity .8s ease .6s" }}>
+        {ROCKET_PATHS.map((d, i) => <path key={i} d={d} />)}
+      </g>
+
+      {/* one satellite, detailed — solar · thin radiator · optical */}
+      <g style={{ opacity: live ? 1 : 0, transition: "opacity .6s ease .9s" }} stroke={solid(ORB)} fill="none">
+        <line x1="415" y1="452" x2="560" y2="238" strokeWidth="1.3" strokeDasharray="5 4" opacity="0.65" />
+        {/* solar panels */}
+        <g strokeWidth="1.4">
+          <rect x="322" y="446" width="46" height="22" />
+          <path d="M334 446v22M346 446v22M358 446v22M322 457h46" strokeWidth="0.7" opacity="0.7" />
+          <rect x="446" y="446" width="46" height="22" />
+          <path d="M458 446v22M470 446v22M482 446v22M446 457h46" strokeWidth="0.7" opacity="0.7" />
+          <line x1="368" y1="457" x2="384" y2="457" /><line x1="430" y1="457" x2="446" y2="457" />
         </g>
+        {/* body */}
+        <rect x="384" y="444" width="46" height="26" rx="2" strokeWidth="1.8" fill="rgb(var(--bg))" />
+        <rect x="396" y="451" width="22" height="12" rx="1" strokeWidth="1" />
+        {/* thin aluminum radiator — long thin sheet */}
+        <rect x="403" y="470" width="8" height="92" rx="1" fill={solid(ORB)} fillOpacity="0.12" strokeWidth="1.3" />
+        <g strokeWidth="1" opacity="0.75"><path d="M415 486c6 3 6 6 0 9M415 508c6 3 6 6 0 9M415 530c6 3 6 6 0 9" /></g>
+        {/* labels */}
+        <text x="345" y="438" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>solar panels</text>
+        <text x="424" y="516" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(T.muted)}>thin aluminum radiator</text>
+        <text x="470" y="330" fontFamily="var(--font-mono)" fontSize="11.5" fill={solid(ORB)}>optical link</text>
       </g>
 
       {/* Earth surface */}
@@ -98,28 +121,37 @@ function AttrBlock({ title, tone, items, dim }) {
   );
 }
 
-function CurveCard({ live }) {
-  const earth = "M50,152 C210,142 350,106 500,32";
-  const orbit = "M50,44 C220,80 380,120 500,134";
+function LegendItem({ tone, text }) {
   return (
-    <div style={{ position: "absolute", right: 44, top: 322, width: 520, zIndex: 2, background: "rgb(var(--bg) / 0.72)", border: `1px solid ${tint(T.line, 0.9)}`, borderRadius: 12, padding: "16px 20px 14px", backdropFilter: "blur(4px)" }}>
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", color: solid(T.muted), marginBottom: 8 }}>COST PER GW · OVER TIME</div>
-      <svg viewBox="0 0 520 178" width="100%" style={{ display: "block" }}>
-        <line x1="46" y1="10" x2="46" y2="150" stroke={tint(T.line, 0.8)} strokeWidth="1" />
-        <line x1="46" y1="150" x2="508" y2="150" stroke={tint(T.line, 0.8)} strokeWidth="1" />
-        <text x="506" y="168" textAnchor="end" fontFamily="var(--font-mono)" fontSize="10.5" fill={solid(T.muted)}>capacity · time →</text>
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <span style={{ width: 18, height: 3, borderRadius: 2, background: solid(tone), flex: "none" }} />
+      <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, letterSpacing: "0.03em", textTransform: "uppercase", color: solid(tone) }}>{text}</span>
+    </div>
+  );
+}
+function CurveCard({ live }) {
+  const earth = "M50,120 C200,110 340,72 500,18";
+  const orbit = "M50,26 C210,62 360,98 500,110";
+  return (
+    <div style={{ position: "absolute", right: 44, top: 320, width: 520, zIndex: 2, background: "rgb(var(--bg) / 0.72)", border: `1px solid ${tint(T.line, 0.9)}`, borderRadius: 12, padding: "16px 20px 14px", backdropFilter: "blur(4px)" }}>
+      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", color: solid(T.muted), marginBottom: 9 }}>COST PER GW · OVER TIME</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 8 }}>
+        <LegendItem tone={TERR} text="Terrestrial · every GW harder ↑" />
+        <LegendItem tone={ORB} text="Orbital · every GW easier ↓" />
+      </div>
+      <svg viewBox="0 0 520 150" width="100%" style={{ display: "block" }}>
+        <line x1="46" y1="6" x2="46" y2="128" stroke={tint(T.line, 0.8)} strokeWidth="1" />
+        <line x1="46" y1="128" x2="508" y2="128" stroke={tint(T.line, 0.8)} strokeWidth="1" />
+        <text x="506" y="145" textAnchor="end" fontFamily="var(--font-mono)" fontSize="10.5" fill={solid(T.muted)}>capacity · time →</text>
         {live && (
           <g>
-            <rect x="286" y="10" width="222" height="140" fill={solid(ORB)} opacity="0.05" />
-            <line x1="286" y1="10" x2="286" y2="150" stroke={solid(ORB)} strokeDasharray="3 4" strokeWidth="1" opacity="0.5" />
-            <circle cx="286" cy="100" r="3.5" fill={solid(ORB)} />
-            <text x="292" y="146" fontFamily="var(--font-mono)" fontSize="10.5" fill={solid(ORB)}>orbit cheaper →</text>
+            <rect x="290" y="6" width="218" height="122" fill={solid(ORB)} opacity="0.05" />
+            <line x1="290" y1="6" x2="290" y2="128" stroke={solid(ORB)} strokeDasharray="3 4" strokeWidth="1" opacity="0.5" />
+            <circle cx="290" cy="66" r="3.5" fill={solid(ORB)} />
           </g>
         )}
-        <path d={earth} fill="none" stroke={solid(TERR)} strokeWidth="2.5" />
-        <text x="504" y="26" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" letterSpacing="0.02em" fill={solid(TERR)}>TERRESTRIAL — EVERY GW HARDER ↑</text>
-        <path d={orbit} fill="none" stroke={solid(ORB)} strokeWidth="2.5" pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: live ? 0 : 1, transition: "stroke-dashoffset 1.1s ease .3s" }} />
-        <text x="504" y="118" textAnchor="end" fontFamily="var(--font-display)" fontWeight="700" fontSize="14" letterSpacing="0.02em" fill={solid(ORB)} style={{ opacity: live ? 1 : 0, transition: "opacity .5s ease 1s" }}>ORBITAL — EVERY GW EASIER ↓</text>
+        <path d={earth} fill="none" stroke={solid(TERR)} strokeWidth="2.75" />
+        <path d={orbit} fill="none" stroke={solid(ORB)} strokeWidth="2.75" pathLength="1" strokeDasharray="1" style={{ strokeDashoffset: live ? 0 : 1, transition: "stroke-dashoffset 1.1s ease .3s" }} />
       </svg>
     </div>
   );
@@ -130,6 +162,17 @@ export default function OrbitalSlide({ step = 0 }) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", background: `radial-gradient(1000px 680px at 34% 20%, ${tint(ORB, 0.05)}, transparent 70%)` }}>
       <Scene live={live} />
+
+      {/* multiple rockets, each launching once when orbit is revealed */}
+      {live && ROCKET_PATHS.map((d, i) => (
+        <div key={i} className="launch" style={{ position: "absolute", left: 0, top: 0, width: 0, height: 0, zIndex: 1, offsetPath: `path('${d}')`, animationDelay: `${[0, 0.5, 0.22, 0.74][i]}s` }}>
+          <svg width="14" height="20" viewBox="0 0 14 20" style={{ transform: "translate(-7px,-10px)", display: "block" }} fill="none" stroke="rgb(var(--e3))" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 0c3 3 3 8 0 12c-3-4-3-9 0-12z" />
+            <path d="M4 9l-3 5M10 9l3 5" />
+            <path d="M5.5 12q1.5 5 1.5 0M8.5 12q-1.5 5-1.5 0" />
+          </svg>
+        </div>
+      ))}
 
       <div style={{ position: "absolute", top: 30, left: 44, zIndex: 2, fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 42, lineHeight: 1, letterSpacing: "0.02em", textTransform: "uppercase" }}>
         Orbital Data Centers
@@ -142,7 +185,7 @@ export default function OrbitalSlide({ step = 0 }) {
 
       {/* terrestrial attributes (lower-left, over the surface) */}
       <div style={{ position: "absolute", left: 44, top: 672, zIndex: 2 }}>
-        <AttrBlock title="TERRESTRIAL · 1 GW" tone={TERR} items={["sprawling campus · $10–15B shell", "grid + fuel · $/yr forever", "chillers + towers + water · $/yr", "≈ 3 years to permit, power & build"]} />
+        <AttrBlock title="TERRESTRIAL · 1 GW" tone={TERR} items={["buildings + land · $10–15B shell", "grid + fuel · $/yr forever", "chillers + towers + water · $/yr", "≈ 3 years to permit, power & build"]} />
       </div>
 
       <CurveCard live={live} />

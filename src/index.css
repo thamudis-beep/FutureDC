@@ -76,6 +76,15 @@
 .draw { stroke-dasharray: 300; stroke-dashoffset: 300; animation: deck-draw 1.1s ease forwards; }
 @keyframes deck-draw { to { stroke-dashoffset: 0; } }
 
+/* one-shot rocket launch along an offset-path */
+.launch { offset-rotate: 0deg; animation: deck-launch 2.1s ease-in forwards; }
+@keyframes deck-launch {
+  0% { offset-distance: 0%; opacity: 0; }
+  12% { opacity: 1; }
+  78% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rv, .flow, .spin { transition: none !important; animation: none !important; }
 }
