@@ -1,5 +1,9 @@
 {
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/", "destination": "/stack.html" },
+    { "source": "/deck", "destination": "/index.html" }
+  ]
 }
