@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Future of Data Centers — Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#05070d; --bg2:#0a0f1a;
+    --cy:#38e1ff; --cy2:#8af0ff; --steel:#8aa6c0; --amber:#ffb45e; --red:#ff5d6c;
+    --ink:#eaf6ff; --mut:#7f93aa; --line:rgba(120,160,200,.16);
+    --disp:'Barlow Condensed',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hidden;font-family:var(--mono);cursor:default}
+  #gl{position:fixed;inset:0;display:block;touch-action:none}
+  .vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%);z-index:2}
+  .grain{position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:3;mix-blend-mode:overlay;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 3px)}
+
+  /* ---- top brand ---- */
+  .brand{position:fixed;top:26px;left:30px;z-index:6;pointer-events:none}
+  .brand .kick{font-size:11px;letter-spacing:.42em;color:var(--cy);opacity:.85}
+  .brand h1{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+    font-size:30px;line-height:1;margin:6px 0 0;color:var(--ink);text-shadow:0 0 24px rgba(56,225,255,.25)}
+
+  /* ---- status ticker ---- */
+  .status{position:fixed;top:30px;right:30px;z-index:6;text-align:right;font-size:10.5px;letter-spacing:.18em;color:var(--mut);pointer-events:none}
+  .status b{color:var(--cy);font-weight:500}
+
+  /* ---- content card ---- */
+  .stage{position:fixed;z-index:6;right:5vw;top:0;height:100vh;width:min(430px,42vw);pointer-events:none}
+  .card{position:absolute;top:50%;right:0;width:100%;transform:translateY(-50%);pointer-events:auto;opacity:0;visibility:hidden}
+  .card.show{opacity:1;visibility:visible;animation:cardIn .7s cubic-bezier(.16,.8,.3,1) both}
+  .card .idx{font-size:11px;letter-spacing:.35em;color:var(--cy);margin-bottom:8px}
+  .card h2{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:40px;line-height:.98;margin:0 0 14px;color:var(--ink)}
+  .card h2 .em{color:var(--cy)}
+  .card p{font-size:13.5px;line-height:1.6;color:#c3d4e6;margin:0 0 12px;max-width:40ch}
+  .card p b{color:var(--cy2);font-weight:500}
+  .card .rule{height:1px;background:linear-gradient(90deg,var(--cy),transparent);margin:2px 0 16px;width:120px;
+    box-shadow:0 0 12px rgba(56,225,255,.4)}
+  .card.show::after{content:"";position:absolute;inset:-8px -12px;pointer-events:none;
+    background:linear-gradient(transparent,rgba(56,225,255,.14),transparent);height:40px;
+    animation:scan 0.75s ease-out both}
+  @keyframes cardIn{from{opacity:0;clip-path:inset(0 0 100% 0)}
+    to{opacity:1;clip-path:inset(0 0 0 0)}}
+  @keyframes scan{from{top:0;opacity:1}to{top:100%;opacity:0}}
+  .glitch{animation:glitch .35s steps(2) 1}
+  @keyframes glitch{0%{text-shadow:2px 0 var(--red),-2px 0 var(--cy)}50%{text-shadow:-2px 0 var(--amber),2px 0 var(--cy)}100%{text-shadow:0 0 24px rgba(56,225,255,.25)}}
+
+  /* metric chips inside card */
+  .chips{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);border-radius:8px;padding:7px 11px;background:rgba(10,16,26,.5);backdrop-filter:blur(4px)}
+  .chip .n{font-family:var(--disp);font-weight:700;font-size:20px;color:var(--cy);line-height:1}
+  .chip .l{font-size:9.5px;letter-spacing:.12em;color:var(--mut);margin-top:3px}
+
+  /* ---- floating nav ---- */
+  nav{position:fixed;left:30px;bottom:30px;z-index:6;display:flex;flex-direction:column;gap:2px}
+  .nav-i{display:flex;align-items:center;gap:12px;padding:7px 4px;cursor:pointer;pointer-events:auto;opacity:.55;transition:opacity .25s,transform .25s}
+  .nav-i:hover{opacity:.95;transform:translateX(3px)}
+  .nav-i.on{opacity:1}
+  .nav-i .dot{width:9px;height:9px;border:1px solid var(--cy);border-radius:50%;position:relative;flex:none;transition:all .25s}
+  .nav-i.on .dot{background:var(--cy);box-shadow:0 0 12px var(--cy)}
+  .nav-i .tx{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+  .nav-i .no{font-family:var(--mono);font-size:10px;color:var(--mut);width:20px}
+
+  /* ---- shader buttons ---- */
+  .ctrls{position:fixed;right:30px;bottom:30px;z-index:6;display:flex;gap:10px}
+  .btn{pointer-events:auto;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--cy2);padding:10px 16px;border:1px solid rgba(56,225,255,.35);border-radius:9px;
+    background:linear-gradient(180deg,rgba(56,225,255,.10),rgba(56,225,255,.02));position:relative;overflow:hidden;transition:.2s}
+  .btn:hover{color:#fff;border-color:var(--cy);box-shadow:0 0 22px rgba(56,225,255,.35),inset 0 0 18px rgba(56,225,255,.15)}
+  .btn::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);
+    transform:translateX(-120%);transition:transform .5s}
+  .btn:hover::before{transform:translateX(120%)}
+
+  .hint{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:6;font-size:10.5px;letter-spacing:.22em;color:var(--mut);pointer-events:none;transition:opacity .5s}
+  .drone-label{position:fixed;z-index:5;font-size:10px;letter-spacing:.14em;color:var(--cy);pointer-events:none;opacity:0;transition:opacity .2s;text-shadow:0 0 8px rgba(56,225,255,.6);white-space:nowrap}
+
+  /* boot overlay */
+  #boot{position:fixed;inset:0;z-index:9;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s}
+  #boot .bt{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:22px;color:var(--cy)}
+  #boot .bar{width:220px;height:2px;background:rgba(120,160,200,.2);overflow:hidden}
+  #boot .bar i{display:block;height:100%;width:0;background:var(--cy);box-shadow:0 0 12px var(--cy)}
+  #boot .bl{font-size:10px;letter-spacing:.2em;color:var(--mut)}
+  @media (max-width:820px){.stage{right:auto;left:5vw;width:88vw;top:auto;bottom:120px;transform:none}.brand h1{font-size:22px}.card h2{font-size:30px}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<div class="brand">
+  <div class="kick">FUTURE OF THE DATA CENTER</div>
+  <h1 id="brandH">Orbital Data Centers</h1>
+</div>
+<div class="status">
+  <div>SYS · <b id="fps">60</b> FPS · <b id="nodes">—</b> NODES</div>
+  <div style="margin-top:4px">ORBIT: DRAG · SCROLL: ZOOM · HOVER: DRONE</div>
+</div>
+
+<div class="stage">
+  <!-- cards injected -->
+  <div class="card" data-i="0"></div>
+  <div class="card" data-i="1"></div>
+  <div class="card" data-i="2"></div>
+  <div class="card" data-i="3"></div>
+</div>
+
+<nav id="nav"></nav>
+<div class="ctrls">
+  <div class="btn" id="btnScan">Re-scan</div>
+  <div class="btn" id="btnAuto">Auto-orbit: ON</div>
+</div>
+<div class="hint" id="hint">drag to orbit the module · move the pointer to stir the data field</div>
+<div class="drone-label" id="dlabel">SERVICE DRONE · online</div>
+
+<div id="boot">
+  <div class="bt">INITIALIZING ORBITAL FABRIC</div>
+  <div class="bar"><i id="bootbar"></i></div>
+  <div class="bl" id="bootlog">allocating compute lattice…</div>
+</div>
+
+<script src="./vendor/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const T = THREE;
+const CY = 0x38e1ff, CY2 = 0x8af0ff, STEEL = 0x9fb6cc, AMBER = 0xffb45e, RED = 0xff5d6c;
+
+// ---------- renderer / scene ----------
+const canvas = document.getElementById('gl');
+const renderer = new T.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+renderer.outputEncoding = T.sRGBEncoding;
+renderer.toneMapping = T.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+const scene = new T.Scene();
+scene.background = new T.Color(0x070b12);
+scene.fog = new T.FogExp2(0x070b12, 0.026);
+const camera = new T.PerspectiveCamera(46, 2, 0.1, 400);
+
+// ---------- lights ----------
+scene.add(new T.AmbientLight(0x22303f, 1.1));
+const key = new T.DirectionalLight(0xdff2ff, 1.5); key.position.set(6,7,5); scene.add(key);
+const rim = new T.DirectionalLight(0x2a6cff, 0.9); rim.position.set(-8,-3,-6); scene.add(rim);
+const coreLight = new T.PointLight(CY, 1.25, 26, 2.2); scene.add(coreLight);
+const sunLight = new T.PointLight(0xfff0d0, 0.0, 60, 2.0); sunLight.position.set(18,10,8); scene.add(sunLight);
+
+// ---------- helpers ----------
+function sprite(){ const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
+  const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.25,'rgba(180,235,255,.9)');
+  g.addColorStop(1,'rgba(120,200,255,0)');x.fillStyle=g;x.fillRect(0,0,64,64);const t=new T.CanvasTexture(c);t.needsUpdate=true;return t;}
+const DOT = sprite();
+function gridTex(cols,rows,base,line){ const c=document.createElement('canvas');c.width=256;c.height=256;const x=c.getContext('2d');
+  x.fillStyle=base;x.fillRect(0,0,256,256);x.strokeStyle=line;x.lineWidth=3;
+  for(let i=0;i<=cols;i++){x.beginPath();x.moveTo(i*256/cols,0);x.lineTo(i*256/cols,256);x.stroke();}
+  for(let j=0;j<=rows;j++){x.beginPath();x.moveTo(0,j*256/rows);x.lineTo(256,j*256/rows);x.stroke();}
+  const t=new T.CanvasTexture(c);t.needsUpdate=true;return t;}
+
+// ---------- STATION (orbital data-center module) ----------
+const station = new T.Group(); scene.add(station);
+const solids = [];              // {mesh, ny} for scan reveal
+const revealables = [];         // materials to fade in
+function addSolid(mesh, ny){ mesh.traverse(o=>{ if(o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{ m.transparent=true; m.opacity=0; revealables.push(m);});}});
+  solids.push({mesh, ny}); station.add(mesh); return mesh; }
+function edges(geo, color, op){ const e=new T.LineSegments(new T.EdgesGeometry(geo), new T.LineBasicMaterial({color:color||CY, transparent:true, opacity:op==null?.9:op})); return e; }
+
+const wire = new T.Group(); station.add(wire);   // blueprint edges (always visible during scan)
+function blueprint(geo, m, color){ const e=edges(geo,color,.85); e.position.copy(m.position); e.rotation.copy(m.rotation); e.scale.copy(m.scale); wire.add(e); return e; }
+
+// --- central truss spine (along X) ---
+const trussGeoBits = [];
+const bay = 1.05, bays = 8, half=(bays*bay)/2;
+const trussMat = new T.MeshStandardMaterial({color:0x2b3947, metalness:.85, roughness:.35, emissive:0x0a2230, emissiveIntensity:.5});
+function strut(a,b,r){ const dir=new T.Vector3().subVectors(b,a); const len=dir.length();
+  const g=new T.CylinderGeometry(r,r,len,6); const m=new T.Mesh(g,trussMat);
+  m.position.copy(a).add(b).multiplyScalar(.5); m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0), dir.clone().normalize()); return m; }
+const trussGrp = new T.Group();
+const s=0.42;
+for(let i=0;i<bays;i++){ const x0=-half+i*bay, x1=x0+bay;
+  const c=[ [x0,s,s],[x0,-s,s],[x0,-s,-s],[x0,s,-s] ].map(p=>new T.Vector3(...p));
+  const c2=[ [x1,s,s],[x1,-s,s],[x1,-s,-s],[x1,s,-s] ].map(p=>new T.Vector3(...p));
+  for(let k=0;k<4;k++){ trussGrp.add(strut(c[k],c2[k],.03)); trussGrp.add(strut(c[k],c[(k+1)%4],.03)); if(i===bays-1)trussGrp.add(strut(c2[k],c2[(k+1)%4],.03)); }
+  trussGrp.add(strut(c[0],c2[2],.022)); trussGrp.add(strut(c[1],c2[3],.022)); }
+addSolid(trussGrp, 0.5);
+trussGrp.children.forEach(m=>{ const e=edges(m.geometry, CY, .5); e.position.copy(m.position); e.quaternion.copy(m.quaternion); wire.add(e); });
+
+// --- compute modules along the spine ---
+const modMat = new T.MeshStandardMaterial({color:0x3a4a5c, metalness:.7, roughness:.4, emissive:0x123244, emissiveIntensity:.6});
+const modGlow = new T.MeshStandardMaterial({color:0x0c141d, metalness:.4, roughness:.5, emissive:CY, emissiveIntensity:1.6});
+[-2.4,-0.6,1.2,3.0].forEach((x,i)=>{
+  const g=new T.CylinderGeometry(.5,.5,1.35,20); g.rotateZ(Math.PI/2);
+  const m=new T.Mesh(g, modMat); m.position.set(x,0,0); const ny=.5;
+  const stripeG=new T.BoxGeometry(1.36,.06,.14); const st=new T.Mesh(stripeG, modGlow); st.position.set(0,.5,0); m.add(st);
+  const st2=st.clone(); st2.position.set(0,.5,0); st2.rotation.x=Math.PI/2; m.add(st2);
+  addSolid(m, ny); blueprint(g, m, CY2);
+});
+
+// --- core (compute heart) ---
+const coreGeo = new T.IcosahedronGeometry(.7,1);
+const core = new T.Mesh(coreGeo, new T.MeshStandardMaterial({color:0x0a2532, metalness:.45, roughness:.28, emissive:CY, emissiveIntensity:0.95}));
+core.position.set(0.3,0,0); addSolid(core,.5);
+const cGlow=new T.Sprite(new T.SpriteMaterial({map:DOT,color:CY,transparent:true,opacity:.45,blending:T.AdditiveBlending,depthWrite:false})); cGlow.scale.setScalar(2.6); core.add(cGlow);
+const coreWire = edges(coreGeo, CY2, .9); coreWire.position.copy(core.position); wire.add(coreWire);
+coreLight.position.copy(core.position);
+
+// --- solar arrays (large gridded wings, top+bottom) ---
+const solarTex = gridTex(8,4,'#0a2a52','#2f6fd0');
+const solarMat = new T.MeshStandardMaterial({map:solarTex, color:0x6fa8ff, metalness:.3, roughness:.5, emissive:0x0a1c3a, emissiveIntensity:.5, side:T.DoubleSide});
+function solar(x,dir){ const grp=new T.Group();
+  const boom=strut(new T.Vector3(x,dir*.4,0), new T.Vector3(x,dir*1.5,0), .03); grp.add(boom);
+  const g=new T.PlaneGeometry(2.0,3.4,1,1); const p=new T.Mesh(g,solarMat); p.position.set(x,dir*3.3,0); p.rotation.y=Math.PI/2; p.rotation.z=Math.PI/2; grp.add(p);
+  const ny = dir>0? .85 : .15; addSolid(grp, ny); const e=edges(g,0x6fb0ff,.5); e.position.copy(p.position); e.rotation.copy(p.rotation); wire.add(e); }
+solar(-3.2, 1); solar(-3.2,-1); solar(2.6,1); solar(2.6,-1);
+
+// --- radiators (thin pale sheets) ---
+const radMat = new T.MeshStandardMaterial({color:0xcfd8e2, metalness:.2, roughness:.6, emissive:0x201a12, emissiveIntensity:.35, side:T.DoubleSide});
+function radiator(x,z){ const g=new T.BoxGeometry(2.6,.02,1.3); const m=new T.Mesh(g,radMat); m.position.set(x,0,z);
+  for(let i=1;i<5;i++){ const l=new T.Mesh(new T.BoxGeometry(2.6,.03,.01), modMat); l.position.set(0,0,-.65+i*.26); m.add(l);} addSolid(m,.5); const e=edges(g,STEEL,.35); e.position.copy(m.position); wire.add(e); }
+radiator(0.4,2.0); radiator(0.4,-2.0);
+
+// --- optical link node / dish ---
+const dishGeo = new T.SphereGeometry(.42,18,12,0,Math.PI*2,0,Math.PI/2);
+const dish = new T.Mesh(dishGeo, new T.MeshStandardMaterial({color:0x223142, metalness:.6, roughness:.4, emissive:0x0a2230, emissiveIntensity:.5, side:T.DoubleSide}));
+dish.position.set(4.4,0,0); dish.rotation.z=-Math.PI/2; addSolid(dish,.5);
+
+// station framing
+station.scale.setScalar(1.0);
+station.position.y = 0.2;
+
+// ---------- particle fields ----------
+// ambient dust / stars
+const dustN = 2200; const dustPos = new Float32Array(dustN*3); const dustBase=new Float32Array(dustN*3);
+for(let i=0;i<dustN;i++){ const r=6+Math.random()*30, a=Math.random()*Math.PI*2, b=(Math.random()-.5)*Math.PI;
+  const x=r*Math.cos(b)*Math.cos(a), y=r*Math.sin(b)*.6, z=r*Math.cos(b)*Math.sin(a);
+  dustPos[i*3]=x;dustPos[i*3+1]=y;dustPos[i*3+2]=z; dustBase[i*3]=x;dustBase[i*3+1]=y;dustBase[i*3+2]=z; }
+const dustGeo=new T.BufferGeometry(); dustGeo.setAttribute('position',new T.BufferAttribute(dustPos,3));
+const dust=new T.Points(dustGeo, new T.PointsMaterial({map:DOT,color:0x9fd8ff,size:.13,sizeAttenuation:true,transparent:true,opacity:.0,depthWrite:false,blending:T.AdditiveBlending}));
+scene.add(dust);
+
+// energy flow along the spine (solar -> core -> radiator)
+const flowN=520; const flowPos=new Float32Array(flowN*3); const flowT=new Float32Array(flowN);
+for(let i=0;i<flowN;i++){ flowT[i]=Math.random(); }
+const flowGeo=new T.BufferGeometry(); flowGeo.setAttribute('position',new T.BufferAttribute(flowPos,3));
+const flow=new T.Points(flowGeo, new T.PointsMaterial({map:DOT,color:CY2,size:.16,sizeAttenuation:true,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending}));
+station.add(flow);
+function flowPoint(t){ // path: from a solar wing down to spine, along spine to radiator
+  if(t<.4){ const u=t/.4; return new T.Vector3(-3.2, 3.3-u*3.3, 0); }
+  else if(t<.75){ const u=(t-.4)/.35; return new T.Vector3(-3.2+u*3.6, 0, 0); }
+  else { const u=(t-.75)/.25; return new T.Vector3(.4, 0, u*2.0); } }
+
+// pointer sparks
+const spN=180; const spPos=new Float32Array(spN*3); const spLife=new Float32Array(spN); const spVel=new Float32Array(spN*3);
+for(let i=0;i<spN;i++){spLife[i]=0;spPos[i*3+1]=999;}
+const spGeo=new T.BufferGeometry(); spGeo.setAttribute('position',new T.BufferAttribute(spPos,3));
+const sparks=new T.Points(spGeo,new T.PointsMaterial({map:DOT,color:CY,size:.22,sizeAttenuation:true,transparent:true,opacity:.95,depthWrite:false,blending:T.AdditiveBlending}));
+scene.add(sparks); let spHead=0;
+function emitSpark(p,burst){ for(let k=0;k<(burst||1);k++){ const i=spHead%spN; spHead++;
+  spPos[i*3]=p.x;spPos[i*3+1]=p.y;spPos[i*3+2]=p.z; spVel[i*3]=(Math.random()-.5)*.06;spVel[i*3+1]=(Math.random()-.5)*.06;spVel[i*3+2]=(Math.random()-.5)*.06; spLife[i]=1; } }
+
+// ---------- interactive drone ----------
+const drone = new T.Group();
+const dBody=new T.Mesh(new T.OctahedronGeometry(.22,0), new T.MeshStandardMaterial({color:0x0c1a24, metalness:.5, roughness:.3, emissive:CY, emissiveIntensity:1.4}));
+drone.add(dBody);
+const dRing=new T.Mesh(new T.TorusGeometry(.34,.02,8,24), new T.MeshStandardMaterial({color:CY2, emissive:CY, emissiveIntensity:1.2, metalness:.3, roughness:.4}));
+drone.add(dRing);
+const dGlow=new T.Sprite(new T.SpriteMaterial({map:DOT,color:CY,transparent:true,opacity:.7,blending:T.AdditiveBlending,depthWrite:false})); dGlow.scale.setScalar(1.6); drone.add(dGlow);
+scene.add(drone); drone.visible=false;
+let droneHover=0;
+
+// ---------- camera orbit control ----------
+const sph = {theta:0.9, phi:1.15, r:15, tTheta:0.9, tPhi:1.15, tR:15};
+let dragging=false, autoOrbit=true, lastX=0,lastY=0, idle=0;
+const target = new T.Vector3(0,0.2,0);
+const _dir=new T.Vector3(), _right=new T.Vector3(), _look=new T.Vector3(), _up=new T.Vector3(0,1,0);
+function applyCam(){ sph.theta+= (sph.tTheta-sph.theta)*.08; sph.phi+=(sph.tPhi-sph.phi)*.08; sph.r+=(sph.tR-sph.r)*.08;
+  sph.phi=Math.max(.25,Math.min(2.7,sph.phi));
+  camera.position.set( target.x + sph.r*Math.sin(sph.phi)*Math.cos(sph.theta),
+                       target.y + sph.r*Math.cos(sph.phi),
+                       target.z + sph.r*Math.sin(sph.phi)*Math.sin(sph.theta) );
+  _dir.subVectors(target,camera.position).normalize(); _right.crossVectors(_dir,_up).normalize();
+  const PAN = window.innerWidth>820 ? sph.r*0.17 : 0;   // frame module to the left, clear the card
+  camera.position.addScaledVector(_right, PAN);
+  _look.copy(target).addScaledVector(_right, PAN);
+  camera.lookAt(_look); }
+
+canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;idle=0;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointerup',e=>{dragging=false;});
+const pointerNDC=new T.Vector2(-2,-2);
+canvas.addEventListener('pointermove',e=>{ pointerNDC.x=(e.clientX/window.innerWidth)*2-1; pointerNDC.y=-(e.clientY/window.innerHeight)*2+1; idle=0;
+  if(dragging){ sph.tTheta-=(e.clientX-lastX)*.006; sph.tPhi-=(e.clientY-lastY)*.006; lastX=e.clientX;lastY=e.clientY; }
+  hideHint(); });
+canvas.addEventListener('wheel',e=>{ sph.tR=Math.max(8,Math.min(30, sph.tR+e.deltaY*.012)); e.preventDefault(); idle=0; },{passive:false});
+
+// ---------- content ----------
+const CONTENT=[
+ {idx:'00 · INTRO', h:'Orbital <span class="em">Data Centers</span>', body:
+   ['The entire data-center stack is being redesigned at once — and power is the constraint that pushes it off-planet. This is the module that replaces the campus.',
+    'Drag to orbit the structure. Solar arrays feed the compute core; waste heat runs out to thin radiators; nodes link by optical laser.'],
+   chips:[['~$41B','CAPEX / GW'],['≈ $0','OPS / GW·YR'],['hours','TO GO LIVE']],
+   cam:{theta:0.9,phi:1.15,r:15}},
+ {idx:'01 · THE STACK', h:'Rebuilt, <span class="em">every layer</span>', body:
+   ['Workloads, design, networking, silicon, cooling and power equipment — each layer is being re-architected for AI at the same time.',
+    'The binding constraint is <b>power</b>: grid growth goes from slow, to accelerating with behind-the-meter, to a step change from nuclear and orbital.'],
+   chips:[['7','LAYERS'],['3','ERAS'],['GW','THE UNIT']],
+   cam:{theta:2.1,phi:1.0,r:13}},
+ {idx:'02 · ORBITAL', h:'A <span class="em">constellation</span>, not a campus', body:
+   ['One GW in orbit is ~200 Starship launches and a few thousand small-MW satellites, lasered together into one fabric.',
+    'Each sat is <b>solar panels + compute + a thin aluminium radiator</b>. Power is free sunlight; cooling is passive radiation to deep space.'],
+   chips:[['200','LAUNCHES / GW'],['solar','FREE POWER'],['radiator','PASSIVE COOL']],
+   cam:{theta:-0.4,phi:1.25,r:12}},
+ {idx:'03 · ECONOMICS', h:'Every GW <span class="em">easier</span>', body:
+   ['On Earth each GW gets harder — permits, NIMBY, finding the power. CapEx is comparable, but operations are paid <b>forever</b>.',
+    'In orbit each GW gets easier — scale and $/kg keep falling, and operations trend to <b>zero</b>. The cost-per-GW curves cross.'],
+   chips:[['harder ↑','TERRESTRIAL'],['easier ↓','ORBITAL'],['→ $0','ORBIT OPS']],
+   cam:{theta:0.5,phi:0.85,r:14}}
+];
+const cards=[...document.querySelectorAll('.card')];
+CONTENT.forEach((c,i)=>{ cards[i].innerHTML =
+  `<div class="idx">${c.idx}</div><h2>${c.h}</h2><div class="rule"></div>`+
+  c.body.map(p=>`<p>${p}</p>`).join('')+
+  `<div class="chips">${c.chips.map(ch=>`<div class="chip"><div class="n">${ch[0]}</div><div class="l">${ch[1]}</div></div>`).join('')}</div>`; });
+
+// nav
+const nav=document.getElementById('nav');
+CONTENT.forEach((c,i)=>{ const d=document.createElement('div'); d.className='nav-i'+(i===0?' on':''); d.dataset.i=i;
+  d.innerHTML=`<span class="no">0${i}</span><span class="dot"></span><span class="tx">${c.idx.split('· ')[1]}</span>`;
+  d.onclick=()=>goto(i); nav.appendChild(d); });
+
+let active=-1;
+function goto(i){ if(i===active) return; active=i; const c=CONTENT[i];
+  sph.tTheta=c.cam.theta; sph.tPhi=c.cam.phi; sph.tR=c.cam.r; idle=0;
+  cards.forEach((el,j)=>{ el.classList.toggle('show', j===i); });
+  const h2=cards[i].querySelector('h2'); h2.classList.remove('glitch'); void h2.offsetWidth; h2.classList.add('glitch');
+  [...nav.children].forEach((n,j)=>n.classList.toggle('on',j===i));
+}
+
+// buttons
+document.getElementById('btnAuto').onclick=(e)=>{ autoOrbit=!autoOrbit; e.target.textContent='Auto-orbit: '+(autoOrbit?'ON':'OFF'); };
+document.getElementById('btnScan').onclick=()=>startScan();
+
+let hintTimer=setTimeout(()=>hideHint(),6000);
+function hideHint(){ const h=document.getElementById('hint'); if(h) h.style.opacity='0'; }
+
+// ---------- scan intro ----------
+let scanT=0, scanning=true, revealed=false;
+const scanLine=new T.Mesh(new T.PlaneGeometry(22,22), new T.MeshBasicMaterial({color:CY,transparent:true,opacity:.0,blending:T.AdditiveBlending,side:T.DoubleSide,depthWrite:false}));
+scanLine.rotation.x=Math.PI/2; scene.add(scanLine);
+const yLow=-4.2, yHigh=4.6;
+function startScan(){ scanT=0; scanning=true; revealed=false; revealables.forEach(m=>m.opacity=0); wire.visible=true; }
+
+// ---------- boot ----------
+const bootbar=document.getElementById('bootbar'), bootlog=document.getElementById('bootlog'), boot=document.getElementById('boot');
+const logs=['allocating compute lattice…','unfolding solar arrays…','priming radiators…','linking optical mesh…','online.'];
+let bp=0; const bi=setInterval(()=>{ bp+=6+Math.random()*10; if(bp>100)bp=100; bootbar.style.width=bp+'%';
+  bootlog.textContent=logs[Math.min(logs.length-1, Math.floor(bp/22))];
+  if(bp>=100){ clearInterval(bi); setTimeout(()=>{ boot.style.opacity='0'; setTimeout(()=>boot.style.display='none',800);
+    startScan(); setTimeout(()=>goto(0),700); },350); } },140);
+
+document.getElementById('nodes').textContent = (solids.length + 4000).toLocaleString();
+
+// ---------- resize ----------
+function resize(){ const w=window.innerWidth,h=window.innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+window.addEventListener('resize',resize); resize();
+
+// ---------- raycaster for drone ----------
+const ray=new T.Raycaster(); const dlabel=document.getElementById('dlabel');
+
+// ---------- loop ----------
+const clock=new T.Clock(); let frames=0,fpsT=0;
+const tmp=new T.Vector3();
+function tick(){ requestAnimationFrame(tick); const dt=Math.min(clock.getDelta(),.05); const et=clock.elapsedTime; idle+=dt;
+  // scan
+  if(scanning){ scanT+=dt/2.6; const p=Math.min(scanT,1); const y=yLow+(yHigh-yLow)*p;
+    scanLine.position.y=y; scanLine.material.opacity=(p<1?.5:0)*(1-Math.abs(0.5-p)*0.4);
+    solids.forEach(s=>{ const sy=yLow+(yHigh-yLow)*s.ny; const on = y>sy?1:0; });
+    revealables.forEach(m=>{}); // reveal handled below by threshold
+    // reveal materials whose object center y passed
+    solids.forEach(s=>{ s.mesh.traverse(o=>{ if(o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{ if(revealables.indexOf(m)>=0){ const sy=yLow+(yHigh-yLow)*s.ny; const tgt=y>sy?1:0; m.opacity+=(tgt-m.opacity)*Math.min(1,dt*6);} });} }); });
+    dust.material.opacity += (0.85-dust.material.opacity)*dt*1.5;
+    flow.material.opacity += ((p>.6?0.95:0)-flow.material.opacity)*dt*2;
+    if(p>=1){ scanning=false; revealed=true; scanLine.visible=false; sunLight.intensity=0.7; setTimeout(()=>{ wire.children.forEach(w=>{ if(w.material) w.material.opacity=0.16; }); coreWire.material.opacity=0.5; }, 200); }
+  }
+  // auto orbit
+  if(autoOrbit && !dragging && idle>2.5){ sph.tTheta+=dt*0.06; }
+  applyCam();
+  // station idle motion
+  station.rotation.y = Math.sin(et*0.08)*0.04;
+  core.rotation.y += dt*0.5; core.rotation.x += dt*0.18;
+  coreLight.intensity = 1.1 + Math.sin(et*3)*0.2;
+  dish.rotation.x += dt*0.3;
+  // flow particles
+  const fp=flowGeo.attributes.position.array;
+  for(let i=0;i<flowN;i++){ flowT[i]+=dt*0.22; if(flowT[i]>1)flowT[i]-=1; const v=flowPoint(flowT[i]); fp[i*3]=v.x+(Math.random()-.5)*.05; fp[i*3+1]=v.y+(Math.random()-.5)*.05; fp[i*3+2]=v.z+(Math.random()-.5)*.05; }
+  flowGeo.attributes.position.needsUpdate=true;
+  // dust drift + pointer stir
+  const dp=dustGeo.attributes.position.array;
+  ray.setFromCamera(pointerNDC, camera); const pw=ray.ray.origin.clone().add(ray.ray.direction.clone().multiplyScalar(14));
+  for(let i=0;i<dustN;i++){ const bx=dustBase[i*3],by=dustBase[i*3+1],bz=dustBase[i*3+2];
+    let x=dp[i*3],y=dp[i*3+1],z=dp[i*3+2];
+    // drift back to base slowly + swirl
+    x+=(bx-x)*.02; y+=(by-y)*.02; z+=(bz-z)*.02;
+    const ddx=x-pw.x, ddy=y-pw.y, ddz=z-pw.z; const d2=ddx*ddx+ddy*ddy+ddz*ddz;
+    if(d2<9){ const f=(1-d2/9)*.25/Math.sqrt(d2+.01); x+=ddx*f; y+=ddy*f; z+=ddz*f; if(Math.random()<0.02) emitSpark(pw,1); }
+    dp[i*3]=x;dp[i*3+1]=y;dp[i*3+2]=z; }
+  dustGeo.attributes.position.needsUpdate=true;
+  // sparks
+  const sp=spGeo.attributes.position.array;
+  for(let i=0;i<spN;i++){ if(spLife[i]>0){ spLife[i]-=dt*1.3; sp[i*3]+=spVel[i*3];sp[i*3+1]+=spVel[i*3+1];sp[i*3+2]+=spVel[i*3+2]; if(spLife[i]<=0){sp[i*3+1]=999;} } }
+  spGeo.attributes.position.needsUpdate=true; sparks.material.opacity=.95;
+  // drone flight
+  if(revealed){ drone.visible=true;
+    const R=6.5; drone.position.set(Math.cos(et*0.5)*R, Math.sin(et*0.9)*2.2+0.3, Math.sin(et*0.5)*R*0.8);
+    drone.lookAt(target); dRing.rotation.z+=dt*2; dRing.rotation.x+=dt*1.3;
+    // hover test
+    ray.setFromCamera(pointerNDC,camera); const hit=ray.intersectObject(drone,true).length>0;
+    droneHover += ((hit?1:0)-droneHover)*.2; drone.scale.setScalar(1+droneHover*0.5);
+    dBody.material.emissiveIntensity=1.4+droneHover*1.8; dGlow.material.opacity=.6+droneHover*.4;
+    if(hit && Math.random()<0.4) emitSpark(drone.position, 2);
+    tmp.copy(drone.position).project(camera); dlabel.style.left=((tmp.x*.5+.5)*window.innerWidth+16)+'px'; dlabel.style.top=((-tmp.y*.5+.5)*window.innerHeight-8)+'px'; dlabel.style.opacity=droneHover>.15?'1':'0';
+  }
+  // fps
+  frames++; fpsT+=dt; if(fpsT>.5){ document.getElementById('fps').textContent=Math.round(frames/fpsT); frames=0;fpsT=0; }
+  renderer.render(scene,camera);
+}
+tick();
+window.__ready=true;
+})();
+</script>
+</body>
+</html>
