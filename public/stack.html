@@ -272,7 +272,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v19 · 101 recut</div>
+<div class="ver">v20 · data center</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -319,7 +319,7 @@ G.buildings=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rec
 G.chart=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><path d="M4 21h18" stroke="'+c+'" stroke-width="1.3"/><rect class="riseb" x="6" y="14" width="3.4" height="7" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.22s" x="11.3" y="9" width="3.4" height="12" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.44s" x="16.6" y="5" width="3.4" height="16" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/></svg>';
 G.modules=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="4" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="bob" x="8.5" y="4.5" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3" fill="'+c+'" fill-opacity=".18"/></svg>';
 G.sat=c=>'<svg class="gi" viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="10" y="10" width="6" height="6" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="pulse" x="2" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><rect class="pulse" style="animation-delay:.5s" x="18" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><path d="M13 10V6" stroke="'+c+'" stroke-width="1.2"/><path class="beat" d="M11 6.2a2.2 2.2 0 0 1 4 0" stroke="'+c+'" stroke-width="1.2"/></svg>';
-const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','memory','memory','chart','mesh','lock'],dc:['buildings','chart','modules','globe','sat','sat','reactor'],apps:['globe','modules','reactor']};
+const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','memory','memory','chart','mesh','lock'],dc:['modules','buildings','chart','lock','sat','reactor','globe'],apps:['globe','modules','reactor']};
 function topicIcon(id,i,c){const nm=(TICON[id]||[])[i];return (nm&&G[nm])?G[nm](c):G.chip(c);}
 
 /* real Natural Earth geometry, Natural Earth projection, fitted to the 1000x460 viewBox */
@@ -1073,6 +1073,140 @@ VIZ.localpower=function(){
   s+=T(20,448,'The same gigawatt costs a different amount, waits a different number of years, and is legal in a different set of places.',{s:12.5,f:V.ink});
   return SV(s);
 };
+
+/* — DC 1. the physical footprint is being rewritten — */
+VIZ.footprint=function(){
+  let s='';
+  const era=(x,y,w,t,l1,l2,c)=>B(x,y,w,84,c,{r:4,fill:'#0d1017'})
+    +T(x+18,y+30,t,{s:15,w:700,f:c})+T(x+18,y+52,l1,{s:12,f:'#c9cfdd'})+T(x+18,y+70,l2,{s:12,f:'#c9cfdd'});
+  const dot=(x1,x2,y)=>LN(x1,y,x2-9,y,V.yel,{sw:2,d:'6 5'})+'<path d="M'+x2+' '+y+' l-11 -5 v10 z" fill="'+V.yel+'"/>';
+  s+=era(16,206,262,'Cloud / Internet era','~3 kW racks','Metro + “cloud regions”',V.grey);
+  s+=dot(286,342,248);
+  s+=era(346,120,286,'AI Training era','~150 kW racks','~1 GW campuses + scale-up/out',V.amber);
+  s+=dot(640,694,162);
+  s+=era(698,34,290,'AGI era','1 MW racks','Multi-GW + scale-across + space + edge',V.cyan);
+  // scene: metro -> campus + generation -> globe, satellites, edge
+  const sky=[[40,44],[58,66],[76,32],[94,80],[112,52],[130,70],[148,38]];
+  sky.forEach(b=>s+=B(b[0],450-b[1],14,b[1],V.grey,{r:1,fill:V.grey+'22',sw:.8}));
+  s+='<circle cx="96" cy="330" r="26" fill="none" stroke="'+V.blue+'" stroke-width="1"/>';
+  [[78,320],[112,318],[96,344],[84,340],[110,340]].forEach(q=>s+='<circle cx="'+q[0]+'" cy="'+q[1]+'" r="2.4" fill="'+V.blue+'"/>');
+  s+=LN(78,320,112,318,V.blue,{sw:.7,op:.7})+LN(78,320,96,344,V.blue,{sw:.7,op:.7})+LN(112,318,110,340,V.blue,{sw:.7,op:.7});
+  s+=T(96,372,'metro + cloud regions',{a:'middle',s:9.5,f:V.dim,m:1});
+  [0,1,2].forEach(i=>{const cx=310+i*30;
+    s+='<path d="M'+(cx-11)+' 450 L'+(cx-7)+' 400 L'+(cx+7)+' 400 L'+(cx+11)+' 450 Z" fill="'+V.grey+'22" stroke="'+V.grey+'" stroke-width=".9"/>';});
+  for(let r=0;r<3;r++)for(let cN=0;cN<6;cN++)s+=B(408+cN*34,390+r*22,28,16,V.amber,{r:1.5,fill:V.amber+'2a',sw:.7});
+  s+=T(492,372,'~1 GW campus',{a:'middle',s:9.5,f:V.amber,m:1});
+  s+='<circle cx="836" cy="404" r="86" fill="none" stroke="'+V.cyan+'" stroke-width="1" opacity=".55"/>';
+  s+='<circle cx="836" cy="404" r="86" fill="'+V.cyan+'" opacity=".07"/>';
+  s+='<ellipse cx="836" cy="404" rx="118" ry="34" fill="none" stroke="'+V.cyan+'" stroke-width=".9" opacity=".5" transform="rotate(-18 836 404)"/>';
+  [[742,352],[930,356],[880,318]].forEach(q=>{s+=B(q[0]-9,q[1]-5,18,10,V.cyan,{r:2,fill:V.cyan+'44',sw:.8});
+    s+=LN(q[0]-16,q[1],q[0]-9,q[1],V.cyan,{sw:.8})+LN(q[0]+9,q[1],q[0]+16,q[1],V.cyan,{sw:.8});});
+  for(let i=0;i<5;i++){const a=(-40+i*24)*Math.PI/180,ex=836+Math.cos(a)*150,ey=452+Math.sin(a)*46;
+    s+=LN(836,404,ex,ey,V.cyan,{sw:.7,op:.5});s+='<circle cx="'+ex.toFixed(0)+'" cy="'+ey.toFixed(0)+'" r="3.2" fill="'+V.cyan+'"/>';}
+  s+=T(690,436,'multi-GW + space + edge',{a:'middle',s:9.5,f:V.cyan,m:1});
+  return SV(s);
+};
+
+/* — DC 2. the players — */
+VIZ.players=function(){
+  let s='';
+  const LAY=[['Inference & apps',0],['Orchestration',1],['Servers & GPUs',2],['Shell & cooling',3],['Land & power',4]];
+  const P=[{n:'POWERED SHELL',c:V.amber,x:300,own:[0,0,0,1,1],sub:'land, shell, power'},
+           {n:'BARE METAL',c:V.blue,x:530,own:[0,0,1,0,0],sub:'GPUs as a utility'},
+           {n:'AI CLOUD',c:V.pur,x:760,own:[1,1,0,0,0],sub:'software margin'}];
+  LAY.forEach((l,i)=>{const y=64+i*62;
+    s+=T(272,y+34,l[0],{a:'end',s:12.5,w:600,f:V.dim});
+    s+=LN(292,y+56,952,y+56,V.dim,{sw:1,op:.14});});
+  P.forEach(pl=>{
+    LAY.forEach((l,i)=>{const y=64+i*62,full=pl.own[i];
+      s+=B(pl.x,y,190,48,pl.c,{r:8,fill:pl.c+(full?'66':'0f'),sw:full?1.4:.9,op:full?1:.42});
+      if(full)s+=T(pl.x+95,y+30,l[0],{a:'middle',s:11.5,w:600,m:1});});
+    s+=B(pl.x,392,190,54,pl.c,{r:8,fill:pl.c+'1f'});
+    s+=T(pl.x+95,418,pl.n,{a:'middle',s:12.5,w:700,f:pl.c,ls:'.06em',m:1});
+    s+=T(pl.x+95,436,pl.sub,{a:'middle',s:10,f:V.dim});});
+  s+=T(20,30,'Three businesses, one word',{s:14,w:700,f:V.ink});
+  s+=T(20,50,'full colour = owned  ·  faint = rented from the layer below',{s:11,f:V.dim,m:1});
+  return SV(s);
+};
+
+/* — DC 3. the economics — */
+VIZ.economics=function(){
+  let s='';
+  const P=[{n:'POWERED SHELL',c:V.amber,x:290,v:['$15B','$2B / yr','85%+ NOI','high teens','15 yr +']},
+           {n:'BARE METAL',c:V.blue,x:530,v:['$40B','$15B / yr','70–80% EBITDA','low 20s','~5 yr']},
+           {n:'AI CLOUD',c:V.pur,x:770,v:['$40B','$15–25B / yr','80%+ EBITDA','high 20s','on demand']}];
+  const M=[['Capex per GW','what it costs to build'],['Revenue','what it earns'],['Margin','what it keeps'],['Unlevered IRR','what it returns'],['Contract','how long it is locked']];
+  P.forEach(pl=>{s+=T(pl.x+92,40,pl.n,{a:'middle',s:12.5,w:700,f:pl.c,ls:'.05em',m:1});
+    s+=B(pl.x,54,184,378,pl.c,{r:12,fill:pl.c+'0d'});});
+  M.forEach((m,i)=>{const y=76+i*76;
+    s+=T(266,y+26,m[0],{a:'end',s:13,w:600});
+    s+=T(266,y+44,m[1],{a:'end',s:10,f:V.dim,m:1});
+    s+=LN(24,y+58,956,y+58,V.dim,{sw:1,op:.14});
+    P.forEach(pl=>{s+=T(pl.x+92,y+34,pl.v[i],{a:'middle',s:17,w:700,f:pl.c,m:1});});});
+  s+=T(24,452,'Same gigawatt, three different businesses — real-estate returns, utility returns, software returns.',{s:12.5,f:V.ink});
+  return SV(s);
+};
+
+/* — DC 4. the software layer — */
+VIZ.software=function(){
+  let s='';
+  s+=T(24,30,'What the software layer actually does',{s:14,w:700,f:V.ink});
+  const box=(x,y,w,h,c,t,sub)=>B(x,y,w,h,c,{r:10,fill:c+'14'})+T(x+16,y+28,t,{s:13,w:600,f:c})+T(x+16,y+48,sub,{s:10.5,f:V.dim});
+  s+=box(24,54,210,74,V.pur,'Scheduling','pack jobs onto silicon');
+  s+=box(24,140,210,74,V.pur,'Inference runtime','batching, caching, quantisation');
+  s+=box(24,226,210,74,V.pur,'Multi-tenancy','many customers, one fleet');
+  s+=T(24,332,'None of it owns a building or a GPU.',{s:12,f:V.dim});
+  s+=T(24,352,'All of it decides how much work the fleet does.',{s:12,w:600,f:V.pur});
+  const util=(x,c,pct,title,sub,cost)=>{let o=T(x+90,72,title,{a:'middle',s:13.5,w:700,f:c});
+    o+=T(x+90,90,sub,{a:'middle',s:10.5,f:V.dim,m:1});
+    o+=B(x,104,180,208,c,{r:10,fill:'#0e1119',sw:1});
+    const fh=(208-16)*pct/100;
+    o+=B(x+8,312-8-fh,164,fh,c,{r:6,fill:c+'66',sw:0});
+    const py=fh>70?(312-8-fh+34):(312-fh-22);o+=T(x+90,py,pct+'%',{a:'middle',s:26,w:700,f:c,m:1});
+    o+=T(x+90,340,'utilisation',{a:'middle',s:10.5,f:V.dim,m:1});
+    o+=T(x+90,372,cost,{a:'middle',s:15,w:700,f:c,m:1});
+    o+=T(x+90,390,'effective $ per unit of work',{a:'middle',s:9.5,f:V.dim,m:1});
+    return o;};
+  s+=util(330,V.red,35,'Owned, inefficient','you bought the GPUs','1.00×');
+  s+=util(560,V.green,85,'Rented, efficient','someone else runs them','0.41×');
+  s+='<path d="M528 210 h20" stroke="'+V.yel+'" stroke-width="2"/>';
+  s+=B(786,104,190,208,V.yel,{r:10,fill:V.yel+'10'});
+  s+=T(881,150,'Where the',{a:'middle',s:13,f:V.dim});
+  s+=T(881,180,'value sits',{a:'middle',s:20,w:700,f:V.yel});
+  s+=T(881,220,'Efficient compute on',{a:'middle',s:12});
+  s+=T(881,240,'rented iron beats',{a:'middle',s:12});
+  s+=T(881,260,'inefficient compute',{a:'middle',s:12});
+  s+=T(881,280,'on owned iron.',{a:'middle',s:12,w:600,f:V.yel});
+  s+=T(24,452,'Yes, it matters: utilisation is the multiplier on every dollar of infrastructure underneath.',{s:12.5,f:V.ink});
+  return SV(s);
+};
+
+/* — DC 7. geography, regulation and labour — */
+VIZ.geodc=function(){
+  let s='';
+  s+='<g transform="translate(0,-24) scale(1,0.80)">';
+  s+='<path d="'+MAP.land+'" fill="#151a24" stroke="#2c3548" stroke-width=".6"/>';
+  s+='<path d="'+MAP.asia+'" fill="'+V.cyan+'" fill-opacity=".20" stroke="'+V.cyan+'" stroke-width=".7"/>';
+  s+='<path d="'+MAP.eu+'" fill="'+V.pur+'" fill-opacity=".22" stroke="'+V.pur+'" stroke-width=".7"/>';
+  s+='<path d="'+MAP.us+'" fill="'+V.amber+'" fill-opacity=".18" stroke="'+V.amber+'" stroke-width=".7"/>';
+  HUBS.forEach(h=>{const c=h.b?V.red:V.green;
+    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="9" fill="'+c+'" fill-opacity=".14" stroke="'+c+'" stroke-width="1"/>';
+    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="3.2" fill="'+c+'"/>';});
+  s+='</g>';
+  const note=(x,c,t,sub)=>'<rect x="'+x+'" y="300" width="11" height="11" rx="3" fill="'+c+'" fill-opacity=".3" stroke="'+c+'"/>'
+    +T(x+18,310,t,{s:11.5,w:600,f:c})+T(x+18,326,sub,{s:9.5,f:V.dim,m:1});
+  s+=note(24,V.amber,'United States','power-led siting, coastal cost');
+  s+=note(300,V.pur,'Europe','data rules gate the build');
+  s+=note(560,V.cyan,'Asia + Gulf','sovereign compute, fastest permits');
+  s+=LN(24,350,976,350,V.dim,{sw:1,op:.3});
+  s+=T(24,382,'And then there is labour',{s:13.5,w:700,f:V.ink});
+  const lab=(x,t,sub,c)=>B(x,394,300,54,c,{r:10,fill:c+'12'})+T(x+16,418,t,{s:12.5,w:600,f:c})+T(x+16,436,sub,{s:10.5,f:V.dim});
+  s+=lab(24,'Skilled trades are the constraint','electricians and pipefitters, not land',V.red);
+  s+=lab(348,'So the build moves to a factory','one workforce, modular blocks shipped',V.amber);
+  s+=lab(672,'Design follows the labour','prefab skids · repeatable units · edge',V.cyan);
+  return SV(s);
+};
+
 /* ============ STACK DATA ============ */
 const LAYERS=[
  {id:'power',name:'POWER',title:'Power',accent:'#e0a355',eyebrow:'LAYER 01 · THE BOTTOM OF THE STACK',
@@ -1096,13 +1230,13 @@ const LAYERS=[
   ]},
  {id:'dc',name:'DATA CENTER',title:'The Data Center',accent:'#6f8dff',eyebrow:'LAYER 03 · THE MACHINE & THE MONEY',
   subs:[
-   {viz:'players',n:'The players',d:'PowerShells (miners → AI) · bare-metal compute · inference & software.',lead:'“Data center” hides three distinct businesses: the power-and-shell developers, the bare-metal compute operators, and the inference/software layer on top. Different capital, different margins.',era:['Colo + enterprise IT','Hyperscalers + neoclouds + ex-miners','Specialized layers, financed separately'],points:['<b>PowerShells</b>: land, power, building — real-estate economics.','<b>Bare-metal</b>: GPUs as a utility; utilization is king.','<b>Inference / software</b> captures the software margin.']},
-   {viz:'economics',n:'The economics',d:'Infra went from ~20% of cost to ~75%. Now it must be financed.',lead:'The cost center flipped: infrastructure went from ~20% to ~75% of total cost. Compute is now an infrastructure asset that must be financed like one.',era:['IT spend · opex-light','GPU capex dominates · fast depreciation','Project-financed · half-trillion-dollar vehicles'],points:['<b>Depreciation schedules</b> define the whole model.','Utilization and power price set the IRR.','Debt and SPVs — not balance sheets — fund the build.']},
-   {viz:'build',n:'Build & design',d:'Monolithic campuses → modular prefab factories → edge nodes.',lead:'Construction is the bottleneck, so the industry is moving from bespoke monolithic campuses to modular, prefabricated, factory-built blocks shipped to site — and to the edge.',era:['Bespoke monolithic builds','Modular + prefab · liquid-ready','Factory-built blocks · edge nodes'],points:['<b>Labor and lead time</b>, not land, are the constraint.','Prefab compresses schedule and de-risks quality.','Edge nodes push compute toward the workload.']},
-   {viz:'geodc',n:'Geography & regulation',d:'Most nations can’t build models or chips — but they can build data centers.',lead:'Most countries can’t build frontier models or leading-edge chips — but they can build data centers and power. Regulation and sovereignty decide where compute lands.',era:['Follow cheap land + fiber','Chase power + friendly permits','Sovereign compute · BYOC · data borders'],points:['Power availability now outranks latency for training.','<b>Sovereignty</b> rules drive in-country builds.','Water, grid and consent gate every approval.']},
-   {viz:'footprint',n:'Scale & footprint',d:'3 kW racks in a metro became 1 MW racks across multi-GW campuses.',lead:'The same machine has taken three physical forms in one cycle: the rack got roughly 330× denser and the campus left the metro entirely.',era:['~3 kW racks · metro','~150 kW racks · GW campuses','1 MW racks · multi-GW + space + edge'],points:['Density, not floor area, now defines the build.','Scale-across links campuses into one machine.','Edge and orbit become part of the footprint.']},
-   {viz:'spacedc',n:'Space',d:'Off-planet data centers: free power, passive cooling, no permits.',lead:'Orbit is a geography of its own: unlimited sun, passive radiative cooling, and no permitting regime — at the cost of launch mass and servicing.',era:['N/A — terrestrial only','Concepts + early demonstrators','Orbital compute for select workloads'],points:['Free 24/7 solar and passive radiative cooling.','No land, water or permitting constraints.','Launch cost, radiation and servicing are the hurdles.']},
-   {viz:'orbital',n:'Orbital economics',d:'Terrestrial cost curves bend up; orbital ones bend down.',lead:'Compute costs the same in both places. What differs is power, cooling and structure — and the direction each cost curve travels as you add gigawatts.',era:['N/A — terrestrial only','Concepts and demonstrators','Orbital for select workloads'],points:['Power and cooling fall to near <b>zero</b> in orbit.','Structure trades permits for launch mass.','Terrestrial: every GW harder. Orbital: every GW easier.']},
+   {viz:'footprint',n:'The physical footprint',d:'3 kW racks in a metro became 1 MW racks across multi-GW campuses, space and edge.'},
+   {viz:'players',n:'The players',d:'Powered shell, bare metal, AI cloud — three businesses hiding behind one word.'},
+   {viz:'economics',n:'The economics',d:'Same gigawatt: real-estate returns, utility returns, software returns.'},
+   {viz:'software',n:'The software layer',d:'Efficient compute on rented iron beats inefficient compute on owned iron.'},
+   {viz:'spacedc',n:'Data centers in space',d:'Free power, passive cooling, no permits — at the cost of launch mass.'},
+   {viz:'orbital',n:'Space economics',d:'Terrestrial cost curves bend up; orbital ones bend down.'},
+   {viz:'geodc',n:'Geography, regulation & labor',d:'Where it is legal, and who is actually available to build it.'},
   ]},
  {id:'apps',name:'APPLICATIONS',title:'Applications',accent:'#ab7cf1',eyebrow:'LAYER 04 · THE WORK ON TOP',
   subs:[
