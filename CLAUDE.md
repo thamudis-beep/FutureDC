@@ -4,9 +4,10 @@ An interactive, coded presentation for an investor audience. It replaces a
 PowerPoint. It is judged the way a deck by a good analyst is judged: is the
 argument right, is it specific, does the picture carry it.
 
-**The deliverable is `public/stack.html` — one self-contained file.** The Vite
-app in `src/` is a separate legacy deck served at `/deck`; the homepage is
-`stack.html` via the `/` rewrite in `vercel.json`.
+**The site is one file: `public/index.html`.** There is no build step, no
+framework, no bundler — Vercel serves `public/` as a static directory. Nothing
+else in the repo ships. If a change does not land in that file or in
+`public/img/`, it does not reach production.
 
 ---
 
@@ -65,7 +66,7 @@ NODE_PATH=/home/user/FutureDC/node_modules node shot.js   # run from the repo ro
 ```
 
 Screenshots of a `file://` URL are fine for layout. Use a local server over
-`dist/` when the page loads an asset by absolute path (`/img/...`).
+`public/` when the page loads an asset by absolute path (`/img/...`).
 
 **Check every topic renders after touching the diagram engine.** Iterate
 `LAYERS`, call each `VIZ[...]`, assert non-trivial output, and capture page
@@ -83,11 +84,10 @@ is showing cache — the user's proxy caches hard.
 
 ## Deploy
 
-Production tracks **`master`**. Every change ships as: build → commit → push the
-feature branch → fast-forward `master` → push.
+Production tracks **`master`**. There is nothing to build. Every change ships
+as: commit → push the feature branch → fast-forward `master` → push.
 
 ```
-npm run build
 git push -u origin claude/datacenter-presentation-migrate-hdwtuf
 git fetch origin master && git branch -f master HEAD && git push origin master
 ```
@@ -105,11 +105,12 @@ Never run `pkill` in the same command as a commit; it kills the shell first.
 Three views, hash-routed, in one file.
 
 - **Home** — title, a pill CTA, two cards that preview real content.
-- **Data Center 101** (`#matrix`) — the master grid: the stack down the Y axis,
-  time across the X (Internet 2023 · AI 2026 · AGI 2031). Every row names its
-  dimension. Rows are numbered bottom-up (1A/1B/1C · 2A/2B/2C · 3 · 4) and click
-  through into the matching layer.
-- **The Stack** (`#stack`) — three stages that animate as one motion:
+- **The Atlas** (`#matrix`) — the master grid: the stack down the Y axis, time
+  across the X (Cloud 2023 · Today 2026 · AGI 2031). Every row names its
+  dimension and holds one unit across all three eras. Rows are numbered
+  bottom-up (1A/1B · 2A/2B/2C · 3A/3B · 4) and click through into the matching
+  layer. It must fit one view — cell metrics scale with viewport height.
+- **Inside the Data Center** (`#stack`) — three stages that animate as one motion:
   `s0` the stack centred → `s1` it slides left, topics appear → `s2` it shrinks
   further, the topic's diagram takes the page. Only `left` and `transform`
   animate; never animate a grid track and the element's internal layout at once

@@ -1,24 +1,9 @@
 {
   "name": "future-dc",
   "version": "1.0.0",
-  "description": "The Future of Data Centers — an animated web presentation",
-  "type": "module",
+  "description": "Future of the Data Center — one self-contained page",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0",
-    "vite": "^5.0.8"
+    "dev": "npx --yes serve public"
   }
 }

@@ -1,60 +1,45 @@
-# The Future of Data Centers
+# Future of the Data Center
 
-An animated, keyboard-driven web presentation on how the entire data-center
-stack — from workloads down to the power plant — is being redesigned at once.
+An interactive, coded presentation for an investor audience. It replaces a
+PowerPoint.
 
-Built with **Vite + React + Tailwind**. Slides are authored on a fixed design
-canvas (1440×900) and scaled to fit any screen, so pixel-precise layouts stay
-intact on a laptop, a projector, or a phone.
+**The site is one file: `public/index.html`.** No build step, no framework, no
+bundler. It carries its own CSS, its own SVG diagram engine, its own canvas
+pixel field, and its embedded map geometry. The only things it loads from
+outside are Geist and IBM Plex Mono from Google Fonts, and `public/img/`.
 
 ## Run
 
 ```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # -> dist/
-npm run preview  # serve the production build
+npm run dev      # serves public/ on http://localhost:3000
 ```
 
-## Controls
+Or just open `public/index.html` in a browser — every route works from
+`file://` except the one topic that loads `/img/footprint.jpg` by absolute
+path.
 
-| Key / action            | Effect                              |
-|-------------------------|-------------------------------------|
-| `→` `Space` `Enter` · click | advance (steps through a slide's reveals, then moves on) |
-| `←`                     | back                                |
-| `Home` / `End`          | first / last slide                  |
-| `O`                     | overview grid (click a slide to jump) |
-| `D`                     | toggle dark / light                 |
-| `F`                     | fullscreen                          |
+## Views
 
-The URL hash tracks position (`#2.3` = slide 2, reveal 3) so any moment is
-linkable and survives a refresh.
+Three views, hash-routed.
 
-## Structure
+| Route             | View                                                  |
+|-------------------|-------------------------------------------------------|
+| `#` (default)     | Home — title, CTA, two cards previewing real content   |
+| `#matrix`         | The Atlas — the stack down Y, time across X            |
+| `#stack/<layer>`  | Inside the Data Center — a layer's topics              |
+| `#stack/<layer>/<n>` | one topic and its diagram                           |
 
-```
-index.html                 fonts + title + theme bootstrap
-src/
-  main.jsx                 React entry
-  App.jsx                  mounts the deck
-  index.css                theme tokens (light/dark) + deck keyframes
-  deck/
-    Deck.jsx               nav engine, fit-to-viewport scaling, chrome, overview
-  slides/
-    registry.js            the slide list, in order
-    primitives.jsx         shared building blocks (Reveal, Chip, EqBox, icons, color tones)
-    TitleSlide.jsx         cover (placeholder)
-    StackRebuildSlide.jsx  "Seven layers, rebuilt three times"
-    ClosingSlide.jsx       closing (placeholder)
-```
+Layers, bottom to top: Power (6 topics) · Compute (7) · Data Center (7) ·
+Applications (3).
 
-## Add a slide
+## Deploy
 
-1. Create `src/slides/MySlide.jsx` exporting a component that takes a `step` prop.
-2. Optionally set `MySlide.steps = N` (intra-slide reveals) and `MySlide.title = "..."`.
-3. Import it into `src/slides/registry.js` and drop it into the `slides` array.
+Vercel serves `public/` as a static directory — see `vercel.json`. Production
+tracks `master`; pushing to it deploys. Bump the version tag in the footer
+(`.ver`) on every deploy so a stale cache is obvious.
 
-Colors come from theme tokens via CSS variables (`--e1/--e2/--e3` era accents,
-plus the neutral `--text` / `--bg` scale), so every slide is light/dark reactive
-with no per-slide theme code — use the `solid()` / `tint()` helpers from
-`primitives.jsx`.
+## Editing
+
+`CLAUDE.md` is the standard this page is held to — what counts as slop, how
+diagrams are built, how to verify by screenshot before claiming anything works.
+Read it before changing the page.
