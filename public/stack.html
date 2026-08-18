@@ -83,41 +83,17 @@
 
   /* ===== MATRIX (4 modules × time) ===== */
   #v-atlas .body{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(8px,1.6vh,18px);overflow:hidden}
-  .mtx{flex:1;min-height:0;display:grid;grid-template-columns:208px 1fr 1fr 1fr;grid-auto-rows:min-content;align-content:center;overflow:hidden;
+  .mtx{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
     background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);
-    border:1px solid var(--line);border-radius:18px;padding:14px 18px 8px;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
-  .mtx::-webkit-scrollbar{height:7px;width:7px}.mtx::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
-  .mhead{position:sticky;top:0;z-index:3;background:linear-gradient(180deg,rgba(13,15,23,.98) 74%,transparent);padding:0 16px 12px;font:600 12px var(--mono);letter-spacing:.14em}
-  .mhead .k{display:inline-block;padding-bottom:7px;border-bottom:2px solid transparent}
-  .mhead.pre .k{color:var(--pre);border-color:var(--pre)}
-  .mhead.today .k{color:var(--today);border-color:var(--today)}
-  .mhead.future .k{color:var(--future);border-color:var(--future)}
-  .rlabel{padding:6px 16px 6px 0;border-top:1px solid var(--line2);display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}
-  .rlabel .rno{width:27px;height:27px;flex:none;border-radius:8px;border:1px solid var(--mc);color:var(--mc);
-    display:flex;align-items:center;justify-content:center;font:700 11.5px var(--mono);background:color-mix(in srgb,var(--mc) 14%,transparent)}
-  .mhead.axis{display:flex;flex-direction:column;justify-content:flex-end;gap:3px}
-  .mhead .ax{font:700 10.5px var(--mono);letter-spacing:.12em;color:var(--ink-soft)}
-  .mhead .ax b{color:var(--accent)}
-  .mhead .ax2{font:400 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-dim)}
-  .mhead .yr{display:block;margin-top:4px;font:400 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-dim)}
-  .rlabel:hover .mn{color:var(--mc)}
-  .rlabel .mn{font:600 12.5px var(--mono);letter-spacing:.04em;color:var(--mc)}
-  .rlabel .rdim{font:400 9.5px var(--sans);color:var(--ink-dim);margin-top:3px;line-height:1.2}
-  .rlabel .ms{font:400 9.5px var(--mono);color:var(--ink-dim);margin-top:3px}
-  .cell{padding:6px 16px;border-top:1px solid var(--line2);border-left:1px solid var(--line2);display:flex;flex-direction:column;justify-content:center}
-  .cell.today{background:rgba(224,163,85,.07)}.cell.future{background:rgba(87,199,221,.075)}
-  .ico{height:23px;display:flex;align-items:flex-end;gap:5px;margin-bottom:4px}
-  .ico svg{overflow:visible;display:block}
-  .cm{font:700 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
-  .cell.pre .cm{color:#c3c9d6}.cell.today .cm{color:var(--today)}.cell.future .cm{color:var(--future)}
-  .ct{font:400 11px/1.28 var(--sans);color:var(--ink-soft)}
-  .thru{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:10px 16px 0;border-top:1px solid var(--line);margin-top:4px}
-  .thru .tl{font:600 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
-  .thru .tv{font:700 15.5px var(--sans);letter-spacing:-.01em}
-  .thru .tv.pre{color:#c3c9d6}.thru .tv.today{color:var(--today)}.thru .tv.future{color:var(--future)}
-  .thru .ta{color:var(--ink-dim)}
-  .thru .tn{margin-left:14px;font:400 11.5px var(--sans);color:var(--ink-dim)}
-  .cd{font:400 11px/1.36 var(--mono);color:var(--ink-soft)}
+    border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
+  .atlas{width:100%;height:100%;max-height:100%}
+  .atlas .rt{cursor:pointer;transition:opacity .25s}
+  .atlas .hit{fill:transparent}
+  .atlas .qual{opacity:0;transition:opacity .25s}
+  .atlas:hover .rt{opacity:.34}
+  .atlas .rt:hover{opacity:1}
+  .atlas .rt:hover .hit{fill:var(--rc);fill-opacity:.07}
+  .atlas .rt:hover .qual{opacity:1}
   .in{display:inline-flex;opacity:0;animation:lu .5s ease forwards}
   @keyframes lu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .gi{animation:flt 4s ease-in-out infinite}@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -275,7 +251,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v34 · atlas</div>
+<div class="ver">v35 · atlas routes</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -447,11 +423,11 @@ const MODS=[
  {id:'equip',no:'1C',n:'EQUIPMENT',dim:'stages from grid to chip',c:'var(--pwr)',go:'power',
   pre:{i:reveal([chain(C_PRE,['X','S','U','P'],false)]),m:'4 stages',t:'480 VAC, losses compound'},
   today:{i:reveal([chain(C_TOD,['X','S','U','P'],false),drop(C_TOD)]),m:'4 stages',t:'same chain, liquid cooled'},
-  future:{i:reveal([sst(C_FUT)]),m:'1 stage',t:'800 VDC straight to the rack'}},
+  future:{i:reveal([sst(C_FUT)]),m:'1 stage',t:'800 VDC to the rack'}},
  {id:'chips',no:'2A',n:'CHIPS',dim:'what does the work',c:'var(--cmp)',go:'compute',
   pre:{i:reveal([chips([['C',C_PRE],['C',C_PRE],['C',C_PRE]])]),m:'CPU',t:'one general-purpose part'},
   today:{i:reveal([chips([['C',C_TOD],['G',C_TOD],['G',C_TOD]])]),m:'GPU',t:'shrink ends, stack upward'},
-  future:{i:reveal([chips([['C',C_FUT],['G',C_FUT],['M',C_FUT],['G',C_FUT]])]),m:'xPU',t:'ratios set by the workload'}},
+  future:{i:reveal([chips([['C',C_FUT],['G',C_FUT],['M',C_FUT],['G',C_FUT]])]),m:'xPU',t:'ratios set by workload'}},
  {id:'memory',no:'2B',n:'MEMORY',dim:'memory per accelerator',c:'var(--cmp)',go:'compute',
   pre:{i:reveal([chips([['D',C_PRE],['D',C_PRE]])]),m:'~16 GB',t:'DDR beside the CPU'},
   today:{i:reveal([chips([['H',C_TOD],['H',C_TOD],['D',C_TOD]])]),m:'~192 GB',t:'HBM on the package'},
@@ -467,490 +443,45 @@ const MODS=[
  {id:'work',no:'4',n:'WORKLOADS',dim:'what runs',c:'var(--app)',go:'apps',
   pre:{i:reveal([globe(C_PRE),globe(C_PRE),globe(C_PRE)]),m:'Web',t:'pages and batch jobs'},
   today:{i:reveal([chat(C_TOD),chat(C_TOD),chat(C_TOD)]),m:'Chat',t:'training and inference'},
-  future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms, and physical AI'}},
+  future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms + physical AI'}},
 ];
 const ERAS=[{k:'pre',n:'CLOUD',y:'2023',t:'T−1'},{k:'today',n:'TODAY',y:'2026',t:'T0'},{k:'future',n:'AGI',y:'2031',t:'T+1'}];
+const ATLAS_ICON={gen:'reactor',grid:'meter',equip:'sst',chips:'chip',memory:'memory',net:'mesh',dc:'buildings',work:'globe'};
 function buildMatrix(){
-  const m=document.getElementById('mtx');let h='';
-  h+='<div class="mhead axis"><span class="ax">STACK <b>Y</b></span><span class="ax2">across time <b>X</b> →</span></div>';
-  ERAS.forEach(e=>{h+='<div class="mhead '+e.k+'"><span class="k">'+e.n+'</span><span class="yr">'+e.y+' · '+e.t+'</span></div>';});
-  [...MODS].reverse().forEach(mo=>{
-    h+='<div class="rlabel" data-go="'+mo.go+'" style="--mc:'+mo.c+'"><span class="rno">'+mo.no+'</span><div><div class="mn">'+mo.n+'</div><div class="rdim">'+mo.dim+'</div></div></div>';
-    ERAS.forEach(e=>{const c=mo[e.k];h+='<div class="cell '+e.k+'"><div class="ico">'+c.i+'</div><div class="cm">'+c.m+'</div><div class="ct">'+c.t+'</div></div>';});
+  const X=[286,548,806], Y0=104, DY=58;
+  const rows=[...MODS].reverse();
+  let g='';
+  /* stations */
+  ERAS.forEach(function(e,k){
+    g+=LN(X[k],78,X[k],Y0+rows.length*DY-24,'#ffffff',{sw:1,op:.09,d:'3 6'});
+    g+=T(X[k],44,e.n,{a:'middle',s:14,w:700,ls:'.14em',m:1,f:e.k==='pre'?V.grey:(e.k==='today'?V.amber:V.cyan)});
+    g+=T(X[k],62,e.y,{a:'middle',s:10,f:V.dim,m:1});
   });
-  h+='<div class="thru"><span class="tl">The rack itself</span>'+
-     '<span class="tv pre">3 kW</span><span class="ta">&rarr;</span>'+
-     '<span class="tv today">150 kW</span><span class="ta">&rarr;</span>'+
-     '<span class="tv future">1 MW</span>'+
-     '<span class="tn">the same machine in three physical forms</span></div>';
-  m.innerHTML=h;
-  m.querySelectorAll('.rlabel[data-go]').forEach(r=>r.addEventListener('click',()=>go('stack',r.dataset.go)));
+  /* one route per row */
+  rows.forEach(function(mo,i){
+    const y=Y0+i*DY, c=mo.c, dly=(0.10+i*0.06).toFixed(2);
+    g+='<g class="rt" data-go="'+mo.go+'" style="--rc:'+c+'">';
+    g+='<rect class="hit" x="8" y="'+(y-24)+'" width="972" height="48" rx="10"/>';
+    g+='<g transform="translate(12,'+(y-13)+')">'+G[ATLAS_ICON[mo.id]](c)+'</g>';
+    g+=T(46,y-2,mo.n,{s:12.5,w:700,ls:'.05em',m:1,f:c});
+    g+=T(46,y+13,mo.dim,{s:10,f:V.dim});
+    /* the line thickens as the era advances */
+    g+='<path class="draw" pathLength="1" style="animation-delay:'+dly+'s" d="M'+X[0]+' '+y+' L'+X[2]+' '+y+'" fill="none" stroke="'+c+'" stroke-width="2.5" opacity=".45"/>';
+    g+='<path class="draw" pathLength="1" style="animation-delay:'+dly+'s" d="M'+X[1]+' '+y+' L'+X[2]+' '+y+'" fill="none" stroke="'+c+'" stroke-width="5" opacity=".55"/>';
+    ERAS.forEach(function(e,k){
+      const cell=mo[e.k], r=6+k*2.5;
+      g+='<circle class="in" style="animation-delay:'+(+dly+0.18+k*0.08).toFixed(2)+'s" cx="'+X[k]+'" cy="'+y+'" r="'+r+'" fill="#0b0d13" stroke="'+c+'" stroke-width="2.4"/>';
+      g+='<circle class="in" style="animation-delay:'+(+dly+0.22+k*0.08).toFixed(2)+'s" cx="'+X[k]+'" cy="'+y+'" r="'+(r-3.4)+'" fill="'+c+'"/>';
+      g+=T(X[k]+r+9,y-3,cell.m,{s:14.5,w:700});
+      g+='<text class="qual" x="'+(X[k]+r+9)+'" y="'+(y+13)+'" fill="'+V.dim+'" font-family="Geist,sans-serif" font-size="10.5">'+cell.t+'</text>';
+    });
+    g+='</g>';
+  });
+  document.getElementById('mtx').innerHTML=
+    '<svg class="atlas" viewBox="0 0 1000 '+(Y0+rows.length*DY+18)+'" preserveAspectRatio="xMidYMid meet">'+g+'</svg>';
+  document.querySelectorAll('#mtx .rt').forEach(function(el){
+    el.addEventListener('click',function(){go('stack',el.dataset.go);});});
 }
-/* — path to 100 GW/year — */
-/* — every conversion sheds power — */
-/* — centralized conversion, three architectures — */
-VIZ.powerconv=function(){
-  let s='';
-  s+=T(30,22,'Decentralized, rack-level AC→DC  ·  many conversions',{s:11.5,f:V.dim});
-  s+=T(760,22,'AC',{s:11,w:700,f:V.blue,m:1})+T(800,22,'DC',{s:11,w:700,f:V.amber,m:1});
-  const rows=[
-   {n:'LEGACY',y:'2026',c:V.grey,cells:[['Utility',V.blue],['LV Transformer',V.blue],['UPS',V.blue],['PDU',V.blue],['IT RACK',V.blue]],dc:5},
-   {n:'800V',y:'2027–29',c:V.amber,cells:[['Utility',V.blue],['LV Transformer',V.blue],['Central Rectifier',V.blue],['Battery Rack',V.amber],['IT RACK',V.amber]],dc:3},
-   {n:'SST',y:'2029+',c:V.cyan,cells:[['Utility',V.blue],['Solid-State Transformer',V.blue],['Battery Rack',V.amber],['IT RACK',V.amber]],dc:2}];
-  rows.forEach((r,i)=>{const y=54+i*118;
-    s+=B(24,y,104,74,r.c,{r:6,fill:r.c+'1f'})+T(76,y+34,r.n,{a:'middle',s:12.5,w:700,f:r.c,m:1})+T(76,y+54,r.y,{a:'middle',s:10,f:V.dim,m:1});
-    const n=r.cells.length,w=(830-n*14)/n;
-    r.cells.forEach((c,k)=>{const x=146+k*(w+14);
-      const dc=k>=r.dc;
-      s+=B(x,y,w,74,c[1],{r:6,fill:dc?V.amber+'16':c[1]+'14'})+T(x+w/2,y+42,c[0],{a:'middle',s:11,w:600,f:c[1]});
-      if(k<n-1)s+=ARROW(x+w,y+37,x+w+12,dc?V.amber:V.blue);
-      if(k>0)s+=T(x+w/2,y-6,'↓ loss',{a:'middle',s:8.5,f:V.red,m:1});});});
-  s+=T(30,438,'Centralized, facility-level AC→DC  ·  fewer conversions = less loss',{s:11.5,f:V.cyan});
-  return SV(s);
-};
-
-/* — behind the meter — */
-/* — storage turns a power problem into a timing problem — */
-/* — where the sun actually pays — */
-/* — who can actually play — */
-function geoGrid(title,note){
-  let s='';
-  s+=T(30,26,title,{s:14,w:700,f:V.dim});
-  const cols=['Models','Chips','Data centers','Power'];
-  const rows=[{n:'US',v:[1,1,1,1],c:V.blue},{n:'China',v:[1,1,1,1],c:V.red},{n:'Europe / UK',v:[0,0,1,0],c:V.pur},
-              {n:'Gulf',v:[0,0,1,1],c:V.amber},{n:'Global South',v:[0,0,1,1],c:V.green}];
-  cols.forEach((c,i)=>s+=T(360+i*150,58,c,{a:'middle',s:11,w:600,f:V.dim,m:1}));
-  rows.forEach((r,i)=>{const y=84+i*58;
-    s+=T(40,y+26,r.n,{s:13.5,w:600,f:r.c});
-    s+=LN(30,y+40,960,y+40,V.dim,{sw:1,op:.18});
-    r.v.forEach((v,k)=>{const x=360+k*150;
-      if(v)s+='<circle cx="'+x+'" cy="'+(y+20)+'" r="11" fill="'+r.c+'" opacity=".85"/>';
-      else s+='<circle cx="'+x+'" cy="'+(y+20)+'" r="11" fill="none" stroke="'+V.dim+'" stroke-width="1.2" opacity=".5"/>';});});
-  s+=T(30,406,'Most countries can never build frontier models or leading-edge chips — but almost any of them can build data centers and power.',{s:13,f:V.ink});
-  s+=T(30,436,note,{s:12,f:V.yel});
-  return SV(s);
-}
-/* — shrink is out of gas, so build up — */
-VIZ.verticality=function(){
-  let s='';
-  s+=LN(60,340,520,340,V.dim,{sw:1.4})+LN(60,340,60,60,V.dim,{sw:1.4});
-  s+=T(290,372,'X · geometry shrink',{a:'middle',s:12.5,w:600,f:V.grey,m:1});
-  s+='<text x="26" y="200" fill="'+V.cyan+'" font-family="IBM Plex Mono,monospace" font-size="12.5" font-weight="600" text-anchor="middle" transform="rotate(-90 26 200)">Y · vertical stacking</text>';
-  s+='<path class="draw" pathLength="1" d="M80 320 C180 300 260 292 330 288" fill="none" stroke="'+V.grey+'" stroke-width="2.4"/>';
-  s+=T(342,292,'out of gas',{s:11.5,w:600,f:V.red,m:1});
-  s+='<path class="draw" pathLength="1" d="M96 328 C120 250 140 150 150 76" fill="none" stroke="'+V.cyan+'" stroke-width="2.6"/>';
-  s+=T(162,74,'stacking',{s:11.5,w:600,f:V.cyan,m:1});
-  const lay=[['2015','32'],['2020','100'],['2025','300'],['2030','1,000']];
-  s+=T(600,26,'NAND layers — the Y axis, already',{s:12.5,w:600,f:V.dim});
-  lay.forEach((l,i)=>{const x=600+i*98,n=[6,10,16,24][i],h=Math.min(150,n*6);
-    for(let k=0;k<n;k++)s+=B(x,300-k*6,60,4.4,V.pur,{r:1,fill:V.pur+(k%2?'55':'88'),sw:0});
-    s+=T(x+30,300-h-14,l[1],{a:'middle',s:13,w:700,f:V.pur,m:1})+T(x+30,322,l[0],{a:'middle',s:10,f:V.dim,m:1});});
-  s+=T(600,360,'Memory everywhere: HBM on the sides, DRAM on top, NAND beneath.',{s:12,f:V.ink});
-  s+=T(60,410,'Verticality buys density — and spends it on power, heat and packaging.',{s:13.5,w:600,f:V.ink});
-  s+=T(60,438,'Which is why advanced packaging and material science are now the frontier.',{s:12,f:V.yel});
-  return SV(s);
-};
-
-/* — the memory wall — */
-VIZ.memorywall=function(){
-  let s='';
-  const x0=430,x1=930,yb=380,Y=v=>yb-62*Math.log10(v);
-  s+=LN(x0,yb,x1+20,yb,V.dim,{sw:1.2})+LN(x0,60,x0,yb,V.dim,{sw:1.2});
-  [1,10,100,1000,10000,100000].forEach(v=>s+=T(x0-10,Y(v)+4,v>=1000?(v/1000)+'k':''+v,{a:'end',s:9,f:V.dim,m:1}));
-  ['2014','2018','2022','2026'].forEach((y,i)=>{const x=x0+(x1-x0)*i/3;s+=LN(x,yb,x,yb+6,V.dim,{sw:1})+T(x,yb+22,y,{a:'middle',s:10,f:V.dim,m:1});});
-  const XX=i=>x0+(x1-x0)*i/6;
-  const comp=[1,30,200,1200,4000,8000,12000],mem=[1,2.5,4,10,20,45,80];
-  s+='<path class="draw" pathLength="1" d="M'+comp.map((v,i)=>XX(i).toFixed(0)+' '+Y(v).toFixed(0)).join(' L')+'" fill="none" stroke="'+V.blue+'" stroke-width="3"/>';
-  s+='<path class="draw" pathLength="1" d="M'+mem.map((v,i)=>XX(i).toFixed(0)+' '+Y(v).toFixed(0)).join(' L')+'" fill="none" stroke="'+V.pur+'" stroke-width="3"/>';
-  s+=B(x1-42,Y(12000)-38,104,30,V.yel,{r:4,fill:'#000'})+T(x1+10,Y(12000)-17,'12,000×',{a:'middle',s:14,w:700,f:V.yel,m:1});
-  s+=B(x1-42,Y(80)-4,104,30,V.yel,{r:4,fill:'#000'})+T(x1+10,Y(80)+17,'80×',{a:'middle',s:14,w:700,f:V.yel,m:1});
-  s+=LN(x1+10,Y(12000)-4,x1+10,Y(80)-8,V.red,{sw:1.6,d:'5 4'});
-  s+=T(x1+26,(Y(12000)+Y(80))/2,'the wall',{s:12,w:700,f:V.red,m:1});
-  s+=T(560,Y(1200)-14,'Compute (peak FLOPs)',{s:11.5,w:600,f:V.blue});
-  s+=T(560,Y(10)+22,'Memory bandwidth (GB/s)',{s:11.5,w:600,f:V.pur});
-  s+=T(30,26,'Training',{s:14,w:700});
-  const mem_b=(y,l,arrows,note,c)=>{let o=B(30,y,150,96,V.pur,{r:8,fill:V.pur+'1a'})+T(105,y+30,'Memory',{a:'middle',s:12.5,w:700,f:V.pur})+T(105,y+50,l,{a:'middle',s:9.5,f:V.dim,m:1});
-    o+=B(250,y+16,80,64,V.blue,{r:8,fill:V.blue+'26'})+T(290,y+52,'GPU',{a:'middle',s:12.5,w:700,f:V.blue});
-    for(let i=0;i<arrows;i++)o+=ARROW(188,y+22+i*14,244,V.yel);
-    o+=T(30,y+118,note,{s:11,w:600,f:c});return o;};
-  s+=mem_b(44,'weights + data',2,'compute-heavy · high data reuse',V.green);
-  s+=T(30,216,'Inference',{s:14,w:700});
-  s+=mem_b(238,'weights + KV cache',5,'bandwidth-heavy · the GPU waits',V.red);
-  s+=T(30,440,'Compute outran memory by two orders of magnitude — the accelerator now waits on data, not on math.',{s:13,f:V.ink});
-  return SV(s);
-};
-
-/* — workloads drive new memory architectures — */
-VIZ.memarch=function(){
-  let s='';
-  const pyr=(cx,base,tiers)=>{let o='',top=140,H=180,hw=110;
-    let acc=0;const n=tiers.length;
-    tiers.forEach((t,i)=>{const y0=top+H*(acc/n),y1=top+H*((acc+1)/n);acc++;
-      const w0=hw*(y0-top)/H,w1=hw*(y1-top)/H;
-      o+='<path d="M'+(cx-w0)+' '+y0+' L'+(cx+w0)+' '+y0+' L'+(cx+w1)+' '+y1+' L'+(cx-w1)+' '+y1+' Z" fill="'+t[1]+'" fill-opacity="'+(.28+i*.13)+'" stroke="'+t[1]+'" stroke-width=".8"/>';
-      o+=T(cx,(y0+y1)/2+4,t[0],{a:'middle',s:11,w:700,m:1});});
-    return o;};
-  const cols=[{n:'Training',x:170,t:[['HBM',V.pink],['DDR',V.pur],['SSD',V.blue],['HDD',V.grey]]},
-              {n:'Inference',x:500,t:[['HBM',V.pink],['DDR',V.pur],['SSD',V.blue],['HDD',V.grey]]},
-              {n:'Agentic AI',x:830,t:[['HBM/HBF',V.pink],['DDR',V.pur],['CXL',V.cyan],['SSD',V.blue],['HDD',V.grey]]}];
-  cols.forEach(c=>{s+=T(c.x,30,c.n,{a:'middle',s:15,w:700});s+=pyr(c.x,320,c.t);});
-  const chipRow=(cx,items,y)=>{let o='';const w=54;items.forEach((it,i)=>{const x=cx-(items.length*(w+6))/2+i*(w+6);
-    o+=B(x,y,w,26,it[1],{r:3,fill:it[1]+'26'})+T(x+w/2,y+18,it[0],{a:'middle',s:9,w:600,m:1,f:it[1]});});return o;};
-  s+=chipRow(170,[['HBM',V.pink],['XPU',V.blue],['HBM',V.pink]],60)+chipRow(170,[['CPU',V.red],['DDR',V.pur]],92);
-  s+=chipRow(500,[['HBM',V.pink],['XPU',V.blue],['HBM',V.pink]],60)+chipRow(500,[['SSD',V.blue],['DDR',V.pur]],92);
-  s+=chipRow(830,[['HBM',V.pink],['XPU',V.blue],['HBF',V.pink],['CXL',V.cyan]],60)+chipRow(830,[['CPU',V.red],['DDR',V.pur],['SSD',V.blue]],92);
-  s+=T(830,126,'KV cache spills to SSD · CXL pools across the rack',{a:'middle',s:9.5,f:V.cyan,m:1});
-  s+=T(960,178,'faster',{a:'end',s:10,f:V.yel,m:1})+T(960,314,'denser',{a:'end',s:10,f:V.yel,m:1});
-  s+=LN(944,190,944,300,V.yel,{sw:1.2});
-  s+=T(30,392,'Each workload pulls a different hierarchy — agentic work needs every tier at once, from HBM to networked data lakes.',{s:13,f:V.ink});
-  return SV(s);
-};
-
-/* — the workload sets the ratio — */
-VIZ.ratios=function(){
-  let s='';
-  s+=T(30,26,'The workload sets the mix — CPU orchestrates, GPU generates, QPU simulates',{s:13,w:600,f:V.dim});
-  const W=[{n:'Web / batch',v:[100,0,0]},{n:'Chatbot inference',v:[33,67,0]},{n:'Agentic harness',v:[65,35,0]},{n:'Physical AI',v:[50,50,0]},{n:'Quantum simulation',v:[20,25,55]}];
-  const C=[[V.red,'CPU'],[V.blue,'GPU'],[V.cyan,'QPU']];
-  W.forEach((w,i)=>{const y=76+i*66;let x=300;
-    s+=T(280,y+26,w.n,{a:'end',s:13,w:600});
-    w.v.forEach((v,k)=>{if(!v)return;const ww=v*6.2;
-      s+=B(x,y,ww,38,C[k][0],{r:4,fill:C[k][0]+'66',sw:.8});
-      if(v>=14)s+=T(x+ww/2,y+24,v+'%',{a:'middle',s:11.5,w:700,m:1});
-      x+=ww+3;});});
-  C.forEach((c,i)=>{s+=B(300+i*130,414,14,14,c[0],{r:3,fill:c[0]+'88',sw:0})+T(322+i*130,426,c[1],{s:11.5,w:600,f:c[0],m:1});});
-  s+=T(30,414,'Why the CPU came back:',{s:12.5,w:600,f:V.yel});
-  s+=T(30,438,'a harness is SQL, APIs and glue — nobody runs that on a GPU.',{s:11.5,f:V.dim});
-  return SV(s);
-};
-
-/* — the physical footprint is being rewritten — */
-/* — data centers in space — */
-VIZ.spacedc=function(){
-  let s='';
-  s+=T(30,26,'AI1 satellite',{s:14,w:700,f:V.dim});
-  const pan=(x,w)=>{let o=B(x,120,w,86,V.blue,{r:3,fill:V.blue+'22'});
-    for(let i=1;i<6;i++)o+=LN(x+w*i/6,120,x+w*i/6,206,V.blue,{sw:.6,op:.6});
-    o+=LN(x,163,x+w,163,V.blue,{sw:.6,op:.6});return o;};
-  s+=pan(70,300)+pan(500,300);
-  s+=B(388,86,84,154,V.ink,{r:3,fill:'#ffffff18'});
-  for(let i=0;i<14;i++)s+=LN(392,92+i*11,468,92+i*11,V.pink,{sw:.7,op:.55});
-  s+=T(430,74,'radiator',{a:'middle',s:10,f:V.pink,m:1});
-  s+=B(404,250,52,34,V.cyan,{r:4,fill:V.cyan+'2e'})+T(430,272,'GB300',{a:'middle',s:9,w:600,m:1,f:V.cyan});
-  s+=T(430,300,'centralized compute · 72 chips',{a:'middle',s:10,f:V.dim,m:1});
-  s+=T(70,232,'solar array',{s:10,f:V.blue,m:1});
-  s+=LN(70,330,800,330,V.dim,{sw:1})+T(435,352,'wingspan 70 m',{a:'middle',s:10.5,f:V.dim,m:1});
-  s+='<path d="M840 60 v300" stroke="'+V.amber+'" stroke-width="2" fill="none"/>';
-  const kv=(y,v,l)=>T(866,y,v,{s:17,w:700,f:V.amber,m:1})+T(866,y+20,l,{s:10.5,f:V.dim});
-  s+=kv(96,'~50','AI1 satellites per rocket')+kv(160,'~0.12 GW','per satellite')+kv(224,'~6 MW','per launch');
-  s+=LN(866,258,866,286,V.yel,{sw:2})+'<path d="M866 292 l-6 -10 h12 z" fill="'+V.yel+'"/>';
-  s+=T(866,320,'1 GW in orbit',{s:15,w:700,f:V.cyan});
-  s+=T(866,344,'≈ 167 launches · ~8,300 satellites',{s:11,f:V.dim});
-  s+=T(30,404,'Free 24/7 sun, passive radiative cooling, no land, no water, no permits.',{s:13,f:V.ink});
-  s+=T(30,432,'The cost is launch mass, radiation and servicing — which is a curve that falls, not a queue that lengthens.',{s:12,f:V.yel});
-  return SV(s);
-};
-
-/* — orbital economics — */
-VIZ.orbital=function(){
-  let s='';
-  s+=T(300,26,'TERRESTRIAL',{a:'middle',s:13,w:700,f:V.red,ls:'.14em',m:1});
-  s+=T(730,26,'ORBITAL',{a:'middle',s:13,w:700,f:V.cyan,ls:'.14em',m:1});
-  const row=(y,lab,cap,lt,lv,rt,rv)=>{
-    let o=T(150,y+44,lab,{a:'end',s:12.5,w:700});
-    o+=T(150,y+62,cap,{a:'end',s:9.5,f:V.dim,m:1});
-    o+=B(170,y,260,78,V.red,{r:8,fill:V.red+'12'})+T(186,y+34,lt,{s:11,f:V.dim})+T(414,y+50,lv,{a:'end',s:20,w:700});
-    o+=B(600,y,260,78,V.cyan,{r:8,fill:V.cyan+'14'})+T(616,y+34,rt,{s:11,f:V.dim})+T(844,y+50,rv,{a:'end',s:20,w:700,f:V.cyan});
-    return o;};
-  s+=row(48,'POWER & COOLING','opex','Grid / PPAs · cooling','$1B/yr','Solar · passive radiator','$0B/yr');
-  s+=row(146,'COMPUTE','capex','Dense campus','$35B/GW','Same silicon','$35B/GW');
-  s+=row(244,'STRUCTURE','capex','Core, shell, permits','$15B/GW','Launch + satellite bus','$10B/GW');
-  s+=B(170,352,260,84,V.red,{r:8,fill:V.red+'0d'});
-  s+='<path class="draw" pathLength="1" d="M190 424 C260 420 320 404 410 366" fill="none" stroke="'+V.red+'" stroke-width="2.4"/>';
-  s+=T(186,374,'every GW harder',{s:10.5,w:600,f:V.red,m:1});
-  s+=B(600,352,260,84,V.cyan,{r:8,fill:V.cyan+'0d'});
-  s+='<path class="draw" pathLength="1" d="M618 366 C700 380 760 404 844 424" fill="none" stroke="'+V.cyan+'" stroke-width="2.4"/>';
-  s+=T(844,374,'every GW easier',{a:'end',s:10.5,w:600,f:V.cyan,m:1});
-  s+=T(150,398,'COST CURVE',{a:'end',s:12.5,w:700});
-  return SV(s);
-};
-
-/* — application stacks — */
-function appStack(title,sub,mix,notes,c){
-  let s='';
-  s+=T(30,30,title,{s:17,w:700,f:c})+T(30,54,sub,{s:12,f:V.dim});
-  const bars=[['Compute',mix[0]],['Memory',mix[1]],['Network',mix[2]],['Latency budget',mix[3]]];
-  bars.forEach((b,i)=>{const y=92+i*62;
-    s+=T(200,y+26,b[0],{a:'end',s:12.5,w:600});
-    s+=B(220,y,620,34,V.dim,{r:6,fill:'#ffffff0c',sw:0});
-    s+=B(220,y,620*b[1]/100,34,c,{r:6,fill:c+'88',sw:0});
-    s+=T(860,y+24,b[1]+'%',{s:12,w:700,f:c,m:1});});
-  notes.forEach((n,i)=>s+=T(30,378+i*26,'◆  '+n,{s:12.5,f:V.ink}));
-  return SV(s);
-}
-VIZ.applang=()=>appStack('Language models','chat, agents, code — the workload that built today’s data center',[85,95,80,60],
-  ['Memory-bound: KV cache dominates the footprint.','Agentic harnesses pull the CPU ratio back up.','Latency is felt per token, by a human.'],V.pur);
-VIZ.appphys=()=>appStack('Physical AI','robotics, autonomy, simulation — compute that leaves the building',[70,55,45,95],
-  ['Inference moves to the edge, next to the sensor.','Simulation training stays central and heavy.','Latency budget is milliseconds, set by physics.'],V.green);
-VIZ.appsci=()=>appStack('Scientific AI','materials, biology, climate — simulation of nature itself',[95,80,90,25],
-  ['Long-running jobs; throughput beats latency.','First real pull for QPUs alongside GPUs.','Drives the densest, most power-hungry racks.'],V.cyan);
-
-
-/* — 1. the path to 100 GW/yr — */
-VIZ.path100gw=function(){
-  let s='';
-  const x0=70,x1=930,yb=340;
-  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.2})+LN(x0,60,x0,yb,V.dim,{sw:1.2});
-  const Y=v=>yb-(v/110)*260;
-  [0,25,50,75,100].forEach(v=>{s+=T(x0-12,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.16});});
-  s+=T(x0-12,44,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
-  const seg=[{n:'CLOUD',c:V.grey,x:x0,w:250,v:5,note:'grid only · +3% if at all'},
-             {n:'TODAY',c:V.amber,x:x0+250,w:290,v:50,note:'grid fast + behind-the-meter'},
-             {n:'AGI',c:V.cyan,x:x0+540,w:320,v:100,note:'nuclear + orbital'}];
-  s+='<path d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.amber+'" opacity=".10"/>';
-  s+='<path class="draw" pathLength="1" d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+'" fill="none" stroke="'+V.amber+'" stroke-width="3"/>';
-  seg.forEach((g,i)=>{
-    s+=LN(g.x,60,g.x,yb,V.dim,{sw:1,op:.35,d:'4 4'});
-    s+=T(g.x+14,84,g.n,{s:13,w:700,f:g.c,ls:'.1em',m:1});
-    s+=T(g.x+14,104,g.note,{s:10.5,f:V.dim});
-    s+='<circle cx="'+(g.x+g.w-20)+'" cy="'+Y(g.v)+'" r="6" fill="'+g.c+'"/>';
-    s+=T(g.x+g.w-20,Y(g.v)-16,(g.v<10?'~5':g.v)+' GW/yr',{a:'middle',s:13,w:700,f:g.c,m:1});});
-  [['2015',x0+60],['2023',x0+250],['2026',x0+430],['2030',x0+660],['2035',x1-40]].forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
-  s+=T(70,392,'We added about 5 GW a year for a decade. We now need twenty times that, every year.',{s:14,w:600,f:V.ink});
-  s+=T(70,422,'Grid alone cannot get there — the last stretch is firm nuclear and, beyond the grid, orbit.',{s:12,f:V.yel});
-  return SV(s);
-};
-
-/* — 2. the problem, in two levers — */
-VIZ.problem=function(){
-  let s='';
-  s+=B(330,40,340,74,V.ink,{r:12,fill:'#ffffff10'});
-  s+=T(500,74,'POWER DELIVERED',{a:'middle',s:13,w:700,ls:'.1em',m:1});
-  s+=T(500,98,'generation  ×  capacity factor',{a:'middle',s:12,f:V.yel,m:1});
-  s+=LN(430,114,300,160,V.dim,{sw:1.4})+LN(570,114,700,160,V.dim,{sw:1.4});
-  const lever=(x,c,title,sub,items)=>{
-    let o=B(x,166,320,232,c,{r:14,fill:c+'12'});
-    o+=T(x+24,204,title,{s:16,w:700,f:c});
-    o+=T(x+24,226,sub,{s:11,f:V.dim,m:1});
-    items.forEach((it,i)=>{const y=252+i*38;
-      o+=B(x+24,y,272,30,c,{r:7,fill:c+'1f',sw:.9});
-      o+=T(x+38,y+20,it,{s:12,w:500});});
-    return o;};
-  s+=lever(60,V.amber,'More generation','build new supply',['Front-of-meter · grid scale','Behind-the-meter · on site','Gas · nuclear · solar · coal held back']);
-  s+=lever(620,V.cyan,'More capacity factor','use what exists harder',['Batteries · shift night to peak','Grid flexibility · interruptible load','Software · orchestrate the fleet']);
-  s+=T(60,436,'Two levers, not one. Every power idea in this module is an instance of one of them.',{s:13.5,w:600,f:V.ink});
-  return SV(s);
-};
-
-/* — 3. generation is a decentralised problem — */
-VIZ.generation=function(){
-  let s='';
-  s+=T(40,28,'No single source closes the gap — it is a portfolio, built by many hands',{s:13,w:600,f:V.dim});
-  const src=[{n:'Gas',c:V.amber,gw:70,lead:'2–4 yr',note:'fast · turbine backlog'},
-             {n:'Nuclear',c:V.pur,gw:6,lead:'6–10 yr',note:'firm · SMR from 2030'},
-             {n:'Solar + storage',c:V.yel,gw:58,lead:'1–2 yr',note:'cheap where sun pays'},
-             {n:'Coal retired later',c:V.grey,gw:20,lead:'now',note:'buys time, not future'},
-             {n:'Fuel cells',c:V.red,gw:17,lead:'<1 yr',note:'800V native · on site'}];
-  const maxgw=70;
-  src.forEach((g,i)=>{const y=60+i*68;
-    s+=T(196,y+26,g.n,{a:'end',s:13.5,w:600,f:g.c});
-    s+=T(196,y+44,g.lead,{a:'end',s:10,f:V.dim,m:1});
-    const w=(g.gw/maxgw)*520;
-    s+=B(216,y+6,w,38,g.c,{r:6,fill:g.c+'55',sw:.9});
-    s+=T(228,y+31,'+'+g.gw+' GW',{s:13,w:700,m:1});
-    s+=T(216+w+16,y+31,g.note,{s:11,f:V.dim});});
-  s+=B(60,414,880,44,V.cyan,{r:10,fill:V.cyan+'12'});
-  s+=T(80,442,'And increasingly it is built behind the meter — next to the campus, skipping the grid entirely.',{s:12.5,w:500,f:V.cyan});
-  return SV(s);
-};
-
-/* — 4. the grid: queue on one side, headroom on the other — */
-VIZ.gridq=function(){
-  let s='';
-  s+=T(40,26,'The generation exists. The connection does not.',{s:14,w:700,f:V.ink});
-  const bx=(x,w,c,l,sub)=>B(x,50,w,66,c,{r:8,fill:c+'1a'})+T(x+w/2,80,l,{a:'middle',s:12.5,w:600,f:c})+(sub?T(x+w/2,100,sub,{a:'middle',s:9.5,f:V.dim,m:1}):'');
-  s+=bx(40,190,V.amber,'Generation ready','built or contracted')+ARROW(234,83,272,V.dim);
-  s+=bx(276,250,V.red,'Interconnection queue','4–7 years · 2,600 GW waiting')+ARROW(530,83,568,V.dim);
-  s+=bx(572,180,V.blue,'Data center','wants power now');
-  s+=T(776,88,'the bottleneck moved',{s:12,w:600,f:V.red});
-  s+=LN(40,146,960,146,V.dim,{sw:1,op:.35});
-  s+=T(40,178,'So free capacity from the load side instead',{s:14,w:700,f:V.cyan});
-  const x0=60,x1=620,yb=396,yt=210;
-  s+=LN(x0,yb,x1+10,yb,V.dim,{sw:1.2})+LN(x0,yt,x0,yb,V.dim,{sw:1.2});
-  const pts=[];for(let i=0;i<=60;i++){const f=i/60;const v=1-Math.pow(f,.34)*.62;pts.push([x0+(x1-x0)*f,yb-(yb-yt)*v]);}
-  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
-  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.blue+'" opacity=".14"/>';
-  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="'+V.blue+'" stroke-width="2.4"/>';
-  const peakY=pts[0][1],cut=peakY+30;
-  const sliver=pts.filter(q=>q[1]<=cut);
-  if(sliver.length>1){
-    s+='<path d="M'+sliver.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L')+' L'+sliver[sliver.length-1][0].toFixed(1)+' '+cut+' L'+x0+' '+cut+' Z" fill="'+V.cyan+'" opacity=".55"/>';
-    s+=LN(sliver[sliver.length-1][0],cut,sliver[sliver.length-1][0],peakY-8,V.cyan,{sw:1,d:'3 3',op:.7});
-  }
-  s+=LN(x0,cut,x1,cut,V.cyan,{sw:1.4,d:'6 4',op:.8});
-  s+=T(x0+140,peakY+34,'curtail this sliver',{s:11.5,w:700,f:V.cyan,m:1});
-  s+=T(x0+140,peakY+50,'~0.25% of hours',{s:10,f:V.dim,m:1});
-  s+=LN(x0+134,peakY+30,x0+44,peakY+10,V.cyan,{sw:1,op:.6});
-  s+=T(x0+4,peakY-12,'peak',{s:10.5,f:V.dim,m:1});
-  s+=T(x1-120,yb-18,'most of the year',{s:10.5,f:V.dim,m:1});
-  s+=T(x0,yb+26,'hours of the year, sorted by load  →',{s:10.5,f:V.dim,m:1});
-  s+=B(680,210,280,186,V.cyan,{r:12,fill:V.cyan+'0f'});
-  s+=T(700,244,'~100 GW',{s:26,w:700,f:V.cyan,m:1});
-  s+=T(700,268,'of headroom on the existing grid',{s:11,f:V.dim});
-  s+=T(700,304,'if large loads can be interrupted',{s:11.5,w:500});
-  s+=T(700,330,'for a fraction of the year',{s:11.5,w:500});
-  s+=T(700,368,'batteries · flexible training · orchestration',{s:10.5,f:V.yel,m:1});
-  s+=T(40,442,'Interruptible load and storage buy years the interconnection queue cannot.',{s:13,f:V.ink});
-  return SV(s);
-};
-
-/* — 6. power is a local problem — */
-VIZ.localpower=function(){
-  let s='';
-  s+='<path d="'+MAP.land+'" fill="#151a24" stroke="#2c3548" stroke-width=".6"/>';
-  s+='<path d="'+MAP.asia+'" fill="'+V.cyan+'" fill-opacity=".20" stroke="'+V.cyan+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.eu+'" fill="'+V.pur+'" fill-opacity=".22" stroke="'+V.pur+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.us+'" fill="'+V.amber+'" fill-opacity=".18" stroke="'+V.amber+'" stroke-width=".7"/>';
-  HUBS.forEach(h=>{const c=h.b?V.red:V.green;
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="10" fill="'+c+'" fill-opacity=".14" stroke="'+c+'" stroke-width="1" opacity=".8"/>';
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="3.4" fill="'+c+'"/>';
-    s+=T(h.x+h.dx,h.y+h.dy,h.n,{a:h.anc,s:11,w:600,f:h.b?'#f2b8ba':'#a6e8c6'});
-    s+=T(h.x+h.dx,h.y+h.dy+13,h.note,{a:h.anc,s:9,f:V.dim,m:1});});
-  const reg=(x,c,l,sub)=>'<rect x="'+x+'" y="392" width="12" height="12" rx="3" fill="'+c+'" fill-opacity=".3" stroke="'+c+'"/>'
-    +T(x+20,402,l,{s:11.5,w:600,f:c})+T(x+20,418,sub,{s:9.5,f:V.dim,m:1});
-  s+=reg(20,V.amber,'United States','cheap inland, constrained coasts');
-  s+=reg(300,V.pur,'Europe','highest cost, least permitting');
-  s+=reg(560,V.cyan,'Asia + Gulf','builds fastest, state-backed');
-  s+='<circle cx="826" cy="398" r="4.5" fill="'+V.green+'"/>'+T(838,402,'builds',{s:10.5,f:V.dim});
-  s+='<circle cx="900" cy="398" r="4.5" fill="'+V.red+'"/>'+T(912,402,'constrained',{s:10.5,f:V.dim});
-  s+=T(20,448,'The same gigawatt costs a different amount, waits a different number of years, and is legal in a different set of places.',{s:12.5,f:V.ink});
-  return SV(s);
-};
-
-/* — DC 1. the physical footprint is being rewritten — */
-/* — DC 2. the players — */
-VIZ.players=function(){
-  let s='';
-  const X0=150,CW=132,GAP=8,col=i=>X0+i*(CW+GAP);
-  const ROWS=[{n:'AI CLOUD',y:118},{n:'BARE METAL',y:196},{n:'POWERED SHELL',y:274}];
-  const C=[
-   {t:'Colo & DC',t2:'platforms',c:V.grey,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
-   {t:'Hyperscalers',t2:'',c:V.blue,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
-   {t:'PowerShells',t2:'miners · mega projects',c:V.amber,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene/Crusoe','SB Energy']},
-   {t:'Neoclouds',t2:'',c:V.green,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
-   {t:'Inference clouds',t2:'',c:V.cyan,f:[2,0,0],names:['Fireworks','Together','Baseten']},
-   {t:'AI labs',t2:'incoming',c:V.pur,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
-  // era bands
-  const band=(i0,i1,l,c)=>{const x=col(i0),w=col(i1)+CW-x;
-    return B(x,44,w,26,c,{r:6,fill:c+'26',sw:0})+T(x+w/2,62,l,{a:'middle',s:11,w:700,ls:'.12em',m:1,f:c});};
-  s+=band(0,1,'INTERNET ERA',V.grey)+band(2,5,'AI ERA',V.amber);
-  // row labels + grid
-  ROWS.forEach(r=>{s+=T(132,r.y+40,r.n,{a:'end',s:12.5,w:700,f:'#c3c9d6'});
-    s+=LN(X0-6,r.y+66,977,r.y+66,V.dim,{sw:1,op:.14});});
-  // cells
-  C.forEach((c,i)=>{const x=col(i);
-    s+=T(x+CW/2,92,c.t,{a:'middle',s:12.5,w:700,f:c.c});
-    if(c.t2)s+=T(x+CW/2,108,c.t2,{a:'middle',s:9,f:V.dim,m:1});
-    ROWS.forEach((r,k)=>{const lv=c.f[k];
-      if(lv===2)s+=B(x,r.y+8,CW,52,c.c,{r:8,fill:c.c+'99',sw:1.4});
-      else if(lv===1)s+='<rect x="'+x+'" y="'+(r.y+8)+'" width="'+CW+'" height="52" rx="8" fill="'+c.c+'26" stroke="'+c.c+'" stroke-width="1" stroke-dasharray="5 4" opacity=".85"/>';
-      else s+=B(x,r.y+8,CW,52,V.dim,{r:8,fill:'#ffffff05',sw:.7,op:.35});});
-    // names under the column
-    s+=LN(x,358,x+CW,358,V.dim,{sw:1,op:.25});
-    c.names.forEach((n,j)=>s+=T(x+CW/2,378+j*19,n,{a:'middle',s:10,f:c.c,m:1}));});
-  // legend
-  const key=(x,fill,dash,l)=>{let o=B(x,474,26,16,V.ink,{r:4,fill:fill,sw:dash?1:1.2});
-    if(dash)o+='<rect x="'+x+'" y="474" width="26" height="16" rx="4" fill="none" stroke="'+V.ink+'" stroke-width="1" stroke-dasharray="4 3"/>';
-    return o+T(x+34,486,l,{s:11,f:V.dim});};
-  s+=key(150,'#e9ebf299',0,'owns it')+key(300,'#e9ebf226',1,'partial / building')+key(500,'#ffffff05',0,'not in it');
-  return SVh(s,510);
-};
-
-/* — DC 3. the economics — */
-VIZ.economics=function(){
-  let s='';
-  const P=[{n:'POWERED SHELL',c:V.amber,x:290,v:['$15B','$2B / yr','85%+ NOI','high teens','15 yr +']},
-           {n:'BARE METAL',c:V.blue,x:530,v:['$40B','$12–15B / yr','70–80% EBITDA','low 20s','~5 yr']},
-           {n:'AI CLOUD',c:V.pur,x:770,v:['$40B','$15–25B / yr','80%+ EBITDA','high 20s','on demand']}];
-  const M=['Capex per GW','Revenue','Margin','Unlevered IRR','Contract'];
-  P.forEach(pl=>{s+=T(pl.x+92,40,pl.n,{a:'middle',s:12.5,w:700,f:pl.c,ls:'.05em',m:1});
-    s+=B(pl.x,54,184,378,pl.c,{r:12,fill:pl.c+'0d'});});
-  M.forEach((m,i)=>{const y=76+i*76;
-    s+=T(266,y+34,m,{a:'end',s:13.5,w:600});
-    s+=LN(24,y+58,956,y+58,V.dim,{sw:1,op:.14});
-    P.forEach(pl=>{s+=T(pl.x+92,y+34,pl.v[i],{a:'middle',s:17,w:700,f:pl.c,m:1});});});
-  s+=T(24,452,'Same gigawatt, three different businesses — real-estate returns, utility returns, software returns.',{s:12.5,f:V.ink});
-  return SV(s);
-};
-
-/* — DC 4. the software layer — what these companies actually build — */
-VIZ.software=function(){
-  let s='';
-  const CW=306,X=i=>24+i*(CW+22);
-  const COL=[
-   {c:V.grey,n:'CLUSTER ORCHESTRATION',job:'make 10,000 accelerators act like one machine',
-    work:[['Gang scheduling','a 4,096-GPU job lands all-or-nothing'],
-          ['Topology-aware placement','rank order follows NVLink domain and rail'],
-          ['Failure handling','ECC, throttling, silent corruption, stragglers'],
-          ['Checkpoint / restart','minutes of loss, not days']],
-    tools:'Kubernetes · SLURM · Ray',
-    hard:'at scale, something is always broken'},
-   {c:V.amber,n:'TRAINING · POST-TRAINING · RL',job:'split one model across thousands of chips',
-    work:[['5D parallelism','data · tensor · pipeline · expert · context'],
-          ['Sharded optimiser state','ZeRO / FSDP — weights, grads, Adam moments'],
-          ['Collectives','all-reduce; all-to-all once the model is MoE'],
-          ['RL loop','rollouts infer, updates train — co-scheduled']],
-    tools:'Megatron · DeepSpeed · Ray · veRL',
-    hard:'one cluster, two opposite workloads'},
-   {c:V.cyan,n:'INFERENCE SERVING',job:'turn weights into tokens against an SLO',
-    work:[['Continuous batching','requests join and leave a running batch'],
-          ['Paged KV cache','block-allocated, offloaded to host and SSD'],
-          ['Prefill / decode split','compute-bound vs bandwidth-bound pools'],
-          ['Speculative decode · FP8','draft-and-verify; quantised weights and cache']],
-    tools:'vLLM · SGLang · TensorRT-LLM',
-    hard:'latency and cost pull against each other'}];
-  COL.forEach((col,i)=>{const x=X(i);
-    s+=B(x,20,CW,486,col.c,{r:14,fill:col.c+'0d'});
-    s+=B(x,20,CW,64,col.c,{r:14,fill:col.c+'1f',sw:0});
-    s+=T(x+20,46,col.n,{s:11.5,w:700,ls:'.06em',m:1,f:col.c});
-    s+=T(x+20,66,col.job,{s:11.5,f:'#c6ccda'});
-    col.work.forEach((w,k)=>{const y=104+k*94;
-      s+=T(x+20,y,w[0],{s:13.5,w:600});
-      s+=T(x+20,y+20,w[1],{s:11,f:V.dim});
-      s+=LN(x+20,y+40,x+CW-20,y+40,col.c,{sw:1,op:.18});});
-    s+=T(x+20,472,col.tools,{s:11,w:600,m:1,f:col.c});
-    s+=T(x+20,492,col.hard,{s:10.5,f:V.dim});});
-  s+=T(24,542,'All three are the same lever: how many tokens the fleet returns per dollar of silicon it is given.',{s:13.5,w:600,f:V.ink});
-  s+=T(24,566,'Orchestration is a commodity. Training frameworks standardised. Serving is contested — and it is where the throughput is won.',{s:11.5,f:V.yel});
-  return SVh(s,584);
-};
-
-/* — DC 7. geography, regulation and labour — */
-VIZ.geodc=function(){
-  let s='';
-  s+='<g transform="translate(0,-24) scale(1,0.80)">';
-  s+='<path d="'+MAP.land+'" fill="#151a24" stroke="#2c3548" stroke-width=".6"/>';
-  s+='<path d="'+MAP.asia+'" fill="'+V.cyan+'" fill-opacity=".20" stroke="'+V.cyan+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.eu+'" fill="'+V.pur+'" fill-opacity=".22" stroke="'+V.pur+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.us+'" fill="'+V.amber+'" fill-opacity=".18" stroke="'+V.amber+'" stroke-width=".7"/>';
-  HUBS.forEach(h=>{const c=h.b?V.red:V.green;
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="9" fill="'+c+'" fill-opacity=".14" stroke="'+c+'" stroke-width="1"/>';
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="3.2" fill="'+c+'"/>';});
-  s+='</g>';
-  const note=(x,c,t,sub)=>'<rect x="'+x+'" y="300" width="11" height="11" rx="3" fill="'+c+'" fill-opacity=".3" stroke="'+c+'"/>'
-    +T(x+18,310,t,{s:11.5,w:600,f:c})+T(x+18,326,sub,{s:9.5,f:V.dim,m:1});
-  s+=note(24,V.amber,'United States','power-led siting, coastal cost');
-  s+=note(300,V.pur,'Europe','data rules gate the build');
-  s+=note(560,V.cyan,'Asia + Gulf','sovereign compute, fastest permits');
-  s+=LN(24,350,976,350,V.dim,{sw:1,op:.3});
-  s+=T(24,382,'And then there is labour',{s:13.5,w:700,f:V.ink});
-  const lab=(x,t,sub,c)=>B(x,394,300,54,c,{r:10,fill:c+'12'})+T(x+16,418,t,{s:12.5,w:600,f:c})+T(x+16,436,sub,{s:10.5,f:V.dim});
-  s+=lab(24,'Skilled trades are the constraint','electricians and pipefitters, not land',V.red);
-  s+=lab(348,'So the build moves to a factory','one workforce, modular blocks shipped',V.amber);
-  s+=lab(672,'Design follows the labour','prefab skids · repeatable units · edge',V.cyan);
-  return SV(s);
-};
-
 /* ============ STACK DATA ============ */
 const LAYERS=[
  {id:'power',name:'POWER',title:'Power',accent:'#e0a355',eyebrow:'LAYER 01 · THE BOTTOM OF THE STACK',
