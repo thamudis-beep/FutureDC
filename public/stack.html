@@ -207,6 +207,8 @@
   .dbody::-webkit-scrollbar{width:6px}.dbody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
     .viz{flex:1;min-height:0;display:flex;align-items:center;margin:0 0 16px;border:1px solid var(--line2);border-radius:14px;background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.34));padding:14px 16px}
   .viz svg{display:block;width:100%;height:auto;max-height:100%;overflow:visible}
+  .viz.img{padding:0;overflow:hidden;background:#000;justify-content:center}
+  .viz.img img{display:block;width:100%;height:100%;object-fit:contain;border-radius:13px}
   .eras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin:0 0 20px;max-width:820px}
   .erac{border:1px solid var(--line2);border-radius:12px;padding:12px 13px;background:rgba(255,255,255,.04);min-width:0}
   .erac .et{font:600 9.5px var(--mono);letter-spacing:.12em;margin-bottom:7px}
@@ -272,7 +274,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v20 · data center</div>
+<div class="ver">v21 · footprint slide</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1230,7 +1232,7 @@ const LAYERS=[
   ]},
  {id:'dc',name:'DATA CENTER',title:'The Data Center',accent:'#6f8dff',eyebrow:'LAYER 03 · THE MACHINE & THE MONEY',
   subs:[
-   {viz:'footprint',n:'The physical footprint',d:'3 kW racks in a metro became 1 MW racks across multi-GW campuses, space and edge.'},
+   {img:'/img/footprint.jpg',n:'The physical footprint',d:'3 kW racks in a metro became 1 MW racks across multi-GW campuses, space and edge.'},
    {viz:'players',n:'The players',d:'Powered shell, bare metal, AI cloud — three businesses hiding behind one word.'},
    {viz:'economics',n:'The economics',d:'Same gigawatt: real-estate returns, utility returns, software returns.'},
    {viz:'software',n:'The software layer',d:'Efficient compute on rented iron beats inefficient compute on owned iron.'},
@@ -1283,7 +1285,8 @@ function renderTopic(L,i){markLayer(L.id);themeFor(L);
   const s=L.subs[i];const pills=L.subs.map((x,j)=>'<div class="pill'+(j===i?' on':'')+'" data-i="'+j+'">'+String(j+1).padStart(2,'0')+'&nbsp;'+x.n+'</div>').join('');
 
 
-  const dia=(s.viz&&VIZ[s.viz])?'<div class="viz">'+VIZ[s.viz]()+'</div>':'';
+  const dia = s.img ? '<div class="viz img"><img src="'+s.img+'" alt="'+s.n+'" loading="lazy"></div>'
+                    : ((s.viz&&VIZ[s.viz])?'<div class="viz">'+VIZ[s.viz]()+'</div>':'');
   panel.innerHTML='<div class="dtop"><div class="back" id="backBtn">‹ '+L.title+'</div><div class="pills">'+pills+'</div></div><div class="dhh"><span class="bico big in">'+topicIcon(L.id,i,L.accent)+'</span><div class="ptitle" style="margin:0">'+s.n+'</div></div><div class="dbody">'+dia+'</div>';
   panel.querySelector('#backBtn').addEventListener('click',()=>go('stack',L.id));
   panel.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>go('stack',L.id,+p.dataset.i)));}
