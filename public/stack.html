@@ -274,7 +274,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v21 · footprint slide</div>
+<div class="ver">v22 · software layer</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -330,6 +330,7 @@ const HUBS=[{"n":"N. Virginia","x":313,"y":129,"b":1,"note":"grid constrained","
 /* ================= STORY DIAGRAMS ================= */
 const V={blue:'#5b8def',pur:'#a78bfa',pink:'#f0a6ca',yel:'#ffe066',grey:'#8b93a6',red:'#e5484d',amber:'#e0a355',cyan:'#57c7dd',green:'#6ee7a8',ink:'#e9ebf2',dim:'#8d94a6'};
 const SV=b=>'<svg viewBox="0 0 1000 460" preserveAspectRatio="xMidYMid meet">'+b+'</svg>';
+const SVh=(b,h)=>'<svg viewBox="0 0 1000 '+h+'" preserveAspectRatio="xMidYMid meet">'+b+'</svg>';
 function T(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" fill="'+(o.f||V.ink)+'" font-family="'+(o.m?'IBM Plex Mono':'Geist')+',sans-serif" font-size="'+(o.s||13)+'" font-weight="'+(o.w||500)+'" text-anchor="'+(o.a||'start')+'"'+(o.ls?' letter-spacing="'+o.ls+'"':'')+(o.op?' opacity="'+o.op+'"':'')+'>'+s+'</text>';}
 function B(x,y,w,h,c,o){o=o||{};return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(o.r==null?4:o.r)+'" fill="'+(o.fill||'none')+'" stroke="'+(o.sw===0?'none':c)+'" stroke-width="'+(o.sw==null?1.2:o.sw)+'"'+(o.op?' opacity="'+o.op+'"':'')+'/>';}
 function LN(x1,y1,x2,y2,c,o){o=o||{};return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="'+(o.sw||1.2)+'"'+(o.d?' stroke-dasharray="'+o.d+'"':'')+(o.op?' opacity="'+o.op+'"':'')+' stroke-linecap="round"/>';}
@@ -1152,35 +1153,42 @@ VIZ.economics=function(){
 /* — DC 4. the software layer — */
 VIZ.software=function(){
   let s='';
-  s+=T(24,30,'What the software layer actually does',{s:14,w:700,f:V.ink});
-  const box=(x,y,w,h,c,t,sub)=>B(x,y,w,h,c,{r:10,fill:c+'14'})+T(x+16,y+28,t,{s:13,w:600,f:c})+T(x+16,y+48,sub,{s:10.5,f:V.dim});
-  s+=box(24,54,210,74,V.pur,'Scheduling','pack jobs onto silicon');
-  s+=box(24,140,210,74,V.pur,'Inference runtime','batching, caching, quantisation');
-  s+=box(24,226,210,74,V.pur,'Multi-tenancy','many customers, one fleet');
-  s+=T(24,332,'None of it owns a building or a GPU.',{s:12,f:V.dim});
-  s+=T(24,352,'All of it decides how much work the fleet does.',{s:12,w:600,f:V.pur});
-  const util=(x,c,pct,title,sub,cost)=>{let o=T(x+90,72,title,{a:'middle',s:13.5,w:700,f:c});
-    o+=T(x+90,90,sub,{a:'middle',s:10.5,f:V.dim,m:1});
-    o+=B(x,104,180,208,c,{r:10,fill:'#0e1119',sw:1});
-    const fh=(208-16)*pct/100;
-    o+=B(x+8,312-8-fh,164,fh,c,{r:6,fill:c+'66',sw:0});
-    const py=fh>70?(312-8-fh+34):(312-fh-22);o+=T(x+90,py,pct+'%',{a:'middle',s:26,w:700,f:c,m:1});
-    o+=T(x+90,340,'utilisation',{a:'middle',s:10.5,f:V.dim,m:1});
-    o+=T(x+90,372,cost,{a:'middle',s:15,w:700,f:c,m:1});
-    o+=T(x+90,390,'effective $ per unit of work',{a:'middle',s:9.5,f:V.dim,m:1});
+  /* band 1 — what the stack is, layer by layer */
+  s+=T(20,26,'THE STACK',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
+  const row=(y,n,ex,c,tag,note)=>{
+    let o=B(20,y,960,54,c,{r:10,fill:c+'12'});
+    o+=T(40,y+24,n,{s:14,w:600,f:c});
+    o+=T(40,y+43,ex,{s:11,f:V.dim,m:1});
+    o+=B(700,y+13,120,28,c,{r:14,fill:c+'2e',sw:.9});
+    o+=T(760,y+31,tag,{a:'middle',s:10,w:700,m:1,f:c});
+    o+=T(836,y+31,note,{s:11,f:V.dim});
     return o;};
-  s+=util(330,V.red,35,'Owned, inefficient','you bought the GPUs','1.00×');
-  s+=util(560,V.green,85,'Rented, efficient','someone else runs them','0.41×');
-  s+='<path d="M528 210 h20" stroke="'+V.yel+'" stroke-width="2"/>';
-  s+=B(786,104,190,208,V.yel,{r:10,fill:V.yel+'10'});
-  s+=T(881,150,'Where the',{a:'middle',s:13,f:V.dim});
-  s+=T(881,180,'value sits',{a:'middle',s:20,w:700,f:V.yel});
-  s+=T(881,220,'Efficient compute on',{a:'middle',s:12});
-  s+=T(881,240,'rented iron beats',{a:'middle',s:12});
-  s+=T(881,260,'inefficient compute',{a:'middle',s:12});
-  s+=T(881,280,'on owned iron.',{a:'middle',s:12,w:600,f:V.yel});
-  s+=T(24,452,'Yes, it matters: utilisation is the multiplier on every dollar of infrastructure underneath.',{s:12.5,f:V.ink});
-  return SV(s);
+  s+=row(38,'Cluster orchestration','Kubernetes · SLURM · schedulers',V.grey,'COMMODITY','everyone has one');
+  s+=row(102,'Training · post-training · RL','distributed compute frameworks',V.amber,'STANDARDISED','the ecosystem converged');
+  s+=row(166,'Inference · model-as-a-service','serving · routing · autoscaling',V.cyan,'CONTESTED','specialists lead here');
+  /* band 2 — two worlds of compute, converging */
+  s+=T(20,262,'TWO WORLDS OF COMPUTE',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
+  const world=(x,c,t,pts)=>{let o=B(x,278,420,150,c,{r:12,fill:c+'12'});
+    o+=T(x+22,308,t,{s:15,w:700,f:c});
+    pts.forEach((p,i)=>o+=T(x+22,336+i*24,'· '+p,{s:12,f:'#c6ccda'}));
+    return o;};
+  s+=world(20,V.amber,'Training',['reserved capacity, long runs','beyond small scale you must control the infra','contracts, not credit cards']);
+  s+=world(560,V.cyan,'Inference',['bursty, latency-bound, priced per token','open-model demand accelerating fast','many providers, real traction']);
+  s+=T(500,352,'≠',{a:'middle',s:30,w:700,f:V.dim});
+  s+='<path d="M230 440 L500 470 L770 440" fill="none" stroke="'+V.yel+'" stroke-width="1.6" stroke-dasharray="6 5"/>';
+  s+=B(236,462,528,56,V.yel,{r:12,fill:V.yel+'14'});
+  s+=T(500,484,'Most scaled customers want both',{a:'middle',s:13.5,w:600,f:V.yel});
+  s+=T(500,505,'keeping them separate is expensive — one fleet, orchestrated together',{a:'middle',s:11,f:V.dim});
+  /* band 3 — margin stacking */
+  s+=T(20,556,'MARGIN STACKING',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
+  const bar=(y,w,c,t,sub)=>B(20,y,w,44,c,{r:8,fill:c+'55',sw:.9})
+    +T(40,y+27,t,{s:13,w:600})+T(w+40,y+27,sub,{s:11,f:c,m:1});
+  s+=bar(572,620,V.green,'Optimised stack · rented compute','more tokens per dollar');
+  s+=bar(628,392,V.red,'Less-optimised stack · owned compute','fewer');
+  s+=T(20,706,'Owning the iron is not the edge. Throughput per dollar is — and it is set in software.',{s:13.5,w:600,f:V.ink});
+  s+=T(20,730,'How big the edge is stays genuinely hard to quantify: token throughput varies by model, batch and workload.',{s:11.5,f:V.dim});
+  s+=T(20,754,'Which is why it ends where it always ends — product quality, then scale: TCO, financing, price.',{s:11.5,f:V.yel});
+  return SVh(s,780);
 };
 
 /* — DC 7. geography, regulation and labour — */
@@ -1235,7 +1243,7 @@ const LAYERS=[
    {img:'/img/footprint.jpg',n:'The physical footprint',d:'3 kW racks in a metro became 1 MW racks across multi-GW campuses, space and edge.'},
    {viz:'players',n:'The players',d:'Powered shell, bare metal, AI cloud — three businesses hiding behind one word.'},
    {viz:'economics',n:'The economics',d:'Same gigawatt: real-estate returns, utility returns, software returns.'},
-   {viz:'software',n:'The software layer',d:'Efficient compute on rented iron beats inefficient compute on owned iron.'},
+   {viz:'software',n:'The software layer',d:'Orchestration, training frameworks, inference — and why throughput per dollar is set in software.'},
    {viz:'spacedc',n:'Data centers in space',d:'Free power, passive cooling, no permits — at the cost of launch mass.'},
    {viz:'orbital',n:'Space economics',d:'Terrestrial cost curves bend up; orbital ones bend down.'},
    {viz:'geodc',n:'Geography, regulation & labor',d:'Where it is legal, and who is actually available to build it.'},
