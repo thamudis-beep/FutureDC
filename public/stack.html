@@ -63,13 +63,6 @@
   .hright{position:relative;height:100%;min-height:0}
   .hcard.k1{left:0;top:8%}
   .hcard.k2{right:0;top:44%}
-  .stat{position:absolute;display:flex;align-items:center;gap:10px;color:var(--ink-soft);animation:lu .8s ease both}
-  .stat .dot{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex:none}
-  .stat .dot span{width:6px;height:6px;border-radius:50%;background:var(--ca,var(--accent))}
-  .stat .v{font:600 13px var(--sans);color:var(--ink);display:block}
-  .stat .l{font:400 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
-  .stat.t1{right:2%;top:6%;animation-delay:.5s}
-  .stat.t2{left:6%;bottom:6%;animation-delay:.65s}
   #v-home h1{font-size:clamp(38px,5.2vw,76px);line-height:.94;letter-spacing:-.03em;font-weight:700;max-width:11ch}
   #v-home h1 .sub{display:block;font-style:italic;color:#cfd6ea;font-size:.62em;margin-top:.06em}
   #v-home .kick{font:500 12px var(--mono);letter-spacing:.28em;color:var(--accent);margin-bottom:20px;text-transform:uppercase}
@@ -139,29 +132,26 @@
   @keyframes rsb{0%{transform:scaleY(.15)}45%,100%{transform:scaleY(1)}}
 
   /* ===== STACK (thin rail) ===== */
-  #v-stack .body{flex:1;min-height:0;display:grid;grid-template-columns:236px 1fr;gap:clamp(26px,4vw,60px);align-items:center;padding:clamp(8px,1.6vh,18px) 0;
-    transition:grid-template-columns .7s cubic-bezier(.5,.05,.15,1),gap .7s cubic-bezier(.5,.05,.15,1)}
-  #v-stack .body.s0{grid-template-columns:1fr 0px;gap:0}
-  #v-stack .body.s1{grid-template-columns:290px 1fr}
-  #v-stack .body.s2{grid-template-columns:172px 1fr}
-  .body.s0 .stack{justify-self:center;width:min(560px,70%)}
-  .body.s0 .panel{opacity:0;visibility:hidden;transform:translateX(24px)}
-  .body.s0 .lab .ln{font-size:17px}
-  .body.s0 .lab .lc{font-size:12px}
-  .body.s0 .row{grid-template-columns:1fr 26px 300px}
-  .body.s0 .stack{gap:clamp(10px,2.4vh,26px)}
-  .body.s1 .row{grid-template-columns:1fr 20px 150px}
-  .body.s2 .row{grid-template-columns:1fr 14px 92px}
-  .body.s2 .lab .ln{font-size:10.5px}
-  .body.s2 .lab .lc{display:none}
-  .s0hint{grid-column:1/-1;justify-self:center;margin-top:18px;font:500 11.5px var(--mono);letter-spacing:.14em;color:var(--ink-dim);text-transform:uppercase;
-    opacity:0;transition:opacity .5s .3s}
+  #v-stack .body{flex:1;min-height:0;position:relative;padding:clamp(8px,1.6vh,18px) 0}
+  .stack{position:absolute;top:50%;left:var(--sx);width:420px;
+    transform:translate(var(--tx),-50%) scale(var(--ss));transform-origin:left center;
+    transition:left .85s cubic-bezier(.66,0,.24,1),transform .85s cubic-bezier(.66,0,.24,1)}
+  .body.s0 .stack{--sx:50%;--tx:-50%;--ss:1}
+  .body.s1 .stack{--sx:0px;--tx:0px;--ss:.70}
+  .body.s2 .stack{--sx:0px;--tx:0px;--ss:.44}
+  .panel{position:absolute;top:50%;right:0;left:var(--pl);
+    transform:translateY(-50%);transition:left .85s cubic-bezier(.66,0,.24,1),opacity .45s ease}
+  .body.s0 .panel{--pl:100%;opacity:0;visibility:hidden}
+  .body.s1 .panel{--pl:352px}
+  .body.s2 .panel{--pl:226px}
+  .s0hint{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);font:500 11.5px var(--mono);letter-spacing:.14em;
+    color:var(--ink-dim);text-transform:uppercase;opacity:0;transition:opacity .5s .35s;pointer-events:none}
   .body.s0 .s0hint{opacity:1}
-  .stack{display:flex;flex-direction:column;gap:clamp(5px,1.1vh,12px);justify-content:center;transition:width .7s cubic-bezier(.5,.05,.15,1),gap .7s}
-  .row{display:grid;grid-template-columns:1fr 18px 118px;align-items:center;cursor:pointer;transition:grid-template-columns .7s cubic-bezier(.5,.05,.15,1)}
+  .stack{display:flex;flex-direction:column;gap:16px;justify-content:center}
+  .row{display:grid;grid-template-columns:1fr 22px 190px;align-items:center;cursor:pointer}
   .lab{text-align:right}
-  .lab .ln{font:600 12px var(--mono);letter-spacing:.05em;color:var(--ink-soft);transition:color .25s}
-  .lab .lc{font:400 9.5px var(--mono);color:var(--ink-dim);margin-top:2px}
+  .lab .ln{font:600 15px var(--mono);letter-spacing:.05em;color:var(--ink-soft);transition:color .25s}
+  .lab .lc{font:400 11px var(--mono);color:var(--ink-dim);margin-top:3px}
   .row.sel .lab .ln,.row:hover .lab .ln{color:var(--ink)}
   .conn{height:1px;background:var(--line);margin:0 5px;transition:.25s}
   .row.sel .conn{background:var(--acc);box-shadow:0 0 8px var(--glow)}
@@ -174,7 +164,7 @@
   .row.sel .slab .sideL{fill:color-mix(in srgb,var(--acc) 52%,#0a0d18)}
   .row.sel .slab .sideR{fill:color-mix(in srgb,var(--acc) 34%,#080a12)}
   @keyframes breathe{0%,100%{filter:drop-shadow(0 8px 22px var(--glow))}50%{filter:drop-shadow(0 10px 36px var(--glow))}}
-  .panel{border:1px solid var(--line);border-radius:18px;transition:opacity .5s ease,transform .5s cubic-bezier(.5,.05,.15,1);background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);padding:clamp(18px,2.2vw,28px);height:auto;max-height:100%;display:flex;flex-direction:column;min-height:0;box-shadow:0 30px 80px -30px rgba(0,0,0,.9);transition:opacity .32s ease,transform .32s cubic-bezier(.2,.7,.2,1)}
+  .panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);padding:clamp(18px,2.2vw,28px);height:auto;max-height:100%;display:flex;flex-direction:column;min-height:0;box-sizing:border-box;box-shadow:0 30px 80px -30px rgba(0,0,0,.9);transition:opacity .32s ease,transform .32s cubic-bezier(.2,.7,.2,1)}
   .panel.swap{opacity:0;transform:translateY(8px)}
   .peyebrow{font:500 10.5px var(--mono);letter-spacing:.16em;color:var(--accent)}
   .ptitle{font-family:var(--serif);font-weight:700;font-size:clamp(26px,2.6vw,38px);line-height:1;letter-spacing:-.02em;margin:6px 0 8px}
@@ -236,7 +226,7 @@
 
 <div class="bar">
   <div class="brand" data-nav="home"><span class="dia"></span><b>FUTURE&nbsp;OF&nbsp;THE&nbsp;DATA&nbsp;CENTER</b></div>
-  <div class="topnav"><span class="slider" id="navSlider"></span><a data-nav="home">Home</a><a data-nav="matrix">The Shift</a><a data-nav="stack">The Stack</a></div>
+  <div class="topnav"><span class="slider" id="navSlider"></span><a data-nav="home">Home</a><a data-nav="matrix">Data Center 101</a><a data-nav="stack">The Stack</a></div>
 </div>
 
 <!-- HOME -->
@@ -247,20 +237,18 @@
     <div class="cta" data-nav="stack"><span class="bars"><i></i><i></i><i></i></span>Enter the stack</div>
    </div>
    <div class="hright">
-    <div class="stat t1" style="--ca:var(--today)"><span class="dot"><span></span></span><span><span class="v">3 kW → 1 MW</span><span class="l">rack power, one cycle</span></span></div>
-    <div class="stat t2" style="--ca:var(--accent)"><span class="dot"><span></span></span><span><span class="v">4 layers · 24 topics</span><span class="l">the stack, end to end</span></span></div>
     <div class="cards">
-    <div class="hcard k1" data-nav="matrix" style="--ca:var(--today);--sd:3.4s">
+     <div class="hcard k1" data-nav="matrix" style="--ca:var(--today);--sd:3.4s">
       <div class="pic"><div class="mini-shift" id="miniShift"></div></div>
-      <div class="meta"><h3>The Shift</h3></div>
-      <div class="go">→</div>
-    </div>
-    <div class="hcard k2" data-nav="stack" style="--ca:var(--accent);--sd:4.2s">
+      <div class="meta"><h3>Data Center 101</h3></div>
+      <div class="go">&rarr;</div>
+     </div>
+     <div class="hcard k2" data-nav="stack" style="--ca:var(--accent);--sd:4.2s">
       <div class="pic"><div class="mini-stack" id="miniStack"></div></div>
       <div class="meta"><h3>The Stack</h3></div>
-      <div class="go">→</div>
+      <div class="go">&rarr;</div>
+     </div>
     </div>
-   </div>
    </div>
   </div>
 </section>
@@ -275,7 +263,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v14 · staged stack</div>
+<div class="ver">v15 · smooth stack</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
