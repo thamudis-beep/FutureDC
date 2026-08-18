@@ -83,17 +83,45 @@
 
   /* ===== MATRIX (4 modules × time) ===== */
   #v-atlas .body{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(8px,1.6vh,18px);overflow:hidden}
-  .mtx{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
-    background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);
-    border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
-  .atlas{width:100%;height:100%;max-height:100%}
-  .atlas .rt{cursor:pointer;transition:opacity .25s}
-  .atlas .hit{fill:transparent}
-  .atlas .qual{opacity:0;transition:opacity .25s}
-  .atlas:hover .rt{opacity:.34}
-  .atlas .rt:hover{opacity:1}
-  .atlas .rt:hover .hit{fill:var(--rc);fill-opacity:.07}
-  .atlas .rt:hover .qual{opacity:1}
+  .mtx{flex:1;min-height:0;display:grid;grid-template-columns:136px 198px 1fr 1fr 1fr;grid-auto-rows:min-content;
+    align-content:center;overflow:hidden;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));
+    backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:14px 18px 8px;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
+  .mhead{padding:0 14px 10px;font:600 12px var(--mono);letter-spacing:.14em}
+  .mhead .k{display:inline-block;padding-bottom:6px;border-bottom:2px solid transparent}
+  .mhead.pre .k{color:var(--pre);border-color:var(--pre)}
+  .mhead.today .k{color:var(--today);border-color:var(--today)}
+  .mhead.future .k{color:var(--future);border-color:var(--future)}
+  .mhead .yr{display:block;margin-top:4px;font:400 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-dim)}
+  /* the four layers: one block each, with a spine down its rows */
+  .grp{grid-column:1;position:relative;display:flex;align-items:center;gap:10px;padding:8px 12px 8px 14px;
+    border-top:1px solid var(--line);cursor:pointer;transition:.2s}
+  .grp .spine{position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:2px;background:var(--gc);opacity:.85}
+  .grp .gic{display:inline-flex;color:var(--gc);flex:none}
+  .grp .gic svg{width:22px;height:22px}
+  .grp .gname{font:700 10.5px/1.25 var(--mono);letter-spacing:.05em;color:var(--gc)}
+  .grp:hover{background:color-mix(in srgb,var(--gc) 8%,transparent)}
+  .rlabel{grid-column:2;padding:7px 14px 7px 4px;border-top:1px solid var(--line2);display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}
+  .rlabel.gtop{border-top:1px solid var(--line)}
+  .rlabel:hover .mn{color:var(--mc)}
+  .rlabel .rno{width:26px;height:24px;flex:none;border-radius:7px;border:1px solid var(--mc);color:var(--mc);
+    display:flex;align-items:center;justify-content:center;font:700 10.5px var(--mono);background:color-mix(in srgb,var(--mc) 14%,transparent)}
+  .rlabel .mn{font:600 11.5px var(--mono);letter-spacing:.04em;color:var(--ink)}
+  .rlabel .rdim{font:400 9.5px var(--sans);color:var(--ink-dim);margin-top:3px;line-height:1.2}
+  .cell{padding:7px 14px;border-top:1px solid var(--line2);border-left:1px solid var(--line2);display:flex;flex-direction:column;justify-content:center}
+  .cell.gtop{border-top:1px solid var(--line)}
+  .cell.pre{grid-column:3}.cell.today{grid-column:4;background:rgba(224,163,85,.05)}.cell.future{grid-column:5;background:rgba(87,199,221,.055)}
+  .ico{height:22px;display:flex;align-items:flex-end;gap:5px;margin-bottom:4px}
+  .ico svg{overflow:visible;display:block}
+  .cm{font:700 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
+  .cell.pre .cm{color:#c3c9d6}.cell.today .cm{color:var(--today)}.cell.future .cm{color:var(--future)}
+  .ct{font:400 11px/1.28 var(--sans);color:var(--ink-soft)}
+  .thru{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:10px 14px 0;border-top:1px solid var(--line);margin-top:4px}
+  .thru .tl{font:600 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .thru .tv{font:700 15.5px var(--sans);letter-spacing:-.01em}
+  .thru .tv.pre{color:#c3c9d6}.thru .tv.today{color:var(--today)}.thru .tv.future{color:var(--future)}
+  .thru .ta{color:var(--ink-dim)}
+  .thru .tn{margin-left:14px;font:400 11.5px var(--sans);color:var(--ink-dim)}
   .in{display:inline-flex;opacity:0;animation:lu .5s ease forwards}
   @keyframes lu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
   .gi{animation:flt 4s ease-in-out infinite}@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -251,7 +279,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v36 · inside the dc</div>
+<div class="ver">v37 · grouped atlas</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -446,40 +474,34 @@ const MODS=[
   future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms + physical AI'}},
 ];
 const ERAS=[{k:'pre',n:'CLOUD',y:'2023',t:'T−1'},{k:'today',n:'TODAY',y:'2026',t:'T0'},{k:'future',n:'AGI',y:'2031',t:'T+1'}];
-const ATLAS_ICON={gen:'reactor',grid:'meter',equip:'sst',chips:'chip',memory:'memory',net:'mesh',dc:'buildings',work:'globe'};
+const GROUPS=[
+ {n:'APPLICATIONS',c:'var(--app)',ic:'globe',go:'apps',ids:['work']},
+ {n:'DATA CENTER',c:'var(--dc)',ic:'buildings',go:'dc',ids:['dc']},
+ {n:'COMPUTE',c:'var(--cmp)',ic:'chip',go:'compute',ids:['net','memory','chips']},
+ {n:'POWER',c:'var(--pwr)',ic:'reactor',go:'power',ids:['equip','grid','gen']}];
 function buildMatrix(){
-  const X=[286,548,806], Y0=104, DY=58;
-  const rows=[...MODS].reverse();
-  let g='';
-  /* stations */
-  ERAS.forEach(function(e,k){
-    g+=LN(X[k],78,X[k],Y0+rows.length*DY-24,'#ffffff',{sw:1,op:.09,d:'3 6'});
-    g+=T(X[k],44,e.n,{a:'middle',s:14,w:700,ls:'.14em',m:1,f:e.k==='pre'?V.grey:(e.k==='today'?V.amber:V.cyan)});
-    g+=T(X[k],62,e.y,{a:'middle',s:10,f:V.dim,m:1});
-  });
-  /* one route per row */
-  rows.forEach(function(mo,i){
-    const y=Y0+i*DY, c=mo.c, dly=(0.10+i*0.06).toFixed(2);
-    g+='<g class="rt" data-go="'+mo.go+'" style="--rc:'+c+'">';
-    g+='<rect class="hit" x="8" y="'+(y-24)+'" width="972" height="48" rx="10"/>';
-    g+='<g transform="translate(12,'+(y-13)+')">'+G[ATLAS_ICON[mo.id]](c)+'</g>';
-    g+=T(46,y-2,mo.n,{s:12.5,w:700,ls:'.05em',m:1,f:c});
-    g+=T(46,y+13,mo.dim,{s:10,f:V.dim});
-    /* the line thickens as the era advances */
-    g+='<path class="draw" pathLength="1" style="animation-delay:'+dly+'s" d="M'+X[0]+' '+y+' L'+X[2]+' '+y+'" fill="none" stroke="'+c+'" stroke-width="2.5" opacity=".45"/>';
-    g+='<path class="draw" pathLength="1" style="animation-delay:'+dly+'s" d="M'+X[1]+' '+y+' L'+X[2]+' '+y+'" fill="none" stroke="'+c+'" stroke-width="5" opacity=".55"/>';
-    ERAS.forEach(function(e,k){
-      const cell=mo[e.k], r=6+k*2.5;
-      g+='<circle class="in" style="animation-delay:'+(+dly+0.18+k*0.08).toFixed(2)+'s" cx="'+X[k]+'" cy="'+y+'" r="'+r+'" fill="#0b0d13" stroke="'+c+'" stroke-width="2.4"/>';
-      g+='<circle class="in" style="animation-delay:'+(+dly+0.22+k*0.08).toFixed(2)+'s" cx="'+X[k]+'" cy="'+y+'" r="'+(r-3.4)+'" fill="'+c+'"/>';
-      g+=T(X[k]+r+9,y-3,cell.m,{s:14.5,w:700});
-      g+='<text class="qual" x="'+(X[k]+r+9)+'" y="'+(y+13)+'" fill="'+V.dim+'" font-family="Geist,sans-serif" font-size="10.5">'+cell.t+'</text>';
+  const by={};MODS.forEach(m=>by[m.id]=m);
+  let h='<div class="mhead gh"></div><div class="mhead"></div>';
+  ERAS.forEach(function(e){h+='<div class="mhead '+e.k+'"><span class="k">'+e.n+'</span><span class="yr">'+e.y+'</span></div>';});
+  GROUPS.forEach(function(gr){
+    h+='<div class="grp" data-go="'+gr.go+'" style="--gc:'+gr.c+';grid-row:span '+gr.ids.length+'">'
+      +'<span class="spine"></span><span class="gic">'+G[gr.ic](gr.c)+'</span>'
+      +'<span class="gname">'+gr.n.replace(' ','<br>')+'</span></div>';
+    gr.ids.forEach(function(id,k){
+      const mo=by[id], top=k===0?' gtop':'';
+      h+='<div class="rlabel'+top+'" data-go="'+gr.go+'" style="--mc:'+gr.c+'">'
+        +'<span class="rno">'+mo.no+'</span><div><div class="mn">'+mo.n+'</div><div class="rdim">'+mo.dim+'</div></div></div>';
+      ERAS.forEach(function(e){const c=mo[e.k];
+        h+='<div class="cell '+e.k+top+'"><div class="ico">'+c.i+'</div><div class="cm">'+c.m+'</div><div class="ct">'+c.t+'</div></div>';});
     });
-    g+='</g>';
   });
-  document.getElementById('mtx').innerHTML=
-    '<svg class="atlas" viewBox="0 0 1000 '+(Y0+rows.length*DY+18)+'" preserveAspectRatio="xMidYMid meet">'+g+'</svg>';
-  document.querySelectorAll('#mtx .rt').forEach(function(el){
+  h+='<div class="thru"><span class="tl">The rack itself</span>'
+    +'<span class="tv pre">3 kW</span><span class="ta">&rarr;</span>'
+    +'<span class="tv today">150 kW</span><span class="ta">&rarr;</span>'
+    +'<span class="tv future">1 MW</span>'
+    +'<span class="tn">the same machine in three physical forms</span></div>';
+  const m=document.getElementById('mtx');m.innerHTML=h;
+  m.querySelectorAll('[data-go]').forEach(function(el){
     el.addEventListener('click',function(){go('stack',el.dataset.go);});});
 }
 /* ============ STACK DATA ============ */
