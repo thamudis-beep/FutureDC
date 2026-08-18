@@ -73,12 +73,13 @@
   .hcard .pic{position:relative;height:clamp(108px,14vh,152px);overflow:hidden;background:radial-gradient(120% 120% at 50% 10%, color-mix(in srgb,var(--ca) 14%,#0b0d14), #0a0c12)}
   .hcard .pic::after{content:'';position:absolute;left:-20%;right:-20%;top:-45%;height:45%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--ca) 40%,transparent),transparent);animation:scan var(--sd,3.6s) cubic-bezier(.5,0,.5,1) infinite;pointer-events:none;mix-blend-mode:screen}
   @keyframes scan{0%{transform:translateY(0);opacity:0}12%{opacity:.9}48%{transform:translateY(560%);opacity:.9}62%{opacity:0}100%{transform:translateY(560%);opacity:0}}
-  .hcard .meta{padding:12px 16px 14px}
+  .hcard .meta{padding:12px 16px 14px;padding-right:62px}
   .hcard .no{font:600 10.5px var(--mono);letter-spacing:.16em;color:var(--ca)}
   .hcard h3{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2.1vw,29px);line-height:1;letter-spacing:-.01em;margin:0;color:var(--ink)}
   .hcard .go{position:absolute;right:14px;bottom:13px;width:34px;height:34px;border-radius:50%;background:var(--ca);color:#0a0c12;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:transform .25s}
   .hcard:hover .go{transform:translateX(4px)}
-  .mini-shift,.mini-stack{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .mini-shift,.mini-stack{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:9px 12px}
+  .mini-shift>svg,.mini-stack>svg{width:100%;height:100%}
   .mini-stack svg{width:58%;margin:-15px 0}
 
   /* ===== MATRIX (4 modules × time) ===== */
@@ -275,7 +276,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v28 · pixel field</div>
+<div class="ver">v29 · card previews</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -993,17 +994,39 @@ const SLAB='<svg class="slab" viewBox="0 0 300 124" preserveAspectRatio="xMidYMi
 
 /* ============ HOME previews ============ */
 (function(){
-  const cols=['#ab7cf1','#6f8dff','#46c6dd','#e0a355'];
-  document.getElementById('miniStack').innerHTML=cols.map(c=>'<svg viewBox="0 0 300 124" style="filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))"><polygon points="12,52 150,92 150,120 12,80" fill="'+rgba(c,.55)+'"/><polygon points="288,52 150,92 150,120 288,80" fill="'+rgba(c,.38)+'"/><polygon points="12,52 150,12 288,52 150,92" fill="'+c+'" stroke="rgba(255,255,255,.2)"/></svg>').join('');
-  // mini shift: 4 module rows, each an icon + 3 growing era blocks (previews the 4-part matrix)
-  const mods=[['#ab7cf1','APP','globe'],['#6f8dff','DC','buildings'],['#46c6dd','CMP','chip'],['#e0a355','PWR','reactor']];
-  let h='<div style="display:grid;grid-template-columns:15px 24px 1fr 1fr 1fr;gap:4px 7px;width:80%;align-items:center">';
-  h+='<div></div><div></div><div style="font:600 6.5px var(--mono);color:var(--pre);letter-spacing:.1em">PRE</div><div style="font:600 6.5px var(--mono);color:var(--today);letter-spacing:.1em">NOW</div><div style="font:600 6.5px var(--mono);color:var(--future);letter-spacing:.1em">NEXT</div>';
-  mods.forEach(mo=>{h+='<span style="color:'+mo[0]+';display:flex;align-items:center;height:13px;transform:scale(.5);transform-origin:left center">'+G[mo[2]](mo[0])+'</span>';
-    h+='<div style="font:600 7.5px var(--mono);color:'+mo[0]+'">'+mo[1]+'</div>';
-    [.34,.62,1].forEach(op=>h+='<div style="height:7px;border-radius:2px;background:'+mo[0]+';opacity:'+op+'"></div>');});
-  h+='</div>';
-  document.getElementById('miniShift').innerHTML=h;
+  /* the stack, vertical, each layer with its own icon */
+  const LY=[['#ab7cf1','globe','APPS'],['#6f8dff','buildings','DATA CENTER'],['#46c6dd','chip','COMPUTE'],['#e0a355','reactor','POWER']];
+  let h='<svg viewBox="0 0 300 152" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
+  LY.forEach(function(l,i){
+    const y=i*28, c=l[0];
+    h+='<g transform="translate(118,'+y+')" opacity="0.97">'
+      +'<polygon points="6,26 75,46 75,60 6,40" fill="'+rgba(c,.5)+'"/>'
+      +'<polygon points="144,26 75,46 75,60 144,40" fill="'+rgba(c,.34)+'"/>'
+      +'<polygon points="6,26 75,6 144,26 75,46" fill="'+c+'" stroke="rgba(255,255,255,.22)" stroke-width="1"/>'
+      +'</g>';
+    h+='<g transform="translate(34,'+(y+14)+') scale(0.72)" color="'+c+'">'+G[l[1]](c)+'</g>';
+  });
+  h+='</svg>';
+  document.getElementById('miniStack').innerHTML=h;
+
+  /* the 101, as its own grid: layers down, eras across, with the through-line */
+  const RW=[['#ab7cf1','globe'],['#6f8dff','buildings'],['#46c6dd','chip'],['#e0a355','reactor']];
+  const ERA=[['PRE','#8b93a6',.30],['NOW','#e0a355',.62],['NEXT','#57c7dd',1]];
+  let m='<svg viewBox="0 0 300 150" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
+  ERA.forEach(function(e,k){m+='<text x="'+(78+k*74)+'" y="12" fill="'+e[1]+'" font-family="IBM Plex Mono,monospace" font-size="8" font-weight="600" letter-spacing="1">'+e[0]+'</text>';});
+  RW.forEach(function(r,i){
+    const y=22+i*24;
+    m+='<g transform="translate(6,'+(y-4)+') scale(0.58)" color="'+r[0]+'">'+G[r[1]](r[0])+'</g>';
+    ERA.forEach(function(e,k){
+      m+='<rect x="'+(78+k*74)+'" y="'+y+'" width="64" height="11" rx="3" fill="'+r[0]+'" opacity="'+e[2]+'"/>';});
+  });
+  m+='<line x1="6" y1="126" x2="294" y2="126" stroke="rgba(255,255,255,.16)"/>';
+  const TL=[['3 kW','#8b93a6',30],['150 kW','#e0a355',120],['1 MW','#57c7dd',232]];
+  TL.forEach(function(t,k){
+    m+='<text x="'+t[2]+'" y="144" fill="'+t[1]+'" font-family="Geist,sans-serif" font-size="13" font-weight="700">'+t[0]+'</text>';
+    if(k<2)m+='<text x="'+(t[2]+(k?62:40))+'" y="144" fill="#5a6072" font-family="Geist,sans-serif" font-size="11">&#8594;</text>';});
+  m+='</svg>';
+  document.getElementById('miniShift').innerHTML=m;
 })();
 
 /* ============ STACK build ============ */
