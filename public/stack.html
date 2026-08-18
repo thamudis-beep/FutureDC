@@ -51,24 +51,23 @@
   #v-home h1{font-size:clamp(46px,7.4vw,104px);line-height:.92;letter-spacing:-.015em}
   #v-home h1 .sub{display:block;font-style:italic;color:#cfd6ea;font-size:.62em;margin-top:.06em}
   #v-home .kick{font:500 12px var(--mono);letter-spacing:.28em;color:var(--accent);margin-bottom:20px;text-transform:uppercase}
-  .cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2vw,26px);margin-top:clamp(20px,4vh,52px);max-width:1000px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,22px);margin-top:clamp(18px,3vh,38px);max-width:660px}
   .hcard{position:relative;border-radius:20px;overflow:hidden;cursor:pointer;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.008));
     transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;box-shadow:0 30px 70px -40px rgba(0,0,0,.8)}
   .hcard:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--ca) 60%,var(--line));box-shadow:0 46px 90px -40px rgba(0,0,0,.85),0 0 40px -20px var(--ca)}
-  .hcard .pic{position:relative;height:clamp(150px,20vh,210px);overflow:hidden;background:radial-gradient(120% 120% at 50% 10%, color-mix(in srgb,var(--ca) 14%,#0b0d14), #0a0c12)}
+  .hcard .pic{position:relative;height:clamp(100px,12.5vh,138px);overflow:hidden;background:radial-gradient(120% 120% at 50% 10%, color-mix(in srgb,var(--ca) 14%,#0b0d14), #0a0c12)}
   .hcard .pic::after{content:'';position:absolute;left:-20%;right:-20%;top:-45%;height:45%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--ca) 40%,transparent),transparent);animation:scan var(--sd,3.6s) cubic-bezier(.5,0,.5,1) infinite;pointer-events:none;mix-blend-mode:screen}
   @keyframes scan{0%{transform:translateY(0);opacity:0}12%{opacity:.9}48%{transform:translateY(560%);opacity:.9}62%{opacity:0}100%{transform:translateY(560%);opacity:0}}
-  .hcard .meta{padding:16px 18px 18px}
+  .hcard .meta{padding:12px 16px 14px}
   .hcard .no{font:600 10.5px var(--mono);letter-spacing:.16em;color:var(--ca)}
-  .hcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.7vw,38px);line-height:1;margin:6px 0 6px;color:var(--ink)}
-  .hcard p{font-size:12.5px;line-height:1.5;color:var(--ink-soft);margin:0;max-width:42ch}
-  .hcard .go{position:absolute;right:16px;bottom:16px;width:40px;height:40px;border-radius:50%;background:var(--ca);color:#0a0c12;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;transition:transform .25s}
+  .hcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.1vw,29px);line-height:1;margin:0;color:var(--ink)}
+  .hcard .go{position:absolute;right:14px;bottom:13px;width:34px;height:34px;border-radius:50%;background:var(--ca);color:#0a0c12;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:transform .25s}
   .hcard:hover .go{transform:translateX(4px)}
   .mini-shift,.mini-stack{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
   .mini-stack svg{width:58%;margin:-15px 0}
 
   /* ===== MATRIX (4 modules × time) ===== */
-  #v-matrix .body{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(6px,1.4vh,16px);overflow:hidden}
+  #v-matrix .body{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(28px,5vh,56px);overflow:hidden}
   .mtx{flex:1;min-height:0;display:grid;grid-template-columns:172px 1fr 1fr 1fr;overflow:auto;scrollbar-width:thin}
   .mtx::-webkit-scrollbar{height:7px;width:7px}.mtx::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
   .mhead{position:sticky;top:0;z-index:3;background:linear-gradient(180deg,var(--bg) 72%,transparent);padding:0 16px 12px;font:600 12px var(--mono);letter-spacing:.14em}
@@ -179,20 +178,17 @@
 <!-- HOME -->
 <section class="view" id="v-home">
   <div class="hhead">
-    <div class="kick">Past · Present · Future</div>
-    <h1>Future of the<br>Data Center<span class="sub">the machine behind the intelligence.</span></h1>
+    <h1>Future of the<br>Data Center</h1>
   </div>
   <div class="cards">
     <div class="hcard" data-nav="matrix" style="--ca:var(--today);--sd:3.4s">
       <div class="pic"><div class="mini-shift" id="miniShift"></div></div>
-      <div class="meta"><div class="no">MOVEMENT 01 · THE SHIFT</div><h3>Across time</h3>
-        <p>Power, compute, the data center, applications — each rewritten from pre-AI to the AGI era.</p></div>
+      <div class="meta"><h3>The Shift</h3></div>
       <div class="go">→</div>
     </div>
     <div class="hcard" data-nav="stack" style="--ca:var(--accent);--sd:4.2s">
       <div class="pic"><div class="mini-stack" id="miniStack"></div></div>
-      <div class="meta"><div class="no">MOVEMENT 02 · THE STACK</div><h3>The four layers</h3>
-        <p>Enter the stack bottom-to-top. Open any layer, then any topic, and go deep.</p></div>
+      <div class="meta"><h3>The Stack</h3></div>
       <div class="go">→</div>
     </div>
   </div>
@@ -200,17 +196,15 @@
 
 <!-- MATRIX -->
 <section class="view" id="v-matrix">
-  <div class="vtitle"><div class="eyebrow">THE SHIFT · PRE-AI → TODAY → FUTURE</div><h1>Four layers, rewritten.</h1></div>
   <div class="body"><div class="mtx" id="mtx"></div></div>
 </section>
 
 <!-- STACK -->
 <section class="view" id="v-stack">
-  <div class="vtitle"><div class="eyebrow" id="stackEyebrow">THE STACK · BOTTOM TO TOP</div><h1>The Stack</h1></div>
   <div class="body"><div class="stack" id="stack"></div><div class="panel" id="panel"></div></div>
 </section>
 
-<div class="ver">v6 · icons + framer nav</div>
+<div class="ver">v7 · pixel bg</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -281,8 +275,8 @@ const MODS=[
 function buildMatrix(){
   const m=document.getElementById('mtx');let h='';
   h+='<div class="mhead"></div><div class="mhead pre"><span class="k">PRE-AI</span></div><div class="mhead today"><span class="k">TODAY</span></div><div class="mhead future"><span class="k">FUTURE</span></div>';
-  MODS.forEach(mo=>{
-    h+='<div class="rlabel" data-go="'+mo.id+'" style="--mc:'+mo.c+'"><span style="width:9px;height:9px;background:'+mo.c+';transform:rotate(45deg);border-radius:1px;flex:none"></span><div><div class="mn">'+mo.n+'</div><div class="ms">'+mo.s+'</div></div></div>';
+  [...MODS].reverse().forEach(mo=>{
+    h+='<div class="rlabel" data-go="'+mo.id+'" style="--mc:'+mo.c+'"><span style="width:9px;height:9px;background:'+mo.c+';transform:rotate(45deg);border-radius:1px;flex:none"></span><div class="mn">'+mo.n+'</div></div>';
     ['pre','today','future'].forEach(k=>{const c=mo[k];h+='<div class="cell '+k+'"><div class="ico">'+c.i+'</div><div class="ct">'+c.t+'</div><div class="cd">'+c.d+'</div></div>';});
   });
   m.innerHTML=h;
@@ -325,12 +319,12 @@ const SLAB='<svg class="slab" viewBox="0 0 300 124" preserveAspectRatio="xMidYMi
   const cols=['#ab7cf1','#6f8dff','#46c6dd','#e0a355'];
   document.getElementById('miniStack').innerHTML=cols.map(c=>'<svg viewBox="0 0 300 124" style="filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))"><polygon points="12,52 150,92 150,120 12,80" fill="'+rgba(c,.55)+'"/><polygon points="288,52 150,92 150,120 288,80" fill="'+rgba(c,.38)+'"/><polygon points="12,52 150,12 288,52 150,92" fill="'+c+'" stroke="rgba(255,255,255,.2)"/></svg>').join('');
   // mini shift: 4 module rows, each an icon + 3 growing era blocks (previews the 4-part matrix)
-  const mods=[['#e0a355','PWR','reactor'],['#46c6dd','CMP','chip'],['#6f8dff','DC','buildings'],['#ab7cf1','APP','globe']];
-  let h='<div style="display:grid;grid-template-columns:24px 30px 1fr 1fr 1fr;gap:8px 8px;width:84%;align-items:center;padding:6px 0">';
-  h+='<div></div><div></div><div style="font:600 7px var(--mono);color:var(--pre);letter-spacing:.1em">PRE</div><div style="font:600 7px var(--mono);color:var(--today);letter-spacing:.1em">NOW</div><div style="font:600 7px var(--mono);color:var(--future);letter-spacing:.1em">NEXT</div>';
-  mods.forEach(mo=>{h+='<span style="color:'+mo[0]+';display:flex;transform:scale(.82);transform-origin:left">'+G[mo[2]](mo[0])+'</span>';
-    h+='<div style="font:600 8px var(--mono);color:'+mo[0]+'">'+mo[1]+'</div>';
-    [.34,.62,1].forEach(op=>h+='<div style="height:11px;border-radius:3px;background:'+mo[0]+';opacity:'+op+'"></div>');});
+  const mods=[['#ab7cf1','APP','globe'],['#6f8dff','DC','buildings'],['#46c6dd','CMP','chip'],['#e0a355','PWR','reactor']];
+  let h='<div style="display:grid;grid-template-columns:17px 26px 1fr 1fr 1fr;gap:5px 7px;width:82%;align-items:center;padding:2px 0">';
+  h+='<div></div><div></div><div style="font:600 6.5px var(--mono);color:var(--pre);letter-spacing:.1em">PRE</div><div style="font:600 6.5px var(--mono);color:var(--today);letter-spacing:.1em">NOW</div><div style="font:600 6.5px var(--mono);color:var(--future);letter-spacing:.1em">NEXT</div>';
+  mods.forEach(mo=>{h+='<span style="color:'+mo[0]+';display:flex;transform:scale(.62);transform-origin:left center">'+G[mo[2]](mo[0])+'</span>';
+    h+='<div style="font:600 7.5px var(--mono);color:'+mo[0]+'">'+mo[1]+'</div>';
+    [.34,.62,1].forEach(op=>h+='<div style="height:8px;border-radius:2px;background:'+mo[0]+';opacity:'+op+'"></div>');});
   h+='</div>';
   document.getElementById('miniShift').innerHTML=h;
 })();
@@ -346,16 +340,16 @@ const stackEl=document.getElementById('stack');
 const panel=document.getElementById('panel');
 function themeFor(L){const a=L?L.accent:'#6f8dff';document.documentElement.style.setProperty('--accent',a);document.documentElement.style.setProperty('--glow',rgba(a,.42));document.documentElement.style.setProperty('--glowbg',rgba(a,.11));}
 function markLayer(id){document.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',r.dataset.id===id));}
-function renderLayer(L){markLayer(L.id);themeFor(L);document.getElementById('stackEyebrow').textContent='THE STACK · '+L.name;
-  let boxes=L.blank?'<div class="blankbox"><div class="t">Module in progress</div><p>Language · physical AI · scientific compute — each pulls a different stack beneath it. Coming next.</p></div>'
+function renderLayer(L){markLayer(L.id);themeFor(L);
+  let boxes=L.blank?'<div class="blankbox"><div class="t">In progress</div></div>'
     :L.subs.map((s,i)=>'<div class="box" data-i="'+i+'" style="animation-delay:'+(i*40)+'ms"><div class="bhead"><span class="bico">'+topicIcon(L.id,i,L.accent)+'</span><span class="bi">'+String(i+1).padStart(2,'0')+'</span></div><div class="bn">'+s.n+'</div><div class="bd">'+s.d+'</div></div>').join('');
-  panel.innerHTML='<div class="peyebrow">'+L.eyebrow+'</div><div class="ptitle">'+L.title+'</div><div class="pmeta"><span class="c">'+(L.blank?'IN PROGRESS':L.subs.length+' TOPICS — CLICK TO GO DEEP')+'</span><span class="bar-l"></span></div><div class="boxes">'+boxes+'</div>';
+  panel.innerHTML='<div class="ptitle">'+L.title+'</div><div class="pmeta"><span class="bar-l"></span></div><div class="boxes">'+boxes+'</div>';
   panel.querySelectorAll('.box[data-i]').forEach(b=>b.addEventListener('click',()=>go('stack',L.id,+b.dataset.i)));}
-function renderTopic(L,i){markLayer(L.id);themeFor(L);document.getElementById('stackEyebrow').textContent='THE STACK · '+L.name+' · 0'+(i+1);
+function renderTopic(L,i){markLayer(L.id);themeFor(L);
   const s=L.subs[i];const pills=L.subs.map((x,j)=>'<div class="pill'+(j===i?' on':'')+'" data-i="'+j+'">'+String(j+1).padStart(2,'0')+'&nbsp;'+x.n+'</div>').join('');
-  const eras=s.era?('<div class="dsec">ACROSS TIME</div><div class="eras"><div class="erac pre"><div class="et">PRE-AI</div><div class="ed">'+s.era[0]+'</div></div><div class="erac today"><div class="et">TODAY</div><div class="ed">'+s.era[1]+'</div></div><div class="erac future"><div class="et">FUTURE</div><div class="ed">'+s.era[2]+'</div></div></div>'):'';
-  const pts=s.points?('<div class="dsec">WHAT MATTERS</div><ul class="dpoints">'+s.points.map(p=>'<li>'+p+'</li>').join('')+'</ul>'):'';
-  panel.innerHTML='<div class="dtop"><div class="back" id="backBtn">‹ '+L.title+'</div><div class="pills">'+pills+'</div></div><div class="peyebrow">'+L.name+' · TOPIC 0'+(i+1)+'</div><div class="dhh"><span class="bico big">'+topicIcon(L.id,i,L.accent)+'</span><div class="ptitle" style="margin:0">'+s.n+'</div></div><div class="dbody"><p class="dlead">'+s.lead+'</p>'+eras+pts+'</div>';
+  const eras=s.era?('<div class="eras"><div class="erac pre"><div class="et">PRE-AI</div><div class="ed">'+s.era[0]+'</div></div><div class="erac today"><div class="et">TODAY</div><div class="ed">'+s.era[1]+'</div></div><div class="erac future"><div class="et">FUTURE</div><div class="ed">'+s.era[2]+'</div></div></div>'):'';
+  const pts=s.points?('<ul class="dpoints">'+s.points.map(p=>'<li>'+p+'</li>').join('')+'</ul>'):'';
+  panel.innerHTML='<div class="dtop"><div class="back" id="backBtn">‹ '+L.title+'</div><div class="pills">'+pills+'</div></div><div class="dhh"><span class="bico big">'+topicIcon(L.id,i,L.accent)+'</span><div class="ptitle" style="margin:0">'+s.n+'</div></div><div class="dbody"><p class="dlead">'+s.lead+'</p>'+eras+pts+'</div>';
   panel.querySelector('#backBtn').addEventListener('click',()=>go('stack',L.id));
   panel.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>go('stack',L.id,+p.dataset.i)));}
 
@@ -363,7 +357,7 @@ function renderTopic(L,i){markLayer(L.id);themeFor(L);document.getElementById('s
 let cur={view:null};
 function moveSlider(){const a=document.querySelector('.topnav a.on'),s=document.getElementById('navSlider');if(!a||!s)return;s.style.width=a.offsetWidth+'px';s.style.transform='translateX('+a.offsetLeft+'px)';}
 addEventListener('resize',moveSlider);addEventListener('load',moveSlider);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveSlider);setTimeout(moveSlider,350);
-function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='matrix')themeFor(null);document.getElementById('field').style.opacity=(v==='home')?'1':'.28';}
+function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='matrix')themeFor(null);document.getElementById('field').style.opacity=(v==='home')?'1':'.42';}
 function go(view,layer,topic){const same=cur.view===view&&cur.layer===layer&&cur.topic===topic;if(same)return;setView(view);
   if(view==='matrix')buildMatrix();
   if(view==='stack'){const L=LAYERS.find(x=>x.id===layer)||LAYERS[0];const wasStack=cur.view==='stack';const doRender=()=>{(topic!=null&&!L.blank)?renderTopic(L,topic):renderLayer(L);};
@@ -378,90 +372,32 @@ addEventListener('hashchange',fromHash);fromHash();
 addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS].reverse().map(l=>l.id);const i=vis.indexOf(cur.layer);
   if(e.key==='ArrowDown'&&i<vis.length-1)go('stack',vis[i+1]);if(e.key==='ArrowUp'&&i>0)go('stack',vis[i-1]);if(e.key==='Escape'&&cur.topic!=null)go('stack',cur.layer);});
 
-/* ============ FIELD: wireframe branches + particles-to-pointer + scan ============ */
+/* ============ FIELD: animated pixel-video background ============ */
 (function(){
   const cv=document.getElementById('field'),x=cv.getContext('2d');
-  let W,H,DPR=Math.min(devicePixelRatio||1,2);
-  const ptr={x:-999,y:-999,on:false};
-  let nodes=[],parts=[];
-  function grow(px,py,ang,len,depth,parent){
-    const idx=nodes.length;nodes.push({bx:px,by:py,parent,depth,ph:Math.random()*6.28});
-    if(depth<=0)return;
-    const br=depth>4?2:(Math.random()<.62?2:1);
-    for(let i=0;i<br;i++){const a=ang+(i-(br-1)/2)*0.55+(Math.random()-.5)*0.5;const l=len*(0.70+Math.random()*0.12);
-      grow(px+Math.cos(a)*l,py+Math.sin(a)*l,a,l,depth-1,idx);}
-  }
-  function build(){
-    nodes=[];grow(W*0.5,H*1.02,-Math.PI/2,H*0.155,6,-1);
-    // second, smaller tree offset for richness
-    grow(W*0.5,H*1.02,-Math.PI/2+0.05,H*0.10,4,-1);
-    parts=[];const n=Math.min(120,Math.round(W*H/16000));
-    for(let i=0;i<n;i++)parts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.12,vy:(Math.random()-.5)*.12,r:Math.random()*1.8+.5,o:Math.random()*.4+.15});
-  }
-  function rs(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);build();}
+  let W,H,DPR=Math.min(devicePixelRatio||1,2),CELL=22,COLS,ROWS;
+  const ptr={x:-9999,y:-9999};
+  function rs(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);COLS=Math.ceil(W/CELL)+1;ROWS=Math.ceil(H/CELL)+1;}
   addEventListener('resize',rs);rs();
-  addEventListener('mousemove',e=>{ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true;});
-  addEventListener('mouseout',()=>{ptr.on=false;ptr.x=ptr.y=-999;});
+  addEventListener('mousemove',e=>{ptr.x=e.clientX;ptr.y=e.clientY;});
+  addEventListener('mouseout',()=>{ptr.x=ptr.y=-9999;});
   function loop(t){
     x.clearRect(0,0,W,H);
     const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6f8dff';
-    const cr=parseInt(acc.slice(1),16),CR=cr>>16&255,CG=cr>>8&255,CB=cr&255;
-    const scan=((t*0.00006)%1.25)-0.125; // sweeps 0..1 with pause
-    const scanX=scan*W;
-    // swayed positions
-    const sway=i=>{const nd=nodes[i];const amp=(H-nd.by)/H*18+2;return[nd.bx+Math.sin(t*0.0005+nd.ph)*amp*0.5,nd.by+Math.cos(t*0.0004+nd.ph)*amp*0.18];};
-    // faint globe horizon behind the tree
-    x.save();x.strokeStyle='rgba('+CR+','+CG+','+CB+',.055)';x.lineWidth=1;
-    const gx=W*0.5,gy=H*1.16,gr=H*0.72;
-    x.beginPath();x.arc(gx,gy,gr,Math.PI,2*Math.PI);x.stroke();
-    for(let k=1;k<4;k++){x.beginPath();x.ellipse(gx,gy,gr*(k/4),gr,0,Math.PI,2*Math.PI);x.stroke();}
-    x.beginPath();x.ellipse(gx,gy,gr,gr*0.5,0,Math.PI,2*Math.PI);x.stroke();
-    x.restore();
-    // branches
-    x.lineCap='round';const tips=[];
-    for(let i=0;i<nodes.length;i++){const nd=nodes[i];if(nd.parent<0)continue;
-      const a=sway(i),b=sway(nd.parent);
-      const near=Math.abs(a[0]-scanX)<70?1:0;
-      const base=0.12+(6-nd.depth)*0.022;
-      x.strokeStyle='rgba('+CR+','+CG+','+CB+','+(base+near*0.30)+')';
-      x.lineWidth=Math.max(.7,nd.depth*0.7);
-      x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();
-      if(nd.depth<=1)tips.push([a[0],a[1],near]);
+    const n=parseInt(acc.slice(1),16),R=n>>16&255,Gc=n>>8&255,B=n&255,tt=t*0.001,s=CELL-3;
+    const cx=COLS*0.5,cy=ROWS*0.62;
+    for(let j=0;j<ROWS;j++){const py=j*CELL;
+      for(let i=0;i<COLS;i++){const px=i*CELL;
+        let v=Math.sin(i*0.34+tt*1.05)+Math.sin(j*0.30-tt*0.9)+Math.sin((i+j)*0.20+tt*0.65)+Math.sin(Math.hypot(i-cx,j-cy)*0.42-tt*1.25);
+        v=(v+4)/8;
+        if(ptr.x>-9000){const d=Math.hypot(px-ptr.x,py-ptr.y),r=1-Math.min(1,d/230);if(r>0)v+=r*0.7*(0.55+0.45*Math.sin(d*0.05-tt*4));}
+        v=v<0?0:v>1?1:v;
+        const a=v*v*v*0.55;
+        if(a<0.012)continue;
+        x.fillStyle='rgba('+R+','+Gc+','+B+','+a.toFixed(3)+')';
+        x.fillRect(px,py,s,s);
+      }
     }
-    // network arcs between nearby tips
-    for(let i=0;i<tips.length;i++)for(let j=i+1;j<tips.length;j++){const p=tips[i],q=tips[j],d=Math.hypot(p[0]-q[0],p[1]-q[1]);
-      if(d<W*0.15){x.strokeStyle='rgba('+CR+','+CG+','+CB+','+((1-d/(W*0.15))*0.09)+')';x.lineWidth=.6;x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(q[0],q[1]);x.stroke();}}
-    // glowing nodes at branch tips
-    x.globalCompositeOperation='lighter';
-    for(const tp of tips){const rr=2.3+tp[2]*2.4,g=x.createRadialGradient(tp[0],tp[1],0,tp[0],tp[1],rr*3);
-      g.addColorStop(0,'rgba('+CR+','+CG+','+CB+','+(0.5+tp[2]*0.4)+')');g.addColorStop(1,'rgba('+CR+','+CG+','+CB+',0)');
-      x.fillStyle=g;x.beginPath();x.arc(tp[0],tp[1],rr*3,0,6.28);x.fill();}
-    x.globalCompositeOperation='source-over';
-    // particle links (constellation)
-    for(let i=0;i<parts.length;i++){const p=parts[i];
-      for(let j=i+1;j<parts.length;j++){const q=parts[j];const dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy;
-        if(d2<11000){const a=(1-d2/11000)*0.12;x.strokeStyle='rgba('+CR+','+CG+','+CB+','+a+')';x.lineWidth=.5;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke();}}}
-    // particles + pointer attraction
-    x.globalCompositeOperation='lighter';
-    for(const p of parts){
-      if(ptr.on){const dx=ptr.x-p.x,dy=ptr.y-p.y,d=Math.hypot(dx,dy);if(d<190){const f=(1-d/190)*0.35;p.vx+=dx/d*f;p.vy+=dy/d*f;}}
-      p.vx*=0.94;p.vy*=0.94;p.x+=p.vx+Math.sin(t*0.0003+p.r)*0.06;p.y+=p.vy-0.05;
-      if(p.y<-8)p.y=H+8;if(p.y>H+8)p.y=-8;if(p.x<-8)p.x=W+8;if(p.x>W+8)p.x=-8;
-      const near=Math.abs(p.x-scanX)<50?1:0;const ptrGlow=ptr.on?Math.max(0,1-Math.hypot(ptr.x-p.x,ptr.y-p.y)/190):0;
-      const o=Math.min(1,p.o+near*0.5+ptrGlow*0.6),r=p.r*(1+near*0.8+ptrGlow*1.1);
-      const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r*4);
-      g.addColorStop(0,'rgba('+CR+','+CG+','+CB+','+o+')');g.addColorStop(1,'rgba('+CR+','+CG+','+CB+',0)');
-      x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r*4,0,6.28);x.fill();
-    }
-    x.globalCompositeOperation='source-over';
-    // scan bar
-    if(scan>=0&&scan<=1){const grad=x.createLinearGradient(scanX-60,0,scanX+8,0);
-      grad.addColorStop(0,'rgba('+CR+','+CG+','+CB+',0)');grad.addColorStop(1,'rgba('+CR+','+CG+','+CB+',.10)');
-      x.fillStyle=grad;x.fillRect(scanX-60,0,68,H);
-      x.strokeStyle='rgba('+CR+','+CG+','+CB+',.5)';x.lineWidth=1;x.beginPath();x.moveTo(scanX,0);x.lineTo(scanX,H);x.stroke();}
-    // pointer node
-    if(ptr.on){x.fillStyle='rgba('+CR+','+CG+','+CB+',.6)';x.beginPath();x.arc(ptr.x,ptr.y,2.5,0,6.28);x.fill();
-      x.strokeStyle='rgba('+CR+','+CG+','+CB+',.25)';x.beginPath();x.arc(ptr.x,ptr.y,16,0,6.28);x.stroke();}
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
