@@ -276,7 +276,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v30 · 101 preview</div>
+<div class="ver">v31 · cloud·today·agi</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -470,7 +470,7 @@ const MODS=[
   today:{i:reveal([chat(C_TOD),chat(C_TOD),chat(C_TOD)]),m:'Chat',t:'training and inference'},
   future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms, and physical AI'}},
 ];
-const ERAS=[{k:'pre',n:'INTERNET',y:'2023',t:'T−1'},{k:'today',n:'AI',y:'2026',t:'T0'},{k:'future',n:'AGI',y:'2031',t:'T+1'}];
+const ERAS=[{k:'pre',n:'CLOUD',y:'2023',t:'T−1'},{k:'today',n:'TODAY',y:'2026',t:'T0'},{k:'future',n:'AGI',y:'2031',t:'T+1'}];
 function buildMatrix(){
   const m=document.getElementById('mtx');let h='';
   h+='<div class="mhead axis"><span class="ax">STACK <b>Y</b></span><span class="ax2">across time <b>X</b> →</span></div>';
@@ -705,9 +705,9 @@ VIZ.path100gw=function(){
   const Y=v=>yb-(v/110)*260;
   [0,25,50,75,100].forEach(v=>{s+=T(x0-12,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.16});});
   s+=T(x0-12,44,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
-  const seg=[{n:'PAST',c:V.grey,x:x0,w:250,v:5,note:'grid only · +3% if at all'},
-             {n:'NOW',c:V.amber,x:x0+250,w:290,v:50,note:'grid fast + behind-the-meter'},
-             {n:'FUTURE',c:V.cyan,x:x0+540,w:320,v:100,note:'nuclear + orbital'}];
+  const seg=[{n:'CLOUD',c:V.grey,x:x0,w:250,v:5,note:'grid only · +3% if at all'},
+             {n:'TODAY',c:V.amber,x:x0+250,w:290,v:50,note:'grid fast + behind-the-meter'},
+             {n:'AGI',c:V.cyan,x:x0+540,w:320,v:100,note:'nuclear + orbital'}];
   s+='<path d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.amber+'" opacity=".10"/>';
   s+='<path class="draw" pathLength="1" d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+'" fill="none" stroke="'+V.amber+'" stroke-width="3"/>';
   seg.forEach((g,i)=>{
@@ -1011,14 +1011,14 @@ const SLAB='<svg class="slab" viewBox="0 0 300 124" preserveAspectRatio="xMidYMi
 
   /* the 101, as its own grid: layers down, eras across, with the through-line */
   const RW=[['#ab7cf1','globe'],['#6f8dff','buildings'],['#46c6dd','chip'],['#e0a355','reactor']];
-  const ERA=[['PRE','#8b93a6',.30],['NOW','#e0a355',.62],['NEXT','#57c7dd',1]];
+  const ERA=[['CLOUD','#8b93a6',.30],['TODAY','#e0a355',.62],['AGI','#57c7dd',1]];
   let m='<svg viewBox="0 0 300 116" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
-  ERA.forEach(function(e,k){m+='<text x="'+(78+k*74)+'" y="12" fill="'+e[1]+'" font-family="IBM Plex Mono,monospace" font-size="8.5" font-weight="600" letter-spacing="1">'+e[0]+'</text>';});
+  ERA.forEach(function(e,k){m+='<text x="'+(70+k*76)+'" y="12" fill="'+e[1]+'" font-family="IBM Plex Mono,monospace" font-size="8.5" font-weight="600" letter-spacing="1">'+e[0]+'</text>';});
   RW.forEach(function(r,i){
     const y=26+i*22;
     m+='<g transform="translate(6,'+(y-5)+') scale(0.60)" color="'+r[0]+'">'+G[r[1]](r[0])+'</g>';
     ERA.forEach(function(e,k){
-      m+='<rect x="'+(78+k*74)+'" y="'+y+'" width="64" height="13" rx="3.5" fill="'+r[0]+'" opacity="'+e[2]+'"/>';});
+      m+='<rect x="'+(70+k*76)+'" y="'+y+'" width="66" height="13" rx="3.5" fill="'+r[0]+'" opacity="'+e[2]+'"/>';});
   });
   m+='</svg>';
   document.getElementById('miniShift').innerHTML=m;
