@@ -274,7 +274,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v22 · software layer</div>
+<div class="ver">v23 · players matrix</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1113,23 +1113,40 @@ VIZ.footprint=function(){
 /* — DC 2. the players — */
 VIZ.players=function(){
   let s='';
-  const LAY=[['Inference & apps',0],['Orchestration',1],['Servers & GPUs',2],['Shell & cooling',3],['Land & power',4]];
-  const P=[{n:'POWERED SHELL',c:V.amber,x:300,own:[0,0,0,1,1],sub:'land, shell, power'},
-           {n:'BARE METAL',c:V.blue,x:530,own:[0,0,1,0,0],sub:'GPUs as a utility'},
-           {n:'AI CLOUD',c:V.pur,x:760,own:[1,1,0,0,0],sub:'software margin'}];
-  LAY.forEach((l,i)=>{const y=64+i*62;
-    s+=T(272,y+34,l[0],{a:'end',s:12.5,w:600,f:V.dim});
-    s+=LN(292,y+56,952,y+56,V.dim,{sw:1,op:.14});});
-  P.forEach(pl=>{
-    LAY.forEach((l,i)=>{const y=64+i*62,full=pl.own[i];
-      s+=B(pl.x,y,190,48,pl.c,{r:8,fill:pl.c+(full?'66':'0f'),sw:full?1.4:.9,op:full?1:.42});
-      if(full)s+=T(pl.x+95,y+30,l[0],{a:'middle',s:11.5,w:600,m:1});});
-    s+=B(pl.x,392,190,54,pl.c,{r:8,fill:pl.c+'1f'});
-    s+=T(pl.x+95,418,pl.n,{a:'middle',s:12.5,w:700,f:pl.c,ls:'.06em',m:1});
-    s+=T(pl.x+95,436,pl.sub,{a:'middle',s:10,f:V.dim});});
-  s+=T(20,30,'Three businesses, one word',{s:14,w:700,f:V.ink});
-  s+=T(20,50,'full colour = owned  ·  faint = rented from the layer below',{s:11,f:V.dim,m:1});
-  return SV(s);
+  const X0=150,CW=132,GAP=8,col=i=>X0+i*(CW+GAP);
+  const ROWS=[{n:'AI CLOUD',y:118,c:V.pur},{n:'BARE METAL',y:196,c:V.blue},{n:'POWERED SHELL',y:274,c:V.amber}];
+  const C=[
+   {t:'Colo & DC',t2:'platforms',era:0,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
+   {t:'Hyperscalers',t2:'',era:0,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
+   {t:'PowerShells',t2:'miners · mega projects',era:1,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene','SB Energy']},
+   {t:'Neoclouds',t2:'',era:1,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
+   {t:'Inference clouds',t2:'',era:1,f:[2,0,0],names:['Fireworks','Together','Baseten']},
+   {t:'AI labs',t2:'incoming',era:1,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
+  // era bands
+  const band=(i0,i1,l,c)=>{const x=col(i0),w=col(i1)+CW-x;
+    return B(x,44,w,26,c,{r:6,fill:c+'26',sw:0})+T(x+w/2,62,l,{a:'middle',s:11,w:700,ls:'.12em',m:1,f:c});};
+  s+=band(0,1,'INTERNET ERA',V.grey)+band(2,5,'AI ERA',V.amber);
+  // row labels + grid
+  ROWS.forEach(r=>{s+=T(132,r.y+40,r.n,{a:'end',s:12.5,w:700,f:r.c});
+    s+=LN(X0-6,r.y+66,977,r.y+66,V.dim,{sw:1,op:.14});});
+  // cells
+  C.forEach((c,i)=>{const x=col(i);
+    s+=T(x+CW/2,92,c.t,{a:'middle',s:12.5,w:600});
+    if(c.t2)s+=T(x+CW/2,108,c.t2,{a:'middle',s:9,f:V.dim,m:1});
+    ROWS.forEach((r,k)=>{const lv=c.f[k];
+      if(lv===2)s+=B(x,r.y+8,CW,52,r.c,{r:8,fill:r.c+'99',sw:1.4});
+      else if(lv===1)s+=B(x,r.y+8,CW,52,r.c,{r:8,fill:r.c+'26',sw:1,d:1})+
+        '<rect x="'+x+'" y="'+(r.y+8)+'" width="'+CW+'" height="52" rx="8" fill="none" stroke="'+r.c+'" stroke-width="1" stroke-dasharray="5 4" opacity=".75"/>';
+      else s+=B(x,r.y+8,CW,52,V.dim,{r:8,fill:'#ffffff05',sw:.7,op:.35});});
+    // names under the column
+    s+=LN(x,358,x+CW,358,V.dim,{sw:1,op:.25});
+    c.names.forEach((n,j)=>s+=T(x+CW/2,378+j*19,n,{a:'middle',s:10,f:'#aab1c2',m:1}));});
+  // legend
+  const key=(x,fill,dash,l)=>{let o=B(x,474,26,16,V.ink,{r:4,fill:fill,sw:dash?1:1.2});
+    if(dash)o+='<rect x="'+x+'" y="474" width="26" height="16" rx="4" fill="none" stroke="'+V.ink+'" stroke-width="1" stroke-dasharray="4 3"/>';
+    return o+T(x+34,486,l,{s:11,f:V.dim});};
+  s+=key(150,'#e9ebf299',0,'owns it')+key(300,'#e9ebf226',1,'partial / building')+key(500,'#ffffff05',0,'not in it');
+  return SVh(s,510);
 };
 
 /* — DC 3. the economics — */
