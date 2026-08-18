@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#090a0f; --bg2:#0c0e15;
@@ -16,8 +16,8 @@
     --accent:#6f8dff; --glow:rgba(111,141,255,.42);
     --pre:#8b93a6; --today:#e0a355; --future:#57c7dd;
     --pwr:#e0a355; --cmp:#46c6dd; --dc:#6f8dff; --app:#ab7cf1;
-    --serif:'Archivo',system-ui,sans-serif;
-    --sans:'Archivo',system-ui,sans-serif;
+    --serif:'Geist',system-ui,sans-serif;
+    --sans:'Geist',system-ui,sans-serif;
     --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   }
   *{box-sizing:border-box}
@@ -204,7 +204,7 @@
   <div class="body"><div class="stack" id="stack"></div><div class="panel" id="panel"></div></div>
 </section>
 
-<div class="ver">v8 · archivo + color pixels</div>
+<div class="ver">v9 · geist + led pixels</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -373,35 +373,34 @@ addEventListener('hashchange',fromHash);fromHash();
 addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS].reverse().map(l=>l.id);const i=vis.indexOf(cur.layer);
   if(e.key==='ArrowDown'&&i<vis.length-1)go('stack',vis[i+1]);if(e.key==='ArrowUp'&&i>0)go('stack',vis[i-1]);if(e.key==='Escape'&&cur.topic!=null)go('stack',cur.layer);});
 
-/* ============ FIELD: animated pixel-video background ============ */
+/* ============ FIELD: colour metaballs sampled through an LED pixel grid ============ */
 (function(){
   const cv=document.getElementById('field'),x=cv.getContext('2d');
-  let W,H,DPR=Math.min(devicePixelRatio||1,2),CELL=22,COLS,ROWS;
+  let W,H,DPR=Math.min(devicePixelRatio||1,2),CELL=20,COLS,ROWS;
   const ptr={x:-9999,y:-9999};
   function rs(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);COLS=Math.ceil(W/CELL)+1;ROWS=Math.ceil(H/CELL)+1;}
   addEventListener('resize',rs);rs();
   addEventListener('mousemove',e=>{ptr.x=e.clientX;ptr.y=e.clientY;});
   addEventListener('mouseout',()=>{ptr.x=ptr.y=-9999;});
-  const PAL=[[74,108,247],[150,102,236],[70,198,221],[224,138,168]];
-  function palcol(c){c=c<0?0:c>0.9999?0.9999:c;c*=(PAL.length-1);const i=c|0,f=c-i,a=PAL[i],b=PAL[i+1];return[(a[0]+(b[0]-a[0])*f)|0,(a[1]+(b[1]-a[1])*f)|0,(a[2]+(b[2]-a[2])*f)|0];}
+  const PAL=[[74,108,247],[150,102,236],[70,198,221],[224,138,168],[96,132,255],[120,90,230]];
+  const L=[];for(let k=0;k<6;k++)L.push({sx:0.09+Math.random()*0.13,sy:0.08+Math.random()*0.13,ax:0.32+Math.random()*0.14,ay:0.34+Math.random()*0.14,px:Math.random()*6.28,py:Math.random()*6.28,c:PAL[k%PAL.length]});
   function loop(t){
     x.clearRect(0,0,W,H);
     const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6f8dff';
-    const n=parseInt(acc.slice(1),16),AR=n>>16&255,AG=n>>8&255,AB=n&255,tt=t*0.001,s=CELL-3;
-    const cx=COLS*0.5,cy=ROWS*0.62,col=fieldColorful;
-    for(let j=0;j<ROWS;j++){const py=j*CELL;
-      for(let i=0;i<COLS;i++){const px=i*CELL;
-        let v=Math.sin(i*0.34+tt*1.05)+Math.sin(j*0.30-tt*0.9)+Math.sin((i+j)*0.20+tt*0.65)+Math.sin(Math.hypot(i-cx,j-cy)*0.42-tt*1.25);
-        v=(v+4)/8;
-        if(ptr.x>-9000){const d=Math.hypot(px-ptr.x,py-ptr.y),r=1-Math.min(1,d/230);if(r>0)v+=r*0.7*(0.55+0.45*Math.sin(d*0.05-tt*4));}
-        v=v<0?0:v>1?1:v;
-        const a=v*v*v*0.62;
-        if(a<0.012)continue;
-        let R,Gc,B;
-        if(col){const cc=(Math.sin(i*0.09+tt*0.25)+Math.sin(j*0.075-tt*0.2)+2)/4,pc=palcol(cc);R=pc[0];Gc=pc[1];B=pc[2];}
-        else{R=AR;Gc=AG;B=AB;}
-        x.fillStyle='rgba('+R+','+Gc+','+B+','+a.toFixed(3)+')';
-        x.fillRect(px,py,s,s);
+    const nn=parseInt(acc.slice(1),16),AR=nn>>16&255,AG=nn>>8&255,AB=nn&255,tt=t*0.001,s=CELL-2,colorful=fieldColorful;
+    const scale=Math.pow(Math.min(W,H)*0.2,2);
+    const lp=L.map(l=>[(0.5+l.ax*Math.sin(tt*l.sx+l.px))*W,(0.5+l.ay*Math.sin(tt*l.sy+l.py))*H]);
+    for(let j=0;j<ROWS;j++){const cyp=j*CELL+CELL*0.5;
+      for(let i=0;i<COLS;i++){const cxp=i*CELL+CELL*0.5;
+        let R=0,G=0,B=0,I=0;
+        for(let k=0;k<6;k++){const dx=cxp-lp[k][0],dy=cyp-lp[k][1],w=1/((dx*dx+dy*dy)/scale+1);I+=w;const c=colorful?L[k].c:[AR,AG,AB];R+=w*c[0];G+=w*c[1];B+=w*c[2];}
+        if(ptr.x>-9000){const dx=cxp-ptr.x,dy=cyp-ptr.y,w=2.2/((dx*dx+dy*dy)/(scale*0.28)+1);I+=w;const c=colorful?[190,205,255]:[AR,AG,AB];R+=w*c[0];G+=w*c[1];B+=w*c[2];}
+        R/=I;G/=I;B/=I;
+        let inten=I/1.5;inten=inten<0?0:inten>1?1:inten;
+        const a=Math.pow(inten,1.35)*0.6;
+        if(a<0.014)continue;
+        x.fillStyle='rgba('+(R|0)+','+(G|0)+','+(B|0)+','+a.toFixed(3)+')';
+        x.fillRect(i*CELL,j*CELL,s,s);
       }
     }
     requestAnimationFrame(loop);
