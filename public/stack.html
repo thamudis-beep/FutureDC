@@ -83,7 +83,7 @@
 
   /* ===== MATRIX (4 modules × time) ===== */
   #v-matrix .body{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(8px,1.6vh,18px);overflow:hidden}
-  .mtx{flex:1;min-height:0;display:grid;grid-template-columns:186px 1fr 1fr 1fr;grid-auto-rows:min-content;align-content:center;overflow:hidden;
+  .mtx{flex:1;min-height:0;display:grid;grid-template-columns:208px 1fr 1fr 1fr;grid-auto-rows:min-content;align-content:center;overflow:hidden;
     background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);
     border:1px solid var(--line);border-radius:18px;padding:14px 18px 8px;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
   .mtx::-webkit-scrollbar{height:7px;width:7px}.mtx::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
@@ -102,6 +102,7 @@
   .mhead .yr{display:block;margin-top:4px;font:400 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-dim)}
   .rlabel:hover .mn{color:var(--mc)}
   .rlabel .mn{font:600 12.5px var(--mono);letter-spacing:.04em;color:var(--mc)}
+  .rlabel .rdim{font:400 9.5px var(--sans);color:var(--ink-dim);margin-top:3px;line-height:1.2}
   .rlabel .ms{font:400 9.5px var(--mono);color:var(--ink-dim);margin-top:3px}
   .cell{padding:6px 16px;border-top:1px solid var(--line2);border-left:1px solid var(--line2);display:flex;flex-direction:column;justify-content:center}
   .cell.today{background:rgba(224,163,85,.07)}.cell.future{background:rgba(87,199,221,.075)}
@@ -274,7 +275,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v24 · software rethink</div>
+<div class="ver">v25 · 101 first principles</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -563,38 +564,38 @@ VIZ.build=function(){
 
 /* ============ THE SHIFT — 4 modules × time ============ */
 const MODS=[
- {id:'gen',no:'1A',n:'GENERATION',c:'var(--pwr)',go:'power',
-  pre:{i:reveal([bolt(C_PRE)]),m:'~5 GW/yr',t:'the utility builds it, slowly'},
-  today:{i:reveal([bolt(C_TOD),bolt(C_TOD)]),m:'Gas + solar',t:'nuclear contracted · built behind the meter'},
-  future:{i:reveal([reactor(C_FUT)]),m:'100 GW/yr',t:'firm nuclear — and solar from orbit'}},
- {id:'grid',no:'1B',n:'GRID & FLEX',c:'var(--pwr)',go:'power',
-  pre:{i:reveal([rack(C_PRE,.3)]),m:'Spare',t:'headroom granted on request'},
-  today:{i:reveal([rack(C_TOD,.95)]),m:'4–7 yr',t:'the queue is the constraint, not generation'},
-  future:{i:reveal([rack(C_FUT,.6),blocks(C_FUT,2)]),m:'~100 GW',t:'freed by interruptible load + storage'}},
- {id:'equip',no:'1C',n:'EQUIPMENT',c:'var(--pwr)',go:'power',
-  pre:{i:reveal([chain(C_PRE,['X','S','U','P'],false)]),m:'480 VAC',t:'four conversions, four losses'},
-  today:{i:reveal([chain(C_TOD,['X','S','U','P'],false),drop(C_TOD)]),m:'Liquid',t:'tighter chain, direct to the chip'},
-  future:{i:reveal([sst(C_FUT)]),m:'800 VDC',t:'one SST stage — no electrical room'}},
- {id:'chips',no:'2A',n:'CHIPS',c:'var(--cmp)',go:'compute',
+ {id:'gen',no:'1A',n:'GENERATION',dim:'new power added per year',c:'var(--pwr)',go:'power',
+  pre:{i:reveal([bolt(C_PRE)]),m:'~5 GW',t:'grid only'},
+  today:{i:reveal([bolt(C_TOD),bolt(C_TOD)]),m:'~25 GW',t:'grid + behind the meter'},
+  future:{i:reveal([reactor(C_FUT)]),m:'100 GW',t:'firm nuclear, then orbit'}},
+ {id:'grid',no:'1B',n:'GRID',dim:'wait to connect',c:'var(--pwr)',go:'power',
+  pre:{i:reveal([rack(C_PRE,.3)]),m:'< 1 yr',t:'ask and receive'},
+  today:{i:reveal([rack(C_TOD,.95)]),m:'4–7 yr',t:'the queue is the constraint'},
+  future:{i:reveal([rack(C_FUT,.6),blocks(C_FUT,2)]),m:'< 2 yr',t:'flexible load counts as capacity'}},
+ {id:'equip',no:'1C',n:'EQUIPMENT',dim:'stages from grid to chip',c:'var(--pwr)',go:'power',
+  pre:{i:reveal([chain(C_PRE,['X','S','U','P'],false)]),m:'4 stages',t:'480 VAC, losses compound'},
+  today:{i:reveal([chain(C_TOD,['X','S','U','P'],false),drop(C_TOD)]),m:'4 stages',t:'same chain, liquid cooled'},
+  future:{i:reveal([sst(C_FUT)]),m:'1 stage',t:'800 VDC straight to the rack'}},
+ {id:'chips',no:'2A',n:'CHIPS',dim:'what does the work',c:'var(--cmp)',go:'compute',
   pre:{i:reveal([chips([['C',C_PRE],['C',C_PRE],['C',C_PRE]])]),m:'CPU',t:'one general-purpose part'},
-  today:{i:reveal([chips([['C',C_TOD],['G',C_TOD],['G',C_TOD]])]),m:'GPU',t:'shrink runs out — build upward'},
+  today:{i:reveal([chips([['C',C_TOD],['G',C_TOD],['G',C_TOD]])]),m:'GPU',t:'shrink ends, stack upward'},
   future:{i:reveal([chips([['C',C_FUT],['G',C_FUT],['M',C_FUT],['G',C_FUT]])]),m:'xPU',t:'ratios set by the workload'}},
- {id:'memory',no:'2B',n:'MEMORY',c:'var(--cmp)',go:'compute',
-  pre:{i:reveal([chips([['D',C_PRE],['D',C_PRE]])]),m:'DDR',t:'beside the CPU, capacity is cheap'},
-  today:{i:reveal([chips([['H',C_TOD],['H',C_TOD],['D',C_TOD]])]),m:'150×',t:'compute outran memory — the wall'},
-  future:{i:reveal([chips([['H',C_FUT],['H',C_FUT],['M',C_FUT],['M',C_FUT]])]),m:'CXL',t:'memory everywhere, pooled'}},
- {id:'net',no:'2C',n:'NETWORKING',c:'var(--cmp)',go:'compute',
-  pre:{i:reveal([net(C_PRE,'solid')]),m:'Copper',t:'top-of-rack, one building'},
-  today:{i:reveal([net(C_TOD,'dci')]),m:'Optical',t:'scale-up inside, scale-out across'},
-  future:{i:reveal([net(C_FUT,'mesh')]),m:'Photonic',t:'optics on the package — one fabric'}},
- {id:'dc',no:'3',n:'DATA CENTER',c:'var(--dc)',go:'dc',
-  pre:{i:reveal([buildings(C_PRE)]),m:'20%',t:'infrastructure share of cost'},
-  today:{i:reveal([blocks(C_TOD,3)]),m:'75%',t:'infra share — so it must be financed'},
-  future:{i:reveal([blocks(C_FUT,3),edge(C_FUT)]),m:'$B/GW',t:'project debt · prefab · edge · space'}},
- {id:'work',no:'4',n:'WORKLOADS',c:'var(--app)',go:'apps',
-  pre:{i:reveal([globe(C_PRE),globe(C_PRE),globe(C_PRE)]),m:'Web',t:'pages and nightly batch jobs'},
-  today:{i:reveal([chat(C_TOD),chat(C_TOD),chat(C_TOD)]),m:'Chat',t:'training, then inference at scale'},
-  future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms 24/7 — and physical AI'}},
+ {id:'memory',no:'2B',n:'MEMORY',dim:'memory per accelerator',c:'var(--cmp)',go:'compute',
+  pre:{i:reveal([chips([['D',C_PRE],['D',C_PRE]])]),m:'~16 GB',t:'DDR beside the CPU'},
+  today:{i:reveal([chips([['H',C_TOD],['H',C_TOD],['D',C_TOD]])]),m:'~192 GB',t:'HBM on the package'},
+  future:{i:reveal([chips([['H',C_FUT],['H',C_FUT],['M',C_FUT],['M',C_FUT]])]),m:'TB-class',t:'pooled across the rack'}},
+ {id:'net',no:'2C',n:'NETWORKING',dim:'where the light starts',c:'var(--cmp)',go:'compute',
+  pre:{i:reveal([net(C_PRE,'solid')]),m:'Nowhere',t:'copper, top of rack'},
+  today:{i:reveal([net(C_TOD,'dci')]),m:'Between racks',t:'optical links, electrical switch'},
+  future:{i:reveal([net(C_FUT,'mesh')]),m:'On the package',t:'co-packaged optics'}},
+ {id:'dc',no:'3',n:'DATA CENTER',dim:'infrastructure share of cost',c:'var(--dc)',go:'dc',
+  pre:{i:reveal([buildings(C_PRE)]),m:'20%',t:'IT spend, opex-light'},
+  today:{i:reveal([blocks(C_TOD,3)]),m:'75%',t:'capex dominates'},
+  future:{i:reveal([blocks(C_FUT,3),edge(C_FUT)]),m:'80%+',t:'project-financed'}},
+ {id:'work',no:'4',n:'WORKLOADS',dim:'what runs',c:'var(--app)',go:'apps',
+  pre:{i:reveal([globe(C_PRE),globe(C_PRE),globe(C_PRE)]),m:'Web',t:'pages and batch jobs'},
+  today:{i:reveal([chat(C_TOD),chat(C_TOD),chat(C_TOD)]),m:'Chat',t:'training and inference'},
+  future:{i:reveal([hex(C_FUT),hex(C_FUT),robot(C_FUT)]),m:'Agents',t:'swarms, and physical AI'}},
 ];
 const ERAS=[{k:'pre',n:'INTERNET',y:'2023',t:'T−1'},{k:'today',n:'AI',y:'2026',t:'T0'},{k:'future',n:'AGI',y:'2031',t:'T+1'}];
 function buildMatrix(){
@@ -602,7 +603,7 @@ function buildMatrix(){
   h+='<div class="mhead axis"><span class="ax">STACK <b>Y</b></span><span class="ax2">across time <b>X</b> →</span></div>';
   ERAS.forEach(e=>{h+='<div class="mhead '+e.k+'"><span class="k">'+e.n+'</span><span class="yr">'+e.y+' · '+e.t+'</span></div>';});
   [...MODS].reverse().forEach(mo=>{
-    h+='<div class="rlabel" data-go="'+mo.go+'" style="--mc:'+mo.c+'"><span class="rno">'+mo.no+'</span><div class="mn">'+mo.n+'</div></div>';
+    h+='<div class="rlabel" data-go="'+mo.go+'" style="--mc:'+mo.c+'"><span class="rno">'+mo.no+'</span><div><div class="mn">'+mo.n+'</div><div class="rdim">'+mo.dim+'</div></div></div>';
     ERAS.forEach(e=>{const c=mo[e.k];h+='<div class="cell '+e.k+'"><div class="ico">'+c.i+'</div><div class="cm">'+c.m+'</div><div class="ct">'+c.t+'</div></div>';});
   });
   h+='<div class="thru"><span class="tl">The rack itself</span>'+
@@ -1118,7 +1119,7 @@ VIZ.players=function(){
   const C=[
    {t:'Colo & DC',t2:'platforms',c:V.grey,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
    {t:'Hyperscalers',t2:'',c:V.blue,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
-   {t:'PowerShells',t2:'miners · mega projects',c:V.amber,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene','SB Energy']},
+   {t:'PowerShells',t2:'miners · mega projects',c:V.amber,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene/Crusoe','SB Energy']},
    {t:'Neoclouds',t2:'',c:V.green,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
    {t:'Inference clouds',t2:'',c:V.cyan,f:[2,0,0],names:['Fireworks','Together','Baseten']},
    {t:'AI labs',t2:'incoming',c:V.pur,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
