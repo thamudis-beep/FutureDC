@@ -276,7 +276,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v46 · cards + chart surfaces</div>
+<div class="ver">v47 · three charts recut</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -761,42 +761,6 @@ VIZ.appsci=()=>appStack('Scientific AI','materials, biology, climate — simulat
 
 /* — DC 1. the physical footprint is being rewritten — */
 /* — DC 2. the players — */
-VIZ.players=function(){
-  let s='';
-  const X0=150,CW=132,GAP=8,col=i=>X0+i*(CW+GAP);
-  const ROWS=[{n:'AI CLOUD',y:118},{n:'BARE METAL',y:196},{n:'POWERED SHELL',y:274}];
-  const C=[
-   {t:'Colo & DC',t2:'platforms',c:V.grey,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
-   {t:'Hyperscalers',t2:'',c:V.blue,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
-   {t:'PowerShells',t2:'miners · mega projects',c:V.amber,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene/Crusoe','SB Energy']},
-   {t:'Neoclouds',t2:'',c:V.green,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
-   {t:'Inference clouds',t2:'',c:V.cyan,f:[2,0,0],names:['Fireworks','Together','Baseten']},
-   {t:'AI labs',t2:'incoming',c:V.pur,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
-  // era bands
-  const band=(i0,i1,l,c)=>{const x=col(i0),w=col(i1)+CW-x;
-    return B(x,44,w,26,c,{r:6,fill:c+'26',sw:0})+T(x+w/2,62,l,{a:'middle',s:11,w:700,ls:'.12em',m:1,f:c});};
-  s+=band(0,1,'INTERNET ERA',V.grey)+band(2,5,'AI ERA',V.amber);
-  // row labels + grid
-  ROWS.forEach(r=>{s+=T(132,r.y+40,r.n,{a:'end',s:12.5,w:700,f:'#c3c9d6'});
-    s+=LN(X0-6,r.y+66,977,r.y+66,V.dim,{sw:1,op:.14});});
-  // cells
-  C.forEach((c,i)=>{const x=col(i);
-    s+=T(x+CW/2,92,c.t,{a:'middle',s:12.5,w:700,f:c.c});
-    if(c.t2)s+=T(x+CW/2,108,c.t2,{a:'middle',s:9,f:V.dim,m:1});
-    ROWS.forEach((r,k)=>{const lv=c.f[k];
-      if(lv===2)s+=B(x,r.y+8,CW,52,c.c,{r:8,fill:c.c+'99',sw:1.4});
-      else if(lv===1)s+='<rect x="'+x+'" y="'+(r.y+8)+'" width="'+CW+'" height="52" rx="8" fill="'+c.c+'26" stroke="'+c.c+'" stroke-width="1" stroke-dasharray="5 4" opacity=".85"/>';
-      else s+=B(x,r.y+8,CW,52,V.dim,{r:8,fill:'#ffffff05',sw:.7,op:.35});});
-    // names under the column
-    s+=LN(x,358,x+CW,358,V.dim,{sw:1,op:.25});
-    c.names.forEach((n,j)=>s+=T(x+CW/2,378+j*19,n,{a:'middle',s:10,f:c.c,m:1}));});
-  // legend
-  const key=(x,fill,dash,l)=>{let o=B(x,474,26,16,V.ink,{r:4,fill:fill,sw:dash?1:1.2});
-    if(dash)o+='<rect x="'+x+'" y="474" width="26" height="16" rx="4" fill="none" stroke="'+V.ink+'" stroke-width="1" stroke-dasharray="4 3"/>';
-    return o+T(x+34,486,l,{s:11,f:V.dim});};
-  s+=key(150,'#e9ebf299',0,'owns it')+key(300,'#e9ebf226',1,'partial / building')+key(500,'#ffffff05',0,'not in it');
-  return SVh(s,510);
-};
 
 /* — DC 3. the economics — */
 VIZ.economics=function(){
@@ -885,30 +849,6 @@ VIZ.geodc=function(){
 
 /* ============ STACK DATA ============ */
 /* — 1. the path to 100 GW/yr — */
-VIZ.path100gw=function(){
-  const C=A.power;let s=FTITLE(40,30,'New power added per year, United States');
-  const x0=90,x1=880,yb=352,yt=76;
-  const Y=v=>yb-(v/110)*(yb-yt);
-  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.1});
-  [0,25,50,75,100].forEach(v=>{s+=T(x0-14,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});
-    if(v)s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.13});});
-  s+=T(x0-14,yt-14,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
-  const P='M'+x0+' '+Y(5)+' L'+(x0+230)+' '+Y(6)
-    +' C'+(x0+320)+' '+Y(20)+' '+(x0+410)+' '+Y(38)+' '+(x0+500)+' '+Y(50)
-    +' C'+(x0+610)+' '+Y(66)+' '+(x0+720)+' '+Y(88)+' '+x1+' '+Y(100);
-  s+='<path d="'+P+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+C+'" opacity=".09"/>';
-  s+='<path class="draw" pathLength="1" d="'+P+'" fill="none" stroke="'+C+'" stroke-width="2.6"/>';
-  /* three eras — the one place a second hue is earned, because the axis is time */
-  [[x0+230,'2023'],[x0+500,'2026']].forEach(g=>{s+=LN(g[0],yt-4,g[0],yb,V.dim,{sw:1,op:.28,d:'4 5'});});
-  s+=LEAD(x0+230,Y(6),x0+248,Y(6)-58,V.grey,'~5 GW/yr','grid only, for a decade');
-  s+=LEAD(x0+500,Y(50),x0+518,Y(50)-62,C,'~50 GW/yr','grid fast, plus behind the meter');
-  s+=LEAD(x1,Y(100),x1-12,Y(100)-46,V.cyan,'100 GW/yr','firm nuclear, then orbit');
-  [['2015',x0+40],['2023',x0+230],['2026',x0+500],['2031',x0+660],['2035',x1]]
-    .forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
-  s+=CAP('Twenty years of build, every year, starting now.');
-  s+=NOTE('Trajectory is illustrative: the ~5 GW/yr base is the recent US run-rate; the 2031 and 2035 points are the requirement, not a forecast.');
-  return SV(s);
-};
 
 /* — 2. the problem: one identity, two levers — */
 VIZ.problem=function(){
@@ -955,26 +895,6 @@ VIZ.generation=function(){
 };
 
 /* — 4. the grid: the headroom already built — */
-VIZ.gridq=function(){
-  const C=A.power;let s=FTITLE(40,30,'US load through the day, against the grid built to serve it');
-  const x0=80,x1=690,yb=352,yt=86;
-  const Y=v=>yb-((v-300)/520)*(yb-yt);
-  const pts=[];for(let i=0;i<=72;i++){const f=i/72;
-    const v=470+120*Math.sin((f-0.30)*Math.PI*2)-70*Math.sin((f-0.10)*Math.PI*4);
-    pts.push([x0+(x1-x0)*f,Y(v)]);}
-  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
-  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+C+'" opacity=".16"/>';
-  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="'+C+'" stroke-width="2.4"/>';
-  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.1});
-  s+=RULE(x0,x1,Y(760),C,'peak-built grid  ~760 GW');
-  s+=RULE(x0,x1,Y(470),V.ink,'average hour  ~470 GW',{op:.5});
-  s+=SPAN(x1+58,Y(760),Y(470),V.green,'~290 GW','idle in the average hour');
-  [['midnight',x0],['4a',x0+(x1-x0)*.17],['4p',x0+(x1-x0)*.67],['midnight',x1]]
-    .forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
-  s+=CAP('Do not build every AI data center for the worst hour.');
-  s+=NOTE('Illustrative from the EIA Lower 48 load shape and the Duke / Nicholas Institute flexible-load framing. Interconnection queues run 4–7 years; flexible load does not wait in them.');
-  return SV(s);
-};
 
 /* — 5. equipment: every conversion sheds heat — */
 VIZ.powerconv=function(){
@@ -1018,6 +938,98 @@ VIZ.localpower=function(){
   s+='<circle cx="800" cy="382" r="4" fill="'+C+'" stroke="'+C+'" stroke-width="1.4"/>'+T(812,386,'constrained',{s:10.5,f:V.dim,m:1});
   s+='<circle cx="890" cy="382" r="4" fill="none" stroke="'+C+'" stroke-width="1.4"/>'+T(902,386,'building',{s:10.5,f:V.dim,m:1});
   s+=CAP('The same gigawatt costs a different amount, waits a different number of years, and is legal in fewer places.');
+  return SV(s);
+};
+
+/* — 1. the path to 100 GW/yr, in three stages — */
+VIZ.path100gw=function(){
+  const CH={grid:V.blue,nuc:V.green,btm:V.amber,orb:V.pur};
+  let s=FTITLE(40,28,'New power added per year, and what it is made of');
+  const x0=92,x1=920,yb=336,yt=72,Y=v=>yb-(v/112)*(yb-yt);
+  /* the three stages are the frame, so they are drawn as ground, not as bars */
+  const stg=[[x0,262,'STAGE 1 · UNTIL NOW',.030],[x0+262,330,'STAGE 2 · THIS DECADE',.055],[x0+592,236,'STAGE 3 · IF 100 GW / YR',.085]];
+  stg.forEach(g=>{s+='<rect x="'+g[0]+'" y="'+yt+'" width="'+g[1]+'" height="'+(yb-yt)+'" fill="rgba(255,255,255,'+g[3]+')"/>';
+    s+=T(g[0]+14,yt-12,g[2],{s:10,w:600,f:V.ink,ls:'.13em',m:1,op:.75});});
+  [0,25,50,75,100].forEach(v=>{s+=T(x0-14,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});
+    s+=LN(x0,Y(v),x1,Y(v),'#ffffff',{sw:.6,op:v?.10:.22});});
+  /* one stacked bar per magnitude discussed */
+  const bar=(cx,w,parts,label,sub)=>{let o='',acc=0;
+    parts.forEach(p=>{const h=Y(acc)-Y(acc+p[1]);
+      o+='<rect class="riseb" x="'+(cx-w/2)+'" y="'+Y(acc+p[1])+'" width="'+w+'" height="'+h+'" fill="'+p[0]+'"/>';acc+=p[1];});
+    o+=T(cx,Y(acc)-(sub?28:12),label,{a:'middle',s:13,w:700,f:V.ink,m:1});
+    if(sub)o+=T(cx,Y(acc)-13,sub,{a:'middle',s:9.5,f:V.dim,m:1});
+    return o;};
+  s+=bar(x0+130,62,[[CH.grid,5]],'~5 GW','grid +3% / yr');
+  s+=bar(x0+352,62,[[CH.grid,14],[CH.btm,6]],'20');
+  s+=bar(x0+452,62,[[CH.grid,19],[CH.btm,11]],'30');
+  s+=bar(x0+552,62,[[CH.grid,26],[CH.btm,24]],'50');
+  s+=bar(x0+710,78,[[CH.grid,40],[CH.btm,20],[CH.nuc,25],[CH.orb,15]],'~100');
+  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.1});
+  const key=[[CH.grid,'grid: faster interconnect, gas, renewables',40,360],
+             [CH.nuc,'nuclear: restarts, uprates, SMRs, new large units',40,380],
+             [CH.btm,'behind the meter: on-site gas, solar + storage',500,360],
+             [CH.orb,'orbital / off-grid compute',500,380]];
+  key.forEach(k=>{s+='<rect x="'+k[2]+'" y="'+(k[3]-9)+'" width="11" height="11" rx="2.5" fill="'+k[0]+'"/>';
+    s+=T(k[2]+19,k[3],k[1],{s:11.5,w:500,f:V.ink});});
+  s+=CAP('Stage 2 is an execution problem; stage 3 is a different energy system.',{y:412});
+  s+=NOTE('Stage-2 magnitudes are the range discussed (20–50 GW/yr). The stage-3 mix is a sketch of what would have to be true, not a forecast.');
+  return SV(s);
+};
+
+/* — 4. the grid: the headroom already built — */
+VIZ.gridq=function(){
+  let s=FTITLE(40,28,'US load through the day, against the grid built to serve it');
+  const x0=150,x1=830,yb=300,yt=64,Y=v=>yb-((v-330)/470)*(yb-yt);
+  s+=PANEL(x0-58,yt-14,x1-x0+124,yb-yt+52,{r:10,fill:'rgba(255,255,255,.028)'});
+  const K=[450,412,400,432,498,566,640,690,700,668,596,516,450];   /* every two hours */
+  const L=f=>{const t=Math.min(.999,Math.max(0,f))*(K.length-1),i=Math.floor(t),u=t-i;
+    return K[i]+(K[i+1]-K[i])*(1-Math.cos(u*Math.PI))/2;};
+  const pts=[];for(let i=0;i<=96;i++){const f=i/96;pts.push([x0+(x1-x0)*f,Y(L(f))]);}
+  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
+  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.blue+'" opacity=".42"/>';
+  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="#9dc0ff" stroke-width="2.4"/>';
+  s+=LN(x0,yb,x1,yb,V.dim,{sw:1,op:.5});
+  s+=RULE(x0-40,x1+40,Y(760),V.yel,'peak-built grid  ~760 GW');
+  s+=RULE(x0-40,x1+40,Y(470),V.ink,'average hour  ~470 GW',{op:.55});
+  s+=SPAN(x0+52,Y(760),Y(470),V.green,'~290 GW','idle in the average hour');
+  [['midnight',x0],['4a',x0+(x1-x0)*.19],['4p',x0+(x1-x0)*.68],['midnight',x1]]
+    .forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:11,w:600,f:V.ink,m:1}));
+  s+=PANEL(150,346,700,58,{r:9,stroke:V.green,sw:1.2,fill:'rgba(110,231,168,.05)'});
+  s+=FT(500,372,'Do not build every AI data center for the worst hour',{a:'middle',s:16.5,w:600,f:V.green});
+  s+=T(500,392,'make compute adapt to the grid, and latent headroom becomes effective capacity',{a:'middle',s:11.5,f:V.ink});
+  s+=NOTE('Illustrative from the EIA Lower 48 load shape and the Duke / Nicholas Institute flexible-load framing.',{y:436});
+  return SV(s);
+};
+
+/* — the players: two infrastructure layers, three roles — */
+VIZ.players=function(){
+  let s=T(40,26,'WHO PLAYS WHERE · TWO INFRASTRUCTURE LAYERS, THREE ROLES',{s:11,w:600,f:V.ink,ls:'.14em',m:1,op:.8});
+  const rows=[['inference','serving, APIs, routing'],['compute','GPUs, clusters, cloud'],['infrastructure','land, power, shell, cooling']];
+  const cols=[
+   {n:'legacy DC & colo',c:V.grey,co:['DLR','EQIX','QTS','Aligned','Vantage'],cell:[0,0,2]},
+   {n:'hyperscalers',c:V.blue,co:['AWS','Azure','GCP','Meta','Oracle'],cell:[2,2,2]},
+   {n:'crypto miners → AI',c:V.amber,co:['Core Scientific','IREN','TeraWulf','Cipher','Applied Digital'],cell:[0,1,2]},
+   {n:'megaprojects',c:V.amber,co:['SB Energy','Crusoe · Abilene','Lancium','Monarch · Scale','OpenAI Ohio'],cell:[0,1,2]},
+   {n:'neoclouds',c:V.pur,co:['CoreWeave','Nebius','Lambda','Crusoe Cloud','Together (GPU)'],cell:[1,2,1]},
+   {n:'inference clouds',c:V.green,co:['Baseten','Fireworks','Together','DigitalOcean','Modal'],cell:[2,1,0]}];
+  const cx0=270,cw=118,ry=[52,120,188],rh=56;
+  rows.forEach((r,i)=>{
+    s+=PANEL(40,ry[i],1000-40-40,rh,{r:8,fill:'rgba(255,255,255,.055)'});
+    s+=T(56,ry[i]+26,r[0],{s:13.5,w:700,f:V.ink});
+    s+=T(56,ry[i]+43,r[1],{s:10.5,f:V.dim});});
+  cols.forEach((c,j)=>{const x=cx0+j*cw;
+    rows.forEach((r,i)=>{const v=c.cell[i];if(!v)return;
+      const w=84,y=ry[i]+9,h=rh-18;
+      if(v===2)s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6" fill="'+c.c+'"/>';
+      else{s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6" fill="'+c.c+'" fill-opacity=".48" stroke="'+c.c+'" stroke-width="1.2"/>';
+        s+=T(x+w/2,y+h/2+4,'partial',{a:'middle',s:10,w:600,f:V.ink});}});
+    s+=T(x+42,266,c.n,{a:'middle',s:11.5,w:700,f:c.c,m:1});
+    c.co.forEach((n,k)=>s+=T(x+42,286+k*17,n,{a:'middle',s:10.5,f:V.ink,op:.82}));});
+  s+=LN(cx0,382,cx0+cw*2-34,382,V.grey,{sw:1.2,op:.6});
+  s+=T(cx0+(cw*2-34)/2,400,'legacy AI infrastructure',{a:'middle',s:11,f:V.dim});
+  s+=LN(cx0+cw*2,382,cx0+cw*6-34,382,V.amber,{sw:1.4});
+  s+=T(cx0+cw*2+(cw*4-34)/2,400,'the new AI infra layer',{a:'middle',s:11,w:600,f:V.amber});
+  s+=NOTE('Coverage is a judgment call, illustrative. Company lists are examples, not exhaustive. Together appears twice deliberately: it sells GPU clusters and an inference API.',{y:432});
   return SV(s);
 };
 
