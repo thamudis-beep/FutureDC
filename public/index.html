@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,600&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#090a0f; --bg2:#0c0e15;
@@ -17,6 +17,7 @@
     --pre:#8b93a6; --today:#e0a355; --future:#57c7dd;
     --pwr:#e0a355; --cmp:#46c6dd; --dc:#6f8dff; --app:#ab7cf1;
     --serif:'Geist',system-ui,sans-serif;
+    --fig:'Source Serif 4',Georgia,serif;
     --sans:'Geist',system-ui,sans-serif;
     --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   }
@@ -271,7 +272,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v44 · atlas rows</div>
+<div class="ver">v45 · power recut</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -336,6 +337,44 @@ function RACK(x,y,w,h,c,n){n=n||7;let s=B(x,y,w,h,c,{r:3,fill:c+'12'});const ih=
   for(let i=0;i<n;i++)s+=B(x+5,y+6+i*ih,w-10,ih-3,c,{r:1.5,op:.55,sw:.85});
   return s;}
 function ARROW(x1,y,x2,c){return LN(x1,y,x2-7,y,c,{sw:1.4})+'<path d="M'+(x2)+' '+y+' l-8 -4 v8 z" fill="'+c+'"/>';}
+
+/* ---- figure grammar -------------------------------------------------
+   One accent per figure — the layer's own — plus neutrals. A second hue
+   only where the X axis is literally time (grey → amber → cyan) or to mark
+   exactly one thing as free (green) or binding (red). The argument lives in
+   the annotation: a dashed reference line, a span with the number on it, a
+   leader to a named point. Titles and captions are set in italic serif so
+   the figure speaks in the deck's editorial voice, not the UI's.          */
+const A={power:V.amber,compute:V.cyan,dc:V.blue,apps:V.pur};
+function FT(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" fill="'+(o.f||V.ink)+'" font-family="Source Serif 4,Georgia,serif" font-style="italic" font-size="'+(o.s||16)+'" font-weight="'+(o.w||400)+'" text-anchor="'+(o.a||'start')+'">'+s+'</text>';}
+const FTITLE=(x,y,s)=>FT(x,y,s,{s:17.5,w:600,f:V.ink});
+function WRAP(str,max){const out=[];let cur='';
+  str.split(' ').forEach(w=>{if((cur+' '+w).trim().length>max){out.push(cur.trim());cur=w;}else cur+=' '+w;});
+  if(cur.trim())out.push(cur.trim());return out;}
+function CAP(str,o){o=o||{};const l=WRAP(str,o.max||112),y=o.y||(l.length>1?396:412);
+  return l.map((t,i)=>FT(40,y+i*23,t,{s:16.5,f:V.ink})).join('');}
+function NOTE(str,o){o=o||{};const l=WRAP(str,o.max||150),y=o.y||(l.length>1?428:440);
+  return l.map((t,i)=>T(40,y+i*14,t,{s:10,f:V.dim})).join('');}
+/* dashed reference line with its value at one end */
+function RULE(x1,x2,y,c,label,o){o=o||{};
+  let r=LN(x1,y,x2,y,c,{sw:1.3,d:'7 5',op:o.op==null?.9:o.op});
+  if(label)r+=T(o.left?x1:x2,y-9,label,{a:o.left?'start':'end',s:11.5,w:600,f:c,m:1});
+  return r;}
+/* the gap between two rules, with the number that names it */
+function SPAN(x,ya,yb,c,val,sub){
+  let s=LN(x,ya+8,x,yb-8,c,{sw:1.5});
+  s+='<path d="M'+x+' '+ya+' l-4.5 9 h9 z" fill="'+c+'"/><path d="M'+x+' '+yb+' l-4.5 -9 h9 z" fill="'+c+'"/>';
+  s+=FT(x+14,(ya+yb)/2-1,val,{s:21,w:600,f:c});
+  if(sub)s+=T(x+14,(ya+yb)/2+17,sub,{s:11,f:V.dim});
+  return s;}
+/* leader from a plotted point out to a named label */
+function LEAD(px,py,lx,ly,c,label,sub){
+  const dir=lx>=px?1:-1,a=dir>0?'start':'end';
+  let s=LN(px,py,px,ly+6,V.dim,{sw:.9,op:.4})+LN(px,ly+6,lx-dir*8,ly+6,V.dim,{sw:.9,op:.4});
+  s+='<circle cx="'+px+'" cy="'+py+'" r="3.6" fill="'+c+'"/>';
+  s+=T(lx,ly,label,{a:a,s:12.5,w:600,f:V.ink});
+  if(sub)s+=FT(lx,ly+15,sub,{a:a,s:11,f:V.dim});
+  return s;}
 const VIZ={};
 
 /* — AI infrastructure stack: who actually builds — */
@@ -507,25 +546,6 @@ function buildMatrix(){
     el.addEventListener('click',function(){go('stack',el.dataset.go);});});
 }
 /* ============ STACK DATA ============ */
-VIZ.powerconv=function(){
-  let s='';
-  s+=T(30,22,'Decentralized, rack-level AC→DC  ·  many conversions',{s:11.5,f:V.dim});
-  s+=T(760,22,'AC',{s:11,w:700,f:V.blue,m:1})+T(800,22,'DC',{s:11,w:700,f:V.amber,m:1});
-  const rows=[
-   {n:'LEGACY',y:'2026',c:V.grey,cells:[['Utility',V.blue],['LV Transformer',V.blue],['UPS',V.blue],['PDU',V.blue],['IT RACK',V.blue]],dc:5},
-   {n:'800V',y:'2027–29',c:V.amber,cells:[['Utility',V.blue],['LV Transformer',V.blue],['Central Rectifier',V.blue],['Battery Rack',V.amber],['IT RACK',V.amber]],dc:3},
-   {n:'SST',y:'2029+',c:V.cyan,cells:[['Utility',V.blue],['Solid-State Transformer',V.blue],['Battery Rack',V.amber],['IT RACK',V.amber]],dc:2}];
-  rows.forEach((r,i)=>{const y=54+i*118;
-    s+=B(24,y,104,74,r.c,{r:6,fill:r.c+'1f'})+T(76,y+34,r.n,{a:'middle',s:12.5,w:700,f:r.c,m:1})+T(76,y+54,r.y,{a:'middle',s:10,f:V.dim,m:1});
-    const n=r.cells.length,w=(830-n*14)/n;
-    r.cells.forEach((c,k)=>{const x=146+k*(w+14);
-      const dc=k>=r.dc;
-      s+=B(x,y,w,74,c[1],{r:6,fill:dc?V.amber+'16':c[1]+'14'})+T(x+w/2,y+42,c[0],{a:'middle',s:11,w:600,f:c[1]});
-      if(k<n-1)s+=ARROW(x+w,y+37,x+w+12,dc?V.amber:V.blue);
-      if(k>0)s+=T(x+w/2,y-6,'↓ loss',{a:'middle',s:8.5,f:V.red,m:1});});});
-  s+=T(30,438,'Centralized, facility-level AC→DC  ·  fewer conversions = less loss',{s:11.5,f:V.cyan});
-  return SV(s);
-};
 
 /* — behind the meter — */
 /* — storage turns a power problem into a timing problem — */
@@ -715,135 +735,14 @@ VIZ.appsci=()=>appStack('Scientific AI','materials, biology, climate — simulat
 
 
 /* — 1. the path to 100 GW/yr — */
-VIZ.path100gw=function(){
-  let s='';
-  const x0=70,x1=930,yb=340;
-  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.2})+LN(x0,60,x0,yb,V.dim,{sw:1.2});
-  const Y=v=>yb-(v/110)*260;
-  [0,25,50,75,100].forEach(v=>{s+=T(x0-12,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.16});});
-  s+=T(x0-12,44,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
-  const seg=[{n:'CLOUD',c:V.grey,x:x0,w:250,v:5,note:'grid only · +3% if at all'},
-             {n:'TODAY',c:V.amber,x:x0+250,w:290,v:50,note:'grid fast + behind-the-meter'},
-             {n:'AGI',c:V.cyan,x:x0+540,w:320,v:100,note:'nuclear + orbital'}];
-  s+='<path d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.amber+'" opacity=".10"/>';
-  s+='<path class="draw" pathLength="1" d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+'" fill="none" stroke="'+V.amber+'" stroke-width="3"/>';
-  seg.forEach((g,i)=>{
-    s+=LN(g.x,60,g.x,yb,V.dim,{sw:1,op:.35,d:'4 4'});
-    s+=T(g.x+14,84,g.n,{s:13,w:700,f:g.c,ls:'.1em',m:1});
-    s+=T(g.x+14,104,g.note,{s:10.5,f:V.dim});
-    s+='<circle cx="'+(g.x+g.w-20)+'" cy="'+Y(g.v)+'" r="6" fill="'+g.c+'"/>';
-    s+=T(g.x+g.w-20,Y(g.v)-16,(g.v<10?'~5':g.v)+' GW/yr',{a:'middle',s:13,w:700,f:g.c,m:1});});
-  [['2015',x0+60],['2023',x0+250],['2026',x0+430],['2030',x0+660],['2035',x1-40]].forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
-  s+=T(70,392,'We added about 5 GW a year for a decade. We now need twenty times that, every year.',{s:14,w:600,f:V.ink});
-  s+=T(70,422,'Grid alone cannot get there — the last stretch is firm nuclear and, beyond the grid, orbit.',{s:12,f:V.yel});
-  return SV(s);
-};
 
 /* — 2. the problem, in two levers — */
-VIZ.problem=function(){
-  let s='';
-  s+=B(330,40,340,74,V.ink,{r:12,fill:'#ffffff10'});
-  s+=T(500,74,'POWER DELIVERED',{a:'middle',s:13,w:700,ls:'.1em',m:1});
-  s+=T(500,98,'generation  ×  capacity factor',{a:'middle',s:12,f:V.yel,m:1});
-  s+=LN(430,114,300,160,V.dim,{sw:1.4})+LN(570,114,700,160,V.dim,{sw:1.4});
-  const lever=(x,c,title,sub,items)=>{
-    let o=B(x,166,320,232,c,{r:14,fill:c+'12'});
-    o+=T(x+24,204,title,{s:16,w:700,f:c});
-    o+=T(x+24,226,sub,{s:11,f:V.dim,m:1});
-    items.forEach((it,i)=>{const y=252+i*38;
-      o+=B(x+24,y,272,30,c,{r:7,fill:c+'1f',sw:.9});
-      o+=T(x+38,y+20,it,{s:12,w:500});});
-    return o;};
-  s+=lever(60,V.amber,'More generation','build new supply',['Front-of-meter · grid scale','Behind-the-meter · on site','Gas · nuclear · solar · coal held back']);
-  s+=lever(620,V.cyan,'More capacity factor','use what exists harder',['Batteries · shift night to peak','Grid flexibility · interruptible load','Software · orchestrate the fleet']);
-  s+=T(60,436,'Two levers, not one. Every power idea in this module is an instance of one of them.',{s:13.5,w:600,f:V.ink});
-  return SV(s);
-};
 
 /* — 3. generation is a decentralised problem — */
-VIZ.generation=function(){
-  let s='';
-  s+=T(40,28,'No single source closes the gap — it is a portfolio, built by many hands',{s:13,w:600,f:V.dim});
-  const src=[{n:'Gas',c:V.amber,gw:70,lead:'2–4 yr',note:'fast · turbine backlog'},
-             {n:'Nuclear',c:V.pur,gw:6,lead:'6–10 yr',note:'firm · SMR from 2030'},
-             {n:'Solar + storage',c:V.yel,gw:58,lead:'1–2 yr',note:'cheap where sun pays'},
-             {n:'Coal retired later',c:V.grey,gw:20,lead:'now',note:'buys time, not future'},
-             {n:'Fuel cells',c:V.red,gw:17,lead:'<1 yr',note:'800V native · on site'}];
-  const maxgw=70;
-  src.forEach((g,i)=>{const y=60+i*68;
-    s+=T(196,y+26,g.n,{a:'end',s:13.5,w:600,f:g.c});
-    s+=T(196,y+44,g.lead,{a:'end',s:10,f:V.dim,m:1});
-    const w=(g.gw/maxgw)*520;
-    s+=B(216,y+6,w,38,g.c,{r:6,fill:g.c+'55',sw:.9});
-    s+=T(228,y+31,'+'+g.gw+' GW',{s:13,w:700,m:1});
-    s+=T(216+w+16,y+31,g.note,{s:11,f:V.dim});});
-  s+=B(60,414,880,44,V.cyan,{r:10,fill:V.cyan+'12'});
-  s+=T(80,442,'And increasingly it is built behind the meter — next to the campus, skipping the grid entirely.',{s:12.5,w:500,f:V.cyan});
-  return SV(s);
-};
 
 /* — 4. the grid: queue on one side, headroom on the other — */
-VIZ.gridq=function(){
-  let s='';
-  s+=T(40,26,'The generation exists. The connection does not.',{s:14,w:700,f:V.ink});
-  const bx=(x,w,c,l,sub)=>B(x,50,w,66,c,{r:8,fill:c+'1a'})+T(x+w/2,80,l,{a:'middle',s:12.5,w:600,f:c})+(sub?T(x+w/2,100,sub,{a:'middle',s:9.5,f:V.dim,m:1}):'');
-  s+=bx(40,190,V.amber,'Generation ready','built or contracted')+ARROW(234,83,272,V.dim);
-  s+=bx(276,250,V.red,'Interconnection queue','4–7 years · 2,600 GW waiting')+ARROW(530,83,568,V.dim);
-  s+=bx(572,180,V.blue,'Data center','wants power now');
-  s+=T(776,88,'the bottleneck moved',{s:12,w:600,f:V.red});
-  s+=LN(40,146,960,146,V.dim,{sw:1,op:.35});
-  s+=T(40,178,'So free capacity from the load side instead',{s:14,w:700,f:V.cyan});
-  const x0=60,x1=620,yb=396,yt=210;
-  s+=LN(x0,yb,x1+10,yb,V.dim,{sw:1.2})+LN(x0,yt,x0,yb,V.dim,{sw:1.2});
-  const pts=[];for(let i=0;i<=60;i++){const f=i/60;const v=1-Math.pow(f,.34)*.62;pts.push([x0+(x1-x0)*f,yb-(yb-yt)*v]);}
-  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
-  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.blue+'" opacity=".14"/>';
-  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="'+V.blue+'" stroke-width="2.4"/>';
-  const peakY=pts[0][1],cut=peakY+30;
-  const sliver=pts.filter(q=>q[1]<=cut);
-  if(sliver.length>1){
-    s+='<path d="M'+sliver.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L')+' L'+sliver[sliver.length-1][0].toFixed(1)+' '+cut+' L'+x0+' '+cut+' Z" fill="'+V.cyan+'" opacity=".55"/>';
-    s+=LN(sliver[sliver.length-1][0],cut,sliver[sliver.length-1][0],peakY-8,V.cyan,{sw:1,d:'3 3',op:.7});
-  }
-  s+=LN(x0,cut,x1,cut,V.cyan,{sw:1.4,d:'6 4',op:.8});
-  s+=T(x0+140,peakY+34,'curtail this sliver',{s:11.5,w:700,f:V.cyan,m:1});
-  s+=T(x0+140,peakY+50,'~0.25% of hours',{s:10,f:V.dim,m:1});
-  s+=LN(x0+134,peakY+30,x0+44,peakY+10,V.cyan,{sw:1,op:.6});
-  s+=T(x0+4,peakY-12,'peak',{s:10.5,f:V.dim,m:1});
-  s+=T(x1-120,yb-18,'most of the year',{s:10.5,f:V.dim,m:1});
-  s+=T(x0,yb+26,'hours of the year, sorted by load  →',{s:10.5,f:V.dim,m:1});
-  s+=B(680,210,280,186,V.cyan,{r:12,fill:V.cyan+'0f'});
-  s+=T(700,244,'~100 GW',{s:26,w:700,f:V.cyan,m:1});
-  s+=T(700,268,'of headroom on the existing grid',{s:11,f:V.dim});
-  s+=T(700,304,'if large loads can be interrupted',{s:11.5,w:500});
-  s+=T(700,330,'for a fraction of the year',{s:11.5,w:500});
-  s+=T(700,368,'batteries · flexible training · orchestration',{s:10.5,f:V.yel,m:1});
-  s+=T(40,442,'Interruptible load and storage buy years the interconnection queue cannot.',{s:13,f:V.ink});
-  return SV(s);
-};
 
 /* — 6. power is a local problem — */
-VIZ.localpower=function(){
-  let s='';
-  s+='<path d="'+MAP.land+'" fill="#151a24" stroke="#2c3548" stroke-width=".6"/>';
-  s+='<path d="'+MAP.asia+'" fill="'+V.cyan+'" fill-opacity=".20" stroke="'+V.cyan+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.eu+'" fill="'+V.pur+'" fill-opacity=".22" stroke="'+V.pur+'" stroke-width=".7"/>';
-  s+='<path d="'+MAP.us+'" fill="'+V.amber+'" fill-opacity=".18" stroke="'+V.amber+'" stroke-width=".7"/>';
-  HUBS.forEach(h=>{const c=h.b?V.red:V.green;
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="10" fill="'+c+'" fill-opacity=".14" stroke="'+c+'" stroke-width="1" opacity=".8"/>';
-    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="3.4" fill="'+c+'"/>';
-    s+=T(h.x+h.dx,h.y+h.dy,h.n,{a:h.anc,s:11,w:600,f:h.b?'#f2b8ba':'#a6e8c6'});
-    s+=T(h.x+h.dx,h.y+h.dy+13,h.note,{a:h.anc,s:9,f:V.dim,m:1});});
-  const reg=(x,c,l,sub)=>'<rect x="'+x+'" y="392" width="12" height="12" rx="3" fill="'+c+'" fill-opacity=".3" stroke="'+c+'"/>'
-    +T(x+20,402,l,{s:11.5,w:600,f:c})+T(x+20,418,sub,{s:9.5,f:V.dim,m:1});
-  s+=reg(20,V.amber,'United States','cheap inland, constrained coasts');
-  s+=reg(300,V.pur,'Europe','highest cost, least permitting');
-  s+=reg(560,V.cyan,'Asia + Gulf','builds fastest, state-backed');
-  s+='<circle cx="826" cy="398" r="4.5" fill="'+V.green+'"/>'+T(838,402,'builds',{s:10.5,f:V.dim});
-  s+='<circle cx="900" cy="398" r="4.5" fill="'+V.red+'"/>'+T(912,402,'constrained',{s:10.5,f:V.dim});
-  s+=T(20,448,'The same gigawatt costs a different amount, waits a different number of years, and is legal in a different set of places.',{s:12.5,f:V.ink});
-  return SV(s);
-};
 
 /* — DC 1. the physical footprint is being rewritten — */
 /* — DC 2. the players — */
@@ -970,6 +869,142 @@ VIZ.geodc=function(){
 };
 
 /* ============ STACK DATA ============ */
+/* — 1. the path to 100 GW/yr — */
+VIZ.path100gw=function(){
+  const C=A.power;let s=FTITLE(40,30,'New power added per year, United States');
+  const x0=90,x1=880,yb=352,yt=76;
+  const Y=v=>yb-(v/110)*(yb-yt);
+  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.1});
+  [0,25,50,75,100].forEach(v=>{s+=T(x0-14,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});
+    if(v)s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.13});});
+  s+=T(x0-14,yt-14,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
+  const P='M'+x0+' '+Y(5)+' L'+(x0+230)+' '+Y(6)
+    +' C'+(x0+320)+' '+Y(20)+' '+(x0+410)+' '+Y(38)+' '+(x0+500)+' '+Y(50)
+    +' C'+(x0+610)+' '+Y(66)+' '+(x0+720)+' '+Y(88)+' '+x1+' '+Y(100);
+  s+='<path d="'+P+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+C+'" opacity=".09"/>';
+  s+='<path class="draw" pathLength="1" d="'+P+'" fill="none" stroke="'+C+'" stroke-width="2.6"/>';
+  /* three eras — the one place a second hue is earned, because the axis is time */
+  [[x0+230,'2023'],[x0+500,'2026']].forEach(g=>{s+=LN(g[0],yt-4,g[0],yb,V.dim,{sw:1,op:.28,d:'4 5'});});
+  s+=LEAD(x0+230,Y(6),x0+248,Y(6)-58,V.grey,'~5 GW/yr','grid only, for a decade');
+  s+=LEAD(x0+500,Y(50),x0+518,Y(50)-62,C,'~50 GW/yr','grid fast, plus behind the meter');
+  s+=LEAD(x1,Y(100),x1-12,Y(100)-46,V.cyan,'100 GW/yr','firm nuclear, then orbit');
+  [['2015',x0+40],['2023',x0+230],['2026',x0+500],['2031',x0+660],['2035',x1]]
+    .forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
+  s+=CAP('Twenty years of build, every year, starting now.');
+  s+=NOTE('Trajectory is illustrative: the ~5 GW/yr base is the recent US run-rate; the 2031 and 2035 points are the requirement, not a forecast.');
+  return SV(s);
+};
+
+/* — 2. the problem: one identity, two levers — */
+VIZ.problem=function(){
+  const C=A.power;let s=FTITLE(40,30,'Power delivered = generation × capacity factor');
+  const col=(x,w,title,kind,items,mark)=>{
+    let o=T(x,84,title,{s:12,w:700,f:kind==='build'?C:V.ink,ls:'.13em',m:1});
+    o+=LN(x,96,x+w,96,kind==='build'?C:V.dim,{sw:1.4,op:kind==='build'?.9:.45});
+    items.forEach((it,i)=>{const y=132+i*66;
+      /* filled = you must build it · outline = it already exists */
+      o+=B(x,y,w,42,C,{r:5,fill:kind==='build'?C+'2a':'none',sw:kind==='build'?1.1:1.1,op:kind==='build'?.95:.5});
+      o+=T(x+16,y+26,it[0],{s:13.5,w:600,f:V.ink});
+      o+=T(x+w-16,y+26,it[1],{a:'end',s:11,f:V.dim,m:1});
+      if(mark===i)o+=B(x,y,4,42,V.green,{r:2,fill:V.green,sw:0});});
+    if(mark!=null){o+=LN(x,352,x+22,352,V.green,{sw:2.4});
+      o+=FT(x+32,357,'the cheaper lever',{s:14,f:V.green});}
+    return o;};
+  s+=col(40,380,'MORE GENERATION','build',[['Front of meter','grid scale'],['Behind the meter','on site'],['Firm baseload','nuclear · gas']]);
+  s+=col(500,380,'MORE CAPACITY FACTOR','exists',[['Storage','shift the peak'],['Flexible load','curtail on demand'],['Orchestration','across the fleet']],1);
+  s+=CAP('Every power idea in this module is an instance of one of the two.');
+  s+=NOTE('Filled bars must be built; outlined bars already exist and are being used at less than their rating.');
+  return SV(s);
+};
+
+/* — 3. generation is a portfolio, ordered by how long it takes — */
+VIZ.generation=function(){
+  const C=A.power;let s=FTITLE(40,30,'Years from decision to energised');
+  const src=[['Coal retirements deferred','0','now',0.1],
+             ['Fuel cells · on site','<1','800V native',0.8],
+             ['Solar + storage','1–2','cheap where the sun pays',2],
+             ['Gas turbines','2–4','ordered out to the 2030s',4],
+             ['Nuclear · SMR and restarts','6–10','the only firm answer at scale',10]];
+  const x0=300,x1=690,yr=v=>x0+(v/10)*(x1-x0);
+  [0,2,4,6,8,10].forEach(v=>{s+=LN(yr(v),64,yr(v),350,V.dim,{sw:.6,op:.13});
+    s+=T(yr(v),372,v+(v===10?' yr':''),{a:'middle',s:10,f:V.dim,m:1});});
+  src.forEach((g,i)=>{const y=78+i*56;
+    s+=T(x0-22,y+22,g[0],{a:'end',s:13,w:600,f:V.ink});
+    s+=B(x0,y+6,Math.max(6,yr(g[3])-x0),32,C,{r:4,fill:C+(i===4?'30':'55'),sw:0});
+    s+=T(x0+10,y+28,g[1],{s:12.5,w:700,f:V.ink,m:1});
+    s+=FT(710,y+28,g[2],{s:12.5,f:V.dim});});
+  s+=CAP('No single source closes the gap; the portfolio is chosen by lead time, not by cost.');
+  s+=NOTE('Lead times are indicative industry ranges. No split of capacity between sources is claimed.');
+  return SV(s);
+};
+
+/* — 4. the grid: the headroom already built — */
+VIZ.gridq=function(){
+  const C=A.power;let s=FTITLE(40,30,'US load through the day, against the grid built to serve it');
+  const x0=80,x1=690,yb=352,yt=86;
+  const Y=v=>yb-((v-300)/520)*(yb-yt);
+  const pts=[];for(let i=0;i<=72;i++){const f=i/72;
+    const v=470+120*Math.sin((f-0.30)*Math.PI*2)-70*Math.sin((f-0.10)*Math.PI*4);
+    pts.push([x0+(x1-x0)*f,Y(v)]);}
+  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
+  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+C+'" opacity=".16"/>';
+  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="'+C+'" stroke-width="2.4"/>';
+  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.1});
+  s+=RULE(x0,x1,Y(760),C,'peak-built grid  ~760 GW');
+  s+=RULE(x0,x1,Y(470),V.ink,'average hour  ~470 GW',{op:.5});
+  s+=SPAN(x1+58,Y(760),Y(470),V.green,'~290 GW','idle in the average hour');
+  [['midnight',x0],['4a',x0+(x1-x0)*.17],['4p',x0+(x1-x0)*.67],['midnight',x1]]
+    .forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
+  s+=CAP('Do not build every AI data center for the worst hour.');
+  s+=NOTE('Illustrative from the EIA Lower 48 load shape and the Duke / Nicholas Institute flexible-load framing. Interconnection queues run 4–7 years; flexible load does not wait in them.');
+  return SV(s);
+};
+
+/* — 5. equipment: every conversion sheds heat — */
+VIZ.powerconv=function(){
+  const C=A.power;let s=FTITLE(40,30,'Conversions between the utility and the die');
+  const row=(y,tag,yr,steps,live)=>{
+    let o=T(40,y+30,tag,{s:13,w:700,f:live?C:V.ink,m:1});
+    o+=T(40,y+48,yr,{s:10,f:V.dim,m:1});
+    const x0=190,w=(880-x0)/steps.length;
+    steps.forEach((st,i)=>{const x=x0+i*w;
+      o+=B(x,y+8,w-16,50,live?C:V.dim,{r:5,fill:live?C+'22':'#ffffff08',sw:live?1.2:1,op:live?1:.8});
+      o+=T(x+(w-16)/2,y+38,st,{a:'middle',s:11,w:600,f:live?V.ink:V.ink});
+      if(i<steps.length-1){o+=T(x+w-8,y+34,'›',{a:'middle',s:15,f:V.dim});
+        o+=T(x+w-8,y+72,'loss',{a:'middle',s:8.5,f:live?C:V.dim,m:1,op:.8});}});
+    return o;};
+  s+=row(70,'LEGACY','today',['Utility','LV transformer','UPS','PDU','Rack'],0);
+  s+=row(176,'800 V','2027–29',['Utility','LV transformer','Rectifier','Rack'],0);
+  s+=row(282,'SST','2029+',['Utility','Solid-state transformer','Rack'],1);
+  s+=CAP('Five conversions become two; what is not converted is not lost as heat.');
+  s+=NOTE('Stage dates are the industry roadmap as discussed, not commitments. No efficiency figure is claimed.');
+  return SV(s);
+};
+
+/* — 6. power is a local problem — */
+/* one hue, three depths: the region axis is ordinal, so it does not need three hues */
+function MAPBASE(c,o){o=o||{};
+  let s='<path d="'+MAP.land+'" fill="#141924" stroke="#28303f" stroke-width=".6"/>';
+  s+='<path d="'+MAP.us+'" fill="'+c+'" fill-opacity=".26" stroke="'+c+'" stroke-width=".8"/>';
+  s+='<path d="'+MAP.eu+'" fill="'+c+'" fill-opacity=".17" stroke="'+c+'" stroke-width=".8" stroke-opacity=".75"/>';
+  s+='<path d="'+MAP.asia+'" fill="'+c+'" fill-opacity=".10" stroke="'+c+'" stroke-width=".8" stroke-opacity=".55"/>';
+  if(o.hubs!==false)HUBS.forEach(h=>{
+    s+='<circle cx="'+h.x+'" cy="'+h.y+'" r="3.6" fill="'+(h.b?c:'none')+'" stroke="'+c+'" stroke-width="1.4"/>';
+    s+=T(h.x+h.dx,h.y+h.dy,h.n,{a:h.anc,s:11,w:600,f:V.ink});
+    if(o.notes!==false)s+=T(h.x+h.dx,h.y+h.dy+13,h.note,{a:h.anc,s:9,f:V.dim,m:1});});
+  return s;}
+VIZ.localpower=function(){
+  const C=A.power;let s=FTITLE(40,26,'Where a gigawatt is cheap, fast and legal');
+  s+='<g transform="translate(0,32) scale(1,0.78)">'+MAPBASE(C)+'</g>';
+  [['United States',60,.26],['Europe',300,.17],['Asia + Gulf',540,.10]].forEach(l=>{
+    s+='<rect x="'+l[1]+'" y="376" width="12" height="12" rx="2" fill="'+C+'" fill-opacity="'+l[2]+'" stroke="'+C+'" stroke-width=".9"/>';
+    s+=T(l[1]+20,386,l[0],{s:12,w:600,f:V.ink});});
+  s+='<circle cx="800" cy="382" r="4" fill="'+C+'" stroke="'+C+'" stroke-width="1.4"/>'+T(812,386,'constrained',{s:10.5,f:V.dim,m:1});
+  s+='<circle cx="890" cy="382" r="4" fill="none" stroke="'+C+'" stroke-width="1.4"/>'+T(902,386,'building',{s:10.5,f:V.dim,m:1});
+  s+=CAP('The same gigawatt costs a different amount, waits a different number of years, and is legal in fewer places.');
+  return SV(s);
+};
+
 const LAYERS=[
  {id:'power',name:'POWER',title:'Power',accent:'#e0a355',eyebrow:'LAYER 01 · THE BOTTOM OF THE STACK',
   subs:[
