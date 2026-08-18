@@ -23,7 +23,6 @@
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;overflow:hidden;font-family:var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
   body{background:radial-gradient(60% 60% at 42% 44%, var(--glowbg,rgba(111,141,255,.10)), transparent 62%),radial-gradient(120% 120% at 50% -8%, rgba(255,255,255,.03), transparent 46%),var(--bg);transition:background 1s ease}
-  #gl{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;transition:opacity .6s ease}
   #field{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges}
   .led{position:fixed;inset:0;z-index:2;pointer-events:none;
     background-image:repeating-linear-gradient(0deg,rgba(4,5,9,.62) 0 1px,transparent 1px 8px),repeating-linear-gradient(90deg,rgba(4,5,9,.62) 0 1px,transparent 1px 8px)}
@@ -235,7 +234,7 @@
 </style>
 </head>
 <body>
-<canvas id="gl"></canvas><canvas id="field"></canvas><div class="led"></div><div class="vig"></div>
+<canvas id="field"></canvas><div class="led"></div><div class="vig"></div>
 
 <div class="bar">
   <div class="brand" data-nav="home"><span class="dia"></span><b>FUTURE&nbsp;OF&nbsp;THE&nbsp;DATA&nbsp;CENTER</b></div>
@@ -276,13 +275,12 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v27 · gl landing</div>
+<div class="ver">v28 · pixel field</div>
 
-<script src="vendor/three.min.js"></script>
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
 const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;};
-let fieldColorful=true, glOn=false;
+let fieldColorful=true;
 
 /* ============ GLYPHS ============ */
 function reveal(items){return items.map((g,i)=>'<span class="in" style="animation-delay:'+(0.08+i*0.09)+'s">'+g+'</span>').join('');}
@@ -1040,8 +1038,7 @@ let cur={view:null};
 function moveSlider(){const a=document.querySelector('.topnav a.on'),s=document.getElementById('navSlider');if(!a||!s)return;s.style.width=a.offsetWidth+'px';s.style.transform='translateX('+a.offsetLeft+'px)';}
 addEventListener('resize',moveSlider);addEventListener('load',moveSlider);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveSlider);setTimeout(moveSlider,350);
 function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='matrix')themeFor(null);fieldColorful=(v==='home');document.getElementById('field').style.opacity=(v==='home')?'1':'.42';
-  const g=document.getElementById('gl');if(g)g.style.opacity=(v==='home')?'1':'.30';
-  if(v==='home'&&window.__glScan)window.__glScan();}
+  if(v==='home'&&window.__scan)window.__scan();}
 const stackBody=document.getElementById('stackBody');
 function stage(n){stackBody.classList.remove('s0','s1','s2');stackBody.classList.add('s'+n);}
 function go(view,layer,topic){
@@ -1071,54 +1068,112 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
   if(e.key==='ArrowDown'&&i<vis.length-1)go('stack',vis[i+1]);if(e.key==='ArrowUp'&&i>0&&cur.layer)go('stack',vis[i-1]);
   if(e.key==='Escape'){if(cur.topic!=null)go('stack',cur.layer);else if(cur.layer)go('stack');}});
 
-/* ====== FIELD: fine LED pixels · colour blobs · butterflies · explosions ====== */
+/* ====== FIELD: fine LED pixels ======================================
+   The pixel field is the identity, so the three interactions from the
+   reference are done in pixel space rather than with geometry:
+   · scan-reveal — a wavefront expands from off-frame, a bright rim riding
+     the front with a dim trail behind it, wobbled so it is not a clean circle
+   · pointer orbit — the blobs are sprung toward the pointer by depth, which
+     parallaxes the field instead of moving a camera
+   · particle spray — a ring buffer emitted along the pointer's path, drag,
+     lift and wander integrated per frame, splatted straight into the grid  */
 (function(){
   const cv=document.getElementById('field'),x=cv.getContext('2d');
-  const CELL=8;
+  const CELL=8, REDUCED=matchMedia('(prefers-reduced-motion:reduce)').matches;
   let W,H,COLS,ROWS,img,data;
   const ptr={x:-9999,y:-9999};
   const PAL=[[64,86,128],[52,96,112],[74,84,118],[46,78,104],[86,92,120],[58,88,124]];
-  const L=[];for(let k=0;k<6;k++)L.push({sx:.09+Math.random()*.13,sy:.08+Math.random()*.13,ax:.30+Math.random()*.16,ay:.30+Math.random()*.16,px:Math.random()*6.28,py:Math.random()*6.28,c:PAL[k%PAL.length]});
-  /* butterflies — drifting rose petals that flap as they cross the field */
+  const L=[];for(let k=0;k<6;k++)L.push({sx:.09+Math.random()*.13,sy:.08+Math.random()*.13,ax:.30+Math.random()*.16,ay:.30+Math.random()*.16,px:Math.random()*6.28,py:Math.random()*6.28,dep:.4+k*.16,c:PAL[k%PAL.length]});
   const BF=[];for(let k=0;k<10;k++)BF.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.018,vy:-.010-Math.random()*.016,rot:Math.random()*6.28,rs:(Math.random()-.5)*.55,sz:.030+Math.random()*.040,ph:Math.random()*6.28,fs:2.2+Math.random()*1.6,c:[96,104,130]});
   const EX=[];let nextEx=1.2;
-  function boom(px,py){EX.push({x:px,y:py,t0:-1,life:1.35});}
+  function boom(a,b){EX.push({x:a,y:b,t0:-1,life:1.35});}
+
+  /* --- scan wavefront --- */
+  let scanR=0,scanning=false,scanT=0,scanMax=2600,wire=1;
+  const SCAN_DUR=2.4, so={x:0,y:0};
+  window.__scan=function(){
+    if(REDUCED){scanning=false;scanR=1e9;wire=0;return;}
+    so.x=-W*0.22; so.y=H*1.05; scanR=0; scanT=0; scanning=true; wire=1;
+  };
+
+  /* --- spray --- */
+  const P_N=460,P_LIFE=1.5;
+  const pX=new Float32Array(P_N),pY=new Float32Array(P_N),pVX=new Float32Array(P_N),
+        pVY=new Float32Array(P_N),pB=new Float32Array(P_N),pR=new Float32Array(P_N);
+  for(let i=0;i<P_N;i++)pB[i]=-999;
+  let head=0,lastX=9e9,lastY=0,idle=0,T=0;
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  function spawn(sx,sy){
+    const i=head;head=(head+1)%P_N;
+    pX[i]=sx+rand(-6,6);pY[i]=sy+rand(-6,6);
+    pVX[i]=rand(-26,26);pVY[i]=-rand(6,52);
+    pB[i]=T;pR[i]=Math.random();
+  }
+  function emit(dt){
+    if(REDUCED)return;
+    if(ptr.x<-9000){lastX=9e9;return;}
+    if(lastX>8e9){lastX=ptr.x;lastY=ptr.y;return;}
+    const d=Math.hypot(ptr.x-lastX,ptr.y-lastY),n=Math.min(14,Math.floor(d/7));
+    for(let k=1;k<=n;k++)spawn(lastX+(ptr.x-lastX)*k/n, lastY+(ptr.y-lastY)*k/n);
+    if(n>0){lastX=ptr.x;lastY=ptr.y;idle=0;}
+    else{idle+=dt;if(idle>.055){spawn(ptr.x,ptr.y);idle=0;}}
+  }
+
   function rs(){W=innerWidth;H=innerHeight;COLS=Math.ceil(W/CELL);ROWS=Math.ceil(H/CELL);
-    cv.width=COLS;cv.height=ROWS;img=x.createImageData(COLS,ROWS);data=img.data;}
+    cv.width=COLS;cv.height=ROWS;img=x.createImageData(COLS,ROWS);data=img.data;
+    scanMax=Math.hypot(W,H)*1.55+600;}
   addEventListener('resize',rs);rs();
   addEventListener('mousemove',e=>{ptr.x=e.clientX;ptr.y=e.clientY;});
   addEventListener('mouseout',()=>{ptr.x=ptr.y=-9999;});
   addEventListener('click',e=>boom(e.clientX,e.clientY));
+  window.__scan();
+
+  const sm={x:0,y:0};
   let last=0;
   function loop(t){
-    const tt=t*0.001,dt=Math.min(.05,last?tt-last:.016);last=tt;
+    const tt=t*0.001,dt=Math.min(.05,last?tt-last:.016);last=tt;T=tt;
     const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6f8dff';
     const nn=parseInt(acc.slice(1),16),AR=nn>>16&255,AG=nn>>8&255,AB=nn&255,colorful=fieldColorful;
     const scale=Math.pow(Math.min(W,H)*0.2,2);
-    /* ambient explosions */
-    nextEx-=dt;if(nextEx<=0){nextEx=2.6+Math.random()*3.4;boom((.15+Math.random()*.7)*W,(.15+Math.random()*.7)*H);}
+    if(scanning){scanT+=dt/SCAN_DUR;const e=Math.min(1,scanT);
+      scanR=(1-Math.pow(1-e,1.35))*scanMax;if(e>=1)scanning=false;}
+    else if(wire>0.18)wire+=(0.18-wire)*0.04;
+    nextEx-=dt;if(nextEx<=0&&!REDUCED){nextEx=2.6+Math.random()*3.4;boom((.15+Math.random()*.7)*W,(.15+Math.random()*.7)*H);}
     for(let k=EX.length-1;k>=0;k--){const e=EX[k];e.t0+=dt;if(e.t0>e.life)EX.splice(k,1);}
-    /* blob + butterfly positions */
-    const lp=L.map(l=>[(0.5+l.ax*Math.sin(tt*l.sx+l.px))*W,(0.5+l.ay*Math.sin(tt*l.sy+l.py))*H]);
+    /* pointer spring — parallax, not a camera */
+    const tx=ptr.x>-9000?(ptr.x/W)*2-1:0, ty=ptr.y>-9000?(ptr.y/H)*2-1:0;
+    sm.x+=(tx-sm.x)*0.055;sm.y+=(ty-sm.y)*0.055;
+    const lp=L.map(l=>[(0.5+l.ax*Math.sin(tt*l.sx+l.px))*W - sm.x*l.dep*90,
+                       (0.5+l.ay*Math.sin(tt*l.sy+l.py))*H - sm.y*l.dep*60]);
     const bp=BF.map(b=>{b.x+=b.vx*dt;b.y+=b.vy*dt;b.rot+=b.rs*dt;
       if(b.y<-.15){b.y=1.15;b.x=Math.random();}if(b.x<-.15)b.x=1.15;if(b.x>1.15)b.x=-.15;
-      const flap=.42+.58*Math.abs(Math.sin(tt*b.fs+b.ph));            /* wing beat */
+      const flap=.42+.58*Math.abs(Math.sin(tt*b.fs+b.ph));
       const a=b.sz*Math.min(W,H),bb=a*flap*0.42;
       return[b.x*W,b.y*H,Math.cos(b.rot),Math.sin(b.rot),1/(a*a),1/(bb*bb)];});
-    for(let j=0;j<ROWS;j++){const cyp=j*CELL+CELL*.5;
-      for(let i=0;i<COLS;i++){const cxp=i*CELL+CELL*.5;
+    for(let j=0;j<ROWS;j++){const cy=j*CELL+CELL*.5;
+      for(let i=0;i<COLS;i++){const cx=i*CELL+CELL*.5;
         let R=0,G=0,B=0,I=0,w,dx,dy,c;
-        for(let k=0;k<6;k++){dx=cxp-lp[k][0];dy=cyp-lp[k][1];w=1/((dx*dx+dy*dy)/scale+1);I+=w;c=colorful?L[k].c:null;
+        for(let k=0;k<6;k++){dx=cx-lp[k][0];dy=cy-lp[k][1];w=1/((dx*dx+dy*dy)/scale+1);I+=w;c=colorful?L[k].c:null;
           if(c){R+=w*c[0];G+=w*c[1];B+=w*c[2];}else{R+=w*AR;G+=w*AG;B+=w*AB;}}
-        for(let k=0;k<10;k++){const b=bp[k];dx=cxp-b[0];dy=cyp-b[1];
+        for(let k=0;k<10;k++){const b=bp[k];dx=cx-b[0];dy=cy-b[1];
           const u=dx*b[2]+dy*b[3],v=-dx*b[3]+dy*b[2],d2=u*u*b[4]+v*v*b[5];
           if(d2<9){w=1.5/(d2*d2+1);I+=w;c=colorful?BF[k].c:null;
             if(c){R+=w*c[0];G+=w*c[1];B+=w*c[2];}else{R+=w*AR;G+=w*AG;B+=w*AB;}}}
-        for(let k=0;k<EX.length;k++){const e=EX[k],p=e.t0/e.life;if(p<0)continue;
-          const rr=p*Math.min(W,H)*.55,th=26+p*70;dx=cxp-e.x;dy=cyp-e.y;
+        /* the survey pulse — rim on the front, dim trail behind it */
+        if(wire>0.001){
+          dx=cx-so.x;dy=cy-so.y;
+          const wob=Math.sin(cy*0.011+cx*0.007)*30+Math.sin(cx*0.021+cy*0.013)*14;
+          const d=Math.sqrt(dx*dx+dy*dy)+wob;
+          const q=(d-scanR)/70, rim=Math.exp(-q*q);
+          const trail=d<scanR?Math.min(1,(scanR-d)/620):0;
+          w=(rim*1.7+trail*0.26)*wire;
+          if(w>0.002){I+=w;R+=w*186;G+=w*206;B+=w*242;}
+        }
+        for(let k=0;k<EX.length;k++){const e=EX[k],pr=e.t0/e.life;if(pr<0)continue;
+          const rr=pr*Math.min(W,H)*.55,th=26+pr*70;dx=cx-e.x;dy=cy-e.y;
           const d=Math.sqrt(dx*dx+dy*dy),g=1-Math.abs(d-rr)/th;
-          if(g>0){w=g*g*3.0*(1-p);I+=w;R+=w*170;G+=w*186;B+=w*214;}}
-        if(ptr.x>-9000){dx=cxp-ptr.x;dy=cyp-ptr.y;w=2.0/((dx*dx+dy*dy)/(scale*.26)+1);I+=w;
+          if(g>0){w=g*g*3.0*(1-pr);I+=w;R+=w*170;G+=w*186;B+=w*214;}}
+        if(ptr.x>-9000){dx=cx-ptr.x;dy=cy-ptr.y;w=1.35/((dx*dx+dy*dy)/(scale*.26)+1);I+=w;
           if(colorful){R+=w*150;G+=w*168;B+=w*200;}else{R+=w*AR;G+=w*AG;B+=w*AB;}}
         let inten=I/1.5;inten=inten>1?1:inten;
         const a=Math.pow(inten,1.5)*0.46;
@@ -1128,194 +1183,30 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
         data[o]=R>255?255:R;data[o+1]=G>255?255:G;data[o+2]=B>255?255:B;data[o+3]=a*255;
       }
     }
+    /* spray splatted straight into the grid, so it stays pixels */
+    emit(dt);
+    for(let k=0;k<P_N;k++){
+      const age=T-pB[k];if(age<0||age>P_LIFE)continue;
+      const u=age/P_LIFE;
+      const sx=pX[k]+pVX[k]*age*(1-0.34*u)+Math.sin(pR[k]*6.28+age*2.6)*22*u;
+      const sy=pY[k]+pVY[k]*age*(1-0.34*u)-46*age;
+      const al=Math.min(1,(u<0.09?u/0.09:1)*(u>0.40?Math.max(0,1-(u-0.40)/0.60):1));
+      if(al<=0.01)continue;
+      const ci=Math.round(sx/CELL),cj=Math.round(sy/CELL);
+      for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){
+        const ii=ci+di,jj=cj+dj;if(ii<0||jj<0||ii>=COLS||jj>=ROWS)continue;
+        const wgt=(di===0&&dj===0)?1:0.42, add=al*wgt;
+        const o=(jj*COLS+ii)<<2;
+        data[o]=Math.min(255,data[o]+140*add);
+        data[o+1]=Math.min(255,data[o+1]+162*add);
+        data[o+2]=Math.min(255,data[o+2]+200*add);
+        data[o+3]=Math.min(255,data[o+3]+add*150);
+      }
+    }
     x.putImageData(img,0,0);
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
-})();
-
-/* ============ GL BACKGROUND ============
-   Three effects ported from the Sylva reference:
-   · wireframe scan-reveal — a wavefront expands from a point; solid geometry
-     only exists behind it, held a beat back from the wire so it reads as a
-     survey rather than a wipe, with a bright rim riding the front
-   · pointer orbit — the camera is sprung toward the pointer, so the stack has
-     parallax and reads as an object in space rather than a picture of one
-   · particle spray — a ring buffer emitted along the pointer's path and
-     integrated entirely in the vertex shader                                   */
-(function(){
-  if(typeof THREE==='undefined')return;
-  const cv=document.getElementById('gl');if(!cv)return;
-  const REDUCED=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  let renderer;
-  try{renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'high-performance'});}
-  catch(e){return;}
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-  glOn=true;
-  const fieldEl=document.getElementById('field');if(fieldEl)fieldEl.style.display='none';
-
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(38,1,1,9000);
-  camera.position.set(0,210,2500);
-
-  const uTime={value:0},uScanR={value:0},uScanOn={value:0},uWire={value:1};
-  const uScanO={value:new THREE.Vector3(-1250,-420,360)};
-  const CULL=['uniform vec3 uScanO;','uniform float uScanR,uScanOn;',
-    'bool unscanned(vec3 w,float lag){',
-    '  if(uScanOn<0.5) return false;',
-    '  float wob=sin(w.y*0.011+w.x*0.007)*36.0+sin(w.z*0.021+w.y*0.013)*17.0;',
-    '  return distance(w,uScanO) > uScanR - lag + wob;','}'].join('\n');
-
-  function solidMat(hex){return new THREE.ShaderMaterial({
-    uniforms:{uScanO:uScanO,uScanR:uScanR,uScanOn:uScanOn,uCol:{value:new THREE.Color(hex)}},
-    transparent:true,
-    vertexShader:['varying vec3 vW;varying vec3 vN;',
-      'void main(){vec4 wp=modelMatrix*vec4(position,1.0);vW=wp.xyz;',
-      'vN=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*wp;}'].join('\n'),
-    fragmentShader:['precision highp float;','uniform vec3 uCol;','varying vec3 vW;varying vec3 vN;',CULL,
-      'void main(){',
-      '  if(unscanned(vW,120.0)) discard;',
-      '  float top=clamp(vN.y,0.0,1.0);',
-      '  float d=distance(vW,uScanO);',
-      '  float rim=exp(-pow((d-uScanR)/150.0,2.0));',
-      '  vec3 c=uCol*(0.17+0.58*top);',
-      '  c=mix(c,vec3(0.86,0.93,1.0),rim*0.55);',
-      '  gl_FragColor=vec4(c,0.70);','}'].join('\n')});}
-
-  function wireMat(hex,gain){return new THREE.ShaderMaterial({
-    uniforms:{uScanO:uScanO,uScanR:uScanR,uWire:uWire,uTime:uTime,uCol:{value:new THREE.Color(hex)},uGain:{value:gain||1}},
-    transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
-    vertexShader:['varying vec3 vW;',
-      'void main(){vec4 wp=modelMatrix*vec4(position,1.0);vW=wp.xyz;gl_Position=projectionMatrix*viewMatrix*wp;}'].join('\n'),
-    fragmentShader:['precision highp float;','uniform vec3 uScanO,uCol;','uniform float uScanR,uWire,uTime,uGain;','varying vec3 vW;',
-      'void main(){',
-      '  float d=distance(vW,uScanO);',
-      '  float rim=exp(-pow((d-uScanR)/135.0,2.0));',
-      '  float trail=smoothstep(uScanR,uScanR-950.0,d);',
-      '  float a=(rim*1.60+trail*0.34)*uWire*uGain;',
-      '  if(a<0.004) discard;',
-      '  a*=0.66+0.34*sin(d*0.045-uTime*7.0);',
-      '  vec3 col=mix(uCol,vec3(0.88,0.95,1.0),rim);',
-      '  gl_FragColor=vec4(col,clamp(a,0.0,1.0));','}'].join('\n')});}
-
-  /* the stack, as an object in space */
-  const group=new THREE.Group();group.rotation.set(-0.34,-0.60,0);group.position.set(330,-40,0);scene.add(group);
-  const LAY=['#e0a355','#46c6dd','#6f8dff','#ab7cf1'];
-  LAY.forEach(function(c,i){
-    const g=new THREE.BoxGeometry(690,44,430);
-    const m=new THREE.Mesh(g,solidMat(c));m.position.y=-165+i*112;group.add(m);
-    const w=new THREE.LineSegments(new THREE.EdgesGeometry(g),wireMat(c,0.95));
-    w.position.copy(m.position);group.add(w);
-  });
-  /* ground rule, one draw call — gives the stack somewhere to stand */
-  (function(){
-    const pos=[],EX=1900,EZ=1200,ST=150;
-    for(let x=-EX;x<=EX;x+=ST){pos.push(x,-300,-EZ,x,-300,EZ);}
-    for(let z=-EZ;z<=EZ;z+=ST){pos.push(-EX,-300,z,EX,-300,z);}
-    const g=new THREE.BufferGeometry();
-    g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(pos),3));
-    group.add(new THREE.LineSegments(g,wireMat('#5b6b8f',0.34)));
-  })();
-
-  /* --- particle spray, integrated in the vertex shader --- */
-  const SPRAY_N=560,SPRAY_LIFE=1.6;
-  const sprayPos=new Float32Array(SPRAY_N*3),sprayVel=new Float32Array(SPRAY_N*3),
-        sprayBirth=new Float32Array(SPRAY_N),sprayRnd=new Float32Array(SPRAY_N*2);
-  for(let i=0;i<SPRAY_N;i++){sprayBirth[i]=-999;sprayRnd[i*2]=0.6+Math.random()*0.8;sprayRnd[i*2+1]=Math.random();}
-  const sg=new THREE.BufferGeometry();
-  sg.setAttribute('position',new THREE.BufferAttribute(sprayPos,3));
-  sg.setAttribute('aVel',new THREE.BufferAttribute(sprayVel,3));
-  sg.setAttribute('aBirth',new THREE.BufferAttribute(sprayBirth,1));
-  sg.setAttribute('aRnd',new THREE.BufferAttribute(sprayRnd,2));
-  const dotTex=(function(){const c=document.createElement('canvas');c.width=c.height=64;
-    const g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
-    r.addColorStop(0,'rgba(210,228,255,1)');r.addColorStop(0.45,'rgba(150,180,240,0.45)');r.addColorStop(1,'rgba(120,150,220,0)');
-    g.fillStyle=r;g.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);return t;})();
-  const spray=new THREE.Points(sg,new THREE.ShaderMaterial({
-    uniforms:{uTime:uTime,uMap:{value:dotTex},uSize:{value:15},uScale:{value:620},uLife:{value:SPRAY_LIFE}},
-    transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
-    vertexShader:['attribute vec3 aVel;','attribute float aBirth;','attribute vec2 aRnd;',
-      'uniform float uTime,uSize,uScale,uLife;','varying float vA;',
-      'void main(){',
-      '  float age=uTime-aBirth;',
-      '  if(age<0.0||age>uLife){vA=0.0;gl_PointSize=0.0;gl_Position=vec4(2.0,2.0,2.0,1.0);return;}',
-      '  float u=age/uLife;',
-      '  vec3 p=position + aVel*age*(1.0-0.34*u)',
-      '       + vec3(sin(aRnd.y*6.28+age*2.6)*22.0*u, 46.0*age, 0.0);',
-      '  vec4 mv=modelViewMatrix*vec4(p,1.0);',
-      '  gl_PointSize=uSize*aRnd.x*(uScale/max(-mv.z,1.0))*(0.45+0.55*(1.0-u));',
-      '  vA=smoothstep(0.0,0.09,u)*(1.0-smoothstep(0.40,1.0,u));',
-      '  gl_Position=projectionMatrix*mv;}'].join('\n'),
-    fragmentShader:['precision highp float;','uniform sampler2D uMap;','varying float vA;',
-      'void main(){vec4 t=texture2D(uMap,gl_PointCoord);gl_FragColor=vec4(t.rgb,t.a*vA*0.9);}'].join('\n')}));
-  scene.add(spray);
-
-  let head=0,dirty=false;
-  const rand=(a,b)=>a+Math.random()*(b-a);
-  function spawn(p){
-    const i=head;head=(head+1)%SPRAY_N;const o=i*3;
-    sprayPos[o]=p.x+rand(-15,15);sprayPos[o+1]=p.y+rand(-15,15);sprayPos[o+2]=p.z+rand(-45,45);
-    sprayVel[o]=rand(-38,38);sprayVel[o+1]=rand(2,64);sprayVel[o+2]=rand(-26,26);
-    sprayBirth[i]=uTime.value;dirty=true;
-  }
-
-  /* --- pointer: orbit spring + spray emission along the path --- */
-  const pointer={x:0,y:0},smooth={x:0,y:0},ndc=new THREE.Vector2(10,10);
-  const ray=new THREE.Raycaster();
-  const plane=new THREE.Plane(new THREE.Vector3(0,0,1),-300);
-  const at=new THREE.Vector3(),last=new THREE.Vector3(9999,0,0),step=new THREE.Vector3();
-  let live=false,idle=0;
-  addEventListener('pointermove',function(e){
-    if(e.pointerType==='touch')return;
-    pointer.x=(e.clientX/innerWidth)*2-1;pointer.y=(e.clientY/innerHeight)*2-1;
-    ndc.x=pointer.x;ndc.y=-pointer.y;live=true;
-  },{passive:true});
-  addEventListener('pointerleave',function(){pointer.x=pointer.y=0;live=false;last.x=9999;});
-
-  function emit(dt){
-    if(REDUCED)return;
-    if(!live){last.x=9999;return;}
-    ray.setFromCamera(ndc,camera);
-    if(!ray.ray.intersectPlane(plane,at)){last.x=9999;return;}
-    if(last.x>9000){last.copy(at);return;}
-    const d=at.distanceTo(last),n=Math.min(14,Math.floor(d/7));
-    for(let k=1;k<=n;k++){step.lerpVectors(last,at,k/n);spawn(step);}
-    if(n>0){last.copy(at);idle=0;}
-    else{idle+=dt;if(idle>0.055){spawn(at);idle=0;}}
-  }
-
-  /* --- the scan --- */
-  let scanning=false,scanT=0,scanMax=4200;const SCAN_DUR=3.0;
-  window.__glScan=function(){
-    if(REDUCED){uScanOn.value=0;uWire.value=0.30;return;}
-    uScanOn.value=1;uScanR.value=0;uWire.value=1;scanT=0;scanning=true;
-  };
-
-  function resize(){
-    const w=innerWidth,h=innerHeight;
-    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
-    scanMax=Math.hypot(w,h)*2.4+1400;
-  }
-  addEventListener('resize',resize);resize();
-  window.__glScan();
-
-  let prev=performance.now();
-  (function frame(now){
-    requestAnimationFrame(frame);
-    const dt=Math.min((now-prev)/1000,0.05);prev=now;uTime.value+=dt;
-    if(scanning){
-      scanT+=dt/SCAN_DUR;const e=Math.min(1,scanT);
-      uScanR.value=(1-Math.pow(1-e,1.35))*scanMax;
-      if(e>=1){scanning=false;}
-    }
-    if(!scanning&&uScanOn.value>0.5)uWire.value+=(0.19-uWire.value)*0.03;
-    smooth.x+=(pointer.x-smooth.x)*0.055;smooth.y+=(pointer.y-smooth.y)*0.055;
-    camera.position.x=-smooth.x*280;camera.position.y=210+smooth.y*150;
-    camera.lookAt(camera.position.x*0.42+180,camera.position.y*0.28-60,0);
-    emit(dt);
-    if(dirty){sg.attributes.position.needsUpdate=sg.attributes.aVel.needsUpdate=sg.attributes.aBirth.needsUpdate=true;dirty=false;}
-    renderer.render(scene,camera);
-  })(prev);
 })();
 </script>
 </body>
