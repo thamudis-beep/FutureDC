@@ -274,7 +274,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v23 · players matrix</div>
+<div class="ver">v24 · software rethink</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1114,33 +1114,32 @@ VIZ.footprint=function(){
 VIZ.players=function(){
   let s='';
   const X0=150,CW=132,GAP=8,col=i=>X0+i*(CW+GAP);
-  const ROWS=[{n:'AI CLOUD',y:118,c:V.pur},{n:'BARE METAL',y:196,c:V.blue},{n:'POWERED SHELL',y:274,c:V.amber}];
+  const ROWS=[{n:'AI CLOUD',y:118},{n:'BARE METAL',y:196},{n:'POWERED SHELL',y:274}];
   const C=[
-   {t:'Colo & DC',t2:'platforms',era:0,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
-   {t:'Hyperscalers',t2:'',era:0,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
-   {t:'PowerShells',t2:'miners · mega projects',era:1,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene','SB Energy']},
-   {t:'Neoclouds',t2:'',era:1,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
-   {t:'Inference clouds',t2:'',era:1,f:[2,0,0],names:['Fireworks','Together','Baseten']},
-   {t:'AI labs',t2:'incoming',era:1,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
+   {t:'Colo & DC',t2:'platforms',c:V.grey,f:[0,0,2],names:['EQIX','DLR','QTS','Vantage']},
+   {t:'Hyperscalers',t2:'',c:V.blue,f:[2,2,2],names:['Microsoft','Amazon','Google','Meta']},
+   {t:'PowerShells',t2:'miners · mega projects',c:V.amber,f:[0,0,2],names:['HUT · CIFR','APLD · WULF','Abilene','SB Energy']},
+   {t:'Neoclouds',t2:'',c:V.green,f:[1,2,1],names:['CRWV','NBIS','IREN','NSCALE']},
+   {t:'Inference clouds',t2:'',c:V.cyan,f:[2,0,0],names:['Fireworks','Together','Baseten']},
+   {t:'AI labs',t2:'incoming',c:V.pur,f:[1,1,1],names:['OpenAI','Anthropic','xAI']}];
   // era bands
   const band=(i0,i1,l,c)=>{const x=col(i0),w=col(i1)+CW-x;
     return B(x,44,w,26,c,{r:6,fill:c+'26',sw:0})+T(x+w/2,62,l,{a:'middle',s:11,w:700,ls:'.12em',m:1,f:c});};
   s+=band(0,1,'INTERNET ERA',V.grey)+band(2,5,'AI ERA',V.amber);
   // row labels + grid
-  ROWS.forEach(r=>{s+=T(132,r.y+40,r.n,{a:'end',s:12.5,w:700,f:r.c});
+  ROWS.forEach(r=>{s+=T(132,r.y+40,r.n,{a:'end',s:12.5,w:700,f:'#c3c9d6'});
     s+=LN(X0-6,r.y+66,977,r.y+66,V.dim,{sw:1,op:.14});});
   // cells
   C.forEach((c,i)=>{const x=col(i);
-    s+=T(x+CW/2,92,c.t,{a:'middle',s:12.5,w:600});
+    s+=T(x+CW/2,92,c.t,{a:'middle',s:12.5,w:700,f:c.c});
     if(c.t2)s+=T(x+CW/2,108,c.t2,{a:'middle',s:9,f:V.dim,m:1});
     ROWS.forEach((r,k)=>{const lv=c.f[k];
-      if(lv===2)s+=B(x,r.y+8,CW,52,r.c,{r:8,fill:r.c+'99',sw:1.4});
-      else if(lv===1)s+=B(x,r.y+8,CW,52,r.c,{r:8,fill:r.c+'26',sw:1,d:1})+
-        '<rect x="'+x+'" y="'+(r.y+8)+'" width="'+CW+'" height="52" rx="8" fill="none" stroke="'+r.c+'" stroke-width="1" stroke-dasharray="5 4" opacity=".75"/>';
+      if(lv===2)s+=B(x,r.y+8,CW,52,c.c,{r:8,fill:c.c+'99',sw:1.4});
+      else if(lv===1)s+='<rect x="'+x+'" y="'+(r.y+8)+'" width="'+CW+'" height="52" rx="8" fill="'+c.c+'26" stroke="'+c.c+'" stroke-width="1" stroke-dasharray="5 4" opacity=".85"/>';
       else s+=B(x,r.y+8,CW,52,V.dim,{r:8,fill:'#ffffff05',sw:.7,op:.35});});
     // names under the column
     s+=LN(x,358,x+CW,358,V.dim,{sw:1,op:.25});
-    c.names.forEach((n,j)=>s+=T(x+CW/2,378+j*19,n,{a:'middle',s:10,f:'#aab1c2',m:1}));});
+    c.names.forEach((n,j)=>s+=T(x+CW/2,378+j*19,n,{a:'middle',s:10,f:c.c,m:1}));});
   // legend
   const key=(x,fill,dash,l)=>{let o=B(x,474,26,16,V.ink,{r:4,fill:fill,sw:dash?1:1.2});
     if(dash)o+='<rect x="'+x+'" y="474" width="26" height="16" rx="4" fill="none" stroke="'+V.ink+'" stroke-width="1" stroke-dasharray="4 3"/>';
@@ -1153,59 +1152,55 @@ VIZ.players=function(){
 VIZ.economics=function(){
   let s='';
   const P=[{n:'POWERED SHELL',c:V.amber,x:290,v:['$15B','$2B / yr','85%+ NOI','high teens','15 yr +']},
-           {n:'BARE METAL',c:V.blue,x:530,v:['$40B','$15B / yr','70–80% EBITDA','low 20s','~5 yr']},
+           {n:'BARE METAL',c:V.blue,x:530,v:['$40B','$12–15B / yr','70–80% EBITDA','low 20s','~5 yr']},
            {n:'AI CLOUD',c:V.pur,x:770,v:['$40B','$15–25B / yr','80%+ EBITDA','high 20s','on demand']}];
-  const M=[['Capex per GW','what it costs to build'],['Revenue','what it earns'],['Margin','what it keeps'],['Unlevered IRR','what it returns'],['Contract','how long it is locked']];
+  const M=['Capex per GW','Revenue','Margin','Unlevered IRR','Contract'];
   P.forEach(pl=>{s+=T(pl.x+92,40,pl.n,{a:'middle',s:12.5,w:700,f:pl.c,ls:'.05em',m:1});
     s+=B(pl.x,54,184,378,pl.c,{r:12,fill:pl.c+'0d'});});
   M.forEach((m,i)=>{const y=76+i*76;
-    s+=T(266,y+26,m[0],{a:'end',s:13,w:600});
-    s+=T(266,y+44,m[1],{a:'end',s:10,f:V.dim,m:1});
+    s+=T(266,y+34,m,{a:'end',s:13.5,w:600});
     s+=LN(24,y+58,956,y+58,V.dim,{sw:1,op:.14});
     P.forEach(pl=>{s+=T(pl.x+92,y+34,pl.v[i],{a:'middle',s:17,w:700,f:pl.c,m:1});});});
   s+=T(24,452,'Same gigawatt, three different businesses — real-estate returns, utility returns, software returns.',{s:12.5,f:V.ink});
   return SV(s);
 };
 
-/* — DC 4. the software layer — */
+/* — DC 4. the software layer — one idea: where throughput actually comes from — */
 VIZ.software=function(){
   let s='';
-  /* band 1 — what the stack is, layer by layer */
-  s+=T(20,26,'THE STACK',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
-  const row=(y,n,ex,c,tag,note)=>{
-    let o=B(20,y,960,54,c,{r:10,fill:c+'12'});
-    o+=T(40,y+24,n,{s:14,w:600,f:c});
-    o+=T(40,y+43,ex,{s:11,f:V.dim,m:1});
-    o+=B(700,y+13,120,28,c,{r:14,fill:c+'2e',sw:.9});
-    o+=T(760,y+31,tag,{a:'middle',s:10,w:700,m:1,f:c});
-    o+=T(836,y+31,note,{s:11,f:V.dim});
+  /* the equation */
+  s+=T(40,86,'Tokens',{s:34,w:700});
+  s+=T(40,124,'per dollar',{s:34,w:700});
+  s+=T(40,158,'what every buyer is actually paying for',{s:12,f:V.dim});
+  s+=T(292,116,'=',{a:'middle',s:40,w:400,f:V.dim});
+  const term=(x,c,t,sub)=>B(x,52,266,110,c,{r:14,fill:c+'14'})
+    +T(x+30,102,t,{s:26,w:700,f:c})+T(x+30,130,sub,{s:12,f:V.dim});
+  s+=term(342,V.grey,'Silicon','rented or owned');
+  s+=T(646,116,'×',{a:'middle',s:32,w:400,f:V.dim});
+  s+=term(676,V.cyan,'Software','how hard it is driven');
+  /* the spreads — the whole argument in one comparison */
+  s+=T(40,222,'HOW MUCH EACH TERM VARIES BETWEEN OPERATORS',{s:11,w:700,ls:'.14em',f:V.dim,m:1});
+  const spread=(y,x0,w,c,lab,note)=>{
+    let o=LN(470,y,942,y,V.dim,{sw:1,op:.22});
+    o+=B(x0,y-13,w,26,c,{r:13,fill:c+'55',sw:1.2});
+    o+=LN(x0,y-22,x0,y+22,c,{sw:1.4})+LN(x0+w,y-22,x0+w,y+22,c,{sw:1.4});
+    o+=T(40,y+6,lab,{s:15,w:600,f:c});
+    o+=T(180,y+6,note,{s:12,f:V.dim});
     return o;};
-  s+=row(38,'Cluster orchestration','Kubernetes · SLURM · schedulers',V.grey,'COMMODITY','everyone has one');
-  s+=row(102,'Training · post-training · RL','distributed compute frameworks',V.amber,'STANDARDISED','the ecosystem converged');
-  s+=row(166,'Inference · model-as-a-service','serving · routing · autoscaling',V.cyan,'CONTESTED','specialists lead here');
-  /* band 2 — two worlds of compute, converging */
-  s+=T(20,262,'TWO WORLDS OF COMPUTE',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
-  const world=(x,c,t,pts)=>{let o=B(x,278,420,150,c,{r:12,fill:c+'12'});
-    o+=T(x+22,308,t,{s:15,w:700,f:c});
-    pts.forEach((p,i)=>o+=T(x+22,336+i*24,'· '+p,{s:12,f:'#c6ccda'}));
-    return o;};
-  s+=world(20,V.amber,'Training',['reserved capacity, long runs','beyond small scale you must control the infra','contracts, not credit cards']);
-  s+=world(560,V.cyan,'Inference',['bursty, latency-bound, priced per token','open-model demand accelerating fast','many providers, real traction']);
-  s+=T(500,352,'≠',{a:'middle',s:30,w:700,f:V.dim});
-  s+='<path d="M230 440 L500 470 L770 440" fill="none" stroke="'+V.yel+'" stroke-width="1.6" stroke-dasharray="6 5"/>';
-  s+=B(236,462,528,56,V.yel,{r:12,fill:V.yel+'14'});
-  s+=T(500,484,'Most scaled customers want both',{a:'middle',s:13.5,w:600,f:V.yel});
-  s+=T(500,505,'keeping them separate is expensive — one fleet, orchestrated together',{a:'middle',s:11,f:V.dim});
-  /* band 3 — margin stacking */
-  s+=T(20,556,'MARGIN STACKING',{s:11,w:700,ls:'.16em',f:V.dim,m:1});
-  const bar=(y,w,c,t,sub)=>B(20,y,w,44,c,{r:8,fill:c+'55',sw:.9})
-    +T(40,y+27,t,{s:13,w:600})+T(w+40,y+27,sub,{s:11,f:c,m:1});
-  s+=bar(572,620,V.green,'Optimised stack · rented compute','more tokens per dollar');
-  s+=bar(628,392,V.red,'Less-optimised stack · owned compute','fewer');
-  s+=T(20,706,'Owning the iron is not the edge. Throughput per dollar is — and it is set in software.',{s:13.5,w:600,f:V.ink});
-  s+=T(20,730,'How big the edge is stays genuinely hard to quantify: token throughput varies by model, batch and workload.',{s:11.5,f:V.dim});
-  s+=T(20,754,'Which is why it ends where it always ends — product quality, then scale: TCO, financing, price.',{s:11.5,f:V.yel});
-  return SVh(s,780);
+  s+=spread(268,650,130,V.grey,'Silicon','narrow — same parts, same price');
+  s+=spread(330,478,456,V.cyan,'Software','wide — and it is the part you control');
+  /* the consequence */
+  s+=B(40,378,902,72,V.yel,{r:14,fill:V.yel+'12'});
+  s+=T(66,412,'An optimised stack on rented compute beats a less-optimised stack on owned compute.',{s:19,w:700,f:V.yel});
+  s+=T(66,436,'Owning the iron was never the edge. Throughput per dollar is — and it is written in software.',{s:12.5,f:'#c6ccda'});
+  /* where it is won, in one line */
+  const chip=(x,w,c,t,tag)=>B(x,478,w,44,c,{r:10,fill:c+'12'})
+    +T(x+16,498,t,{s:12.5,w:600,f:c})+T(x+16,514,tag,{s:10,f:V.dim,m:1});
+  s+=chip(40,286,V.grey,'Cluster orchestration','commodity — everyone has one');
+  s+=chip(348,286,V.amber,'Training · post-training · RL','standardised on shared frameworks');
+  s+=chip(656,286,V.cyan,'Inference serving','contested — specialists lead');
+  s+=T(40,556,'How large the edge is stays unsettled: token throughput moves with model, batch and workload.',{s:12,f:V.dim});
+  return SVh(s,580);
 };
 
 /* — DC 7. geography, regulation and labour — */
