@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#090a0f; --bg2:#0c0e15;
@@ -16,8 +16,8 @@
     --accent:#6f8dff; --glow:rgba(111,141,255,.42);
     --pre:#8b93a6; --today:#e0a355; --future:#57c7dd;
     --pwr:#e0a355; --cmp:#46c6dd; --dc:#6f8dff; --app:#ab7cf1;
-    --serif:'Instrument Serif',Georgia,serif;
-    --sans:'Instrument Sans',system-ui,sans-serif;
+    --serif:'Archivo',system-ui,sans-serif;
+    --sans:'Archivo',system-ui,sans-serif;
     --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   }
   *{box-sizing:border-box}
@@ -43,12 +43,12 @@
   .view.on{opacity:1;visibility:visible;transform:none;pointer-events:auto}
   .vtitle{flex:none;padding-top:clamp(4px,1.4vh,18px)}
   .eyebrow{font:500 11.5px var(--mono);letter-spacing:.2em;color:var(--accent);transition:color .5s;margin-bottom:10px}
-  h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.8vw,58px);line-height:.98;letter-spacing:-.005em;margin:0}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(34px,4.8vw,58px);line-height:.98;letter-spacing:-.02em;margin:0}
 
   /* ===== HOME (big immersive) ===== */
   #v-home{justify-content:center}
   #v-home .hhead{flex:none}
-  #v-home h1{font-size:clamp(46px,7.4vw,104px);line-height:.92;letter-spacing:-.015em}
+  #v-home h1{font-size:clamp(46px,7.4vw,104px);line-height:.9;letter-spacing:-.035em;font-weight:700}
   #v-home h1 .sub{display:block;font-style:italic;color:#cfd6ea;font-size:.62em;margin-top:.06em}
   #v-home .kick{font:500 12px var(--mono);letter-spacing:.28em;color:var(--accent);margin-bottom:20px;text-transform:uppercase}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,22px);margin-top:clamp(18px,3vh,38px);max-width:660px}
@@ -60,7 +60,7 @@
   @keyframes scan{0%{transform:translateY(0);opacity:0}12%{opacity:.9}48%{transform:translateY(560%);opacity:.9}62%{opacity:0}100%{transform:translateY(560%);opacity:0}}
   .hcard .meta{padding:12px 16px 14px}
   .hcard .no{font:600 10.5px var(--mono);letter-spacing:.16em;color:var(--ca)}
-  .hcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.1vw,29px);line-height:1;margin:0;color:var(--ink)}
+  .hcard h3{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2.1vw,29px);line-height:1;letter-spacing:-.01em;margin:0;color:var(--ink)}
   .hcard .go{position:absolute;right:14px;bottom:13px;width:34px;height:34px;border-radius:50%;background:var(--ca);color:#0a0c12;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:transform .25s}
   .hcard:hover .go{transform:translateX(4px)}
   .mini-shift,.mini-stack{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
@@ -116,7 +116,7 @@
   .panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.024),rgba(255,255,255,.006));padding:clamp(18px,2.2vw,28px);height:100%;max-height:100%;display:flex;flex-direction:column;min-height:0;box-shadow:0 30px 80px -40px rgba(0,0,0,.8);transition:opacity .32s ease,transform .32s cubic-bezier(.2,.7,.2,1)}
   .panel.swap{opacity:0;transform:translateY(8px)}
   .peyebrow{font:500 10.5px var(--mono);letter-spacing:.16em;color:var(--accent)}
-  .ptitle{font-family:var(--serif);font-weight:400;font-size:clamp(28px,2.8vw,40px);line-height:1;margin:7px 0 10px}
+  .ptitle{font-family:var(--serif);font-weight:700;font-size:clamp(28px,2.8vw,40px);line-height:1;letter-spacing:-.02em;margin:7px 0 10px}
   .pmeta{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
   .pmeta .c{font:600 11px var(--mono);color:var(--accent);letter-spacing:.04em}
   .pmeta .bar-l{flex:1;height:1px;background:var(--line)}
@@ -204,11 +204,12 @@
   <div class="body"><div class="stack" id="stack"></div><div class="panel" id="panel"></div></div>
 </section>
 
-<div class="ver">v7 · pixel bg</div>
+<div class="ver">v8 · archivo + color pixels</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
 const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;};
+let fieldColorful=true;
 
 /* ============ GLYPHS ============ */
 function reveal(items){return items.map((g,i)=>'<span class="in" style="animation-delay:'+(0.08+i*0.09)+'s">'+g+'</span>').join('');}
@@ -357,7 +358,7 @@ function renderTopic(L,i){markLayer(L.id);themeFor(L);
 let cur={view:null};
 function moveSlider(){const a=document.querySelector('.topnav a.on'),s=document.getElementById('navSlider');if(!a||!s)return;s.style.width=a.offsetWidth+'px';s.style.transform='translateX('+a.offsetLeft+'px)';}
 addEventListener('resize',moveSlider);addEventListener('load',moveSlider);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveSlider);setTimeout(moveSlider,350);
-function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='matrix')themeFor(null);document.getElementById('field').style.opacity=(v==='home')?'1':'.42';}
+function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='matrix')themeFor(null);fieldColorful=(v==='home');document.getElementById('field').style.opacity=(v==='home')?'1':'.42';}
 function go(view,layer,topic){const same=cur.view===view&&cur.layer===layer&&cur.topic===topic;if(same)return;setView(view);
   if(view==='matrix')buildMatrix();
   if(view==='stack'){const L=LAYERS.find(x=>x.id===layer)||LAYERS[0];const wasStack=cur.view==='stack';const doRender=()=>{(topic!=null&&!L.blank)?renderTopic(L,topic):renderLayer(L);};
@@ -381,19 +382,24 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
   addEventListener('resize',rs);rs();
   addEventListener('mousemove',e=>{ptr.x=e.clientX;ptr.y=e.clientY;});
   addEventListener('mouseout',()=>{ptr.x=ptr.y=-9999;});
+  const PAL=[[74,108,247],[150,102,236],[70,198,221],[224,138,168]];
+  function palcol(c){c=c<0?0:c>0.9999?0.9999:c;c*=(PAL.length-1);const i=c|0,f=c-i,a=PAL[i],b=PAL[i+1];return[(a[0]+(b[0]-a[0])*f)|0,(a[1]+(b[1]-a[1])*f)|0,(a[2]+(b[2]-a[2])*f)|0];}
   function loop(t){
     x.clearRect(0,0,W,H);
     const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6f8dff';
-    const n=parseInt(acc.slice(1),16),R=n>>16&255,Gc=n>>8&255,B=n&255,tt=t*0.001,s=CELL-3;
-    const cx=COLS*0.5,cy=ROWS*0.62;
+    const n=parseInt(acc.slice(1),16),AR=n>>16&255,AG=n>>8&255,AB=n&255,tt=t*0.001,s=CELL-3;
+    const cx=COLS*0.5,cy=ROWS*0.62,col=fieldColorful;
     for(let j=0;j<ROWS;j++){const py=j*CELL;
       for(let i=0;i<COLS;i++){const px=i*CELL;
         let v=Math.sin(i*0.34+tt*1.05)+Math.sin(j*0.30-tt*0.9)+Math.sin((i+j)*0.20+tt*0.65)+Math.sin(Math.hypot(i-cx,j-cy)*0.42-tt*1.25);
         v=(v+4)/8;
         if(ptr.x>-9000){const d=Math.hypot(px-ptr.x,py-ptr.y),r=1-Math.min(1,d/230);if(r>0)v+=r*0.7*(0.55+0.45*Math.sin(d*0.05-tt*4));}
         v=v<0?0:v>1?1:v;
-        const a=v*v*v*0.55;
+        const a=v*v*v*0.62;
         if(a<0.012)continue;
+        let R,Gc,B;
+        if(col){const cc=(Math.sin(i*0.09+tt*0.25)+Math.sin(j*0.075-tt*0.2)+2)/4,pc=palcol(cc);R=pc[0];Gc=pc[1];B=pc[2];}
+        else{R=AR;Gc=AG;B=AB;}
         x.fillStyle='rgba('+R+','+Gc+','+B+','+a.toFixed(3)+')';
         x.fillRect(px,py,s,s);
       }
