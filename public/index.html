@@ -177,16 +177,20 @@
   .pmeta{display:flex;align-items:center;gap:10px;margin:2px 0 10px}
   .pmeta .c{font:600 11px var(--mono);color:var(--accent);letter-spacing:.04em}
   .pmeta .bar-l{flex:1;height:1px;background:var(--line)}
-  .boxes{display:grid;grid-template-columns:1fr 1fr 1fr;grid-auto-rows:minmax(130px,208px);align-content:center;gap:12px;flex:1;min-height:0;overflow:hidden}
+  .boxes{display:grid;grid-template-columns:1fr 1fr 1fr;grid-auto-rows:minmax(104px,146px);align-content:center;gap:12px;flex:1;min-height:0;overflow:hidden}
+  .gcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;align-content:center;flex:1;min-height:0;overflow:hidden}
+  .gcol{display:flex;flex-direction:column;gap:11px;min-height:0}
+  .gcol>.gh{display:flex;align-items:center;gap:10px;padding-bottom:11px;border-bottom:1.5px solid var(--accent)}
+  .gcol>.gh .gn{font:700 14px var(--mono);letter-spacing:.14em;color:var(--accent)}
+  .gcol .box{grid-auto-rows:unset}
   .boxes::-webkit-scrollbar{width:6px}.boxes::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
-  .box{border:1px solid var(--line2);background:rgba(255,255,255,.04);border-radius:12px;padding:14px 15px;transition:.18s;cursor:pointer;animation:pop .4s cubic-bezier(.2,.7,.2,1) both}
+  .box{border:1px solid var(--line2);background:rgba(255,255,255,.04);border-radius:12px;padding:14px 16px 16px;transition:.18s;cursor:pointer;animation:pop .4s cubic-bezier(.2,.7,.2,1) both}
   .box:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);background:rgba(255,255,255,.075);transform:translateY(-2px)}
-  .box .bhead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px}
+  .box .bhead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
   .bico{display:inline-flex;color:var(--accent)}.bico svg{display:block}
-  .box .bico svg{width:34px;height:34px}
+  .box .bico svg{width:52px;height:52px}
   .box .bi{font:600 10.5px var(--mono);color:var(--accent);letter-spacing:.05em}
-  .box .bn{font:500 15px/1.15 var(--sans);margin:0 0 6px;color:var(--ink)}
-  .box .bd{font:400 11.5px/1.42 var(--sans);color:var(--ink-soft)}
+  .box .bn{font:600 20px/1.12 var(--sans);letter-spacing:-.015em;margin:0;color:var(--ink)}
   .dhh{display:flex;align-items:center;gap:13px;margin:7px 0 14px}
   .bico.big{width:48px;height:48px;flex:none;border:1px solid var(--line);border-radius:13px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--accent) 9%,transparent)}
   .bico.big svg{width:30px;height:30px}
@@ -272,7 +276,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v45 · power recut</div>
+<div class="ver">v46 · cards + chart surfaces</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -319,7 +323,7 @@ G.buildings=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rec
 G.chart=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><path d="M4 21h18" stroke="'+c+'" stroke-width="1.3"/><rect class="riseb" x="6" y="14" width="3.4" height="7" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.22s" x="11.3" y="9" width="3.4" height="12" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.44s" x="16.6" y="5" width="3.4" height="16" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/></svg>';
 G.modules=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="4" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="bob" x="8.5" y="4.5" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3" fill="'+c+'" fill-opacity=".18"/></svg>';
 G.sat=c=>'<svg class="gi" viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="10" y="10" width="6" height="6" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="pulse" x="2" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><rect class="pulse" style="animation-delay:.5s" x="18" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><path d="M13 10V6" stroke="'+c+'" stroke-width="1.2"/><path class="beat" d="M11 6.2a2.2 2.2 0 0 1 4 0" stroke="'+c+'" stroke-width="1.2"/></svg>';
-const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','memory','memory','chart','mesh','lock'],dc:['modules','buildings','chart','lock','sat','reactor','globe'],apps:['globe','modules','reactor']};
+const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','chart','lock','memory','memory','mesh'],dc:['modules','buildings','chart','lock','sat','reactor','globe'],apps:['globe','modules','reactor']};
 function topicIcon(id,i,c){const nm=(TICON[id]||[])[i];return (nm&&G[nm])?G[nm](c):G.chip(c);}
 
 /* real Natural Earth geometry, Natural Earth projection, fitted to the 1000x460 viewBox */
@@ -346,6 +350,17 @@ function ARROW(x1,y,x2,c){return LN(x1,y,x2-7,y,c,{sw:1.4})+'<path d="M'+(x2)+' 
    leader to a named point. Titles and captions are set in italic serif so
    the figure speaks in the deck's editorial voice, not the UI's.          */
 const A={power:V.amber,compute:V.cyan,dc:V.blue,apps:V.pur};
+/* The accent is a stroke, an edge, a dot or a word — never a shape fill.
+   Filled accent over near-black desaturates into mud (amber especially), which
+   is why the landing page never does it either. The one exception is the wash
+   under a chart line, which reads as area rather than as a swatch. */
+const SURF='rgba(255,255,255,.045)', SLINE='rgba(255,255,255,.11)';
+/* a container in the deck's own surface language, not a tinted wash */
+function PANEL(x,y,w,h,o){o=o||{};
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(o.r==null?10:o.r)+'" fill="'+(o.fill||SURF)+'" stroke="'+(o.stroke||SLINE)+'" stroke-width="'+(o.sw||1)+'"/>';}
+function BAR(x,y,w,h,c,o){o=o||{};
+  return PANEL(x,y,w,h,{r:o.r==null?5:o.r,stroke:o.live===false?SLINE:c,sw:o.live===false?1:1.15})
+       + B(x,y,3.5,h,c,{r:2,fill:o.live===false?'rgba(255,255,255,.18)':c,sw:0});}
 function FT(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" fill="'+(o.f||V.ink)+'" font-family="Source Serif 4,Georgia,serif" font-style="italic" font-size="'+(o.s||16)+'" font-weight="'+(o.w||400)+'" text-anchor="'+(o.a||'start')+'">'+s+'</text>';}
 const FTITLE=(x,y,s)=>FT(x,y,s,{s:17.5,w:600,f:V.ink});
 function WRAP(str,max){const out=[];let cur='';
@@ -903,7 +918,7 @@ VIZ.problem=function(){
     o+=LN(x,96,x+w,96,kind==='build'?C:V.dim,{sw:1.4,op:kind==='build'?.9:.45});
     items.forEach((it,i)=>{const y=132+i*66;
       /* filled = you must build it · outline = it already exists */
-      o+=B(x,y,w,42,C,{r:5,fill:kind==='build'?C+'2a':'none',sw:kind==='build'?1.1:1.1,op:kind==='build'?.95:.5});
+      o+=BAR(x,y,w,42,C,{r:6,live:kind==='build'});
       o+=T(x+16,y+26,it[0],{s:13.5,w:600,f:V.ink});
       o+=T(x+w-16,y+26,it[1],{a:'end',s:11,f:V.dim,m:1});
       if(mark===i)o+=B(x,y,4,42,V.green,{r:2,fill:V.green,sw:0});});
@@ -913,7 +928,7 @@ VIZ.problem=function(){
   s+=col(40,380,'MORE GENERATION','build',[['Front of meter','grid scale'],['Behind the meter','on site'],['Firm baseload','nuclear · gas']]);
   s+=col(500,380,'MORE CAPACITY FACTOR','exists',[['Storage','shift the peak'],['Flexible load','curtail on demand'],['Orchestration','across the fleet']],1);
   s+=CAP('Every power idea in this module is an instance of one of the two.');
-  s+=NOTE('Filled bars must be built; outlined bars already exist and are being used at less than their rating.');
+  s+=NOTE('Accented rows must be built. Dimmed rows already exist and are being run at less than their rating.');
   return SV(s);
 };
 
@@ -930,11 +945,12 @@ VIZ.generation=function(){
     s+=T(yr(v),372,v+(v===10?' yr':''),{a:'middle',s:10,f:V.dim,m:1});});
   src.forEach((g,i)=>{const y=78+i*56;
     s+=T(x0-22,y+22,g[0],{a:'end',s:13,w:600,f:V.ink});
-    s+=B(x0,y+6,Math.max(6,yr(g[3])-x0),32,C,{r:4,fill:C+(i===4?'30':'55'),sw:0});
-    s+=T(x0+10,y+28,g[1],{s:12.5,w:700,f:V.ink,m:1});
+    const bw=Math.max(9,yr(g[3])-x0);
+    s+=BAR(x0,y+6,bw,32,C,{r:4});
+    s+=T(bw>64?x0+14:x0+bw+11,y+28,g[1],{s:12.5,w:700,f:V.ink,m:1});
     s+=FT(710,y+28,g[2],{s:12.5,f:V.dim});});
   s+=CAP('No single source closes the gap; the portfolio is chosen by lead time, not by cost.');
-  s+=NOTE('Lead times are indicative industry ranges. No split of capacity between sources is claimed.');
+  s+=NOTE('Bar length is the lead time. Ranges are indicative; no split of capacity between sources is claimed.');
   return SV(s);
 };
 
@@ -968,7 +984,7 @@ VIZ.powerconv=function(){
     o+=T(40,y+48,yr,{s:10,f:V.dim,m:1});
     const x0=190,w=(880-x0)/steps.length;
     steps.forEach((st,i)=>{const x=x0+i*w;
-      o+=B(x,y+8,w-16,50,live?C:V.dim,{r:5,fill:live?C+'22':'#ffffff08',sw:live?1.2:1,op:live?1:.8});
+      o+=(live?PANEL(x,y+8,w-16,50,{r:6,stroke:C,sw:1.15}):PANEL(x,y+8,w-16,50,{r:6}));
       o+=T(x+(w-16)/2,y+38,st,{a:'middle',s:11,w:600,f:live?V.ink:V.ink});
       if(i<steps.length-1){o+=T(x+w-8,y+34,'›',{a:'middle',s:15,f:V.dim});
         o+=T(x+w-8,y+72,'loss',{a:'middle',s:8.5,f:live?C:V.dim,m:1,op:.8});}});
@@ -1016,14 +1032,14 @@ const LAYERS=[
    {viz:'localpower',n:'Power is a local problem',d:'Land, politics, water and price decide where a gigawatt is actually legal.',era:['Follow fiber and cheap land','Chase power and friendly permits','Sovereign corridors · and orbit'],points:['US: cheap land and power inland, cost and NIMBY on the coasts.','Europe pays the most and permits the least; the Gulf and Asia build fastest.','Compute travels to where power is legal — orbit is a jurisdiction, not just a place.']},
   ]},
  {id:'compute',name:'COMPUTE',title:'Compute',accent:'#46c6dd',eyebrow:'LAYER 02 · SILICON & THE FABRIC',
-  subs:[
-   {viz:'disagg',n:'Architecture',d:'Heterogeneous CPU · GPU · QPU in ratios the workload sets. Shrink is out of gas.',lead:'Dennard scaling is over and shrink is nearly out of gas, so performance now comes from specialization and packaging — heterogeneous dies stacked and stitched together.',era:['CPU-centric · general purpose','GPU-centric · HBM memory wall','Memory-defined · heterogeneous xPU'],points:['Gains shift from lithography to <b>advanced packaging</b>.','Chiplets mix process nodes on a single package.','Compute : memory : IO ratios are set by the workload.']},
+  groups:[{n:'CHIPS',ids:[0,1,2,3]},{n:'MEMORY',ids:[4,5]},{n:'NETWORKING',ids:[6]}],
+  subs:[   {viz:'disagg',n:'Architecture',d:'Heterogeneous CPU · GPU · QPU in ratios the workload sets. Shrink is out of gas.',lead:'Dennard scaling is over and shrink is nearly out of gas, so performance now comes from specialization and packaging — heterogeneous dies stacked and stitched together.',era:['CPU-centric · general purpose','GPU-centric · HBM memory wall','Memory-defined · heterogeneous xPU'],points:['Gains shift from lithography to <b>advanced packaging</b>.','Chiplets mix process nodes on a single package.','Compute : memory : IO ratios are set by the workload.']},
    {viz:'verticality',n:'Verticality & packaging',d:'Shrink is out of gas, so the industry builds up — and pays in heat.',lead:'Geometry shrink is running out. Performance now comes from the Y axis: stacking dies, memory and layers — which buys density and spends it on power, heat and packaging.',era:['Shrink the transistor','2.5D packaging · HBM beside the die','Full 3D stacks · new materials'],points:['NAND already went <b>32 → 300 → 1,000 layers</b>.','Verticality raises power density and heat.','<b>Material science</b> becomes the limiting discipline.']},
+   {viz:'ratios',n:'Workload ratios',d:'CPU orchestrates, GPU generates, QPU simulates — in ratios the workload sets.',lead:'There is no single right machine. Each workload implies a different CPU:GPU:QPU mix — and the agentic harness is why the CPU came back.',era:['CPU only','~1 CPU : 2 GPU','Heterogeneous, per workload'],points:['A harness is SQL, APIs and glue — <b>not GPU work</b>.','Token generation stays GPU-bound.','Quantum simulation introduces a third ratio.']},
+   {viz:'cpu',n:'Co-design & the moat',d:'Model ↔ chip co-design, and AI-written compilers routing around CUDA.',lead:'The frontier is now model-and-chip co-design: architectures shaped to the silicon, and AI-written compilers that route around incumbent software moats.',era:['Hardware and software siloed','CUDA moat · hand-tuned kernels','AI-generated compilers · open accelerators'],points:['Whoever owns the <b>compiler</b> owns the margin.','Model shapes are increasingly hardware-aware.','AI writing its own kernels erodes vendor lock-in.']},
    {viz:'memorywall',n:'Memory',d:'AGI is memory-hungry. HBM · 3D-DRAM · NAND — put memory everywhere.',lead:'Frontier models are bottlenecked by memory bandwidth and capacity, not raw FLOPs. The answer is to put memory everywhere and closer to compute.',era:['DDR beside the CPU','HBM stacked on the GPU','3D-DRAM + NAND tiers · CXL pooling'],points:['<b>HBM bandwidth</b>, not compute, caps real utilization.','3D stacking and CXL pooling expand usable capacity.','Memory now drives more cost and power than logic.']},
    {viz:'memarch',n:'Memory hierarchy',d:'HBM · DDR · CXL · SSD — each workload pulls a different pyramid.',lead:'The hierarchy is being re-cut per workload. Training wants bandwidth at the top; agentic work needs every tier at once, spilling KV cache to SSD and pooling capacity over CXL.',era:['DDR and disk','HBM on package · SSD tier','HBM/HBF · CXL pools · networked lakes'],points:['<b>KV cache</b> is the new capacity driver.','CXL pools memory across the whole rack.','NAND becomes part of the memory system, not storage.']},
-   {viz:'ratios',n:'Workload ratios',d:'CPU orchestrates, GPU generates, QPU simulates — in ratios the workload sets.',lead:'There is no single right machine. Each workload implies a different CPU:GPU:QPU mix — and the agentic harness is why the CPU came back.',era:['CPU only','~1 CPU : 2 GPU','Heterogeneous, per workload'],points:['A harness is SQL, APIs and glue — <b>not GPU work</b>.','Token generation stays GPU-bound.','Quantum simulation introduces a third ratio.']},
    {viz:'optics',n:'Networking',d:'Copper runs out of reach; optics move inward. Scale-up, out, across.',lead:'At GW scale the network is the computer. Copper runs out of reach, so optics move inward — from between buildings to between chips.',era:['Copper · top-of-rack','Optical DCI · NVLink in-rack','Co-packaged optics · multi-site fabric'],points:['Scale-up (in rack), scale-out (cluster), scale-across (sites).','<b>Co-packaged optics</b> cut power per bit dramatically.','The fabric sets the effective model size you can train.']},
-   {viz:'cpu',n:'Co-design & the moat',d:'Model ↔ chip co-design, and AI-written compilers routing around CUDA.',lead:'The frontier is now model-and-chip co-design: architectures shaped to the silicon, and AI-written compilers that route around incumbent software moats.',era:['Hardware and software siloed','CUDA moat · hand-tuned kernels','AI-generated compilers · open accelerators'],points:['Whoever owns the <b>compiler</b> owns the margin.','Model shapes are increasingly hardware-aware.','AI writing its own kernels erodes vendor lock-in.']},
   ]},
  {id:'dc',name:'DATA CENTER',title:'The Data Center',accent:'#6f8dff',eyebrow:'LAYER 03 · THE MACHINE & THE MONEY',
   subs:[
@@ -1089,9 +1105,15 @@ const panel=document.getElementById('panel');
 function themeFor(L){const a=L?L.accent:'#6f8dff';document.documentElement.style.setProperty('--accent',a);document.documentElement.style.setProperty('--glow',rgba(a,.42));document.documentElement.style.setProperty('--glowbg',rgba(a,.11));}
 function markLayer(id){document.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',id!=null&&r.dataset.id===id));}
 function renderLayer(L){markLayer(L.id);themeFor(L);
-  let boxes=L.blank?'<div class="blankbox"><div class="t">In progress</div></div>'
-    :L.subs.map((s,i)=>'<div class="box" data-i="'+i+'" style="animation-delay:'+(i*40)+'ms"><div class="bhead"><span class="bico in" style="animation-delay:'+(0.05+i*0.07)+'s">'+topicIcon(L.id,i,L.accent)+'</span><span class="bi">'+String(i+1).padStart(2,'0')+'</span></div><div class="bn">'+s.n+'</div><div class="bd">'+s.d+'</div></div>').join('');
-  panel.innerHTML='<div class="dtop"><div class="back" id="upBtn">‹ All layers</div></div><div class="ptitle">'+L.title+'</div><div class="pmeta"><span class="bar-l"></span></div><div class="boxes">'+boxes+'</div>';
+  const card=(s,i)=>'<div class="box" data-i="'+i+'" style="animation-delay:'+(i*40)+'ms"><div class="bhead">'
+    +'<span class="bico in" style="animation-delay:'+(0.05+i*0.07)+'s">'+topicIcon(L.id,i,L.accent)+'</span>'
+    +'<span class="bi">'+String(i+1).padStart(2,'0')+'</span></div><div class="bn">'+s.n+'</div></div>';
+  let body;
+  if(L.blank) body='<div class="boxes"><div class="blankbox"><div class="t">In progress</div></div></div>';
+  else if(L.groups) body='<div class="gcols">'+L.groups.map(g=>'<div class="gcol"><div class="gh"><span class="gn">'+g.n+'</span></div>'
+      +g.ids.map(i=>card(L.subs[i],i)).join('')+'</div>').join('')+'</div>';
+  else body='<div class="boxes">'+L.subs.map(card).join('')+'</div>';
+  panel.innerHTML='<div class="dtop"><div class="back" id="upBtn">‹ All layers</div></div><div class="ptitle">'+L.title+'</div><div class="pmeta"><span class="bar-l"></span></div>'+body;
   const ub=panel.querySelector('#upBtn'); if(ub) ub.addEventListener('click',()=>go('stack'));
   panel.querySelectorAll('.box[data-i]').forEach(b=>b.addEventListener('click',()=>go('stack',L.id,+b.dataset.i)));}
 function renderTopic(L,i){markLayer(L.id);themeFor(L);
