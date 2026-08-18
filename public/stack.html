@@ -275,7 +275,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v32 · stack card</div>
+<div class="ver">v33 · stack card r</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -998,13 +998,13 @@ const SLAB='<svg class="slab" viewBox="0 0 300 124" preserveAspectRatio="xMidYMi
   let h='<svg viewBox="0 0 300 150" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
   LY.forEach(function(l,i){
     const y=i*29, c=l[0];
-    h+='<g transform="translate(126,'+y+')">'
+    h+='<g transform="translate(4,'+y+')">'
       +'<polygon points="6,26 75,46 75,60 6,40" fill="'+rgba(c,.5)+'"/>'
       +'<polygon points="144,26 75,46 75,60 144,40" fill="'+rgba(c,.34)+'"/>'
       +'<polygon points="6,26 75,6 144,26 75,46" fill="'+c+'" stroke="rgba(255,255,255,.22)" stroke-width="1"/>'
       +'</g>';
-    h+='<g transform="translate(6,'+(y+13)+')" color="'+c+'">'+G[l[1]](c)+'</g>';
-    h+='<text x="40" y="'+(y+30)+'" fill="'+c+'" font-family="IBM Plex Mono,monospace" font-size="9.5" font-weight="600" letter-spacing="0.4">'+l[2]+'</text>';
+    h+='<g transform="translate(166,'+(y+13)+')" color="'+c+'">'+G[l[1]](c)+'</g>';
+    h+='<text x="200" y="'+(y+30)+'" fill="'+c+'" font-family="IBM Plex Mono,monospace" font-size="9.5" font-weight="600" letter-spacing="0.4">'+l[2]+'</text>';
   });
   h+='</svg>';
   document.getElementById('miniStack').innerHTML=h;
