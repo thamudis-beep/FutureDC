@@ -264,7 +264,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v16 · full height</div>
+<div class="ver">v17 · power narrative</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -311,7 +311,7 @@ G.buildings=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rec
 G.chart=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><path d="M4 21h18" stroke="'+c+'" stroke-width="1.3"/><rect class="riseb" x="6" y="14" width="3.4" height="7" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.22s" x="11.3" y="9" width="3.4" height="12" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.44s" x="16.6" y="5" width="3.4" height="16" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/></svg>';
 G.modules=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="4" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="bob" x="8.5" y="4.5" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3" fill="'+c+'" fill-opacity=".18"/></svg>';
 G.sat=c=>'<svg class="gi" viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="10" y="10" width="6" height="6" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="pulse" x="2" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><rect class="pulse" style="animation-delay:.5s" x="18" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><path d="M13 10V6" stroke="'+c+'" stroke-width="1.2"/><path class="beat" d="M11 6.2a2.2 2.2 0 0 1 4 0" stroke="'+c+'" stroke-width="1.2"/></svg>';
-const TICON={power:['reactor','sst','meter','battery','sun','globe'],compute:['chip','modules','memory','memory','chart','mesh','lock'],dc:['buildings','chart','modules','globe','sat','sat','reactor'],apps:['globe','modules','reactor']};
+const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','memory','memory','chart','mesh','lock'],dc:['buildings','chart','modules','globe','sat','sat','reactor'],apps:['globe','modules','reactor']};
 function topicIcon(id,i,c){const nm=(TICON[id]||[])[i];return (nm&&G[nm])?G[nm](c):G.chip(c);}
 
 /* ================= STORY DIAGRAMS ================= */
@@ -918,16 +918,156 @@ VIZ.appphys=()=>appStack('Physical AI','robotics, autonomy, simulation — compu
 VIZ.appsci=()=>appStack('Scientific AI','materials, biology, climate — simulation of nature itself',[95,80,90,25],
   ['Long-running jobs; throughput beats latency.','First real pull for QPUs alongside GPUs.','Drives the densest, most power-hungry racks.'],V.cyan);
 
+
+/* — 1. the path to 100 GW/yr — */
+VIZ.path100gw=function(){
+  let s='';
+  const x0=70,x1=930,yb=340;
+  s+=LN(x0,yb,x1,yb,V.dim,{sw:1.2})+LN(x0,60,x0,yb,V.dim,{sw:1.2});
+  const Y=v=>yb-(v/110)*260;
+  [0,25,50,75,100].forEach(v=>{s+=T(x0-12,Y(v)+4,''+v,{a:'end',s:10,f:V.dim,m:1});s+=LN(x0,Y(v),x1,Y(v),V.dim,{sw:.6,op:.16});});
+  s+=T(x0-12,44,'GW/yr',{a:'end',s:10,f:V.dim,m:1});
+  const seg=[{n:'PAST',c:V.grey,x:x0,w:250,v:5,note:'grid only · +3% if at all'},
+             {n:'NOW',c:V.amber,x:x0+250,w:290,v:50,note:'grid fast + behind-the-meter'},
+             {n:'FUTURE',c:V.cyan,x:x0+540,w:320,v:100,note:'nuclear + orbital'}];
+  s+='<path d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.amber+'" opacity=".10"/>';
+  s+='<path class="draw" pathLength="1" d="M'+x0+' '+Y(5)+' L'+(x0+250)+' '+Y(6)+' C'+(x0+340)+' '+Y(20)+' '+(x0+440)+' '+Y(38)+' '+(x0+540)+' '+Y(50)+' C'+(x0+660)+' '+Y(66)+' '+(x0+780)+' '+Y(88)+' '+x1+' '+Y(100)+'" fill="none" stroke="'+V.amber+'" stroke-width="3"/>';
+  seg.forEach((g,i)=>{
+    s+=LN(g.x,60,g.x,yb,V.dim,{sw:1,op:.35,d:'4 4'});
+    s+=T(g.x+14,84,g.n,{s:13,w:700,f:g.c,ls:'.1em',m:1});
+    s+=T(g.x+14,104,g.note,{s:10.5,f:V.dim});
+    s+='<circle cx="'+(g.x+g.w-20)+'" cy="'+Y(g.v)+'" r="6" fill="'+g.c+'"/>';
+    s+=T(g.x+g.w-20,Y(g.v)-16,(g.v<10?'~5':g.v)+' GW/yr',{a:'middle',s:13,w:700,f:g.c,m:1});});
+  [['2015',x0+60],['2023',x0+250],['2026',x0+430],['2030',x0+660],['2035',x1-40]].forEach(t=>s+=T(t[1],yb+24,t[0],{a:'middle',s:10.5,f:V.dim,m:1}));
+  s+=T(70,392,'We added about 5 GW a year for a decade. We now need twenty times that, every year.',{s:14,w:600,f:V.ink});
+  s+=T(70,422,'Grid alone cannot get there — the last stretch is firm nuclear and, beyond the grid, orbit.',{s:12,f:V.yel});
+  return SV(s);
+};
+
+/* — 2. the problem, in two levers — */
+VIZ.problem=function(){
+  let s='';
+  s+=B(330,40,340,74,V.ink,{r:12,fill:'#ffffff10'});
+  s+=T(500,74,'POWER DELIVERED',{a:'middle',s:13,w:700,ls:'.1em',m:1});
+  s+=T(500,98,'generation  ×  capacity factor',{a:'middle',s:12,f:V.yel,m:1});
+  s+=LN(430,114,300,160,V.dim,{sw:1.4})+LN(570,114,700,160,V.dim,{sw:1.4});
+  const lever=(x,c,title,sub,items)=>{
+    let o=B(x,166,320,232,c,{r:14,fill:c+'12'});
+    o+=T(x+24,204,title,{s:16,w:700,f:c});
+    o+=T(x+24,226,sub,{s:11,f:V.dim,m:1});
+    items.forEach((it,i)=>{const y=252+i*38;
+      o+=B(x+24,y,272,30,c,{r:7,fill:c+'1f',sw:.9});
+      o+=T(x+38,y+20,it,{s:12,w:500});});
+    return o;};
+  s+=lever(60,V.amber,'More generation','build new supply',['Front-of-meter · grid scale','Behind-the-meter · on site','Gas · nuclear · solar · coal held back']);
+  s+=lever(620,V.cyan,'More capacity factor','use what exists harder',['Batteries · shift night to peak','Grid flexibility · interruptible load','Software · orchestrate the fleet']);
+  s+=T(60,436,'Two levers, not one. Every power idea in this module is an instance of one of them.',{s:13.5,w:600,f:V.ink});
+  return SV(s);
+};
+
+/* — 3. generation is a decentralised problem — */
+VIZ.generation=function(){
+  let s='';
+  s+=T(40,28,'No single source closes the gap — it is a portfolio, built by many hands',{s:13,w:600,f:V.dim});
+  const src=[{n:'Gas',c:V.amber,gw:70,lead:'2–4 yr',note:'fast · turbine backlog'},
+             {n:'Nuclear',c:V.pur,gw:6,lead:'6–10 yr',note:'firm · SMR from 2030'},
+             {n:'Solar + storage',c:V.yel,gw:58,lead:'1–2 yr',note:'cheap where sun pays'},
+             {n:'Coal retired later',c:V.grey,gw:20,lead:'now',note:'buys time, not future'},
+             {n:'Fuel cells',c:V.red,gw:17,lead:'<1 yr',note:'800V native · on site'}];
+  const maxgw=70;
+  src.forEach((g,i)=>{const y=60+i*68;
+    s+=T(196,y+26,g.n,{a:'end',s:13.5,w:600,f:g.c});
+    s+=T(196,y+44,g.lead,{a:'end',s:10,f:V.dim,m:1});
+    const w=(g.gw/maxgw)*520;
+    s+=B(216,y+6,w,38,g.c,{r:6,fill:g.c+'55',sw:.9});
+    s+=T(228,y+31,'+'+g.gw+' GW',{s:13,w:700,m:1});
+    s+=T(216+w+16,y+31,g.note,{s:11,f:V.dim});});
+  s+=B(60,414,880,44,V.cyan,{r:10,fill:V.cyan+'12'});
+  s+=T(80,442,'And increasingly it is built behind the meter — next to the campus, skipping the grid entirely.',{s:12.5,w:500,f:V.cyan});
+  return SV(s);
+};
+
+/* — 4. the grid: queue on one side, headroom on the other — */
+VIZ.gridq=function(){
+  let s='';
+  s+=T(40,26,'The generation exists. The connection does not.',{s:14,w:700,f:V.ink});
+  const bx=(x,w,c,l,sub)=>B(x,50,w,66,c,{r:8,fill:c+'1a'})+T(x+w/2,80,l,{a:'middle',s:12.5,w:600,f:c})+(sub?T(x+w/2,100,sub,{a:'middle',s:9.5,f:V.dim,m:1}):'');
+  s+=bx(40,190,V.amber,'Generation ready','built or contracted')+ARROW(234,83,272,V.dim);
+  s+=bx(276,250,V.red,'Interconnection queue','4–7 years · 2,600 GW waiting')+ARROW(530,83,568,V.dim);
+  s+=bx(572,180,V.blue,'Data center','wants power now');
+  s+=T(776,88,'the bottleneck moved',{s:12,w:600,f:V.red});
+  s+=LN(40,146,960,146,V.dim,{sw:1,op:.35});
+  s+=T(40,178,'So free capacity from the load side instead',{s:14,w:700,f:V.cyan});
+  const x0=60,x1=620,yb=396,yt=210;
+  s+=LN(x0,yb,x1+10,yb,V.dim,{sw:1.2})+LN(x0,yt,x0,yb,V.dim,{sw:1.2});
+  const pts=[];for(let i=0;i<=60;i++){const f=i/60;const v=1-Math.pow(f,.34)*.62;pts.push([x0+(x1-x0)*f,yb-(yb-yt)*v]);}
+  const path='M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
+  s+='<path d="'+path+' L'+x1+' '+yb+' L'+x0+' '+yb+' Z" fill="'+V.blue+'" opacity=".14"/>';
+  s+='<path class="draw" pathLength="1" d="'+path+'" fill="none" stroke="'+V.blue+'" stroke-width="2.4"/>';
+  const peakY=pts[0][1],cut=peakY+30;
+  const sliver=pts.filter(q=>q[1]<=cut);
+  if(sliver.length>1){
+    s+='<path d="M'+sliver.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L')+' L'+sliver[sliver.length-1][0].toFixed(1)+' '+cut+' L'+x0+' '+cut+' Z" fill="'+V.cyan+'" opacity=".55"/>';
+    s+=LN(sliver[sliver.length-1][0],cut,sliver[sliver.length-1][0],peakY-8,V.cyan,{sw:1,d:'3 3',op:.7});
+  }
+  s+=LN(x0,cut,x1,cut,V.cyan,{sw:1.4,d:'6 4',op:.8});
+  s+=T(x0+140,peakY+34,'curtail this sliver',{s:11.5,w:700,f:V.cyan,m:1});
+  s+=T(x0+140,peakY+50,'~0.25% of hours',{s:10,f:V.dim,m:1});
+  s+=LN(x0+134,peakY+30,x0+44,peakY+10,V.cyan,{sw:1,op:.6});
+  s+=T(x0+4,peakY-12,'peak',{s:10.5,f:V.dim,m:1});
+  s+=T(x1-120,yb-18,'most of the year',{s:10.5,f:V.dim,m:1});
+  s+=T(x0,yb+26,'hours of the year, sorted by load  →',{s:10.5,f:V.dim,m:1});
+  s+=B(680,210,280,186,V.cyan,{r:12,fill:V.cyan+'0f'});
+  s+=T(700,244,'~100 GW',{s:26,w:700,f:V.cyan,m:1});
+  s+=T(700,268,'of headroom on the existing grid',{s:11,f:V.dim});
+  s+=T(700,304,'if large loads can be interrupted',{s:11.5,w:500});
+  s+=T(700,330,'for a fraction of the year',{s:11.5,w:500});
+  s+=T(700,368,'batteries · flexible training · orchestration',{s:10.5,f:V.yel,m:1});
+  s+=T(40,442,'Interruptible load and storage buy years the interconnection queue cannot.',{s:13,f:V.ink});
+  return SV(s);
+};
+
+/* — 6. power is a local problem — */
+VIZ.localpower=function(){
+  let s='';
+  s+=T(40,26,'Where you may build is decided locally — by land, politics, water and price',{s:13,w:600,f:V.dim});
+  const moons=(cx,cy,r,list)=>{let o='';list.forEach((m,i)=>{const a=(-152+i*58)*Math.PI/180,mx=cx+Math.cos(a)*r,my=cy+Math.sin(a)*r;
+    o+='<circle cx="'+mx.toFixed(1)+'" cy="'+my.toFixed(1)+'" r="15" fill="'+(m[1]?V.red:V.green)+'" fill-opacity=".22" stroke="'+(m[1]?V.red:V.green)+'" stroke-width="1.1"/>';
+    o+=T(mx,my+3.5,m[0],{a:'middle',s:8,w:700,m:1,f:m[1]?V.red:V.green});});return o;};
+  // US
+  s+='<path d="M96,150 L150,132 L228,126 L296,138 L332,158 L338,186 L318,206 L292,244 L238,262 L168,264 L118,246 L86,208 L74,176 Z" fill="'+V.blue+'" fill-opacity=".14" stroke="'+V.blue+'" stroke-width="1.3"/>';
+  s+='<path d="M96,150 L128,140 L134,254 L118,246 L86,208 L74,176 Z" fill="'+V.amber+'" fill-opacity=".26"/>';
+  s+='<path d="M296,138 L332,158 L338,186 L318,206 L300,232 L288,142 Z" fill="'+V.red+'" fill-opacity=".22"/>';
+  s+=T(150,196,'cheap land',{a:'middle',s:10,w:600,f:V.amber,m:1})+T(150,212,'cheap power',{a:'middle',s:10,w:600,f:V.amber,m:1});
+  s+=T(316,180,'coasts',{a:'middle',s:9.5,w:600,f:V.red,m:1});
+  s+=T(206,300,'UNITED STATES',{a:'middle',s:12.5,w:700,ls:'.08em',m:1});
+  s+=moons(206,192,132,[['NIMBY',1],['TAX',0],['WATER',1],['COST',0]]);
+  // Europe
+  s+='<path d="M470,150 L520,138 L560,150 L572,176 L556,204 L560,232 L524,250 L484,240 L466,208 L462,176 Z" fill="'+V.pur+'" fill-opacity=".14" stroke="'+V.pur+'" stroke-width="1.3"/>';
+  s+=T(518,300,'EUROPE',{a:'middle',s:12.5,w:700,ls:'.08em',m:1});
+  s+=T(518,196,'high cost',{a:'middle',s:10,w:600,f:V.red,m:1});
+  s+=moons(518,192,96,[['GDPR',1],['GRID',1],['COST',1],['NIMBY',1]]);
+  // Asia
+  s+='<path d="M700,142 L780,128 L860,142 L900,168 L906,204 L876,236 L806,254 L736,242 L700,212 L694,172 Z" fill="'+V.cyan+'" fill-opacity=".14" stroke="'+V.cyan+'" stroke-width="1.3"/>';
+  s+=T(800,300,'ASIA + GULF',{a:'middle',s:12.5,w:700,ls:'.08em',m:1});
+  s+=T(800,196,'builds fastest',{a:'middle',s:10,w:600,f:V.green,m:1});
+  s+=moons(800,192,120,[['SUN',0],['NUKE',0],['STATE',0],['COST',0]]);
+  s+=LN(40,346,960,346,V.dim,{sw:1,op:.35});
+  s+=T(40,386,'The same gigawatt costs a different amount, takes a different number of years, and is legal in a different set of places.',{s:13,f:V.ink});
+  s+=T(40,416,'Which is why compute travels — and why orbit is a jurisdiction, not just a geography.',{s:12,f:V.yel});
+  return SV(s);
+};
+
 /* ============ STACK DATA ============ */
 const LAYERS=[
  {id:'power',name:'POWER',title:'Power',accent:'#e0a355',eyebrow:'LAYER 01 · THE BOTTOM OF THE STACK',
   subs:[
-   {viz:'path100gw',n:'Generation & sources',d:'Gas, nuclear, renewables — the bottleneck is bringing new supply online.',lead:'Compute is now a power problem. The constraint isn’t the chip — it’s finding firm, dispatchable electricity and building enough of it, fast enough.',era:['Grid tap · utility does the rest','Gas + grid · nuclear PPAs · solar+storage','Dedicated nuclear (SMR) · firm 24/7 behind-the-meter'],points:['<b>Gas turbines</b> are the fast option — but turbines and interconnects have multi-year backlogs.','<b>Nuclear</b> (SMRs, restarts) is the firm-clean bet for the 2030s.','Renewables + storage only pencil where the resource is world-class.']},
-   {viz:'powerconv',n:'Voltage & conversion loss',d:'Every conversion sheds heat — 800V and SST collapse the chain.',era:['480 VAC · four conversions','Tighter chain · direct-to-chip liquid','One stage · MV → 800 VDC · no electrical room'],points:['Each conversion loses 1–3%; the chain compounds across every stage.','<b>SST</b> collapses transformer, switchgear, UPS and PDU into a single device.','Native <b>800 VDC</b> cuts copper mass and resistive loss — the electrical room disappears.']},
-   {viz:'behindmeter',n:'Behind the meter',d:'Put generation next to the campus and skip the grid. Economics, not physics.',lead:'Rather than wait years for a grid interconnect, put generation on-site. It’s a speed-and-economics play more than a physics one.',era:['Utility supplies everything','On-site gas / fuel cells bridge the queue','Co-located firm generation as the norm'],points:['Skips multi-year interconnect and transmission queues.','Owner captures the spread between fuel and grid power.','Emissions and permitting rules decide where it’s viable.']},
-   {viz:'storage',n:'Storage & load-shifting',d:'Run flat-out overnight, bank it for the peak. Power becomes a timing problem.',lead:'Generation is cheapest when demand is lowest. Storage lets you run flat-out and bank energy for the peak — turning a supply problem into a timing one.',era:['Follow the load in real time','Batteries shave peaks + ride-through','Hours of storage · training as a flexible load'],points:['Batteries + thermal storage flatten the duty cycle.','AI <b>training can be paused and shifted</b> — a dispatchable load.','Load-shifting unlocks cheaper off-peak and stranded power.']},
-   {viz:'solargeo',n:'Solar & space',d:'Where the sun actually pays — and the orbital option beyond the grid.',lead:'Solar only pays where the sun is relentless and land is cheap — the Gulf, west China, the US Southwest. Beyond the grid entirely sits the orbital option.',era:['Rooftop / small PV · marginal','GW-scale PV + storage in the sun belts','Orbital solar · 24/7 sun · passive cooling'],points:['Capacity factor is everything — geography decides economics.','Pairing with storage is mandatory for firm output.','Space removes night, weather and permits — at a launch cost.']},
-   {viz:'geopower',n:'Geography & regulatory',d:'Sources ≠ location. Who can generate, and who will actually permit it.',lead:'Where you can generate isn’t where you can build. Permitting, transmission rights and politics shape the map as much as the physics.',era:['Metro sites near users','Chase power + permits to rural grids','Sovereign power corridors · cross-border'],points:['Interconnect + permitting is the true lead time.','Water, land and community consent gate every site.','Nations now compete to host power-rich compute.']},
+   {viz:'path100gw',n:'The path to 100 GW/yr',d:'We added ~5 GW a year. We now need twenty times that, every year.',era:['Grid only · +3% if at all · ~5 GW/yr','Grid fast + behind-the-meter · 20→50 GW/yr','100 GW/yr · firm nuclear · orbital'],points:['A decade of ~3% growth left no slack for this.','Behind-the-meter is what makes the middle years possible.','The last stretch needs <b>nuclear</b>, and beyond the grid, <b>orbit</b>.']},
+   {viz:'problem',n:'The problem',d:'Two levers: build more generation, or raise the capacity factor of what exists.',era:['Neither lever pulled hard','Both pulled at once','Flexibility becomes the cheaper lever'],points:['<b>More generation</b> — front-of-meter, behind-the-meter, every source.','<b>More capacity factor</b> — batteries, grid flexibility, interruptible load.','Every idea that follows is an instance of one of the two.']},
+   {viz:'generation',n:'Generation',d:'No single source closes the gap — it is a portfolio, built by many hands.',era:['Utility builds it, slowly','Gas + solar now, nuclear contracted','Firm nuclear · fuel cells · on-site as default'],points:['Gas is fastest but turbines and interconnects are backlogged.','Coal retiring later buys time — it does not buy a future.','Increasingly built <b>behind the meter</b>, next to the campus.']},
+   {viz:'gridq',n:'Grid & interconnection',d:'The generation exists; the connection does not. So free capacity from the load side.',era:['Grid had spare headroom','Queues stretch 4–7 years','Flexible load treated as grid capacity'],points:['Thousands of GW sit waiting in interconnection queues.','Curtailing large loads a fraction of the year frees <b>~100 GW</b> of headroom.','Batteries and orchestration turn a power problem into a timing one.']},
+   {viz:'powerconv',n:'Equipment efficiency',d:'Every conversion sheds heat — 800V and SST collapse the chain.',era:['480 VAC · four conversions','Tighter chain · direct-to-chip liquid','One stage · MV → 800 VDC · no electrical room'],points:['Each conversion loses 1–3%; the chain compounds across every stage.','<b>SST</b> collapses transformer, switchgear, UPS and PDU into one device.','Native <b>800 VDC</b> cuts copper mass — the electrical room disappears.']},
+   {viz:'localpower',n:'Power is a local problem',d:'Land, politics, water and price decide where a gigawatt is actually legal.',era:['Follow fiber and cheap land','Chase power and friendly permits','Sovereign corridors · and orbit'],points:['US: cheap land and power inland, cost and NIMBY on the coasts.','Europe pays the most and permits the least; the Gulf and Asia build fastest.','Compute travels to where power is legal — orbit is a jurisdiction, not just a place.']},
   ]},
  {id:'compute',name:'COMPUTE',title:'Compute',accent:'#46c6dd',eyebrow:'LAYER 02 · SILICON & THE FABRIC',
   subs:[
