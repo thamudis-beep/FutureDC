@@ -27,6 +27,18 @@
   #field{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges}
   .led{position:fixed;inset:0;z-index:2;pointer-events:none;
     background-image:repeating-linear-gradient(0deg,rgba(4,5,9,.62) 0 1px,transparent 1px 8px),repeating-linear-gradient(90deg,rgba(4,5,9,.62) 0 1px,transparent 1px 8px)}
+  /* tracking reticles — locked to the field's own features, home only, so they
+     never sit under a panel of content */
+  .hud{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 1.1s ease}
+  .hud.on{opacity:.88}
+  .trk{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);color:var(--tc)}
+  .trk i{position:absolute;width:11px;height:11px;border:1px solid currentColor;opacity:.9}
+  .trk i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+  .trk i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+  .trk i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+  .trk i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+  .trk b{position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);white-space:nowrap;
+    font:500 9.5px var(--mono);letter-spacing:.09em;font-variant-numeric:tabular-nums}
   .vig{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(120% 90% at 50% 42%, transparent 54%, rgba(0,0,0,.5))}
 
   .bar{position:fixed;top:0;left:0;right:0;height:58px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,52px)}
@@ -236,7 +248,7 @@
 </style>
 </head>
 <body>
-<canvas id="field"></canvas><div class="led"></div><div class="vig"></div>
+<canvas id="field"></canvas><div class="hud" id="hud"></div><div class="led"></div><div class="vig"></div>
 
 <div class="bar">
   <div class="brand" data-nav="home"><span class="dia"></span><b>FUTURE&nbsp;OF&nbsp;THE&nbsp;DATA&nbsp;CENTER</b></div>
@@ -277,7 +289,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v50 · atlas stack ownership</div>
+<div class="ver">v51 · holo background</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1149,7 +1161,8 @@ function renderTopic(L,i){markLayer(L.id);themeFor(L);
 let cur={view:null};
 function moveSlider(){const a=document.querySelector('.topnav a.on'),s=document.getElementById('navSlider');if(!a||!s)return;s.style.width=a.offsetWidth+'px';s.style.transform='translateX('+a.offsetLeft+'px)';}
 addEventListener('resize',moveSlider);addEventListener('load',moveSlider);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveSlider);setTimeout(moveSlider,350);
-function setView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='atlas')themeFor(null);fieldColorful=(v==='home');document.getElementById('field').style.opacity=(v==='home')?'1':'.42';
+function setView(v){const hd=document.getElementById('hud');if(hd)hd.classList.toggle('on',v==='home');
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.topnav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===v));moveSlider();if(v==='home'||v==='atlas')themeFor(null);fieldColorful=(v==='home');document.getElementById('field').style.opacity=(v==='home')?'1':'.42';
   if(v==='home'&&window.__scan)window.__scan();}
 const stackBody=document.getElementById('stackBody');
 function stage(n){stackBody.classList.remove('s0','s1','s2');stackBody.classList.add('s'+n);}
@@ -1197,6 +1210,13 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
   const PAL=[[64,86,128],[52,96,112],[74,84,118],[46,78,104],[86,92,120],[58,88,124]];
   const L=[];for(let k=0;k<6;k++)L.push({sx:.09+Math.random()*.13,sy:.08+Math.random()*.13,ax:.30+Math.random()*.16,ay:.30+Math.random()*.16,px:Math.random()*6.28,py:Math.random()*6.28,dep:.4+k*.16,c:PAL[k%PAL.length]});
   const BF=[];for(let k=0;k<10;k++)BF.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.018,vy:-.010-Math.random()*.016,rot:Math.random()*6.28,rs:(Math.random()-.5)*.55,sz:.030+Math.random()*.040,ph:Math.random()*6.28,fs:2.2+Math.random()*1.6,c:[96,104,130]});
+  /* holographic shells — thin elliptical isolines that precess slowly, and a
+     static starfield hashed per cell so it does not crawl between frames */
+  const RG=[{rx:.44,ry:.30,a0:0.15,sp:.030,w:.0075},
+            {rx:.33,ry:.44,a0:1.95,sp:-.023,w:.0065},
+            {rx:.53,ry:.21,a0:0.90,sp:.017,w:.0055},
+            {rx:.24,ry:.26,a0:2.60,sp:-.038,w:.0085}];
+  const hash=(i,j)=>(((i*73856093)^(j*19349663))>>>0)%10000/10000;
   const EX=[];let nextEx=1.2;
   function boom(a,b){EX.push({x:a,y:b,t0:-1,life:1.35});}
 
@@ -1240,8 +1260,16 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
   addEventListener('click',e=>boom(e.clientX,e.clientY));
   window.__scan();
 
+  /* one reticle per blob; the field already knows where they are */
+  const hud=document.getElementById('hud'),TRK=[];
+  (function(){const cols=['#6ee7a8','#6ee7a8','#e0a355','#57c7dd','#6ee7a8','#e0a355'];
+    for(let k=0;k<6;k++){const d=document.createElement('div');
+      d.className='trk';d.style.setProperty('--tc',cols[k]);
+      d.innerHTML='<i></i><i></i><i></i><i></i><b></b>';
+      hud.appendChild(d);TRK.push({el:d,lb:d.querySelector('b')});}})();
+  let hudTick=0;
   const sm={x:0,y:0};
-  let last=0;
+  let last=0,ab=null;
   function loop(t){
     const tt=t*0.001,dt=Math.min(.05,last?tt-last:.016);last=tt;T=tt;
     const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6f8dff';
@@ -1287,8 +1315,20 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
           if(g>0){w=g*g*3.0*(1-pr);I+=w;R+=w*170;G+=w*186;B+=w*214;}}
         if(ptr.x>-9000){dx=cx-ptr.x;dy=cy-ptr.y;w=1.35/((dx*dx+dy*dy)/(scale*.26)+1);I+=w;
           if(colorful){R+=w*150;G+=w*168;B+=w*200;}else{R+=w*AR;G+=w*AG;B+=w*AB;}}
+        /* the shells */
+        const rx0=cx-W*.5, ry0=cy-H*.5;
+        for(let k=0;k<4;k++){const rg=RG[k],an=rg.a0+tt*rg.sp*(REDUCED?0:1),ca=Math.cos(an),sa=Math.sin(an);
+          const u=(rx0*ca+ry0*sa)/(rg.rx*W), v=(-rx0*sa+ry0*ca)/(rg.ry*H);
+          const dd=Math.sqrt(u*u+v*v), q=(dd-1)/rg.w;
+          if(q>-3.2&&q<3.2){w=Math.exp(-q*q)*.16;I+=w;R+=w*150;G+=w*196;B+=w*228;}}
+        /* contour isolines through the blob field — the topographic read */
+        if(I>.55){const bandf=I*9.0, fr=bandf-Math.floor(bandf), e=Math.abs(fr-.5);
+          if(e>.455){w=(e-.455)*3.0;I+=w;R+=w*196;G+=w*214;B+=w*246;}}
+        /* starfield, fixed to the cell so it does not crawl */
+        const hv=hash(i,j);
+        if(hv>.9986){w=(hv-.9986)*260;I+=w;R+=w*220;G+=w*228;B+=w*246;}
         let inten=I/1.5;inten=inten>1?1:inten;
-        const a=Math.pow(inten,1.5)*0.46;
+        const a=Math.pow(inten,1.9)*0.42+hv*.006;
         const o=(j*COLS+i)<<2;
         if(a<.012){data[o+3]=0;continue;}
         R/=I;G/=I;B/=I;
@@ -1314,6 +1354,22 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
         data[o+2]=Math.min(255,data[o+2]+200*add);
         data[o+3]=Math.min(255,data[o+3]+add*150);
       }
+    }
+    if(++hudTick%7===0&&hud.classList.contains('on')){
+      for(let k=0;k<6;k++){const t=TRK[k],px=lp[k][0],py=lp[k][1];
+        t.el.style.left=px.toFixed(0)+'px';t.el.style.top=py.toFixed(0)+'px';
+        t.lb.textContent='TRK '+String(k+1).padStart(2,'0')+' · X'+(px/W).toFixed(2)+' Y'+(py/H).toFixed(2)+' · LOCK';}}
+    /* RGB split — red pulled one cell left, blue one right, weighted by how
+       bright the cell already is, so only the lit edges fringe */
+    if(!REDUCED){
+      if(!ab||ab.length!==data.length)ab=new Uint8ClampedArray(data.length);
+      ab.set(data);
+      for(let j=0;j<ROWS;j++){const row=j*COLS;
+        for(let i=1;i<COLS-1;i++){const o=(row+i)<<2;
+          const al=ab[o+3];if(al<10)continue;
+          const oL=(row+i-1)<<2, oR=(row+i+1)<<2;
+          data[o]  =ab[oL]*.70+ab[o]*.30;
+          data[o+2]=ab[oR+2]*.70+ab[o+2]*.30;}}
     }
     x.putImageData(img,0,0);
     requestAnimationFrame(loop);
