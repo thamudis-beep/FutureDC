@@ -30,7 +30,7 @@
   /* tracking reticles — locked to the field's own features, home only, so they
      never sit under a panel of content */
   .hud{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 1.1s ease}
-  .hud.on{opacity:.88}
+  .hud.on{opacity:.78}
   .trk{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);color:var(--tc)}
   .trk i{position:absolute;width:11px;height:11px;border:1px solid currentColor;opacity:.9}
   .trk i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
@@ -39,6 +39,11 @@
   .trk i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
   .trk b{position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);white-space:nowrap;
     font:500 9.5px var(--mono);letter-spacing:.09em;font-variant-numeric:tabular-nums}
+  .vfind i{position:absolute;width:26px;height:26px;border:1px solid rgba(255,255,255,.16)}
+  .vfind i:nth-child(1){left:26px;top:74px;border-right:0;border-bottom:0}
+  .vfind i:nth-child(2){right:26px;top:74px;border-left:0;border-bottom:0}
+  .vfind i:nth-child(3){left:26px;bottom:30px;border-right:0;border-top:0}
+  .vfind i:nth-child(4){right:26px;bottom:30px;border-left:0;border-top:0}
   .vig{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(120% 90% at 50% 42%, transparent 54%, rgba(0,0,0,.5))}
 
   .bar{position:fixed;top:0;left:0;right:0;height:58px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,52px)}
@@ -289,7 +294,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v51 · holo background</div>
+<div class="ver">v52 · holo composed</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1262,11 +1267,14 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
 
   /* one reticle per blob; the field already knows where they are */
   const hud=document.getElementById('hud'),TRK=[];
-  (function(){const cols=['#6ee7a8','#6ee7a8','#e0a355','#57c7dd','#6ee7a8','#e0a355'];
-    for(let k=0;k<6;k++){const d=document.createElement('div');
-      d.className='trk';d.style.setProperty('--tc',cols[k]);
+  const ANCH=[[.135,.175,'#6ee7a8'],[.375,.285,'#57c7dd'],[.858,.170,'#6ee7a8'],
+              [.245,.875,'#e0a355'],[.605,.750,'#6ee7a8'],[.880,.885,'#57c7dd']];
+  (function(){ANCH.forEach(function(a,k){const d=document.createElement('div');
+      d.className='trk';d.style.setProperty('--tc',a[2]);
       d.innerHTML='<i></i><i></i><i></i><i></i><b></b>';
-      hud.appendChild(d);TRK.push({el:d,lb:d.querySelector('b')});}})();
+      hud.appendChild(d);TRK.push({el:d,lb:d.querySelector('b'),ph:k*1.7});});
+    const f=document.createElement('div');f.className='vfind';
+    f.innerHTML='<i></i><i></i><i></i><i></i>';hud.appendChild(f);})();
   let hudTick=0;
   const sm={x:0,y:0};
   let last=0,ab=null;
@@ -1328,7 +1336,7 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
         const hv=hash(i,j);
         if(hv>.9986){w=(hv-.9986)*260;I+=w;R+=w*220;G+=w*228;B+=w*246;}
         let inten=I/1.5;inten=inten>1?1:inten;
-        const a=Math.pow(inten,1.9)*0.42+hv*.006;
+        const a=Math.pow(inten,2.25)*0.40+hv*.005;
         const o=(j*COLS+i)<<2;
         if(a<.012){data[o+3]=0;continue;}
         R/=I;G/=I;B/=I;
@@ -1355,10 +1363,12 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
         data[o+3]=Math.min(255,data[o+3]+add*150);
       }
     }
-    if(++hudTick%7===0&&hud.classList.contains('on')){
-      for(let k=0;k<6;k++){const t=TRK[k],px=lp[k][0],py=lp[k][1];
-        t.el.style.left=px.toFixed(0)+'px';t.el.style.top=py.toFixed(0)+'px';
-        t.lb.textContent='TRK '+String(k+1).padStart(2,'0')+' · X'+(px/W).toFixed(2)+' Y'+(py/H).toFixed(2)+' · LOCK';}}
+    if(++hudTick%9===0&&hud.classList.contains('on')){
+      for(let k=0;k<TRK.length;k++){const t=TRK[k],a=ANCH[k];
+        const fx=a[0]+Math.sin(tt*.11+t.ph)*.012-sm.x*.010,
+              fy=a[1]+Math.cos(tt*.09+t.ph*1.3)*.010-sm.y*.008;
+        t.el.style.left=(fx*W).toFixed(0)+'px';t.el.style.top=(fy*H).toFixed(0)+'px';
+        t.lb.textContent='TRK '+String(k+1).padStart(2,'0')+' · X'+fx.toFixed(2)+' Y'+fy.toFixed(2)+' · LOCK';}}
     /* RGB split — red pulled one cell left, blue one right, weighted by how
        bright the cell already is, so only the lit edges fringe */
     if(!REDUCED){
