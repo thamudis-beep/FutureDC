@@ -50,7 +50,7 @@
   .brand{display:flex;align-items:center;gap:10px;cursor:pointer}
   .brand .dia{width:9px;height:9px;background:var(--accent);transform:rotate(45deg);border-radius:1px;transition:background .6s}
   .brand b{font:600 12.5px var(--mono);letter-spacing:.02em}
-  .topnav{position:relative;display:flex;align-items:center;padding:5px;border-radius:999px;
+  .topnav{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;padding:5px;border-radius:999px;
     background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(16px);
     border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 34px -14px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
   .topnav .slider{position:absolute;left:0;top:5px;bottom:5px;border-radius:999px;background:linear-gradient(180deg,#fff,#e7eaf1);
@@ -294,7 +294,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v52 · holo composed</div>
+<div class="ver">v53 · nav centred</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
