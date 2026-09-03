@@ -327,7 +327,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v59 · race line</div>
+<div class="ver">v60 · the planet</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1322,17 +1322,17 @@ function mountEras(host){
   key.position.set(-140,200,120); key.castShadow=true;
   key.shadow.mapSize.set(2048,2048);
   var sc=key.shadow.camera;
-  sc.left=-200; sc.right=210; sc.top=150; sc.bottom=-130; sc.near=40; sc.far=560;
+  sc.left=-200; sc.right=250; sc.top=150; sc.bottom=-130; sc.near=40; sc.far=560;
   key.shadow.bias=-0.0012; key.shadow.normalBias=.6;
   scene.add(key); scene.add(key.target); key.target.position.set(0,0,0);
   var rim=new T.DirectionalLight(0x5a7ea8,.62); rim.position.set(170,70,-200); scene.add(rim);
   var fill=new T.DirectionalLight(0x8fa4c4,.42); fill.position.set(60,80,240); scene.add(fill);
 
   /* the rail everything is worked on */
-  var X0=-110, X1=-5, X2=118;
+  var X0=-110, X1=-5, X2=144;
   var railMat=mat(C.rail,{r:.92,m:.2});
-  var railTop=box(340,2.2,76,railMat,4,-2.4,0,true); railTop.receiveShadow=true; scene.add(railTop);
-  scene.add(box(344,1.0,80,mat(C.pad,{r:.95,m:.15}),4,-4.0,0));
+  var railTop=box(380,2.2,86,railMat,40,-2.4,0,true); railTop.receiveShadow=true; scene.add(railTop);
+  scene.add(box(384,1.0,90,mat(C.pad,{r:.95,m:.15}),40,-4.0,0));
 
   /* pedestal with a glowing seam in the stage's accent */
   function pedestal(x,w,d,accent){
@@ -1646,7 +1646,7 @@ function mountEras(host){
     /* street fibre vault, and the riser out to the long-haul conduit */
     g.add(box(2.2,.35,1.6,mat(0x1e232b,{r:.85,m:.3}),-15,.2,-15));
     g.add(box(1.9,.08,1.3,lit(C.aqua,.9),-15,.40,-15));
-    bundle(g,[[BX-11,HY+.4,BZ-4],[-13,.6,-8],[-15,.5,-15],[-15,.5,-19.6]],.10,fibM,4,.16);
+    bundle(g,[[BX-11,HY+.4,BZ-4],[-13,.6,-8],[-15,.5,-15],[-15,.6,-41]],.10,fibM,4,.16);
   })();
   scene.add(winIM);
 
@@ -1685,7 +1685,7 @@ function mountEras(host){
     g.add(box(9,5.0,7,mat(0x252b33,{r:.85,m:.3}),-38,2.5,-30,true));
     g.add(box(8.6,.10,.10,lit(C.forge,1.2),-38,3.6,-26.55));
     g.add(box(3.0,.6,2.4,mat(0x2a313a,{r:.8,m:.4}),-38,5.3,-30));
-    bundle(g,[[-38,6.1,-27],[-38,4.2,-31],[-38,1.2,-33],[-38,1.0,-36]],.13,fibM,5,.2);
+    bundle(g,[[-38,6.1,-27],[-38,4.2,-31],[-38,1.2,-33],[-38,1.0,-41]],.13,fibM,5,.2);
 
     /* --- power yard --- */
     for(var t=0;t<5;t++) turbineUnit(g,-32+t*12,9,0);
@@ -1719,266 +1719,184 @@ function mountEras(host){
   })();
 
   /* =========================================================
-     STAGE 3 · AGI — planetary. A multi-GW site in the same
-     building language as the campus, denser; a 1 MW hall cut
-     open at its core; a real Earth above it, an orbital layer
-     around that; compute at the site's edge.
+     STAGE 3 · AGI — the planet. The back of the pedestal is the
+     world: GW sites across countries at real coordinates, the
+     fabric between them carrying one job, an orbital layer over
+     it, inference at the edge in real cities. In front: three
+     dioramas of the future at full scale — the 1 MW hall, the
+     SMR plant, the physical world it powers.
      ========================================================= */
-  var anim={globe:null,leo:[],bigring:null,dishes:[],pulses:[],cabs:[],flow:null,links:[],arms:[],bots:[],drones:[]};
+  var anim={leo:[],bigring:null,dishes:[],pulses:[],cabs:[],flow:null,links:[],arms:[],bots:[],drones:[],sats:[]};
   var links=[];
-  var S3=pedestal(X2,96,76,C.hot);
+  var S3=pedestal(X2,150,76,C.hot);
   (function(){
     var g=S3;
-    g.add(box(96,.10,76,mat(0x1b2027,{r:.94,m:.14}),0,.05,0));
-    var road=mat(0x14181e,{r:.95,m:.08}), lane=lit(0x9aa3b2,.35,.7);
-    g.add(box(88,.06,4,road,0,.11,-10.5)); g.add(box(88,.06,4,road,0,.11,10.5));
-    g.add(box(4,.06,64,road,0,.11,0));
-    /* the perimeter loop the cabs run */
-    var PX=44.5, PZ=34.5;
-    g.add(box(2*PX+3,.06,3,road,0,.10,-PZ)); g.add(box(2*PX+3,.06,3,road,0,.10,PZ));
-    g.add(box(3,.06,2*PZ+3,road,-PX,.10,0));  g.add(box(3,.06,2*PZ+3,road,PX,.10,0));
-    g.add(box(2*PX,.02,.12,lane,0,.14,-PZ));   g.add(box(2*PX,.02,.12,lane,0,.14,PZ));
-    g.add(box(.12,.02,2*PZ,lane,-PX,.14,0));   g.add(box(.12,.02,2*PZ,lane,PX,.14,0));
+    g.add(box(150,.10,76,mat(0x14181e,{r:.94,m:.14}),0,.05,0));
 
-    /* ---- the core: a hall cut open on twelve 1 MW monoliths ---- */
-    var HX=0, HZ=-1;
-    hallShell(g,HX,HZ,34,14,7.6,C.hot,{open:true});
+    /* ---- the world, ±60° of latitude, Natural Earth ---- */
+    var MW=150, MH=50, MZ=-13;
+    var tex=new T.TextureLoader().load('img/earth.png'); geos.push({dispose:function(){tex.dispose();}});
+    if(T.SRGBColorSpace) tex.colorSpace=T.SRGBColorSpace; tex.anisotropy=8;
+    tex.offset.y=1/6; tex.repeat.y=2/3;
+    var mapM=mat(0xffffff,{r:.95,m:.02}); mapM.map=tex;
+    var map=new T.Mesh(G(new T.PlaneGeometry(MW,MH)),mapM); map.rotation.x=-Math.PI/2; map.position.set(0,.12,MZ); map.receiveShadow=true; g.add(map);
+    function LL(la,lo){ return [lo/180*(MW/2), MZ-la/60*(MH/2)]; }
+
+    /* ---- GW sites: halls, two SMR modules, batteries — one cluster per site, instanced ---- */
+    var SITES=[[32.4,-99.7],[39.0,-77.5],[33.4,-112.1],[53.5,-113.5],[-23.5,-46.6],[53.3,-6.2],
+               [59.9,10.7],[24.5,54.4],[19.1,72.9],[1.5,103.8],[35.7,139.7],[-33.9,151.2]];
+    var sxy=SITES.map(function(s){return LL(s[0],s[1]);});
+    var hM=mat(0x39414c,{r:.85,m:.3}), hl=lit(C.hot,1.6), smM=mat(0x4a525d,{r:.8,m:.25}), bM=mat(0x2a3037,{r:.8,m:.4});
+    var siteParts=[];
+    [[-1.0,-.55],[1.0,-.55],[-1.0,.55],[1.0,.55]].forEach(function(o){
+      siteParts.push([BG(1.6,.5,.9),hM,o[0],.37,o[1],1]); siteParts.push([BG(1.5,.06,.06),hl,o[0],.3,o[1]+.47,0]); });
+    [[-.6,1.55],[.6,1.55]].forEach(function(o){ siteParts.push([CG(.38,.42,.8,14),smM,o[0],.52,o[1],1]); });
+    [[-2.3,-.4],[-2.3,.4]].forEach(function(o){ siteParts.push([BG(.9,.35,.6),bM,o[0],.3,o[1],1]); siteParts.push([BG(.85,.05,.05),hl,o[0],.4,o[1]+.31,0]); });
+    var siteAt=sxy.map(function(p){return [p[0],p[1],0];});
+    repeat(g,siteParts,siteAt);
+    var domeG=G(new T.SphereGeometry(.38,14,8,0,Math.PI*2,0,Math.PI/2)), domes=inst(domeG,smM,SITES.length*2);
+    sxy.forEach(function(p){ put(domes,p[0]-.6,.92,p[1]+1.55); put(domes,p[0]+.6,.92,p[1]+1.55); }); g.add(domes);
+    var padG=G(new T.RingGeometry(3.0,3.2,40)), pads=inst(padG,lit(C.hot,.8,.55),SITES.length);
+    sxy.forEach(function(p){ put(pads,p[0],.14,p[1],-Math.PI/2,0,0); }); g.add(pads);
+
+    /* ---- the fabric: arcs between sites, and one job's traffic on them ---- */
+    var arcM=mat(C.hot,{e:C.hot,ei:.6,r:.5,m:.1,t:true,o:.8});
+    [[0,1],[0,2],[3,0],[4,1],[1,5],[5,6],[5,7],[6,7],[7,8],[8,9],[9,10],[10,11],[2,10],[9,11],[4,5],[3,10]].forEach(function(pr){
+      var a=sxy[pr[0]], b=sxy[pr[1]], d=Math.hypot(b[0]-a[0],b[1]-a[1]);
+      var c=new T.CatmullRomCurve3([new T.Vector3(a[0],.5,a[1]),new T.Vector3((a[0]+b[0])/2,2.5+d*.16,(a[1]+b[1])/2),new T.Vector3(b[0],.5,b[1])],false,'centripetal');
+      g.add(new T.Mesh(G(new T.TubeGeometry(c,24,.07,5,false)),arcM)); links.push(c); });
+    var NL=64, pulses=inst(SG(.19,8),lit(C.hotCore,2.4),NL); g.add(pulses);
+    for(var pi=0;pi<NL;pi++){ put(pulses,0,-5,0); anim.links.push({m:pulses,i:pi,c:links[pi%links.length],t:Math.random(),v:.09+Math.random()*.08,d:pi%2?1:-1}); }
+
+    /* ---- inference at the edge: real cities ---- */
+    var CITIES=[[40.7,-74],[34.05,-118.2],[41.9,-87.6],[29.8,-95.4],[25.8,-80.2],[43.7,-79.4],[49.3,-123.1],[19.4,-99.1],
+      [4.7,-74.1],[-12,-77],[-33.4,-70.6],[-34.6,-58.4],[-22.9,-43.2],[51.5,-0.1],[48.9,2.3],[40.4,-3.7],[52.5,13.4],[41.9,12.5],
+      [59.3,18.1],[52.2,21],[41,29],[55.8,37.6],[30,31.2],[6.5,3.4],[-1.3,36.8],[-26.2,28],[24.7,46.7],[35.7,51.4],[24.9,67],
+      [28.6,77.2],[13,77.6],[23.8,90.4],[13.8,100.5],[-6.2,106.8],[14.6,121],[22.3,114.2],[31.2,121.5],[39.9,116.4],[37.6,127],
+      [25,121.5],[-31.9,115.9],[-37.8,145],[-36.8,174.8],[45.5,-73.6],[33.7,-84.4],[47.6,-122.3],[39.7,-105],[50.1,8.7],[45.5,9.2],[55.7,12.6]];
+    var edge=inst(BG(.34,.10,.34),lit(0xdfe8f5,1.5),CITIES.length);
+    CITIES.forEach(function(c){ var p=LL(c[0],c[1]); put(edge,p[0],.2,p[1]); }); g.add(edge);
+
+    /* ---- the orbital layer: three shells over the world, and compute in orbit ---- */
+    var satM=mat(0x4a525d,{r:.5,m:.8}), panM=mat(0x1a2330,{r:.4,m:.6});
+    for(var ring=0;ring<3;ring++){
+      var n=22, bus=inst(BG(.5,.2,.36),satM,n), pan=inst(BG(1.5,.04,.5),panM,n);
+      for(var k=0;k<n;k++){ put(bus,0,-9,0); put(pan,0,-9,0); }
+      g.add(bus); g.add(pan);
+      anim.sats.push({bus:bus,pan:pan,n:n,rx:66-ring*5,rz:20+ring*2,y:18+ring*5,tilt:(ring-1)*.22,ph:ring*1.1,v:(ring%2?1:-1)*(.16+ring*.03)});
+    }
+    var solarM=mat(0x121a26,{r:.35,m:.7}), radM=mat(0xaab5c4,{r:.4,m:.7}), busM=mat(0x39414c,{r:.5,m:.8});
+    for(var q2=0;q2<4;q2++){
+      var sat=new T.Group();
+      sat.add(box(2.2,1.3,1.5,busM,0,0,0)); sat.add(box(1.9,.06,.06,lit(C.hotCore,1.6),0,.7,0));
+      sat.add(box(4.4,.06,1.6,solarM,3.6,0,0)); sat.add(box(4.4,.06,1.6,solarM,-3.6,0,0));
+      sat.add(box(.06,1.6,2.6,radM,0,0,1.9)); sat.add(box(.06,1.6,2.6,radM,0,0,-1.9));
+      sat.add(cyl(.6,.18,.6,mat(0xd6dfeb,{r:.4,m:.5}),0,-1.1,0,14));
+      g.add(sat); anim.bigring=anim.bigring||[]; anim.bigring.push({o:sat,a:q2/4*Math.PI*2,rx:58,rz:24,y:32,v:.09});
+    }
+    [0,5,10].forEach(function(si,gi){
+      var p=sxy[si], u3=new T.Group(); u3.position.set(p[0]+3.2,0,p[1]+1.2); g.add(u3);
+      var yoke=new T.Group(); yoke.position.y=.6; u3.add(yoke);
+      yoke.add(cyl(.08,.1,.6,SK(),0,-.25,0,8));
+      var dish=new T.Mesh(G(new T.SphereGeometry(.55,14,8,0,Math.PI*2,0,Math.PI/2.6)),mat(0xc9d3e0,{r:.4,m:.5,s:T.DoubleSide}));
+      dish.rotation.x=-Math.PI/3.2; yoke.add(dish); anim.dishes.push({y:yoke,p:gi*2.1});
+    });
+
+    /* ---- the front row: three dioramas of the future at full scale ---- */
+    var plinth=mat(0x1a1f26,{r:.92,m:.2}), seam=lit(C.hot,1.4);
+    [-50,0,50].forEach(function(vx){ g.add(box(46,.3,24,plinth,vx,.15,27,true)); });
+    g.add(box(.14,.10,24,seam,-25,.34,27)); g.add(box(.14,.10,24,seam,25,.34,27)); g.add(box(148,.10,.14,seam,0,.34,15));
+
+    /* V1 · racks are 1 MW: the hall cut open */
+    var HX=-50, HZ=27;
+    hallShell(g,HX,HZ,30,12,7.6,C.hot,{open:true});
     var monM=mat(0x2b323c,{r:.6,m:.62}), monRail=mat(C.steelL,{r:.45,m:.85}), coreM=lit(C.hot,1.6);
-    var supM=mat(0x2b4a66,{r:.4,m:.7}), retM=mat(0x5a3340,{r:.4,m:.7});
-    var fibM=mat(C.hot,{r:.5,m:.1,e:C.hot,ei:.4});
-    var monParts=[[BG(4.4,6.5,2.2),monM,0,3.25,0,1],
-                  [BG(.14,5.4,.14),monRail,-2.1,3.25,1.15,0],
-                  [BG(.14,5.4,.14),monRail, 2.1,3.25,1.15,0],
-                  [CG(.11,.11,6.1,8),supM,-2.35,3.25,0,0],
-                  [CG(.11,.11,6.1,8),retM, 2.35,3.25,0,0]];
+    var supM=mat(0x2b4a66,{r:.4,m:.7}), retM=mat(0x5a3340,{r:.4,m:.7}), fibM=mat(C.hot,{r:.5,m:.1,e:C.hot,ei:.4});
+    var monParts=[[BG(4.4,6.5,2.2),monM,0,3.25,0,1],[BG(.14,5.4,.14),monRail,-2.1,3.25,1.15,0],[BG(.14,5.4,.14),monRail,2.1,3.25,1.15,0],
+                  [CG(.11,.11,6.1,8),supM,-2.35,3.25,0,0],[CG(.11,.11,6.1,8),retM,2.35,3.25,0,0]];
     for(var b=0;b<9;b++) monParts.push([BG(3.4,.06,.05),coreM,0,.9+b*.62,1.13,0]);
     var monAt=[], trayM=mat(C.steelL,{r:.5,m:.8});
-    for(var r=0;r<2;r++){
-      var rz=HZ+(r?3.2:-3.2);
-      for(var i=0;i<6;i++) monAt.push([HX-12.5+i*5,rz,0]);
-      g.add(box(31,.18,.18,supM,HX,.45,rz-1.45)); g.add(box(31,.18,.18,retM,HX,.85,rz-1.45));
-      ladder(g,[HX-15.5,7.0,rz-.9],[HX+15.5,7.0,rz-.9],.7,trayM,1.5);
-      for(var d=0;d<6;d++){ var dx=HX-12.5+d*5;
-        g.add(tube([[dx,6.92,rz-.9],[dx,6.75,rz-.5],[dx,6.55,rz+.6]],.035,fibM,8)); }
-      g.add(box(31,.22,.22,mat(C.steel,{r:.5,m:.8}),HX,7.3,rz+1.2));
-      g.add(box(31,.05,.05,lit(C.hot,1.2),HX,7.18,rz+1.2));
-    }
-    repeat(g,monParts,monAt);
-    g.add(box(33,.12,1.2,mat(0x0c0f14,{r:.95,m:.1}),HX,.17,HZ));           /* underfloor trench */
-    var hl=new T.PointLight(0xbfefff,120,22,1.6); hl.position.set(HX,4.5,HZ+1); g.add(hl);
+    for(var r=0;r<2;r++){ var rz=HZ+(r?2.9:-2.9);
+      for(var i=0;i<5;i++) monAt.push([HX-10+i*5,rz,0]);
+      g.add(box(26,.18,.18,supM,HX,.75,rz-1.45)); g.add(box(26,.18,.18,retM,HX,1.15,rz-1.45));
+      ladder(g,[HX-13.5,7.0,rz-.9],[HX+13.5,7.0,rz-.9],.7,trayM,1.5);
+      for(var d=0;d<5;d++){ var dx=HX-10+d*5; g.add(tube([[dx,6.92,rz-.9],[dx,6.75,rz-.5],[dx,6.55,rz+.6]],.035,fibM,8)); }
+      g.add(box(26,.22,.22,mat(C.steel,{r:.5,m:.8}),HX,7.3,rz+1.2)); g.add(box(26,.05,.05,lit(C.hot,1.2),HX,7.18,rz+1.2)); }
+    monAt.forEach(function(a){ a[1]=a[1]; }); repeat(g,monParts,monAt.map(function(a){return [a[0],a[1],0];}));
+    g.add(box(29,.12,1.2,mat(0x0c0f14,{r:.95,m:.1}),HX,.36,HZ));
+    var hl2=new T.PointLight(0xbfefff,120,22,1.6); hl2.position.set(HX,4.5,HZ+1); g.add(hl2);
 
-    /* ---- four campus quadrants, sixteen halls ---- */
-    var QX=[-29,29], QZ=[-21.5,21.5];
-    QX.forEach(function(cx){ QZ.forEach(function(cz){
-      for(var hr=0;hr<2;hr++) for(var hc=0;hc<2;hc++)
-        hallShell(g,cx+(hc?7:-7),cz+(hr?5.6:-5.6),12,7,3.4,C.hot,{chillers:4});
-      ladder(g,[cx-14,4.6,cz-9.5],[cx+14,4.6,cz-9.5],.7,trayM,1.8);
-      ladder(g,[cx-14,4.6,cz+1.6],[cx+14,4.6,cz+1.6],.7,trayM,1.8);
-    });});
-    /* trunks from the core to every quadrant: tray, and the fibre in it */
-    QX.forEach(function(cx){ QZ.forEach(function(cz){
-      var sx=cx<0?-17:17, ez=cz<0?-9.5:1.6, fibre=fibM;
-      ladder(g,[sx,1.2,HZ],[cx,1.2,HZ],.6,trayM,1.8);
-      ladder(g,[cx,1.2,HZ],[cx,1.2,ez],.6,trayM,1.8);
-      var lc=new T.CatmullRomCurve3([new T.Vector3(sx,1.25,HZ),new T.Vector3(cx,1.25,HZ),new T.Vector3(cx,1.25,ez)],false,'catmullrom',0);
-      g.add(new T.Mesh(G(new T.TubeGeometry(lc,12,.05,5,false)),fibre)); links.push(lc);
-    });});
-    /* east-west trunks between the sites along the roads: scale-across runs on these */
-    ladder(g,[-43,1.2,-10.5],[43,1.2,-10.5],.6,trayM,2); ladder(g,[-43,1.2,10.5],[43,1.2,10.5],.6,trayM,2);
-    [-10.5,10.5].forEach(function(rz){ var lc=new T.CatmullRomCurve3([new T.Vector3(-43,1.25,rz),new T.Vector3(43,1.25,rz)],false,'catmullrom',0);
-      g.add(new T.Mesh(G(new T.TubeGeometry(lc,4,.05,5,false)),fibM)); links.push(lc); });
-    /* traffic on the backbone: one job, many sites */
-    var NL=54, pulses=inst(SG(.15,8),lit(C.hotCore,2.4),NL); g.add(pulses);
-    for(var pi=0;pi<NL;pi++){ put(pulses,0,-5,0); anim.links.push({m:pulses,i:pi,c:links[pi%links.length],t:Math.random(),v:.10+Math.random()*.08,d:pi%2?1:-1}); }
-
-    /* ---- north: substation, HV out over the boundary ---- */
-    var xp=[]; for(var t=0;t<4;t++) xp.push([-9+t*6,-19,0]); repeat(g,XFMR(),xp);
-    g.add(box(22,.4,.4,mat(0x3c4652,{r:.55,m:.75}),0,4.5,-19));
-    for(var bp=0;bp<4;bp++) g.add(cyl(.10,.10,1.9,SK(),-9+bp*6,3.6,-19,8));
-    pylon(g,-5,-27,12); pylon(g,5,-27,12);
-    var hv=mat(0x424b57,{r:.7,m:.6});
-    for(var w2=-1;w2<=1;w2++){
-      g.add(tube([[-5+w2*2,11.2,-27],[0,9.4,-23],[5+w2*2,11.2,-27]],.045,hv,10));
-      g.add(tube([[-5+w2*2,11.2,-27],[-6+w2*2,9.6,-36],[-7+w2*2,8.2,-45]],.045,hv,10));
-      g.add(tube([[5+w2*2,11.2,-27],[6+w2*2,9.6,-36],[7+w2*2,8.2,-45]],.045,hv,10));
-    }
-    /* ---- south: four SMR modules, one turbine hall with air-cooled condensers, batteries ---- */
+    /* V2 · nuclear and SMRs: four modules, one turbine hall, batteries */
     var smrM=mat(0x3a4049,{r:.85,m:.2}), smrRing=lit(C.hot,1.0), fanM2=mat(0x4a525d,{r:.62,m:.6});
     [-12,-4,4,12].forEach(function(mx){
-      var cont=cyl(2.6,2.75,5,smrM,mx,2.5,17.5,28); cont.castShadow=cont.receiveShadow=true; g.add(cont);
-      var dome=new T.Mesh(G(new T.SphereGeometry(2.6,28,12,0,Math.PI*2,0,Math.PI/2)),smrM); dome.position.set(mx,5,17.5); dome.castShadow=true; g.add(dome);
-      g.add(cyl(2.85,2.85,.12,smrRing,mx,.10,17.5,28));
-      g.add(box(1.6,1.2,1.2,mat(0x2c333c,{r:.7,m:.5}),mx+2.9,.6,15.6,true));               /* auxiliary skid */
-      g.add(tube([[mx+1.3,4.4,19.8],[mx+1.3,5.2,21.0],[mx+1.3,3.4,21.6]],.16,SK(),8));        /* steam to the hall */
-    });
-    g.add(box(28,3.6,5,mat(0x2b3139,{r:.8,m:.35}),0,1.8,24,true));
-    g.add(box(27.6,.08,.08,lit(C.hot,1.1),0,2.4,26.55));
-    for(var fc=0;fc<6;fc++){ g.add(box(3.6,.5,3.4,mat(0x232a33,{r:.7,m:.5}),-12.5+fc*5,3.85,24)); g.add(cyl(1.05,1.05,.10,fanM2,-12.5+fc*5,4.15,24,16)); }
-    var bp2=[]; for(var bs=0;bs<6;bs++){ bp2.push([-13.5+bs*5.4,28.6,0]); bp2.push([-13.5+bs*5.4,32,0]); }
-    repeat(g,BESS(C.hot),bp2);
-    /* ---- east: closed-loop water and the chiller plant ---- */
-    for(var wt=0;wt<2;wt++){
-      g.add(cyl(3.4,3.4,6,mat(0x272e37,{r:.8,m:.4}),31,3,-5+wt*10,20));
-      g.add(cyl(3.5,3.5,.25,SK(),31,6.1,-5+wt*10,20)); }
-    g.add(box(6,3.2,5,mat(0x252b33,{r:.85,m:.3}),41,1.6,7,true));
-    g.add(box(5.6,.08,.08,lit(C.hot,1.1),41,2.2,9.55));
-    var cont=mat(0x2a2f36,{r:.8,m:.4}), cAt=[];
-    for(var ci=0;ci<2;ci++) for(var cj=0;cj<2;cj++) cAt.push([39.5+ci*3.2,-7.5+cj*1.8,0]);
-    repeat(g,[[BG(2.8,1.4,1.5),cont,0,.7,0,1],[BG(2.7,.06,.06),lit(C.hot,1.2),0,1.0,.78,0]],cAt);
-    cAt.forEach(function(c,ci){ if(ci<2){ g.add(box(2.8,1.4,1.5,cont,c[0],2.1,c[1],true)); } });
-    [[37.5,-3.2],[43.5,-3.2]].forEach(function(ap,ai){
-      var base=new T.Group(); base.position.set(ap[0],0,ap[1]); g.add(base);
-      base.add(cyl(.55,.65,.5,mat(0x2c333c,{r:.6,m:.7}),0,.25,0,12));
-      var sh=new T.Group(); sh.position.y=.5; base.add(sh);
-      sh.add(box(.5,.5,.5,mat(0xd9a441,{r:.5,m:.5}),0,.25,0));
-      var up=new T.Group(); up.position.y=.5; sh.add(up);
-      up.add(box(.26,1.7,.26,mat(0xd9a441,{r:.5,m:.5}),0,.85,0));
-      var fo=new T.Group(); fo.position.y=1.7; up.add(fo);
-      fo.add(box(.2,1.3,.2,mat(0xd9a441,{r:.5,m:.5}),0,.65,0));
-      fo.add(box(.3,.25,.3,mat(0x2c333c,{r:.6,m:.7}),0,1.35,0));
-      fo.add(box(.06,.06,.06,lit(C.hot,2.4),0,1.5,0));
-      anim.arms.push({sh:sh,up:up,fo:fo,p:ai*1.7});
-    });
-    /* ---- west: ground stations ---- */
-    [[-36,-6],[-36,5],[-26,-1]].forEach(function(gp,gi){
-      var u3=new T.Group(); u3.position.set(gp[0],0,gp[1]); g.add(u3);
-      u3.add(box(3.2,.9,3.2,mat(0x1e232b,{r:.85,m:.3}),0,.45,0,true));
-      var yoke=new T.Group(); yoke.position.set(0,1.6,0); u3.add(yoke);
-      yoke.add(cyl(.20,.24,1.4,SK(),0,-.4,0,10));
-      var dish=new T.Mesh(G(new T.SphereGeometry(1.5,20,10,0,Math.PI*2,0,Math.PI/2.6)),mat(0xc9d3e0,{r:.4,m:.5,s:T.DoubleSide}));
-      dish.rotation.x=-Math.PI/3.2; yoke.add(dish);
-      anim.dishes.push({y:yoke,p:gi*2.1});
-      for(var pa=0;pa<2;pa++) u3.add(box(2.0,.14,1.4,mat(0x18202b,{r:.4,m:.7,e:C.hot,ei:.35}),-2.6,.5,-1.2+pa*2.4));
-    });
-    ladder(g,[-36,1.2,-6],[-36,1.2,5],.5,trayM,1.6); ladder(g,[-36,1.2,HZ],[-17,1.2,HZ],.5,trayM,1.6);
+      var cont=cyl(2.6,2.75,5,smrM,mx,2.8,20.5,28); cont.castShadow=cont.receiveShadow=true; g.add(cont);
+      var dome=new T.Mesh(G(new T.SphereGeometry(2.6,28,12,0,Math.PI*2,0,Math.PI/2)),smrM); dome.position.set(mx,5.3,20.5); dome.castShadow=true; g.add(dome);
+      g.add(cyl(2.85,2.85,.12,smrRing,mx,.36,20.5,28));
+      g.add(box(1.6,1.2,1.2,mat(0x2c333c,{r:.7,m:.5}),mx+2.9,.9,18.4,true));
+      g.add(tube([[mx+1.3,4.6,22.8],[mx+1.3,5.4,24.0],[mx+1.3,3.6,24.6]],.16,SK(),8)); });
+    g.add(box(28,3.6,5,mat(0x2b3139,{r:.8,m:.35}),0,2.1,27,true));
+    g.add(box(27.6,.08,.08,lit(C.hot,1.1),0,2.7,29.55));
+    for(var fc=0;fc<6;fc++){ g.add(box(3.6,.5,3.4,mat(0x232a33,{r:.7,m:.5}),-12.5+fc*5,4.15,27)); g.add(cyl(1.05,1.05,.10,fanM2,-12.5+fc*5,4.45,27,16)); }
+    var bp2=[]; for(var bs=0;bs<6;bs++){ bp2.push([-13.5+bs*5.4,33,0]); bp2.push([-13.5+bs*5.4,36.4,0]); }
+    repeat(g,BESS(C.hot),bp2.map(function(p){return [p[0],p[1],0];}));
+    var xp=[[-19.5,33,0],[19.5,33,0]]; repeat(g,XFMR(),xp);
+    g.add(box(.5,.5,10,mat(0x3c4652,{r:.55,m:.75}),-19.5,4.9,29)); g.add(box(.5,.5,10,mat(0x3c4652,{r:.55,m:.75}),19.5,4.9,29));
 
-    /* ---- the edge: cabinets and masts on the perimeter, cabs on the loop ---- */
-    var cabAt=[]; for(var ex=-35;ex<=35;ex+=14){ cabAt.push([ex,-(PZ+2.2),Math.PI]); cabAt.push([ex,PZ+2.2,0]); }
-    for(var ez2=-21;ez2<=21;ez2+=14){ cabAt.push([-(PX+2.2),ez2,Math.PI/2]); cabAt.push([PX+2.2,ez2,-Math.PI/2]); }
-    repeat(g,[[BG(1.2,1.6,.9),mat(0x252b33,{r:.75,m:.45}),0,.8,0,1],[BG(1.0,.07,.07),lit(C.hot,1.6),0,1.25,-.47,0]],cabAt);
-    [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(c){
-      var mx=c[0]*(PX+2.2), mz=c[1]*(PZ+2.2);
-      g.add(cyl(.14,.18,7.0,SK(),mx,3.5,mz,8));
-      for(var sc2=0;sc2<3;sc2++){ var as2=sc2/3*Math.PI*2;
-        g.add(box(.18,1.1,.5,mat(0xd4dae4,{r:.6,m:.3}),mx+Math.cos(as2)*.45,6.6,mz+Math.sin(as2)*.45).rotateY(-as2)); }
-      g.add(box(.10,.10,.10,lit(C.red,2.4),mx,7.1,mz));
-    });
-    function loop(off){ var px=PX+off, pz=PZ+off, k=6, pts=[
-        [-px+k,-pz],[0,-pz],[px-k,-pz],[px,-pz+k],[px,0],[px,pz-k],[px-k,pz],[0,pz],[-px+k,pz],[-px,pz-k],[-px,0],[-px,-pz+k]];
-      return new T.CatmullRomCurve3(pts.map(function(p){return new T.Vector3(p[0],.42,p[1]);}),true,'catmullrom',.1); }
-    var lanes=[loop(1.1),loop(-1.1)];
-    var body=mat(0x4a4133,{r:.35,m:.75}), canopy=mat(0x0f1621,{r:.12,m:.9,t:true,o:.72}), wheel=mat(0x14181e,{r:.9,m:.2});
-    for(var cb=0;cb<20;cb++){
-      var dir=cb%2?1:-1, u4=new T.Group();
-      u4.add(box(2.1,.48,.98,body,0,0,0));
-      u4.add(box(1.35,.38,.9,canopy,-.05,.42,0));
-      u4.add(box(.08,.08,.74,lit(0xf2f6ff,2.2),1.04,.04,0));
-      u4.add(box(.07,.07,.66,lit(C.red,1.8),-1.04,.04,0));
-      u4.add(cyl(.22,.22,.14,wheel,.66,-.2,.48,10).rotateZ(Math.PI/2)); u4.add(cyl(.22,.22,.14,wheel,-.66,-.2,.48,10).rotateZ(Math.PI/2));
-      u4.add(cyl(.22,.22,.14,wheel,.66,-.2,-.48,10).rotateZ(Math.PI/2)); u4.add(cyl(.22,.22,.14,wheel,-.66,-.2,-.48,10).rotateZ(Math.PI/2));
-      g.add(u4);
-      anim.cabs.push({o:u4,c:lanes[cb%2],t:(cb/20+Math.random()*.03)%1,d:dir,v:.011+Math.random()*.004});
-    }
-    /* two autonomous trucks bringing containers in */
-    var truckM=mat(0x3a4048,{r:.6,m:.6});
-    for(var tk=0;tk<2;tk++){
-      var u5=new T.Group();
-      u5.add(box(1.5,1.5,1.3,truckM,2.4,.35,0)); u5.add(box(.06,.30,1.0,lit(0xf2f6ff,2.0),3.16,.35,0));
-      u5.add(box(4.4,.3,1.3,truckM,-.4,-.2,0));
-      u5.add(box(4.2,1.4,1.3,cont,-.4,.65,0)); u5.add(box(4.1,.06,.06,lit(C.hot,1.2),-.4,.95,.67));
-      for(var wh=0;wh<3;wh++) for(var ws=-1;ws<=1;ws+=2) u5.add(cyl(.26,.26,.16,wheel,2.4-wh*1.9,-.3,ws*.6,10).rotateZ(Math.PI/2));
-      g.add(u5); anim.cabs.push({o:u5,c:lanes[0],t:.3+tk*.5,d:1,v:.006});
-    }
-    /* humanoids walking the south road */
+    /* V3 · the physical world: a line of robot arms, humanoids, robotaxis, drones */
+    var cont=mat(0x2a2f36,{r:.8,m:.4}), cAt=[];
+    for(var ci=0;ci<4;ci++) cAt.push([34+ci*3.4,17.6,0]);
+    repeat(g,[[BG(2.8,1.4,1.5),cont,0,1.0,0,1],[BG(2.7,.06,.06),lit(C.hot,1.2),0,1.3,.78,0]],cAt);
+    g.add(box(30,.5,1.4,mat(0x262c35,{r:.7,m:.5}),52,.55,21.2,true)); g.add(box(29.6,.05,.05,lit(C.hot,1.4),52,.83,21.9));  /* the line */
+    [[40,19.4],[52,19.4],[64,19.4]].forEach(function(ap,ai){
+      var base=new T.Group(); base.position.set(ap[0],.3,ap[1]); g.add(base);
+      base.add(cyl(.55,.65,.5,mat(0x2c333c,{r:.6,m:.7}),0,.25,0,12));
+      var sh=new T.Group(); sh.position.y=.5; base.add(sh); sh.add(box(.5,.5,.5,mat(0xd9a441,{r:.5,m:.5}),0,.25,0));
+      var up=new T.Group(); up.position.y=.5; sh.add(up); up.add(box(.26,1.7,.26,mat(0xd9a441,{r:.5,m:.5}),0,.85,0));
+      var fo=new T.Group(); fo.position.y=1.7; up.add(fo); fo.add(box(.2,1.3,.2,mat(0xd9a441,{r:.5,m:.5}),0,.65,0));
+      fo.add(box(.3,.25,.3,mat(0x2c333c,{r:.6,m:.7}),0,1.35,0)); fo.add(box(.06,.06,.06,lit(C.hot,2.4),0,1.5,0));
+      anim.arms.push({sh:sh,up:up,fo:fo,p:ai*1.7}); });
     var skinM=mat(0xb8c0cc,{r:.5,m:.5}), jointM=mat(0x2a3038,{r:.6,m:.5});
     for(var hb=0;hb<8;hb++){
-      var h=new T.Group(); h.position.y=0;
-      h.add(box(.42,.6,.24,skinM,0,1.0,0)); h.add(box(.22,.24,.22,skinM,0,1.45,0));
-      h.add(box(.16,.05,.04,lit(C.hot,2.0),0,1.47,.12));
+      var h=new T.Group();
+      h.add(box(.42,.6,.24,skinM,0,1.0,0)); h.add(box(.22,.24,.22,skinM,0,1.45,0)); h.add(box(.16,.05,.04,lit(C.hot,2.0),0,1.47,.12));
       var legs=[],arms=[];
       [-1,1].forEach(function(sd){ var l=new T.Group(); l.position.set(sd*.11,.72,0); l.add(box(.14,.7,.14,jointM,0,-.35,0)); h.add(l); legs.push(l);
         var a=new T.Group(); a.position.set(sd*.28,1.26,0); a.add(box(.10,.55,.10,jointM,0,-.28,0)); h.add(a); arms.push(a); });
       g.add(h);
-      anim.bots.push({o:h,legs:legs,arms:arms,x0:-15,x1:15,z:9.2+(hb%2)*.9,t:hb/8,d:hb%3?1:-1,v:.045+Math.random()*.02,ph:Math.random()*6});
-    }
-    /* quadcopters over the sites */
+      anim.bots.push({o:h,legs:legs,arms:arms,x0:31,x1:69,y:.3,z:24.2+(hb%2)*.9,t:hb/8,d:hb%3?1:-1,v:.045+Math.random()*.02,ph:Math.random()*6}); }
+    function oval(rx,rz,cx,cz){ var pts=[]; for(var i=0;i<16;i++){ var a=i/16*Math.PI*2; pts.push(new T.Vector3(cx+Math.cos(a)*rx,.72,cz+Math.sin(a)*rz)); }
+      return new T.CatmullRomCurve3(pts,true,'catmullrom',.5); }
+    var lanes=[oval(19,5.2,50,31.5),oval(17,3.8,50,31.5)];
+    var road=new T.Mesh(G(new T.PlaneGeometry(44,14)),mat(0x14181e,{r:.95,m:.08})); road.rotation.x=-Math.PI/2; road.position.set(50,.31,31.5); g.add(road);
+    var body=mat(0x4a4133,{r:.35,m:.75}), canopy=mat(0x0f1621,{r:.12,m:.9,t:true,o:.72}), wheel=mat(0x14181e,{r:.9,m:.2});
+    for(var cb=0;cb<8;cb++){
+      var u4=new T.Group();
+      u4.add(box(2.1,.48,.98,body,0,0,0)); u4.add(box(1.35,.38,.9,canopy,-.05,.42,0));
+      u4.add(box(.08,.08,.74,lit(0xf2f6ff,2.2),1.04,.04,0)); u4.add(box(.07,.07,.66,lit(C.red,1.8),-1.04,.04,0));
+      [[.66,.48],[-.66,.48],[.66,-.48],[-.66,-.48]].forEach(function(w){ u4.add(cyl(.22,.22,.14,wheel,w[0],-.2,w[1],10).rotateZ(Math.PI/2)); });
+      g.add(u4); anim.cabs.push({o:u4,c:lanes[cb%2],t:cb/8,d:cb%2?1:-1,v:.05+Math.random()*.02}); }
+    var truckM=mat(0x3a4048,{r:.6,m:.6}), u5=new T.Group();
+    u5.add(box(1.5,1.5,1.3,truckM,2.4,.35,0)); u5.add(box(.06,.30,1.0,lit(0xf2f6ff,2.0),3.16,.35,0));
+    u5.add(box(4.4,.3,1.3,truckM,-.4,-.2,0)); u5.add(box(4.2,1.4,1.3,cont,-.4,.65,0)); u5.add(box(4.1,.06,.06,lit(C.hot,1.2),-.4,.95,.67));
+    for(var wh=0;wh<3;wh++) for(var ws=-1;ws<=1;ws+=2) u5.add(cyl(.26,.26,.16,wheel,2.4-wh*1.9,-.3,ws*.6,10).rotateZ(Math.PI/2));
+    g.add(u5); anim.cabs.push({o:u5,c:lanes[0],t:.5,d:1,v:.03});
+    var pl3=new T.PointLight(0xffe2b8,160,30,1.6); pl3.position.set(50,9,26); g.add(pl3);
     var droneM=mat(0x1f242b,{r:.6,m:.6}), rotorM=mat(0x0f1318,{r:.4,m:.3,t:true,o:.55});
-    [[-29,-21.5,11],[29,-21.5,13],[-29,21.5,12],[29,21.5,10]].forEach(function(dp,di){
-      var dr=new T.Group(); var rot=[];
+    [[42,26,8],[58,24,10],[50,32,7]].forEach(function(dp,di){
+      var dr=new T.Group(), rot=[];
       dr.add(box(.6,.14,.6,droneM,0,0,0));
       [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(q){
         dr.add(box(.9,.05,.08,droneM,q[0]*.35,.02,q[1]*.35).rotateY(q[0]*q[1]>0?-Math.PI/4:Math.PI/4));
         var rd=cyl(.32,.32,.02,rotorM,q[0]*.72,.08,q[1]*.72,12); dr.add(rd); rot.push(rd); });
       dr.add(box(.06,.06,.06,lit(C.red,2.4),-.3,.1,0)); dr.add(box(.06,.06,.06,lit(0x86e07a,2.4),.3,.1,0));
-      g.add(dr); anim.drones.push({o:dr,cx:dp[0],cz:dp[1],h:dp[2],r:7+di*2,a:di*1.6,v:(di%2?1:-1)*(.35+di*.05),rot:rot});
-    });
-
-    /* ---- the Earth: Natural Earth land on a dark sphere, lit by the key ---- */
-    var globe=new T.Group(); globe.position.set(HX,46,HZ); g.add(globe);
-    var GR=11;
-    var earthTex=new T.TextureLoader().load('img/earth.png'); geos.push({dispose:function(){earthTex.dispose();}});
-    if(T.SRGBColorSpace) earthTex.colorSpace=T.SRGBColorSpace; earthTex.anisotropy=4;
-    var earthM=mat(0xffffff,{r:.92,m:.02}); earthM.map=earthTex;
-    var earth=new T.Mesh(G(new T.SphereGeometry(GR,64,40)),earthM); globe.add(earth);
-    var atmo=new T.Mesh(G(new T.SphereGeometry(GR*1.045,48,32)),
-      new T.MeshBasicMaterial({color:C.hot,transparent:true,opacity:.055,side:T.BackSide,depthWrite:false,blending:T.AdditiveBlending}));
-    mats.push(atmo.material); globe.add(atmo);
-    var sites=[[39.0,-77.5],[32.4,-99.7],[33.4,-112.1],[47.6,-122.3],[-23.5,-46.6],
-               [53.3,-6.2],[51.5,-0.1],[50.1,8.7],[59.3,18.1],[6.5,3.4],
-               [24.5,54.4],[19.1,72.9],[1.35,103.8],[35.7,139.7],[-33.9,151.2]];
-    /* three's sphere puts u=.5 (lon 0) on +x and lon 90E on -z */
-    function ll(la,lo,rr){var p=la*Math.PI/180,q=lo*Math.PI/180;
-      return new T.Vector3(rr*Math.cos(p)*Math.cos(q),rr*Math.sin(p),-rr*Math.cos(p)*Math.sin(q));}
-    var siteV=sites.map(function(s){return ll(s[0],s[1],GR);});
-    var cluster=inst(BG(.34,.14,.34),lit(C.hotCore,2.0),sites.length*3);
-    siteV.forEach(function(v){ var n=v.clone().normalize();
-      for(var q=0;q<3;q++){ var p=v.clone().addScaledVector(n,.06);
-        p.add(new T.Vector3(-n.z,0,n.x).normalize().multiplyScalar((q-1)*.34));
-        put(cluster,p.x,p.y,p.z,0,Math.atan2(n.x,n.z),0,1,.6+q*.3,1); }});
-    globe.add(cluster);
-    function arcPts(a,b,lift,n){ var out=[]; for(var i=0;i<=n;i++){ var t2=i/n, v=a.clone().lerp(b,t2).normalize();
-        out.push(v.multiplyScalar(GR*(1+lift*Math.sin(t2*Math.PI))+(lift?0:.05))); } return out; }
-    var cableM=mat(C.hot,{e:C.hot,ei:.45,r:.5,m:.1,t:true,o:.85});
-    [[0,5],[0,4],[1,0],[1,2],[2,3],[3,13],[5,6],[6,7],[7,8],[7,9],[10,11],[11,12],[12,13],[12,14],[13,14],[9,10],[4,9],[2,12]]
-      .forEach(function(p){ globe.add(new T.Mesh(G(new T.TubeGeometry(new T.CatmullRomCurve3(arcPts(siteV[p[0]],siteV[p[1]],0,22)),22,.03,4,false)),cableM)); });
-    var bbM=mat(C.hotCore,{e:C.hotCore,ei:.35,r:.5,m:.1,t:true,o:.28});
-    [[0,13],[6,12],[0,12],[4,7],[1,14],[9,3]].forEach(function(p){
-      var cur=new T.CatmullRomCurve3(arcPts(siteV[p[0]],siteV[p[1]],.30,30));
-      globe.add(new T.Mesh(G(new T.TubeGeometry(cur,30,.025,4,false)),bbM));
-      var dot=new T.Mesh(SG(.16,8),lit(C.hotCore,2.4)); globe.add(dot);
-      anim.pulses.push({c:cur,m:dot,t:Math.random(),v:.14+Math.random()*.08}); });
-    anim.globe=globe;
-
-    /* ---- LEO shell: six planes, small flat-panel buses, unlit ---- */
-    var satM=mat(0x4a525d,{r:.5,m:.8}), panM=mat(0x1a2330,{r:.4,m:.6});
-    for(var pl=0;pl<6;pl++){
-      var plane=new T.Group(); plane.rotation.x=Math.PI/2.6*Math.sin(pl/6*Math.PI*2)+.3; plane.rotation.z=pl/6*Math.PI;
-      var bus=inst(BG(.22,.09,.16),satM,18), pan=inst(BG(.62,.02,.2),panM,18);
-      for(var s2=0;s2<18;s2++){ var as=s2/18*Math.PI*2, rr=16.5, sx=Math.cos(as)*rr, sz=Math.sin(as)*rr;
-        put(bus,sx,0,sz,0,-as,0); put(pan,sx,0,sz,0,-as,0); }
-      plane.add(bus); plane.add(pan); globe.add(plane);
-      anim.leo.push({g:plane,v:(pl%2?1:-1)*(.05+pl*.006)});
-    }
-    /* ---- six large orbital compute satellites ---- */
-    var bigring=new T.Group(); bigring.rotation.x=.22; globe.add(bigring); anim.bigring=bigring;
-    var solarM=mat(0x121a26,{r:.35,m:.7}), radM=mat(0xaab5c4,{r:.4,m:.7}), busM=mat(0x39414c,{r:.5,m:.8});
-    for(var q2=0;q2<6;q2++){
-      var aq=q2/6*Math.PI*2, rq=23, sat=new T.Group();
-      sat.position.set(Math.cos(aq)*rq,0,Math.sin(aq)*rq); sat.rotation.y=-aq;
-      sat.add(box(1.3,.8,.9,busM,0,0,0));
-      sat.add(box(1.1,.04,.04,lit(C.hotCore,1.6),0,.44,0));
-      sat.add(box(2.6,.04,1.0,solarM,2.2,0,0)); sat.add(box(2.6,.04,1.0,solarM,-2.2,0,0));
-      sat.add(box(.04,1.0,1.6,radM,0,0,1.15));   sat.add(box(.04,1.0,1.6,radM,0,0,-1.15));
-      sat.add(cyl(.4,.12,.4,mat(0xd6dfeb,{r:.4,m:.5}),0,-.7,0,12));
-      bigring.add(sat);
-    }
+      g.add(dr); anim.drones.push({o:dr,cx:dp[0],cz:dp[1],h:dp[2],r:5+di*2,a:di*1.6,v:(di%2?1:-1)*(.4+di*.05),rot:rot}); });
   })();
 
   /* =========================================================
      The one continuous thing: a long-haul conduit down the back
      of the rail, carrying traffic cold -> forge -> arc-white.
      ========================================================= */
-  var CZ=-36, CY=1.4, CA=-146, CB=178;
+  var CZ=-41, CY=1.4, CA=-146, CB=226;
   var conduitMat=new T.MeshStandardMaterial({vertexColors:true,roughness:.5,metalness:.1,
     emissive:0xffffff,emissiveIntensity:.0}); mats.push(conduitMat);
   function eraColor(x){
@@ -2007,7 +1925,7 @@ function mountEras(host){
 
   /* pick targets, one per stage */
   var picks=[];
-  [[X0,44,40,26,10,0],[X1,92,66,26,10,1],[X2,96,76,86,40,2]].forEach(function(p){
+  [[X0,44,40,26,10,0],[X1,92,66,26,10,1],[X2,150,76,86,40,2]].forEach(function(p){
     var m=new T.Mesh(BG(p[1],p[3],p[2]),new T.MeshBasicMaterial({visible:false}));
     mats.push(m.material); m.position.set(p[0],p[4],0); m.userData.stage=p[5];
     scene.add(m); picks.push(m);});
@@ -2015,110 +1933,70 @@ function mountEras(host){
   /* =========================================================
      CAMERA — every framing is {target, half-width, half-height,
      yaw, pitch}; the radius is derived from the panel's aspect.
+     A move between framings is one crane: rise, cross, settle.
      ========================================================= */
   var ERAS=[
-    {id:'wide', t:new T.Vector3(20,13,0),  w:184, h:58, th:1.47, ph:.93, era:-1},   /* the whole rail */
+    {id:'wide', t:new T.Vector3(36,12,0),  w:206, h:60, th:1.47, ph:.93, era:-1},   /* the whole rail */
     {id:'cloud',t:new T.Vector3(X0,7,2),   w:44,  h:26, th:1.19, ph:.80, era:0},
     {id:'ai',   t:new T.Vector3(X1-3,4,-9),w:58,  h:30, th:1.14, ph:.84, era:1},
-    {id:'agi',  t:new T.Vector3(X2,20,-1), w:60,  h:44, th:1.26, ph:.84, era:2}
+    {id:'agi',  t:new T.Vector3(X2,6,-2),  w:84,  h:52, th:1.40, ph:.80, era:2}
   ];
-  /* inspect points: a close framing, and a pin in the scene at the same spot */
+  /* the stops. This is the storyline, in order; each is a chip, a pin and a chapter */
   var SPOTS=[
-    {id:'metro',  n:'Metro colo',      era:0, t:new T.Vector3(X0+1,9.5,4),    w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
-    {id:'nvl',    n:'NVL72 hall',      era:1, t:new T.Vector3(X1-14,2.4,-11), w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
-    {id:'power',  n:'Power yard',      era:1, t:new T.Vector3(X1-6,2,18),     w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
-    {id:'sites',  n:'Connected sites', era:2, t:new T.Vector3(X2,4,0),        w:56, h:36, th:1.25, ph:.72,  pin:[X2,7.5,10.5,1]},
-    {id:'mono',   n:'1 MW racks',      era:2, t:new T.Vector3(X2,3.4,-1),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,6.5,1]},
-    {id:'smr',    n:'SMR plant',       era:2, t:new T.Vector3(X2,3,21),       w:30, h:14, th:1.30, ph:1.00, pin:[X2+16.5,9,21,1]},
-    {id:'edge',   n:'Physical AI',     era:2, t:new T.Vector3(X2+40,2,-2),    w:30, h:14, th:1.20, ph:1.00, pin:[X2+40.5,8,-5,1]},
-    {id:'orbit',  n:'Orbital layer',   era:2, t:new T.Vector3(X2,46,-1),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]}
+    {id:'metro',  n:'3 kW CPU racks',   era:0, t:new T.Vector3(X0+1,9.5,4),     w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
+    {id:'nvl',    n:'NVL72 hall',       era:1, t:new T.Vector3(X1-14,2.4,-11),  w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
+    {id:'power',  n:'Grid + on-site',   era:1, t:new T.Vector3(X1-6,2,18),      w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
+    {id:'fabric', n:'Connected GW sites',era:2,t:new T.Vector3(X2,0,-14),      w:80, h:34, th:1.50, ph:.60,  pin:[X2+36,7,-13,1]},
+    {id:'mono',   n:'1 MW racks',       era:2, t:new T.Vector3(X2-50,3.6,27),   w:22, h:12, th:1.12, ph:1.02, pin:[X2-33,10,33,1]},
+    {id:'smr',    n:'Nuclear + SMRs',   era:2, t:new T.Vector3(X2,3,27),        w:28, h:13, th:1.30, ph:1.00, pin:[X2+17,9,22,1]},
+    {id:'orbit',  n:'Orbital + edge',   era:2, t:new T.Vector3(X2,12,-13),      w:84, h:44, th:1.45, ph:.98,  pin:[X2-60,36,-13,0]},
+    {id:'edge',   n:'Physical AI',      era:2, t:new T.Vector3(X2+50,2,26),     w:28, h:13, th:1.20, ph:1.00, pin:[X2+66,8,22,1]}
   ];
-
-  /* ---- the flight: one closed path the drone flies, nose-first, banking.
-     [position, look-ahead, speed 0..1, era, spot]. It dives at the city,
-     threads the street, runs the conduit, enters the NVL hall through the
-     open side and punches out through the roof frame, low over the
-     turbines, across the AGI site into the 1 MW hall, up through its roof,
-     round the Earth, down to the loop, and back out wide. ---- */
-  var K=[
-    [[ 24, 70,150],[ 20, 10,  0], .85,-1,null],
-    [[-34, 40,100],[-105,10,  3],1.00, 0,null],
-    [[-82, 22, 48],[-110, 9,  3], .60, 0,'metro'],
-    [[-87, 14, 20],[-112,10,  3], .55, 0,'metro'],
-    [[-95,  9, 13],[-118,10,  3], .45, 0,'metro'],
-    [[-96.5,8.5,2],[-119, 9, -2], .45, 0,'metro'],
-    [[-96.5,9.5,-8],[-104,7,-20], .80, 0,null],
-    [[-100,10,-24],[-112, 7,-30], .90, 0,null],
-    [[-114, 7,-31],[ -90, 6,-34],1.00, 0,null],
-    [[ -72, 5,-31],[ -22, 5,-34],1.00, 1,null],
-    [[ -36,14,-24],[ -19, 4,-11], .65, 1,'nvl'],
-    [[   6,4.6,-9.4],[-12,3.0,-9.4],.50,1,'nvl'],
-    [[  -6,3.9,-9.4],[-20,2.9,-9.4],.45,1,'nvl'],
-    [[ -15,3.9,-9.4],[-22,4.5,-9.4],.45,1,'nvl'],
-    [[ -21, 8,-9.4],[-30,12, -2], .75, 1,null],
-    [[ -34, 8, 12],[ 10, 5, 18], .60, 1,'power'],
-    [[ -10, 5, 32],[ 30, 3, 26], .70, 1,'power'],
-    [[  28, 9, 22],[ 40, 4,  8], .75, 1,'power'],
-    [[  64,24, 22],[118,10, -1],1.00, 2,null],
-    [[  78,4.5,12.5],[120,3.2,11],.60,2,'sites'],
-    [[ 118,4.5,12.5],[160,4, 10], .60, 2,'sites'],
-    [[ 150, 6,  4],[135, 4, -1], .55, 2,'mono'],
-    [[ 144,4.5,-1],[122, 4, -1], .50, 2,'mono'],
-    [[ 124,4.2,-1],[104, 4, -1], .45, 2,'mono'],
-    [[ 108,4.4,-1],[100, 6, -1], .45, 2,'mono'],
-    [[ 100,10, -1],[ 96,18, -8], .70, 2,null],
-    [[  88,10, 14],[118, 4, 20], .60, 2,'smr'],
-    [[ 104, 7, 30],[130, 3, 20], .55, 2,'smr'],
-    [[ 150, 5, 26],[160, 2,  0], .55, 2,'edge'],
-    [[ 163, 4, 10],[160,1.5,-6], .50, 2,'edge'],
-    [[ 166, 9,-20],[150, 4,-30], .80, 2,null],
-    [[ 140,30,-40],[118,46, -1], .85, 2,'orbit'],
-    [[ 100,52,-34],[118,46, -1], .60, 2,'orbit'],
-    [[  92,60, 10],[118,46, -1], .50, 2,'orbit'],
-    [[ 130,68, 34],[118,46, -1], .60, 2,'orbit'],
-    [[ 104,56,110],[ 60,10,  0],1.00,-1,null]
-  ];
-
-  var posC=new T.CatmullRomCurve3(K.map(function(k){return V(k[0]);}),true,'centripetal');
-  var lookC=new T.CatmullRomCurve3(K.map(function(k){return V(k[1]);}),true,'centripetal');
-  var uK=(function(){ var L=posC.getLengths(600), tot=L[L.length-1], out=[];
-    for(var i=0;i<K.length;i++) out.push(L[Math.round(i/K.length*600)]/tot); out.push(1); return out; })();
-  function segAt(u){ var i=0; while(i<K.length-1&&u>=uK[i+1]) i++; return i; }
-  function speedAt(u){ var i=segAt(u), a=uK[i], b=uK[i+1], f=b>a?(u-a)/(b-a):0; f=f*f*(3-2*f);
-    return K[i][2]+(K[(i+1)%K.length][2]-K[i][2])*f; }
-  var FLIGHT=18;                         /* seconds for one lap at full speed */
+  var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
+  /* the film: [framing, seconds to hold]. Moves take 1.6 s within an era, up to 3 s across */
+  var CHAPTERS=[[ERAS[0],3],[ERAS[1],2.6],[byId.metro,4.5],[ERAS[2],2.6],[byId.nvl,4.5],[byId.power,4],
+                [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4.5],[byId.edge,5]];
 
   function fitRadius(v){
     var ht=Math.tan(camera.fov*Math.PI/360);
-    return Math.max(6,Math.min(400,Math.max(v.w/(ht*Math.max(.6,camera.aspect)),v.h/ht)));}
+    return Math.max(6,Math.min(520,Math.max(v.w/(ht*Math.max(.6,camera.aspect)),v.h/ht)));}
   var cur=ERAS[0], tgt=cur.t.clone(), gTgt=cur.t.clone();
   var rad=0, gRad=0, th=cur.th, gTh=th, ph=cur.ph, gPh=ph;
   var drag=false, px=0, py=0, moved=0, idle=0, zoomed=false;
-  var roll=0, gRoll=0, fov=42, gFov=42;
-  var tour={on:false,entered:false,u:0,blend:0,seg:-1};
-  var camPos=new T.Vector3(), camLook=new T.Vector3(), dPos=new T.Vector3(), dLook=new T.Vector3(), tA=new T.Vector3(), tB=new T.Vector3();
-
-  function orbitPos(out){ out.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th)); }
-  function goView(v,fromTour){
-    cur=v; gTgt.copy(v.t); gTh=v.th; gPh=v.ph; zoomed=false; gRad=fitRadius(v); idle=0;
-    if(!fromTour) pauseTour();
-    syncUI();}
-  /* hand the drone's pose to the orbit camera so a drag continues from where it is */
-  function pauseTour(){
-    if(!tour.on) return; tour.on=false;
-    tgt.copy(camLook); gTgt.copy(tgt);
-    dPos.copy(camPos).sub(camLook); rad=gRad=Math.max(6,dPos.length());
-    th=gTh=Math.atan2(dPos.z,dPos.x); ph=gPh=Math.max(.14,Math.min(1.44,Math.acos(Math.max(-1,Math.min(1,dPos.y/rad)))));
-    zoomed=true; syncUI(); }
+  var tour={on:false,entered:false,i:0,hold:0};
+  var mv=null;   /* the move in progress: from, to, t, dur, lift */
   function place(){
-    orbitPos(dPos); camLook.copy(tgt);
-    if(tour.blend>0){ posC.getPointAt(tour.u,camPos); lookC.getPointAt(tour.u,dLook);
-      camPos.lerp(dPos,1-tour.blend); camLook.copy(dLook).lerp(tgt,1-tour.blend); }
-    else camPos.copy(dPos);
-    camera.position.copy(camPos); camera.up.set(0,1,0); camera.lookAt(camLook); camera.rotateZ(roll);
-    if(Math.abs(camera.fov-fov)>.01){ camera.fov=fov; camera.updateProjectionMatrix(); } }
+    camera.position.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th));
+    camera.lookAt(tgt);}
+  function unwrap(a,ref){ while(a-ref>Math.PI) a-=Math.PI*2; while(a-ref<-Math.PI) a+=Math.PI*2; return a; }
+  /* one crane from where the camera is to a framing */
+  function flyTo(v){
+    cur=v; zoomed=false; idle=0;
+    var dist=tgt.distanceTo(v.t), to={t:v.t.clone(),r:fitRadius(v),th:unwrap(v.th,th),ph:v.ph};
+    if(RM){ tgt.copy(to.t); gTgt.copy(to.t); rad=gRad=to.r; th=gTh=to.th; ph=gPh=to.ph; mv=null; syncUI(); return; }
+    mv={from:{t:tgt.clone(),r:rad,th:th,ph:ph},to:to,t:0,dur:1.6+Math.min(1.4,dist/120),lift:Math.min(90,dist*.4)};
+    syncUI();}
+  function stepMove(dt){
+    if(!mv) return;
+    mv.t=Math.min(1,mv.t+dt/mv.dur);
+    var e=mv.t*mv.t*(3-2*mv.t), s=Math.sin(mv.t*Math.PI);
+    tgt.copy(mv.from.t).lerp(mv.to.t,e);
+    rad=mv.from.r+(mv.to.r-mv.from.r)*e+mv.lift*s;
+    th=mv.from.th+(mv.to.th-mv.from.th)*e;
+    ph=mv.from.ph+(mv.to.ph-mv.from.ph)*e-.22*s*Math.min(1,mv.lift/40);
+    gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph;
+    if(mv.t>=1){ gRad=mv.to.r; gTh=mv.to.th; gPh=mv.to.ph; mv=null; } }
+  function goView(v){ if(tour.on) pauseTour(); flyTo(v); }
+  function pauseTour(){ if(!tour.on) return; tour.on=false; mv=null; gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; syncUI(); }
+  function startTour(){ tour.on=true; tour.hold=0; flyTo(CHAPTERS[tour.i][0]); syncUI(); }
+  function tourStep(dt){
+    if(mv) return;
+    tour.hold+=dt;
+    /* the hold: steady, with the slowest drift — a slow push-in and a hint of orbit */
+    gTh+=dt*.018; gRad*=1-dt*.012; th=gTh; rad=gRad;
+    if(tour.hold>=CHAPTERS[tour.i][1]){ tour.i=(tour.i+1)%CHAPTERS.length; tour.hold=0; flyTo(CHAPTERS[tour.i][0]); } }
 
-  /* ---- pins: one per inspect point, sized to the camera so they never vanish ---- */
+  /* ---- pins: one per stop, sized to the camera so they never vanish ---- */
   var pins=[], pinHits=[];
   SPOTS.forEach(function(sp){
     var c=ERA[sp.era], g=new T.Group(), p=sp.pin;
@@ -2137,11 +2015,11 @@ function mountEras(host){
   function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
   function move(e){ if(!drag) return;
     var dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
-    if(moved>5&&tour.on) pauseTour();
+    if(moved>5){ if(tour.on) pauseTour(); mv=null; }
     gTh-=dx*.005; gPh=Math.max(.14,Math.min(1.44,gPh-dy*.004)); idle=0;}
   function up(e){ if(drag&&moved<5) pick(e); drag=false; el.style.cursor='grab';}
-  function wheel(e){ e.preventDefault(); pauseTour(); zoomed=true;
-    gRad=Math.max(6,Math.min(420,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
+  function wheel(e){ e.preventDefault(); pauseTour(); mv=null; zoomed=true;
+    gRad=Math.max(6,Math.min(560,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
   var ray=new T.Raycaster(), ndc=new T.Vector2();
   function pick(e){
     var b=el.getBoundingClientRect();
@@ -2155,7 +2033,7 @@ function mountEras(host){
   el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
   el.addEventListener('wheel',wheel,{passive:false});
 
-  /* ---- the chrome: an entry, an era bar, inspect chips. DOM, never in the scene ---- */
+  /* ---- the chrome: an entry, an era bar, the stops. DOM, never in the scene ---- */
   var ui=document.createElement('div'); ui.className='e3d';
   ui.innerHTML=
     '<div class="e3d-bar">'+
@@ -2166,33 +2044,19 @@ function mountEras(host){
     '<div class="e3d-chips">'+SPOTS.map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'" style="--ec:#'+ERA[sp.era].toString(16).padStart(6,'0')+'">'+sp.n+'</button>';}).join('')+'</div>'+
     '<div class="e3d-enter"><button data-enter>Enter</button></div>';
   host.appendChild(ui);
-  var tourEra=-1, tourSpot=null;
   function syncUI(){
-    var era=tour.on?tourEra:cur.era, id=tour.on?tourSpot:cur.id;
-    ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===era); });
-    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===id); });
-    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause the flight (space)':'Fly (space)';
-    ui.classList.toggle('in',tour.entered); ui.classList.toggle('flying',tour.on);}
-  function startTour(){ tour.on=true; tour.seg=-1; syncUI(); }
-  function enter(){ tour.entered=true; if(!RM){ tour.u=0; startTour(); } else syncUI(); }
+    ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
+    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===cur.id); });
+    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause (space)':'Play (space)';
+    ui.classList.toggle('in',tour.entered);}
+  function enter(){ tour.entered=true; if(!RM){ tour.i=0; startTour(); } else syncUI(); }
   function toggleTour(){ if(!tour.entered){enter();return;} if(tour.on) pauseTour(); else startTour(); }
-  function tourStep(dt){
-    var sp=speedAt(tour.u);
-    tour.u=(tour.u+dt/FLIGHT*sp)%1;
-    var i=segAt(tour.u);
-    if(i!==tour.seg){ tour.seg=i; tourEra=K[i][3]; tourSpot=K[i][4]; syncUI(); }
-    /* bank into the turn: compare the heading now with the heading just ahead */
-    posC.getTangentAt(tour.u,tA); posC.getTangentAt((tour.u+.004)%1,tB);
-    var turn=Math.atan2(tA.x*tB.z-tA.z*tB.x, tA.x*tB.x+tA.z*tB.z);
-    gRoll=Math.max(-.65,Math.min(.65,turn*11))*sp;
-    gFov=40+22*sp;
-    return sp; }
   ui.addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return;
     if(b.dataset.enter!=null) return enter();
     if(b.dataset.play!=null) return toggleTour();
     if(b.dataset.era!=null){ tour.entered=true; return goView(ERAS[+b.dataset.era+1]); }
-    if(b.dataset.spot){ tour.entered=true; var sp=SPOTS.filter(function(s){return s.id===b.dataset.spot;})[0]; return goView(sp); }
+    if(b.dataset.spot){ tour.entered=true; return goView(byId[b.dataset.spot]); }
   });
   ui.addEventListener('pointerdown',function(e){ e.stopPropagation(); });
   ui.addEventListener('wheel',function(e){ e.stopPropagation(); });
@@ -2208,7 +2072,7 @@ function mountEras(host){
   function resize(){
     var w=host.clientWidth||900, h=host.clientHeight||500;
     renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
-    if(!zoomed) gRad=fitRadius(cur);}
+    if(!zoomed&&!mv) gRad=fitRadius(cur);}
   var ro=window.ResizeObserver?new ResizeObserver(resize):null;
   if(ro) ro.observe(host); else addEventListener('resize',resize);
   resize(); rad=gRad; place();
@@ -2220,9 +2084,12 @@ function mountEras(host){
   /* every moving part is posed by this, so it also supplies the resting state
      for prefers-reduced-motion — otherwise the cabs pile up at the origin */
   function tick(dt,t){
-    if(anim.globe) anim.globe.rotation.y+=dt*.055;
-    anim.leo.forEach(function(p){p.g.rotation.y+=dt*p.v;});
-    if(anim.bigring) anim.bigring.rotation.y-=dt*.032;
+    anim.sats.forEach(function(s){ s.ph+=dt*s.v;
+      for(var i=0;i<s.n;i++){ var a=s.ph+i/s.n*Math.PI*2, x=Math.cos(a)*s.rx, z=Math.sin(a)*s.rz;
+        dummy.position.set(x, s.y+z*Math.sin(s.tilt), -13+z*Math.cos(s.tilt)); dummy.rotation.set(0,-a,0); dummy.scale.setScalar(1); dummy.updateMatrix();
+        s.bus.setMatrixAt(i,dummy.matrix); s.pan.setMatrixAt(i,dummy.matrix); }
+      s.bus.instanceMatrix.needsUpdate=true; s.pan.instanceMatrix.needsUpdate=true; });
+    if(anim.bigring) anim.bigring.forEach(function(b){ b.a+=dt*b.v; b.o.position.set(Math.cos(b.a)*b.rx, b.y+Math.sin(b.a*2)*2, -13+Math.sin(b.a)*b.rz); b.o.rotation.y=-b.a; });
     anim.dishes.forEach(function(d){ d.y.rotation.y=Math.sin(t*.22+d.p)*1.1; d.y.rotation.z=Math.sin(t*.15+d.p)*.14;});
     anim.pulses.forEach(function(p){ p.t=(p.t+dt*p.v)%1; p.c.getPoint(p.t,tmp); p.m.position.copy(tmp);});
     anim.cabs.forEach(function(c){ c.t=(c.t+dt*c.v*c.d+1)%1;
@@ -2235,7 +2102,7 @@ function mountEras(host){
       lm.instanceMatrix.needsUpdate=true; }
     anim.arms.forEach(function(a){ a.sh.rotation.y=Math.sin(t*.45+a.p)*1.2; a.up.rotation.x=-.55+Math.sin(t*.6+a.p)*.3; a.fo.rotation.x=1.0+Math.sin(t*.8+a.p)*.35; });
     anim.bots.forEach(function(b){ b.t+=dt*b.v*b.d; if(b.t>1||b.t<0){ b.d*=-1; b.t=Math.max(0,Math.min(1,b.t)); }
-      b.o.position.set(b.x0+(b.x1-b.x0)*b.t,0,b.z); b.o.rotation.y=b.d>0?-Math.PI/2:Math.PI/2;
+      b.o.position.set(b.x0+(b.x1-b.x0)*b.t,b.y||0,b.z); b.o.rotation.y=b.d>0?-Math.PI/2:Math.PI/2;
       var w=Math.sin(t*7+b.ph); b.legs[0].rotation.x=w*.5; b.legs[1].rotation.x=-w*.5; b.arms[0].rotation.x=-w*.35; b.arms[1].rotation.x=w*.35; });
     anim.drones.forEach(function(d){ d.a+=dt*d.v; d.o.position.set(d.cx+Math.cos(d.a)*d.r, d.h+Math.sin(t*.9+d.a)*.6, d.cz+Math.sin(d.a)*d.r);
       d.o.rotation.y=-d.a+(d.v>0?Math.PI:0); d.o.rotation.z=.18*(d.v>0?-1:1); d.rot.forEach(function(r,i){ r.rotation.y+=dt*(i%2?38:-38); }); });
@@ -2255,7 +2122,7 @@ function mountEras(host){
       var s=ps*(1+(RM?0:.10*Math.sin(t*2.6+i)));
       p.userData.core.scale.setScalar(s); p.userData.ring.scale.setScalar(s*1.15);
       if(p.userData.stalk) p.userData.stalk.scale.x=p.userData.stalk.scale.z=Math.max(.6,ps*.7);
-      p.visible = (tour.on?tourSpot:cur.id)!==p.userData.id;
+      p.visible = cur.id!==p.userData.id;
     });
   }
   tick(0,0);
@@ -2264,21 +2131,14 @@ function mountEras(host){
     raf=requestAnimationFrame(frame);
     var dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
 
-    if(tour.on&&!RM){ tourStep(dt); tour.blend=Math.min(1,tour.blend+dt/.9); }
+    if(mv) stepMove(dt);
+    else if(tour.on&&!RM) tourStep(dt);
     else{
-      tour.blend=Math.max(0,tour.blend-dt/.6);
-      if(!drag&&!RM){ idle+=dt;
-        if(idle>4){ if(cur===ERAS[0]) gTh=ERAS[0].th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
-      gRoll=0;
-      /* a cut is a move: the lens opens while the camera is travelling */
-      var motion=Math.min(1,(Math.abs(gRad-rad)+Math.abs(gTh-th)*rad*.6+tgt.distanceTo(gTgt))/50);
-      gFov=42+12*motion;
+      if(!drag&&!RM){ idle+=dt; if(idle>4){ if(cur===ERAS[0]) gTh=ERAS[0].th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
+      var k=RM?1:1-Math.pow(.002,dt);
+      th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
     }
-    var k=RM?1:1-Math.pow(.0004,dt), kr=RM?1:1-Math.pow(.02,dt);
-    th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
-    roll+=(gRoll-roll)*kr; fov+=(gFov-fov)*kr;
     place();
-
     tick(RM?0:dt,t);
     renderer.render(scene,camera);
   }

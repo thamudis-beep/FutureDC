@@ -144,42 +144,31 @@ their own resting state must be reset under `prefers-reduced-motion`, or icons
 render invisible or squashed.
 
 **The 3D scene** (`mountEras`, Data Center topic 01) is three stages on one
-industrial rail — a metro colo, a 1 GW campus, a planetary fabric — with no text
-in the scene and the era colours carrying the reading: grey past, amber today,
-cyan future. It opens on a wide shot behind an "Enter the foundry" pill; entering
-starts the flight (`K`, one closed spline the camera flies nose-first — it dives
-at the city, threads a street, runs the conduit, enters the NVL hall through its
-open side and leaves through the roof frame, crosses the AGI site into the 1 MW
-hall, climbs round the Earth, drops to the loop). Speed per keyframe sets the
-bank and the field of view; a pause hands the drone's pose to the orbit camera
-so a drag continues from where it is. Any drag, wheel, chip or key pauses it
-and space resumes. The era bar and keys 1 / 2 / 3 jump between stages; the
-inspect chips and the in-scene pins (`SPOTS`) fly to close framings — the
-metro colo, the NVL72 cutaway, the power yard, the 1 MW ring, the orbital
-layer, the edge ring. Drag to orbit, wheel to zoom, click a stage to fly to
-it, click the ground to pull back. All of that chrome is DOM over the canvas,
-never text in the scene, and every framing is {target, half-width,
-half-height, yaw, pitch} — the radius is derived from the panel's aspect, not
-baked in.
-The flight's stops are the argument, in order, and the inspect chips are the
-same stops: 3 kW CPU racks in a metro colo → a GW campus of liquid-cooled
-NVL72 with grid and on-site power → many connected GW sites (scale-across
-traffic on the backbone), 1 MW racks, an SMR plant, physical AI, the orbital
-layer. The AGI stage is first principles, not a hologram: four sites of sealed
-halls with a 1 MW hall cut open at the core, four SMR modules feeding one
-turbine hall with air-cooled condensers (nuclear is the user's call for the
-AGI era; the AI campus stays gas, turbines and batteries, no cooling towers),
-a real Earth and an orbital layer above, edge cabinets and masts outside the
-perimeter loop, and physical AI at work — cabs and container trucks on the
-loop, humanoids on the road, quadcopters over the sites, robot arms in the
-container bay. no wireframe globe, no glowing stem, no visible orbit
-rings, no glowing pads. It was tried and read as cartoonish.
-It is mounted only when its topic opens and disposed on every navigation —
-`killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving
-part is posed by `tick()`, which is also called once at build so
-`prefers-reduced-motion` gets a correct resting state rather than a pile of
-cybercabs at the origin. Keep draw calls down: repeated assemblies go through
-`repeat()` or `inst()`/`put()`, never a mesh per copy.
+industrial rail with no text in the scene and the era colours carrying the
+reading: grey past, amber today, cyan future. It opens on the wide shot behind
+an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
+The camera moves between framings with one crane (`flyTo`: rise, cross,
+settle, smoothstep, no roll) and holds steady with the slowest drift; the
+stops are the storyline in order — 3 kW CPU racks in a metro colo → the GW
+campus, the NVL72 hall, grid + on-site power → connected GW sites across
+countries, 1 MW racks, nuclear + SMRs, orbital + edge, physical AI — and the
+inspect chips and in-scene pins (`SPOTS`) are those same stops. Any drag,
+wheel, chip or key pauses; space resumes; keys 1 / 2 / 3 jump eras. All chrome
+is DOM over the canvas, and every framing is {target, half-width, half-height,
+yaw, pitch} — the radius is derived from the panel's aspect, not baked in.
+The stage pedestals are 44×40, 92×66 and 150×76; the rail is 86 deep so the
+long-haul conduit at z = −41 clears the world map.
+
+The AGI stage is the planet, never a city block: the back of its pedestal is
+the world (Natural Earth, ±60° of latitude), with GW sites at real coordinates
+across countries, the fabric between them carrying one job's traffic, an
+orbital layer over it and edge nodes at real cities; in front, three dioramas
+at full scale — the 1 MW hall cut open, four SMR modules on one turbine hall
+(nuclear is the user's call for the AGI era; the AI campus stays gas, turbines
+and batteries, no cooling towers), and the physical world it powers: robot
+arms on a line, humanoids, robotaxis, drones. A wireframe globe on a stem, a
+circular site with glowing pads, and a race-drone flythrough were all tried
+and rejected as cartoonish or unstable.
 
 The globe in that scene is real too: `public/img/earth.png` is Natural Earth
 110m land drawn equirectangular by `tools/earth-texture.js` and wrapped on a
