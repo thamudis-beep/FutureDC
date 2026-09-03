@@ -5,8 +5,10 @@ PowerPoint.
 
 **The site is one file: `public/index.html`.** No build step, no framework, no
 bundler. It carries its own CSS, its own SVG diagram engine, its own canvas
-pixel field, and its embedded map geometry. The only things it loads from
-outside are Geist and IBM Plex Mono from Google Fonts, and `public/img/`.
+pixel field, its embedded map geometry, and one WebGL scene. The only things it
+loads from outside are Geist and IBM Plex Mono from Google Fonts, `public/img/`,
+and `public/vendor/three.min.js` — vendored, and fetched only when the one 3D
+topic is opened.
 
 ## Run
 
@@ -15,8 +17,7 @@ npm run dev      # serves public/ on http://localhost:3000
 ```
 
 Or just open `public/index.html` in a browser — every route works from
-`file://` except the one topic that loads `/img/footprint.jpg` by absolute
-path.
+`file://`, including the 3D topic, which loads three.js by relative path.
 
 ## Views
 

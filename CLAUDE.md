@@ -6,8 +6,13 @@ argument right, is it specific, does the picture carry it.
 
 **The site is one file: `public/index.html`.** There is no build step, no
 framework, no bundler — Vercel serves `public/` as a static directory. Nothing
-else in the repo ships. If a change does not land in that file or in
-`public/img/`, it does not reach production.
+else in the repo ships. If a change does not land in that file, in
+`public/img/`, or in `public/vendor/`, it does not reach production.
+
+`public/vendor/three.min.js` is the one vendored dependency — three r159, UMD,
+loaded lazily by the single 3D topic and by nothing else. It is vendored rather
+than pulled from a CDN so the page stays self-contained and renders offline.
+Do not add a second copy, and do not reach for a bundler on its account.
 
 ---
 
@@ -123,8 +128,8 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 
 ## Diagrams
 
-Each topic renders one diagram, either generated SVG (`viz:'name'` → `VIZ.name`)
-or a real image (`img:'/img/name.jpg'`). Helpers: `SV(body)` for the standard
+Each topic renders one diagram: generated SVG (`viz:'name'` → `VIZ.name`), a real
+image (`img:'/img/name.jpg'`), or the one live 3D scene (`scene:'eras'`). Helpers: `SV(body)` for the standard
 1000×460 canvas, `SVh(body,h)` when a diagram genuinely needs more height, plus
 `T` text, `B` box, `LN` line, `ARROW`, `RACK`, `CHIP`.
 
@@ -137,6 +142,18 @@ Icons live in `G` (26px line-art, one per topic via `TICON`) and animate —
 orbits spin, chains draw, batteries charge in sequence. Animations that carry
 their own resting state must be reset under `prefers-reduced-motion`, or icons
 render invisible or squashed.
+
+**The 3D scene** (`mountEras`, Data Center topic 01) is three stages on one
+industrial rail — a metro colo, a 1 GW campus, a planetary fabric — with no text
+in the scene and the era colours carrying the reading: grey past, amber today,
+cyan future. Drag to orbit, wheel to zoom, click a stage to fly to it, click the
+ground to pull back; framing is derived from the panel's aspect, not baked in.
+It is mounted only when its topic opens and disposed on every navigation —
+`killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving
+part is posed by `tick()`, which is also called once at build so
+`prefers-reduced-motion` gets a correct resting state rather than a pile of
+cybercabs at the origin. Keep draw calls down: repeated assemblies go through
+`repeat()` or `inst()`/`put()`, never a mesh per copy.
 
 The world map is real: `world-atlas` 110m TopoJSON, Natural Earth projection,
 Antarctica dropped, fitted to the viewBox and rounded to integers, generated
