@@ -146,8 +146,16 @@ render invisible or squashed.
 **The 3D scene** (`mountEras`, Data Center topic 01) is three stages on one
 industrial rail — a metro colo, a 1 GW campus, a planetary fabric — with no text
 in the scene and the era colours carrying the reading: grey past, amber today,
-cyan future. Drag to orbit, wheel to zoom, click a stage to fly to it, click the
-ground to pull back; framing is derived from the panel's aspect, not baked in.
+cyan future. It opens on a wide shot behind an "Enter the foundry" pill; entering
+starts a scripted flythrough (`TOUR`) that any drag, wheel, chip or key pauses
+and space resumes. The era bar and keys 1 / 2 / 3 jump between stages; the
+inspect chips and the in-scene pins (`SPOTS`) fly to close framings — the
+metro colo, the NVL72 cutaway, the power yard, the 1 MW ring, the orbital
+layer, the edge ring. Drag to orbit, wheel to zoom, click a stage to fly to
+it, click the ground to pull back. All of that chrome is DOM over the canvas,
+never text in the scene, and every framing is {target, half-width,
+half-height, yaw, pitch} — the radius is derived from the panel's aspect, not
+baked in.
 It is mounted only when its topic opens and disposed on every navigation —
 `killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving
 part is posed by `tick()`, which is also called once at build so
