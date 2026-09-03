@@ -239,10 +239,9 @@
     transition:color .18s,border-color .18s,background .18s,opacity .3s}
   .e3d button:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
   .e3d-bar{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity .5s}
-  .e3d-chips{position:absolute;left:14px;right:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:flex-end;opacity:0;transition:opacity .5s .1s}
-  .e3d-grp{display:flex;flex-direction:column;gap:5px}
-  .e3d-gl{display:flex;align-items:center;gap:6px;padding-left:2px;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ec);opacity:.85}
-  .e3d-gl i{width:5px;height:5px;border-radius:50%;background:var(--ec);box-shadow:0 0 6px var(--ec)}
+  .e3d-chips{position:absolute;left:14px;right:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;opacity:0;transition:opacity .5s .1s}
+  .e3d-grp{display:flex;align-items:center}
+  .e3d-grp+.e3d-grp{padding-left:14px;border-left:1px solid rgba(255,255,255,.16)}
   .e3d-row{display:flex;flex-wrap:wrap;gap:6px}
   .e3d.in .e3d-bar,.e3d.in .e3d-chips{opacity:1}
   .e3d-era{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 9px;font-size:10.5px;font-weight:600;letter-spacing:.06em}
@@ -331,7 +330,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v62 · on-site and grid</div>
+<div class="ver">v63 · combined cycle</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1495,16 +1494,27 @@ function mountEras(host){
 
   /* ---------------- power plant kit ---------------- */
   var stacks=[];   /* exhaust halos, animated */
-  function turbineUnit(g,x,z,rot){
-    var u=new T.Group(); u.position.set(x,0,z); u.rotation.y=rot||0;
-    var encl=mat(0x2a313a,{r:.7,m:.55}), sk=mat(C.steelL,{r:.45,m:.85});
-    u.add(box(7.0,2.6,2.6,encl,0,1.3,0,true));                 /* turbine package */
-    u.add(box(2.6,3.4,3.0,mat(0x232931,{r:.8,m:.4}),-4.8,1.7,0,true)); /* intake filter house */
-    for(var i=0;i<5;i++) u.add(box(.10,3.0,3.05,sk,-5.9+i*.55,1.7,0));
-    u.add(cyl(.72,.9,6.2,sk,4.6,3.1,0,12));                    /* exhaust stack */
-    u.add(box(2.6,2.2,2.4,mat(0x30373f,{r:.6,m:.7}),2.2,1.1,0,true)); /* generator end */
-    u.add(box(6.6,.10,.10,lit(C.forgeLit,1.2),0,2.68,1.32));
-    var h=halo(C.forgeLit,3.4,.30); h.position.set(4.6,6.6,0); u.add(h); stacks.push(h);
+  /* a combined-cycle train: filter house, gas turbine, generator, HRSG with its stack,
+     steam turbine, and an air-cooled condenser deck behind it */
+  function ccgt(g,x,z){
+    var u=new T.Group(); u.position.set(x,0,z);
+    var encl=mat(0x2a313a,{r:.7,m:.55}), sk=SK(), hrsgM=mat(0x333b46,{r:.8,m:.35}), duct=mat(0x3c4652,{r:.6,m:.7});
+    u.add(box(3.0,4.0,3.4,mat(0x232931,{r:.8,m:.4}),-8.5,2.0,0,true));                 /* intake filter house */
+    for(var i=0;i<5;i++) u.add(box(.10,3.6,3.45,sk,-9.7+i*.6,2.0,0));
+    u.add(box(6.0,3.0,3.2,encl,-3.8,1.5,0,true));                                     /* gas turbine package */
+    u.add(box(5.8,.10,.10,lit(C.forgeLit,1.2),-3.8,3.05,1.62));
+    u.add(box(3.0,2.6,2.8,mat(0x30373f,{r:.6,m:.7}),.9,1.3,0,true));                  /* generator */
+    u.add(box(2.2,2.2,2.2,duct,3.2,2.4,0));                                           /* exhaust duct */
+    u.add(box(4.2,7.0,4.6,hrsgM,6.2,3.5,0,true));                                     /* HRSG */
+    for(var r=0;r<3;r++) u.add(box(4.3,.12,4.7,sk,6.2,1.2+r*2.3,0));
+    u.add(cyl(.95,1.1,8.0,sk,6.2,11.0,0,14));                                         /* stack */
+    var h=halo(C.forgeLit,4.2,.30); h.position.set(6.2,15.6,0); u.add(h); stacks.push(h);
+    u.add(tube([[6.2,7.1,1.6],[8.4,7.4,1.6],[10.4,3.2,1.2]],.18,sk,8));                /* steam to the ST */
+    u.add(box(4.0,2.6,3.0,mat(0x30373f,{r:.6,m:.7}),10.6,1.3,0,true));                /* steam turbine + generator */
+    u.add(box(3.8,.10,.10,lit(C.forgeLit,1.0),10.6,2.65,1.52));
+    u.add(box(12,1.0,3.6,mat(0x232a33,{r:.7,m:.5}),3.5,3.6,4.6,true));                /* air-cooled condenser deck */
+    for(var f=0;f<4;f++) u.add(cyl(1.15,1.15,.10,mat(0x4a525d,{r:.62,m:.6}),-1+f*3,4.16,4.6,16));
+    for(var l=0;l<4;l++) u.add(box(.18,3.1,.18,sk,-2.5+l*4,1.55,3.2+(l%2)*2.8));
     g.add(u); return u;}
 
   var _sk=null; function SK(){ return _sk||(_sk=mat(C.steelL,{r:.5,m:.8})); }
@@ -1691,10 +1701,10 @@ function mountEras(host){
     g.add(box(3.0,.6,2.4,mat(0x2a313a,{r:.8,m:.4}),-38,5.3,-30));
     bundle(g,[[-38,6.1,-27],[-38,4.2,-31],[-38,1.2,-33],[-38,1.0,-41]],.13,fibM,5,.2);
 
-    /* --- power yard --- */
-    for(var t=0;t<5;t++) turbineUnit(g,-32+t*12,9,0);
-    g.add(box(74,.5,.5,mat(0x3c4652,{r:.55,m:.75}),-8,1.1,14.2));            /* gas header */
-    for(var gh=0;gh<5;gh++) g.add(cyl(.22,.22,1.4,mat(0x3c4652,{r:.55,m:.75}),-32+gh*12,1.9,14.2,8));
+    /* --- power yard: three combined-cycle trains, gensets for backup, batteries --- */
+    [-26,-2,22].forEach(function(tx){ ccgt(g,tx,8); });
+    g.add(box(74,.5,.5,mat(0x3c4652,{r:.55,m:.75}),-2,1.1,15.4));            /* gas header */
+    [-26,-2,22].forEach(function(tx){ g.add(cyl(.22,.22,1.4,mat(0x3c4652,{r:.55,m:.75}),tx-8.5,1.9,15.4,8)); });
 
     var gp=[]; for(var gs=0;gs<8;gs++) gp.push([-34+gs*8,19,0]); repeat(g,GENSET(),gp);
     var bp=[]; for(var bs=0;bs<9;bs++){ bp.push([-36+bs*8,25.5,0]); bp.push([-36+bs*8,29.5,0]); }
@@ -1951,19 +1961,20 @@ function mountEras(host){
     {id:'metro',  n:'3 kW CPU racks',        era:0, t:new T.Vector3(X0+1,9.5,4),   w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
     {id:'nvl',    n:'NVL72 · 150 kW racks',  era:1, t:new T.Vector3(X1-14,2.4,-11),w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
     {id:'campus', n:'GW-scale campus',       era:1, t:new T.Vector3(X1-3,4,-9),    w:58, h:30, th:1.14, ph:.84,  pin:null},
-    {id:'onsite', n:'On-site power',         era:1, t:new T.Vector3(X1-8,1.5,21),  w:40, h:18, th:1.40, ph:.98,  pin:[X1-10,8.5,22,1]},
+    {id:'onsite', n:'On-site power',         era:1, t:new T.Vector3(X1-4,3,17),    w:44, h:22, th:1.42, ph:.96,  pin:[X1+4.2,18,8,1]},
     {id:'grid',   n:'Grid',                  era:1, t:new T.Vector3(X1+38,2.5,13), w:22, h:12, th:1.12, ph:1.00, pin:[X1+38,8.6,13,1]},
     {id:'fabric', n:'Connected GW sites',    era:2, t:new T.Vector3(X2,0,-14),     w:80, h:34, th:1.50, ph:.60,  pin:[X2+36,7,-13,1]},
     {id:'mono',   n:'1 MW racks',            era:2, t:new T.Vector3(X2-50,3.6,27), w:22, h:12, th:1.12, ph:1.02, pin:[X2-33,10,33,1]},
-    {id:'smr',    n:'Nuclear + SMRs',        era:2, t:new T.Vector3(X2,3,27),      w:28, h:13, th:1.30, ph:1.00, pin:[X2+17,9,22,1]},
-    {id:'orbit',  n:'Orbital + edge',        era:2, t:new T.Vector3(X2,12,-13),    w:84, h:44, th:1.45, ph:.98,  pin:[X2-60,36,-13,0]},
+    {id:'smr',    n:'Nuclear',               era:2, t:new T.Vector3(X2,3,27),      w:28, h:13, th:1.30, ph:1.00, pin:[X2+17,9,22,1]},
+    {id:'orbit',  n:'Orbital',               era:2, t:new T.Vector3(X2,20,-13),    w:76, h:40, th:1.45, ph:1.12, pin:[X2-60,36,-13,0]},
+    {id:'cities', n:'Edge',                  era:2, t:new T.Vector3(X2+8,0,-16),   w:54, h:26, th:1.50, ph:.50,  pin:[X2,4.5,-34.5,1]},
     {id:'edge',   n:'Physical AI',           era:2, t:new T.Vector3(X2+50,2,26),   w:28, h:13, th:1.20, ph:1.00, pin:[X2+66,8,22,1]}
   ];
 
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   /* the film: [framing, seconds to hold]. Moves take 1.6 s within an era, up to 3 s across */
   var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.nvl,4.5],[byId.campus,3],[byId.onsite,4],[byId.grid,3.5],
-                [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4.5],[byId.edge,5]];
+                [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4],[byId.cities,3.5],[byId.edge,5]];
 
   function fitRadius(v){
     var ht=Math.tan(camera.fov*Math.PI/360);
@@ -2050,7 +2061,7 @@ function mountEras(host){
       '<button class="e3d-play" data-play></button>'+
     '</div>'+
     '<div class="e3d-chips">'+[0,1,2].map(function(e){ var ec='#'+ERA[e].toString(16).padStart(6,'0');
-      return '<div class="e3d-grp" style="--ec:'+ec+'"><div class="e3d-gl"><i></i>'+['Cloud era · 2023','AI era · 2026','AGI era · 2031'][e]+'</div><div class="e3d-row">'+
+      return '<div class="e3d-grp" style="--ec:'+ec+'"><div class="e3d-row">'+
         SPOTS.filter(function(sp){return sp.era===e;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
     '<div class="e3d-enter"><button data-enter>Enter</button></div>';
   host.appendChild(ui);
