@@ -147,7 +147,12 @@ render invisible or squashed.
 industrial rail — a metro colo, a 1 GW campus, a planetary fabric — with no text
 in the scene and the era colours carrying the reading: grey past, amber today,
 cyan future. It opens on a wide shot behind an "Enter the foundry" pill; entering
-starts a scripted flythrough (`TOUR`) that any drag, wheel, chip or key pauses
+starts the flight (`K`, one closed spline the camera flies nose-first — it dives
+at the city, threads a street, runs the conduit, enters the NVL hall through its
+open side and leaves through the roof frame, crosses the AGI site into the 1 MW
+hall, climbs round the Earth, drops to the loop). Speed per keyframe sets the
+bank and the field of view; a pause hands the drone's pose to the orbit camera
+so a drag continues from where it is. Any drag, wheel, chip or key pauses it
 and space resumes. The era bar and keys 1 / 2 / 3 jump between stages; the
 inspect chips and the in-scene pins (`SPOTS`) fly to close framings — the
 metro colo, the NVL72 cutaway, the power yard, the 1 MW ring, the orbital
@@ -156,9 +161,12 @@ it, click the ground to pull back. All of that chrome is DOM over the canvas,
 never text in the scene, and every framing is {target, half-width,
 half-height, yaw, pitch} — the radius is derived from the panel's aspect, not
 baked in.
-The AGI stage is a site in the same building language as the campus — sealed
-halls, a 1 MW hall cut open, substation, turbines, batteries, a perimeter
-loop — never a hologram: no wireframe globe, no glowing stem, no visible orbit
+The AGI stage is first principles, not a hologram: four sites of sealed halls
+with a 1 MW hall cut open at the core, one job's traffic running the backbone
+between them (scale-across), a real Earth and an orbital layer above, edge
+cabinets and masts on the perimeter, and physical AI at work — cabs and
+container trucks on the loop, humanoids on the road, quadcopters over the
+sites, robot arms in the container bay. no wireframe globe, no glowing stem, no visible orbit
 rings, no glowing pads. It was tried and read as cartoonish.
 It is mounted only when its topic opens and disposed on every navigation —
 `killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving

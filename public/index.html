@@ -327,7 +327,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v57 · a real Earth over a real site</div>
+<div class="ver">v58 · fly the future</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1724,13 +1724,14 @@ function mountEras(host){
      open at its core; a real Earth above it, an orbital layer
      around that; compute at the site's edge.
      ========================================================= */
-  var anim={globe:null,leo:[],bigring:null,dishes:[],pulses:[],cabs:[],flow:null};
+  var anim={globe:null,leo:[],bigring:null,dishes:[],pulses:[],cabs:[],flow:null,links:[],arms:[],bots:[],drones:[]};
+  var links=[];
   var S3=pedestal(X2,96,76,C.hot);
   (function(){
     var g=S3;
     g.add(box(96,.10,76,mat(0x1b2027,{r:.94,m:.14}),0,.05,0));
     var road=mat(0x14181e,{r:.95,m:.08}), lane=lit(0x9aa3b2,.35,.7);
-    g.add(box(88,.06,4,road,0,.11,-12)); g.add(box(88,.06,4,road,0,.11,12));
+    g.add(box(88,.06,4,road,0,.11,-10.5)); g.add(box(88,.06,4,road,0,.11,10.5));
     g.add(box(4,.06,64,road,0,.11,0));
     /* the perimeter loop the cabs run */
     var PX=44.5, PZ=34.5;
@@ -1740,7 +1741,7 @@ function mountEras(host){
     g.add(box(.12,.02,2*PZ,lane,-PX,.14,0));   g.add(box(.12,.02,2*PZ,lane,PX,.14,0));
 
     /* ---- the core: a hall cut open on twelve 1 MW monoliths ---- */
-    var HX=0, HZ=-2;
+    var HX=0, HZ=-1;
     hallShell(g,HX,HZ,34,14,7.6,C.hot,{open:true});
     var monM=mat(0x2b323c,{r:.6,m:.62}), monRail=mat(C.steelL,{r:.45,m:.85}), coreM=lit(C.hot,1.6);
     var supM=mat(0x2b4a66,{r:.4,m:.7}), retM=mat(0x5a3340,{r:.4,m:.7});
@@ -1767,7 +1768,7 @@ function mountEras(host){
     var hl=new T.PointLight(0xbfefff,120,22,1.6); hl.position.set(HX,4.5,HZ+1); g.add(hl);
 
     /* ---- four campus quadrants, sixteen halls ---- */
-    var QX=[-29,29], QZ=[-22,22];
+    var QX=[-29,29], QZ=[-21.5,21.5];
     QX.forEach(function(cx){ QZ.forEach(function(cz){
       for(var hr=0;hr<2;hr++) for(var hc=0;hc<2;hc++)
         hallShell(g,cx+(hc?7:-7),cz+(hr?5.6:-5.6),12,7,3.4,C.hot,{chillers:4});
@@ -1776,13 +1777,19 @@ function mountEras(host){
     });});
     /* trunks from the core to every quadrant: tray, and the fibre in it */
     QX.forEach(function(cx){ QZ.forEach(function(cz){
-      var sx=cx<0?-17:17, ez=cz<0?-9.5:1.6;
+      var sx=cx<0?-17:17, ez=cz<0?-9.5:1.6, fibre=fibM;
       ladder(g,[sx,1.2,HZ],[cx,1.2,HZ],.6,trayM,1.8);
       ladder(g,[cx,1.2,HZ],[cx,1.2,ez],.6,trayM,1.8);
-      g.add(tube([[sx,1.15,HZ],[cx,1.15,HZ],[cx,1.15,ez]],.05,fibM,6));
+      var lc=new T.CatmullRomCurve3([new T.Vector3(sx,1.25,HZ),new T.Vector3(cx,1.25,HZ),new T.Vector3(cx,1.25,ez)],false,'catmullrom',0);
+      g.add(new T.Mesh(G(new T.TubeGeometry(lc,12,.05,5,false)),fibre)); links.push(lc);
     });});
-    /* east-west trunk between the quadrants along the road */
-    ladder(g,[-43,1.2,-12],[43,1.2,-12],.6,trayM,2); ladder(g,[-43,1.2,12],[43,1.2,12],.6,trayM,2);
+    /* east-west trunks between the sites along the roads: scale-across runs on these */
+    ladder(g,[-43,1.2,-10.5],[43,1.2,-10.5],.6,trayM,2); ladder(g,[-43,1.2,10.5],[43,1.2,10.5],.6,trayM,2);
+    [-10.5,10.5].forEach(function(rz){ var lc=new T.CatmullRomCurve3([new T.Vector3(-43,1.25,rz),new T.Vector3(43,1.25,rz)],false,'catmullrom',0);
+      g.add(new T.Mesh(G(new T.TubeGeometry(lc,4,.05,5,false)),fibM)); links.push(lc); });
+    /* traffic on the backbone: one job, many sites */
+    var NL=54, pulses=inst(SG(.15,8),lit(C.hotCore,2.4),NL); g.add(pulses);
+    for(var pi=0;pi<NL;pi++){ put(pulses,0,-5,0); anim.links.push({m:pulses,i:pi,c:links[pi%links.length],t:Math.random(),v:.10+Math.random()*.08,d:pi%2?1:-1}); }
 
     /* ---- north: substation, HV out over the boundary ---- */
     var xp=[]; for(var t=0;t<4;t++) xp.push([-9+t*6,-19,0]); repeat(g,XFMR(),xp);
@@ -1804,8 +1811,25 @@ function mountEras(host){
     for(var wt=0;wt<2;wt++){
       g.add(cyl(3.4,3.4,6,mat(0x272e37,{r:.8,m:.4}),31,3,-5+wt*10,20));
       g.add(cyl(3.5,3.5,.25,SK(),31,6.1,-5+wt*10,20)); }
-    g.add(box(6,3.2,9,mat(0x252b33,{r:.85,m:.3}),41,1.6,0,true));
-    g.add(box(5.6,.08,.08,lit(C.hot,1.1),41,2.2,4.55));
+    g.add(box(6,3.2,5,mat(0x252b33,{r:.85,m:.3}),41,1.6,7,true));
+    g.add(box(5.6,.08,.08,lit(C.hot,1.1),41,2.2,9.55));
+    var cont=mat(0x2a2f36,{r:.8,m:.4}), cAt=[];
+    for(var ci=0;ci<2;ci++) for(var cj=0;cj<2;cj++) cAt.push([39.5+ci*3.2,-7.5+cj*1.8,0]);
+    repeat(g,[[BG(2.8,1.4,1.5),cont,0,.7,0,1],[BG(2.7,.06,.06),lit(C.hot,1.2),0,1.0,.78,0]],cAt);
+    cAt.forEach(function(c,ci){ if(ci<2){ g.add(box(2.8,1.4,1.5,cont,c[0],2.1,c[1],true)); } });
+    [[37.5,-3.2],[43.5,-3.2]].forEach(function(ap,ai){
+      var base=new T.Group(); base.position.set(ap[0],0,ap[1]); g.add(base);
+      base.add(cyl(.55,.65,.5,mat(0x2c333c,{r:.6,m:.7}),0,.25,0,12));
+      var sh=new T.Group(); sh.position.y=.5; base.add(sh);
+      sh.add(box(.5,.5,.5,mat(0xd9a441,{r:.5,m:.5}),0,.25,0));
+      var up=new T.Group(); up.position.y=.5; sh.add(up);
+      up.add(box(.26,1.7,.26,mat(0xd9a441,{r:.5,m:.5}),0,.85,0));
+      var fo=new T.Group(); fo.position.y=1.7; up.add(fo);
+      fo.add(box(.2,1.3,.2,mat(0xd9a441,{r:.5,m:.5}),0,.65,0));
+      fo.add(box(.3,.25,.3,mat(0x2c333c,{r:.6,m:.7}),0,1.35,0));
+      fo.add(box(.06,.06,.06,lit(C.hot,2.4),0,1.5,0));
+      anim.arms.push({sh:sh,up:up,fo:fo,p:ai*1.7});
+    });
     /* ---- west: ground stations ---- */
     [[-36,-6],[-36,5],[-26,-1]].forEach(function(gp,gi){
       var u3=new T.Group(); u3.position.set(gp[0],0,gp[1]); g.add(u3);
@@ -1820,11 +1844,11 @@ function mountEras(host){
     ladder(g,[-36,1.2,-6],[-36,1.2,5],.5,trayM,1.6); ladder(g,[-36,1.2,HZ],[-17,1.2,HZ],.5,trayM,1.6);
 
     /* ---- the edge: cabinets and masts on the perimeter, cabs on the loop ---- */
-    var cabAt=[]; for(var ex=-35;ex<=35;ex+=14){ cabAt.push([ex,-(PZ-2.8),0]); cabAt.push([ex,PZ-2.8,Math.PI]); }
-    for(var ez2=-21;ez2<=21;ez2+=14){ cabAt.push([-(PX-2.8),ez2,-Math.PI/2]); cabAt.push([PX-2.8,ez2,Math.PI/2]); }
+    var cabAt=[]; for(var ex=-35;ex<=35;ex+=14){ cabAt.push([ex,-(PZ+2.2),Math.PI]); cabAt.push([ex,PZ+2.2,0]); }
+    for(var ez2=-21;ez2<=21;ez2+=14){ cabAt.push([-(PX+2.2),ez2,Math.PI/2]); cabAt.push([PX+2.2,ez2,-Math.PI/2]); }
     repeat(g,[[BG(1.2,1.6,.9),mat(0x252b33,{r:.75,m:.45}),0,.8,0,1],[BG(1.0,.07,.07),lit(C.hot,1.6),0,1.25,-.47,0]],cabAt);
     [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(c){
-      var mx=c[0]*(PX-2.8), mz=c[1]*(PZ-2.8);
+      var mx=c[0]*(PX+2.2), mz=c[1]*(PZ+2.2);
       g.add(cyl(.14,.18,7.0,SK(),mx,3.5,mz,8));
       for(var sc2=0;sc2<3;sc2++){ var as2=sc2/3*Math.PI*2;
         g.add(box(.18,1.1,.5,mat(0xd4dae4,{r:.6,m:.3}),mx+Math.cos(as2)*.45,6.6,mz+Math.sin(as2)*.45).rotateY(-as2)); }
@@ -1846,6 +1870,39 @@ function mountEras(host){
       g.add(u4);
       anim.cabs.push({o:u4,c:lanes[cb%2],t:(cb/20+Math.random()*.03)%1,d:dir,v:.011+Math.random()*.004});
     }
+    /* two autonomous trucks bringing containers in */
+    var truckM=mat(0x3a4048,{r:.6,m:.6});
+    for(var tk=0;tk<2;tk++){
+      var u5=new T.Group();
+      u5.add(box(1.5,1.5,1.3,truckM,2.4,.35,0)); u5.add(box(.06,.30,1.0,lit(0xf2f6ff,2.0),3.16,.35,0));
+      u5.add(box(4.4,.3,1.3,truckM,-.4,-.2,0));
+      u5.add(box(4.2,1.4,1.3,cont,-.4,.65,0)); u5.add(box(4.1,.06,.06,lit(C.hot,1.2),-.4,.95,.67));
+      for(var wh=0;wh<3;wh++) for(var ws=-1;ws<=1;ws+=2) u5.add(cyl(.26,.26,.16,wheel,2.4-wh*1.9,-.3,ws*.6,10).rotateZ(Math.PI/2));
+      g.add(u5); anim.cabs.push({o:u5,c:lanes[0],t:.3+tk*.5,d:1,v:.006});
+    }
+    /* humanoids walking the south road */
+    var skinM=mat(0xb8c0cc,{r:.5,m:.5}), jointM=mat(0x2a3038,{r:.6,m:.5});
+    for(var hb=0;hb<8;hb++){
+      var h=new T.Group(); h.position.y=0;
+      h.add(box(.42,.6,.24,skinM,0,1.0,0)); h.add(box(.22,.24,.22,skinM,0,1.45,0));
+      h.add(box(.16,.05,.04,lit(C.hot,2.0),0,1.47,.12));
+      var legs=[],arms=[];
+      [-1,1].forEach(function(sd){ var l=new T.Group(); l.position.set(sd*.11,.72,0); l.add(box(.14,.7,.14,jointM,0,-.35,0)); h.add(l); legs.push(l);
+        var a=new T.Group(); a.position.set(sd*.28,1.26,0); a.add(box(.10,.55,.10,jointM,0,-.28,0)); h.add(a); arms.push(a); });
+      g.add(h);
+      anim.bots.push({o:h,legs:legs,arms:arms,x0:-15,x1:15,z:9.2+(hb%2)*.9,t:hb/8,d:hb%3?1:-1,v:.045+Math.random()*.02,ph:Math.random()*6});
+    }
+    /* quadcopters over the sites */
+    var droneM=mat(0x1f242b,{r:.6,m:.6}), rotorM=mat(0x0f1318,{r:.4,m:.3,t:true,o:.55});
+    [[-29,-21.5,11],[29,-21.5,13],[-29,21.5,12],[29,21.5,10]].forEach(function(dp,di){
+      var dr=new T.Group(); var rot=[];
+      dr.add(box(.6,.14,.6,droneM,0,0,0));
+      [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(q){
+        dr.add(box(.9,.05,.08,droneM,q[0]*.35,.02,q[1]*.35).rotateY(q[0]*q[1]>0?-Math.PI/4:Math.PI/4));
+        var rd=cyl(.32,.32,.02,rotorM,q[0]*.72,.08,q[1]*.72,12); dr.add(rd); rot.push(rd); });
+      dr.add(box(.06,.06,.06,lit(C.red,2.4),-.3,.1,0)); dr.add(box(.06,.06,.06,lit(0x86e07a,2.4),.3,.1,0));
+      g.add(dr); anim.drones.push({o:dr,cx:dp[0],cz:dp[1],h:dp[2],r:7+di*2,a:di*1.6,v:(di%2?1:-1)*(.35+di*.05),rot:rot});
+    });
 
     /* ---- the Earth: Natural Earth land on a dark sphere, lit by the key ---- */
     var globe=new T.Group(); globe.position.set(HX,46,HZ); g.add(globe);
@@ -1954,20 +2011,62 @@ function mountEras(host){
     {id:'wide', t:new T.Vector3(20,13,0),  w:184, h:58, th:1.47, ph:.93, era:-1},   /* the whole rail */
     {id:'cloud',t:new T.Vector3(X0,7,2),   w:44,  h:26, th:1.19, ph:.80, era:0},
     {id:'ai',   t:new T.Vector3(X1-3,4,-9),w:58,  h:30, th:1.14, ph:.84, era:1},
-    {id:'agi',  t:new T.Vector3(X2,20,-2), w:60,  h:44, th:1.26, ph:.84, era:2}
+    {id:'agi',  t:new T.Vector3(X2,20,-1), w:60,  h:44, th:1.26, ph:.84, era:2}
   ];
   /* inspect points: a close framing, and a pin in the scene at the same spot */
   var SPOTS=[
     {id:'metro',  n:'Metro colo',    era:0, t:new T.Vector3(X0+1,9.5,4),    w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
     {id:'nvl',    n:'NVL72 hall',    era:1, t:new T.Vector3(X1-14,2.4,-11), w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
     {id:'power',  n:'Power yard',    era:1, t:new T.Vector3(X1-6,2,18),     w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
-    {id:'mono',   n:'1 MW racks',    era:2, t:new T.Vector3(X2,3.4,-2),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,5.5,1]},
-    {id:'orbit',  n:'Orbital layer', era:2, t:new T.Vector3(X2,46,-2),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]},
-    {id:'edge',   n:'Edge ring',     era:2, t:new T.Vector3(X2+28,1,24),    w:32, h:15, th:1.36, ph:.98,  pin:[X2+41.7,9.4,31.7,1]}
+    {id:'mono',   n:'1 MW racks',    era:2, t:new T.Vector3(X2,3.4,-1),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,6.5,1]},
+    {id:'orbit',  n:'Orbital layer', era:2, t:new T.Vector3(X2,46,-1),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]},
+    {id:'edge',   n:'Edge ring',     era:2, t:new T.Vector3(X2+30,1,26),    w:32, h:15, th:1.36, ph:.98,  pin:[X2+46.7,9.4,36.7,1]}
   ];
-  /* the flythrough: framing, then how long to hold it */
-  var TOUR=[[ERAS[0],7],[ERAS[1],5],[SPOTS[0],6],[ERAS[2],5],[SPOTS[1],7],[SPOTS[2],5],
-            [ERAS[3],5],[SPOTS[3],6],[SPOTS[4],7],[SPOTS[5],5]];
+  /* ---- the flight: one closed path the drone flies, nose-first, banking.
+     [position, look-ahead, speed 0..1, era, spot]. It dives at the city,
+     threads the street, runs the conduit, enters the NVL hall through the
+     open side and punches out through the roof frame, low over the
+     turbines, across the AGI site into the 1 MW hall, up through its roof,
+     round the Earth, down to the loop, and back out wide. ---- */
+  var K=[
+    [[ 24, 84,176],[ 20, 10,  0], .75,-1,null],
+    [[-34, 46,112],[-105,10,  3],1.00, 0,null],
+    [[-82, 26, 54],[-110, 9,  3], .45, 0,'metro'],
+    [[-96, 13, 27],[-112,10,  4], .50, 0,'metro'],
+    [[-102, 7,14.5],[-118,7, 13], .75, 0,null],
+    [[-118, 6, 13],[-127, 8, -1], .80, 0,null],
+    [[-127.5,9,-1],[-126, 9,-25], .85, 0,null],
+    [[-126, 9,-25],[-100, 6,-34],1.00, 0,null],
+    [[ -72, 7,-30],[ -22, 6,-34],1.00, 1,null],
+    [[ -36,15,-24],[ -19, 4,-11], .60, 1,'nvl'],
+    [[   6,4.2,-9.4],[-12,3.2,-9.4],.45,1,'nvl'],
+    [[  -6,3.4,-9.4],[-20,3.2,-9.4],.40,1,'nvl'],
+    [[ -15,3.5,-9.4],[-22,4.5,-9.4],.40,1,'nvl'],
+    [[ -21, 8,-9.4],[-30,12, -2], .70, 1,null],
+    [[ -32,10, 13],[ 10, 6, 18], .55, 1,'power'],
+    [[  24,13, 24],[ 42, 4, 12], .80, 1,'power'],
+    [[  64,26, 24],[118,12,  0],1.00, 2,null],
+    [[  84,10, 34],[118, 4, -1], .80, 2,null],
+    [[ 144,4.5,-1],[122, 4, -1], .45, 2,'mono'],
+    [[ 124,4.2,-1],[104, 4, -1], .40, 2,'mono'],
+    [[ 108,4.4,-1],[100, 6, -1], .40, 2,'mono'],
+    [[ 100,10, -1],[ 96,20,-10], .70, 2,null],
+    [[  92,26,-26],[118,46, -1], .80, 2,'orbit'],
+    [[ 118,44,-40],[118,46, -1], .70, 2,'orbit'],
+    [[ 150,56,-10],[118,46, -1], .45, 2,'orbit'],
+    [[ 132,66, 30],[118,46, -1], .60, 2,'orbit'],
+    [[ 166,10, 38],[140, 3, 30], .50, 2,'edge'],
+    [[ 148,12, 54],[100, 6, 20], .90, 2,null],
+    [[ 104,62,118],[ 60,10,  0],1.00,-1,null]
+  ];
+  var posC=new T.CatmullRomCurve3(K.map(function(k){return V(k[0]);}),true,'centripetal');
+  var lookC=new T.CatmullRomCurve3(K.map(function(k){return V(k[1]);}),true,'centripetal');
+  var uK=(function(){ var L=posC.getLengths(600), tot=L[L.length-1], out=[];
+    for(var i=0;i<K.length;i++) out.push(L[Math.round(i/K.length*600)]/tot); out.push(1); return out; })();
+  function segAt(u){ var i=0; while(i<K.length-1&&u>=uK[i+1]) i++; return i; }
+  function speedAt(u){ var i=segAt(u), a=uK[i], b=uK[i+1], f=b>a?(u-a)/(b-a):0; f=f*f*(3-2*f);
+    return K[i][2]+(K[(i+1)%K.length][2]-K[i][2])*f; }
+  var FLIGHT=26;                         /* seconds for one lap at full speed */
 
   function fitRadius(v){
     var ht=Math.tan(camera.fov*Math.PI/360);
@@ -1975,15 +2074,29 @@ function mountEras(host){
   var cur=ERAS[0], tgt=cur.t.clone(), gTgt=cur.t.clone();
   var rad=0, gRad=0, th=cur.th, gTh=th, ph=cur.ph, gPh=ph;
   var drag=false, px=0, py=0, moved=0, idle=0, zoomed=false;
-  var tour={on:false,i:0,t:0,entered:false};
+  var roll=0, gRoll=0, fov=42, gFov=42;
+  var tour={on:false,entered:false,u:0,blend:0,seg:-1};
+  var camPos=new T.Vector3(), camLook=new T.Vector3(), dPos=new T.Vector3(), dLook=new T.Vector3(), tA=new T.Vector3(), tB=new T.Vector3();
 
+  function orbitPos(out){ out.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th)); }
   function goView(v,fromTour){
     cur=v; gTgt.copy(v.t); gTh=v.th; gPh=v.ph; zoomed=false; gRad=fitRadius(v); idle=0;
-    if(!fromTour){ tour.on=false; }
+    if(!fromTour) pauseTour();
     syncUI();}
+  /* hand the drone's pose to the orbit camera so a drag continues from where it is */
+  function pauseTour(){
+    if(!tour.on) return; tour.on=false;
+    tgt.copy(camLook); gTgt.copy(tgt);
+    dPos.copy(camPos).sub(camLook); rad=gRad=Math.max(6,dPos.length());
+    th=gTh=Math.atan2(dPos.z,dPos.x); ph=gPh=Math.max(.14,Math.min(1.44,Math.acos(Math.max(-1,Math.min(1,dPos.y/rad)))));
+    zoomed=true; syncUI(); }
   function place(){
-    camera.position.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th));
-    camera.lookAt(tgt);}
+    orbitPos(dPos); camLook.copy(tgt);
+    if(tour.blend>0){ posC.getPointAt(tour.u,camPos); lookC.getPointAt(tour.u,dLook);
+      camPos.lerp(dPos,1-tour.blend); camLook.copy(dLook).lerp(tgt,1-tour.blend); }
+    else camPos.copy(dPos);
+    camera.position.copy(camPos); camera.up.set(0,1,0); camera.lookAt(camLook); camera.rotateZ(roll);
+    if(Math.abs(camera.fov-fov)>.01){ camera.fov=fov; camera.updateProjectionMatrix(); } }
 
   /* ---- pins: one per inspect point, sized to the camera so they never vanish ---- */
   var pins=[], pinHits=[];
@@ -2004,11 +2117,11 @@ function mountEras(host){
   function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
   function move(e){ if(!drag) return;
     var dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
-    if(moved>5&&tour.on){ tour.on=false; syncUI(); }
+    if(moved>5&&tour.on) pauseTour();
     gTh-=dx*.005; gPh=Math.max(.14,Math.min(1.44,gPh-dy*.004)); idle=0;}
   function up(e){ if(drag&&moved<5) pick(e); drag=false; el.style.cursor='grab';}
-  function wheel(e){ e.preventDefault(); zoomed=true; if(tour.on){tour.on=false;syncUI();}
-    gRad=Math.max(12,Math.min(420,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
+  function wheel(e){ e.preventDefault(); pauseTour(); zoomed=true;
+    gRad=Math.max(6,Math.min(420,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
   var ray=new T.Raycaster(), ndc=new T.Vector2();
   function pick(e){
     var b=el.getBoundingClientRect();
@@ -2033,18 +2146,27 @@ function mountEras(host){
     '<div class="e3d-chips">'+SPOTS.map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'" style="--ec:#'+ERA[sp.era].toString(16).padStart(6,'0')+'">'+sp.n+'</button>';}).join('')+'</div>'+
     '<div class="e3d-enter"><button data-enter>Enter the foundry</button></div>';
   host.appendChild(ui);
+  var tourEra=-1, tourSpot=null;
   function syncUI(){
-    var era=cur.era;
+    var era=tour.on?tourEra:cur.era, id=tour.on?tourSpot:cur.id;
     ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===era); });
-    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===cur.id); });
-    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause the tour (space)':'Resume the tour (space)';
-    ui.classList.toggle('in',tour.entered);}
-  function enter(){ tour.entered=true; if(!RM){ tour.on=true; tour.i=0; tour.t=0; goView(TOUR[0][0],true); } else syncUI(); }
-  function toggleTour(){ if(!tour.entered){enter();return;}
-    tour.on=!tour.on; if(tour.on){ tour.t=0; goView(TOUR[tour.i][0],true); } syncUI(); }
+    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===id); });
+    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause the flight (space)':'Fly (space)';
+    ui.classList.toggle('in',tour.entered); ui.classList.toggle('flying',tour.on);}
+  function startTour(){ tour.on=true; tour.seg=-1; syncUI(); }
+  function enter(){ tour.entered=true; if(!RM){ tour.u=0; startTour(); } else syncUI(); }
+  function toggleTour(){ if(!tour.entered){enter();return;} if(tour.on) pauseTour(); else startTour(); }
   function tourStep(dt){
-    if(!tour.on) return; tour.t+=dt;
-    if(tour.t>=TOUR[tour.i][1]){ tour.i=(tour.i+1)%TOUR.length; tour.t=0; goView(TOUR[tour.i][0],true); } }
+    var sp=speedAt(tour.u);
+    tour.u=(tour.u+dt/FLIGHT*sp)%1;
+    var i=segAt(tour.u);
+    if(i!==tour.seg){ tour.seg=i; tourEra=K[i][3]; tourSpot=K[i][4]; syncUI(); }
+    /* bank into the turn: compare the heading now with the heading just ahead */
+    posC.getTangentAt(tour.u,tA); posC.getTangentAt((tour.u+.004)%1,tB);
+    var turn=Math.atan2(tA.x*tB.z-tA.z*tB.x, tA.x*tB.x+tA.z*tB.z);
+    gRoll=Math.max(-.55,Math.min(.55,turn*9))*sp;
+    gFov=40+18*sp;
+    return sp; }
   ui.addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return;
     if(b.dataset.enter!=null) return enter();
@@ -2087,6 +2209,16 @@ function mountEras(host){
       c.c.getPointAt(c.t,tmp); c.o.position.copy(tmp); c.c.getTangentAt(c.t,tmp);
       c.o.rotation.y=Math.atan2(-tmp.z*c.d,tmp.x*c.d);});
     stacks.forEach(function(h,i){ h.material.opacity=.30+.14*Math.sin(t*1.3+i*1.7); });
+    if(anim.links.length){ var lm=anim.links[0].m;
+      anim.links.forEach(function(l){ l.t=(l.t+dt*l.v*l.d+1)%1; l.c.getPointAt(l.t,tmp);
+        dummy.position.copy(tmp); dummy.rotation.set(0,0,0); dummy.scale.setScalar(1); dummy.updateMatrix(); lm.setMatrixAt(l.i,dummy.matrix); });
+      lm.instanceMatrix.needsUpdate=true; }
+    anim.arms.forEach(function(a){ a.sh.rotation.y=Math.sin(t*.45+a.p)*1.2; a.up.rotation.x=-.55+Math.sin(t*.6+a.p)*.3; a.fo.rotation.x=1.0+Math.sin(t*.8+a.p)*.35; });
+    anim.bots.forEach(function(b){ b.t+=dt*b.v*b.d; if(b.t>1||b.t<0){ b.d*=-1; b.t=Math.max(0,Math.min(1,b.t)); }
+      b.o.position.set(b.x0+(b.x1-b.x0)*b.t,0,b.z); b.o.rotation.y=b.d>0?-Math.PI/2:Math.PI/2;
+      var w=Math.sin(t*7+b.ph); b.legs[0].rotation.x=w*.5; b.legs[1].rotation.x=-w*.5; b.arms[0].rotation.x=-w*.35; b.arms[1].rotation.x=w*.35; });
+    anim.drones.forEach(function(d){ d.a+=dt*d.v; d.o.position.set(d.cx+Math.cos(d.a)*d.r, d.h+Math.sin(t*.9+d.a)*.6, d.cz+Math.sin(d.a)*d.r);
+      d.o.rotation.y=-d.a+(d.v>0?Math.PI:0); d.o.rotation.z=.18*(d.v>0?-1:1); d.rot.forEach(function(r,i){ r.rotation.y+=dt*(i%2?38:-38); }); });
     var fl=anim.flow, col=fl.m.instanceColor;
     for(var i2=0;i2<fl.t.length;i2++){
       fl.t[i2]+=dt*.028*(1+(i2%5)*.06); if(fl.t[i2]>1) fl.t[i2]-=1;
@@ -2103,7 +2235,7 @@ function mountEras(host){
       var s=ps*(1+(RM?0:.10*Math.sin(t*2.6+i)));
       p.userData.core.scale.setScalar(s); p.userData.ring.scale.setScalar(s*1.15);
       if(p.userData.stalk) p.userData.stalk.scale.x=p.userData.stalk.scale.z=Math.max(.6,ps*.7);
-      p.visible = cur.id!==p.userData.id;
+      p.visible = (tour.on?tourSpot:cur.id)!==p.userData.id;
     });
   }
   tick(0,0);
@@ -2112,12 +2244,19 @@ function mountEras(host){
     raf=requestAnimationFrame(frame);
     var dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
 
-    if(!RM) tourStep(dt);
-    if(!drag&&!RM&&!tour.on){ idle+=dt;
-      if(idle>4){ if(cur===ERAS[0]) gTh=ERAS[0].th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
-    if(tour.on) gTh+=dt*.012;                       /* the tour drifts as it holds */
-    var k=RM?1:1-Math.pow(.0016,dt);
+    if(tour.on&&!RM){ tourStep(dt); tour.blend=Math.min(1,tour.blend+dt/.9); }
+    else{
+      tour.blend=Math.max(0,tour.blend-dt/.6);
+      if(!drag&&!RM){ idle+=dt;
+        if(idle>4){ if(cur===ERAS[0]) gTh=ERAS[0].th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
+      gRoll=0;
+      /* a cut is a move: the lens opens while the camera is travelling */
+      var motion=Math.min(1,(Math.abs(gRad-rad)+Math.abs(gTh-th)*rad*.6+tgt.distanceTo(gTgt))/50);
+      gFov=42+12*motion;
+    }
+    var k=RM?1:1-Math.pow(.0004,dt), kr=RM?1:1-Math.pow(.02,dt);
     th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
+    roll+=(gRoll-roll)*kr; fov+=(gFov-fov)*kr;
     place();
 
     tick(RM?0:dt,t);
