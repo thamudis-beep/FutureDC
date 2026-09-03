@@ -161,12 +161,18 @@ it, click the ground to pull back. All of that chrome is DOM over the canvas,
 never text in the scene, and every framing is {target, half-width,
 half-height, yaw, pitch} — the radius is derived from the panel's aspect, not
 baked in.
-The AGI stage is first principles, not a hologram: four sites of sealed halls
-with a 1 MW hall cut open at the core, one job's traffic running the backbone
-between them (scale-across), a real Earth and an orbital layer above, edge
-cabinets and masts on the perimeter, and physical AI at work — cabs and
-container trucks on the loop, humanoids on the road, quadcopters over the
-sites, robot arms in the container bay. no wireframe globe, no glowing stem, no visible orbit
+The flight's stops are the argument, in order, and the inspect chips are the
+same stops: 3 kW CPU racks in a metro colo → a GW campus of liquid-cooled
+NVL72 with grid and on-site power → many connected GW sites (scale-across
+traffic on the backbone), 1 MW racks, an SMR plant, physical AI, the orbital
+layer. The AGI stage is first principles, not a hologram: four sites of sealed
+halls with a 1 MW hall cut open at the core, four SMR modules feeding one
+turbine hall with air-cooled condensers (nuclear is the user's call for the
+AGI era; the AI campus stays gas, turbines and batteries, no cooling towers),
+a real Earth and an orbital layer above, edge cabinets and masts outside the
+perimeter loop, and physical AI at work — cabs and container trucks on the
+loop, humanoids on the road, quadcopters over the sites, robot arms in the
+container bay. no wireframe globe, no glowing stem, no visible orbit
 rings, no glowing pads. It was tried and read as cartoonish.
 It is mounted only when its topic opens and disposed on every navigation —
 `killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving

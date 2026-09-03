@@ -327,7 +327,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v58 · fly the future</div>
+<div class="ver">v59 · race line</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1315,7 +1315,7 @@ function mountEras(host){
   renderer.domElement.style.cursor='grab';
   host.appendChild(renderer.domElement);
 
-  var camera=new T.PerspectiveCamera(42,1,1,1400);
+  var camera=new T.PerspectiveCamera(42,1,.3,1400);
 
   scene.add(new T.HemisphereLight(0x4a5c7c,0x0b0f18,1.95));
   var key=new T.DirectionalLight(0xdce6f6,2.55);
@@ -1554,7 +1554,7 @@ function mountEras(host){
     var spots=[[-19,-16,7,13],[-19,-6,6,8],[-19,5,7,11],[-18,16,6,7],
                [-9,-17,7,10],[3,-17,6,14],[14,-17,6,8],[20,-14,6,12],
                [20,-3,7,9],[20,8,6,13],[19,17,6,6],[8,18,7,10],
-               [-5,18,6,8],[-14,-9,5,6],[-13,11,5,6],[13,12,5,7]];
+               [-5,18,6,8],[-14,-9,5,6]];
     spots.forEach(function(s,i){
       var w=s[2],h=s[3],x=s[0],z=s[1], m=(i%3)?conc:glass;
       g.add(box(w,h,w*.86,m,x,h/2,z,true));
@@ -1802,10 +1802,19 @@ function mountEras(host){
       g.add(tube([[-5+w2*2,11.2,-27],[-6+w2*2,9.6,-36],[-7+w2*2,8.2,-45]],.045,hv,10));
       g.add(tube([[5+w2*2,11.2,-27],[6+w2*2,9.6,-36],[7+w2*2,8.2,-45]],.045,hv,10));
     }
-    /* ---- south: turbines, gas header, batteries ---- */
-    for(var tb=0;tb<3;tb++) turbineUnit(g,-10+tb*10,18,0);
-    g.add(box(30,.5,.5,mat(0x3c4652,{r:.55,m:.75}),0,1.1,23));
-    var bp2=[]; for(var bs=0;bs<6;bs++){ bp2.push([-13.5+bs*5.4,26.5,0]); bp2.push([-13.5+bs*5.4,30.5,0]); }
+    /* ---- south: four SMR modules, one turbine hall with air-cooled condensers, batteries ---- */
+    var smrM=mat(0x3a4049,{r:.85,m:.2}), smrRing=lit(C.hot,1.0), fanM2=mat(0x4a525d,{r:.62,m:.6});
+    [-12,-4,4,12].forEach(function(mx){
+      var cont=cyl(2.6,2.75,5,smrM,mx,2.5,17.5,28); cont.castShadow=cont.receiveShadow=true; g.add(cont);
+      var dome=new T.Mesh(G(new T.SphereGeometry(2.6,28,12,0,Math.PI*2,0,Math.PI/2)),smrM); dome.position.set(mx,5,17.5); dome.castShadow=true; g.add(dome);
+      g.add(cyl(2.85,2.85,.12,smrRing,mx,.10,17.5,28));
+      g.add(box(1.6,1.2,1.2,mat(0x2c333c,{r:.7,m:.5}),mx+2.9,.6,15.6,true));               /* auxiliary skid */
+      g.add(tube([[mx+1.3,4.4,19.8],[mx+1.3,5.2,21.0],[mx+1.3,3.4,21.6]],.16,SK(),8));        /* steam to the hall */
+    });
+    g.add(box(28,3.6,5,mat(0x2b3139,{r:.8,m:.35}),0,1.8,24,true));
+    g.add(box(27.6,.08,.08,lit(C.hot,1.1),0,2.4,26.55));
+    for(var fc=0;fc<6;fc++){ g.add(box(3.6,.5,3.4,mat(0x232a33,{r:.7,m:.5}),-12.5+fc*5,3.85,24)); g.add(cyl(1.05,1.05,.10,fanM2,-12.5+fc*5,4.15,24,16)); }
+    var bp2=[]; for(var bs=0;bs<6;bs++){ bp2.push([-13.5+bs*5.4,28.6,0]); bp2.push([-13.5+bs*5.4,32,0]); }
     repeat(g,BESS(C.hot),bp2);
     /* ---- east: closed-loop water and the chiller plant ---- */
     for(var wt=0;wt<2;wt++){
@@ -2015,13 +2024,16 @@ function mountEras(host){
   ];
   /* inspect points: a close framing, and a pin in the scene at the same spot */
   var SPOTS=[
-    {id:'metro',  n:'Metro colo',    era:0, t:new T.Vector3(X0+1,9.5,4),    w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
-    {id:'nvl',    n:'NVL72 hall',    era:1, t:new T.Vector3(X1-14,2.4,-11), w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
-    {id:'power',  n:'Power yard',    era:1, t:new T.Vector3(X1-6,2,18),     w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
-    {id:'mono',   n:'1 MW racks',    era:2, t:new T.Vector3(X2,3.4,-1),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,6.5,1]},
-    {id:'orbit',  n:'Orbital layer', era:2, t:new T.Vector3(X2,46,-1),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]},
-    {id:'edge',   n:'Edge ring',     era:2, t:new T.Vector3(X2+30,1,26),    w:32, h:15, th:1.36, ph:.98,  pin:[X2+46.7,9.4,36.7,1]}
+    {id:'metro',  n:'Metro colo',      era:0, t:new T.Vector3(X0+1,9.5,4),    w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
+    {id:'nvl',    n:'NVL72 hall',      era:1, t:new T.Vector3(X1-14,2.4,-11), w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
+    {id:'power',  n:'Power yard',      era:1, t:new T.Vector3(X1-6,2,18),     w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
+    {id:'sites',  n:'Connected sites', era:2, t:new T.Vector3(X2,4,0),        w:56, h:36, th:1.25, ph:.72,  pin:[X2,7.5,10.5,1]},
+    {id:'mono',   n:'1 MW racks',      era:2, t:new T.Vector3(X2,3.4,-1),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,6.5,1]},
+    {id:'smr',    n:'SMR plant',       era:2, t:new T.Vector3(X2,3,21),       w:30, h:14, th:1.30, ph:1.00, pin:[X2+16.5,9,21,1]},
+    {id:'edge',   n:'Physical AI',     era:2, t:new T.Vector3(X2+40,2,-2),    w:30, h:14, th:1.20, ph:1.00, pin:[X2+40.5,8,-5,1]},
+    {id:'orbit',  n:'Orbital layer',   era:2, t:new T.Vector3(X2,46,-1),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]}
   ];
+
   /* ---- the flight: one closed path the drone flies, nose-first, banking.
      [position, look-ahead, speed 0..1, era, spot]. It dives at the city,
      threads the street, runs the conduit, enters the NVL hall through the
@@ -2029,36 +2041,44 @@ function mountEras(host){
      turbines, across the AGI site into the 1 MW hall, up through its roof,
      round the Earth, down to the loop, and back out wide. ---- */
   var K=[
-    [[ 24, 84,176],[ 20, 10,  0], .75,-1,null],
-    [[-34, 46,112],[-105,10,  3],1.00, 0,null],
-    [[-82, 26, 54],[-110, 9,  3], .45, 0,'metro'],
-    [[-96, 13, 27],[-112,10,  4], .50, 0,'metro'],
-    [[-102, 7,14.5],[-118,7, 13], .75, 0,null],
-    [[-118, 6, 13],[-127, 8, -1], .80, 0,null],
-    [[-127.5,9,-1],[-126, 9,-25], .85, 0,null],
-    [[-126, 9,-25],[-100, 6,-34],1.00, 0,null],
-    [[ -72, 7,-30],[ -22, 6,-34],1.00, 1,null],
-    [[ -36,15,-24],[ -19, 4,-11], .60, 1,'nvl'],
-    [[   6,4.2,-9.4],[-12,3.2,-9.4],.45,1,'nvl'],
-    [[  -6,3.4,-9.4],[-20,3.2,-9.4],.40,1,'nvl'],
-    [[ -15,3.5,-9.4],[-22,4.5,-9.4],.40,1,'nvl'],
-    [[ -21, 8,-9.4],[-30,12, -2], .70, 1,null],
-    [[ -32,10, 13],[ 10, 6, 18], .55, 1,'power'],
-    [[  24,13, 24],[ 42, 4, 12], .80, 1,'power'],
-    [[  64,26, 24],[118,12,  0],1.00, 2,null],
-    [[  84,10, 34],[118, 4, -1], .80, 2,null],
-    [[ 144,4.5,-1],[122, 4, -1], .45, 2,'mono'],
-    [[ 124,4.2,-1],[104, 4, -1], .40, 2,'mono'],
-    [[ 108,4.4,-1],[100, 6, -1], .40, 2,'mono'],
-    [[ 100,10, -1],[ 96,20,-10], .70, 2,null],
-    [[  92,26,-26],[118,46, -1], .80, 2,'orbit'],
-    [[ 118,44,-40],[118,46, -1], .70, 2,'orbit'],
-    [[ 150,56,-10],[118,46, -1], .45, 2,'orbit'],
-    [[ 132,66, 30],[118,46, -1], .60, 2,'orbit'],
-    [[ 166,10, 38],[140, 3, 30], .50, 2,'edge'],
-    [[ 148,12, 54],[100, 6, 20], .90, 2,null],
-    [[ 104,62,118],[ 60,10,  0],1.00,-1,null]
+    [[ 24, 70,150],[ 20, 10,  0], .85,-1,null],
+    [[-34, 40,100],[-105,10,  3],1.00, 0,null],
+    [[-82, 22, 48],[-110, 9,  3], .60, 0,'metro'],
+    [[-87, 14, 20],[-112,10,  3], .55, 0,'metro'],
+    [[-95,  9, 13],[-118,10,  3], .45, 0,'metro'],
+    [[-96.5,8.5,2],[-119, 9, -2], .45, 0,'metro'],
+    [[-96.5,9.5,-8],[-104,7,-20], .80, 0,null],
+    [[-100,10,-24],[-112, 7,-30], .90, 0,null],
+    [[-114, 7,-31],[ -90, 6,-34],1.00, 0,null],
+    [[ -72, 5,-31],[ -22, 5,-34],1.00, 1,null],
+    [[ -36,14,-24],[ -19, 4,-11], .65, 1,'nvl'],
+    [[   6,4.6,-9.4],[-12,3.0,-9.4],.50,1,'nvl'],
+    [[  -6,3.9,-9.4],[-20,2.9,-9.4],.45,1,'nvl'],
+    [[ -15,3.9,-9.4],[-22,4.5,-9.4],.45,1,'nvl'],
+    [[ -21, 8,-9.4],[-30,12, -2], .75, 1,null],
+    [[ -34, 8, 12],[ 10, 5, 18], .60, 1,'power'],
+    [[ -10, 5, 32],[ 30, 3, 26], .70, 1,'power'],
+    [[  28, 9, 22],[ 40, 4,  8], .75, 1,'power'],
+    [[  64,24, 22],[118,10, -1],1.00, 2,null],
+    [[  78,4.5,12.5],[120,3.2,11],.60,2,'sites'],
+    [[ 118,4.5,12.5],[160,4, 10], .60, 2,'sites'],
+    [[ 150, 6,  4],[135, 4, -1], .55, 2,'mono'],
+    [[ 144,4.5,-1],[122, 4, -1], .50, 2,'mono'],
+    [[ 124,4.2,-1],[104, 4, -1], .45, 2,'mono'],
+    [[ 108,4.4,-1],[100, 6, -1], .45, 2,'mono'],
+    [[ 100,10, -1],[ 96,18, -8], .70, 2,null],
+    [[  88,10, 14],[118, 4, 20], .60, 2,'smr'],
+    [[ 104, 7, 30],[130, 3, 20], .55, 2,'smr'],
+    [[ 150, 5, 26],[160, 2,  0], .55, 2,'edge'],
+    [[ 163, 4, 10],[160,1.5,-6], .50, 2,'edge'],
+    [[ 166, 9,-20],[150, 4,-30], .80, 2,null],
+    [[ 140,30,-40],[118,46, -1], .85, 2,'orbit'],
+    [[ 100,52,-34],[118,46, -1], .60, 2,'orbit'],
+    [[  92,60, 10],[118,46, -1], .50, 2,'orbit'],
+    [[ 130,68, 34],[118,46, -1], .60, 2,'orbit'],
+    [[ 104,56,110],[ 60,10,  0],1.00,-1,null]
   ];
+
   var posC=new T.CatmullRomCurve3(K.map(function(k){return V(k[0]);}),true,'centripetal');
   var lookC=new T.CatmullRomCurve3(K.map(function(k){return V(k[1]);}),true,'centripetal');
   var uK=(function(){ var L=posC.getLengths(600), tot=L[L.length-1], out=[];
@@ -2066,7 +2086,7 @@ function mountEras(host){
   function segAt(u){ var i=0; while(i<K.length-1&&u>=uK[i+1]) i++; return i; }
   function speedAt(u){ var i=segAt(u), a=uK[i], b=uK[i+1], f=b>a?(u-a)/(b-a):0; f=f*f*(3-2*f);
     return K[i][2]+(K[(i+1)%K.length][2]-K[i][2])*f; }
-  var FLIGHT=26;                         /* seconds for one lap at full speed */
+  var FLIGHT=18;                         /* seconds for one lap at full speed */
 
   function fitRadius(v){
     var ht=Math.tan(camera.fov*Math.PI/360);
@@ -2144,7 +2164,7 @@ function mountEras(host){
       '<button class="e3d-play" data-play></button>'+
     '</div>'+
     '<div class="e3d-chips">'+SPOTS.map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'" style="--ec:#'+ERA[sp.era].toString(16).padStart(6,'0')+'">'+sp.n+'</button>';}).join('')+'</div>'+
-    '<div class="e3d-enter"><button data-enter>Enter the foundry</button></div>';
+    '<div class="e3d-enter"><button data-enter>Enter</button></div>';
   host.appendChild(ui);
   var tourEra=-1, tourSpot=null;
   function syncUI(){
@@ -2164,8 +2184,8 @@ function mountEras(host){
     /* bank into the turn: compare the heading now with the heading just ahead */
     posC.getTangentAt(tour.u,tA); posC.getTangentAt((tour.u+.004)%1,tB);
     var turn=Math.atan2(tA.x*tB.z-tA.z*tB.x, tA.x*tB.x+tA.z*tB.z);
-    gRoll=Math.max(-.55,Math.min(.55,turn*9))*sp;
-    gFov=40+18*sp;
+    gRoll=Math.max(-.65,Math.min(.65,turn*11))*sp;
+    gFov=40+22*sp;
     return sp; }
   ui.addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return;
@@ -2230,8 +2250,8 @@ function mountEras(host){
     }
     fl.m.instanceMatrix.needsUpdate=true; col.needsUpdate=true;
     /* pins hold a constant size on screen and breathe a little */
-    var ps=Math.max(.5,rad*.0085);
     pins.forEach(function(p,i){
+      var ps=Math.max(.4,camera.position.distanceTo(p.position)*.0085);
       var s=ps*(1+(RM?0:.10*Math.sin(t*2.6+i)));
       p.userData.core.scale.setScalar(s); p.userData.ring.scale.setScalar(s*1.15);
       if(p.userData.stalk) p.userData.stalk.scale.x=p.userData.stalk.scale.z=Math.max(.6,ps*.7);
