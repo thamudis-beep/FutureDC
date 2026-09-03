@@ -327,7 +327,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v56 · enter the foundry</div>
+<div class="ver">v57 · a real Earth over a real site</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1719,210 +1719,192 @@ function mountEras(host){
   })();
 
   /* =========================================================
-     STAGE 3 · AGI — planetary. 1 MW monoliths at the core,
-     campuses on a globe, an orbital shell, compute at the edge.
+     STAGE 3 · AGI — planetary. A multi-GW site in the same
+     building language as the campus, denser; a 1 MW hall cut
+     open at its core; a real Earth above it, an orbital layer
+     around that; compute at the site's edge.
      ========================================================= */
   var anim={globe:null,leo:[],bigring:null,dishes:[],pulses:[],cabs:[],flow:null};
   var S3=pedestal(X2,96,76,C.hot);
   (function(){
     var g=S3;
-    g.add(box(96,.10,76,mat(0x171b21,{r:.94,m:.14}),0,.05,0));
+    g.add(box(96,.10,76,mat(0x1b2027,{r:.94,m:.14}),0,.05,0));
+    var road=mat(0x14181e,{r:.95,m:.08}), lane=lit(0x9aa3b2,.35,.7);
+    g.add(box(88,.06,4,road,0,.11,-12)); g.add(box(88,.06,4,road,0,.11,12));
+    g.add(box(4,.06,64,road,0,.11,0));
+    /* the perimeter loop the cabs run */
+    var PX=44.5, PZ=34.5;
+    g.add(box(2*PX+3,.06,3,road,0,.10,-PZ)); g.add(box(2*PX+3,.06,3,road,0,.10,PZ));
+    g.add(box(3,.06,2*PZ+3,road,-PX,.10,0));  g.add(box(3,.06,2*PZ+3,road,PX,.10,0));
+    g.add(box(2*PX,.02,.12,lane,0,.14,-PZ));   g.add(box(2*PX,.02,.12,lane,0,.14,PZ));
+    g.add(box(.12,.02,2*PZ,lane,-PX,.14,0));   g.add(box(.12,.02,2*PZ,lane,PX,.14,0));
 
-    /* ---- twelve 1 MW monoliths in a ring, on an underfloor trench ---- */
-    var monM=mat(0x2b323c,{r:.6,m:.62}), coreM=lit(C.hotCore,3.2);
+    /* ---- the core: a hall cut open on twelve 1 MW monoliths ---- */
+    var HX=0, HZ=-2;
+    hallShell(g,HX,HZ,34,14,7.6,C.hot,{open:true});
+    var monM=mat(0x2b323c,{r:.6,m:.62}), monRail=mat(C.steelL,{r:.45,m:.85}), coreM=lit(C.hot,1.6);
     var supM=mat(0x2b4a66,{r:.4,m:.7}), retM=mat(0x5a3340,{r:.4,m:.7});
-    var trenchM=mat(0x0c0f14,{r:.95,m:.1}), fibM=mat(C.hot,{r:.5,m:.1,e:C.hot,ei:.8});
-    var cp=new T.PointLight(C.hot,900,64,1.5); cp.position.set(0,7,0); g.add(cp);
-    var R=9.5, monRail=mat(C.steelL,{r:.45,m:.85});
+    var fibM=mat(C.hot,{r:.5,m:.1,e:C.hot,ei:.4});
     var monParts=[[BG(4.4,6.5,2.2),monM,0,3.25,0,1],
                   [BG(.14,5.4,.14),monRail,-2.1,3.25,1.15,0],
                   [BG(.14,5.4,.14),monRail, 2.1,3.25,1.15,0],
-                  [BG(4.5,.16,.16),supM,0,.45,-1.25,0],
-                  [BG(4.5,.16,.16),retM,0,.85,-1.25,0]];
-    for(var b=0;b<9;b++) monParts.push([BG(3.4,.07,.06),coreM,0,.9+b*.62,1.13,0]);
-    var monAt=[];
-    for(var i=0;i<12;i++){
-      var a=i/12*Math.PI*2, x=Math.cos(a)*R, z=Math.sin(a)*R;
-      monAt.push([x,z,-a]);
-      g.add(tube([[x*.92,.28,z*.92],[x*.5,.20,z*.5],[0,.20,0]],.075,fibM,12));
+                  [CG(.11,.11,6.1,8),supM,-2.35,3.25,0,0],
+                  [CG(.11,.11,6.1,8),retM, 2.35,3.25,0,0]];
+    for(var b=0;b<9;b++) monParts.push([BG(3.4,.06,.05),coreM,0,.9+b*.62,1.13,0]);
+    var monAt=[], trayM=mat(C.steelL,{r:.5,m:.8});
+    for(var r=0;r<2;r++){
+      var rz=HZ+(r?3.2:-3.2);
+      for(var i=0;i<6;i++) monAt.push([HX-12.5+i*5,rz,0]);
+      g.add(box(31,.18,.18,supM,HX,.45,rz-1.45)); g.add(box(31,.18,.18,retM,HX,.85,rz-1.45));
+      ladder(g,[HX-15.5,7.0,rz-.9],[HX+15.5,7.0,rz-.9],.7,trayM,1.5);
+      for(var d=0;d<6;d++){ var dx=HX-12.5+d*5;
+        g.add(tube([[dx,6.92,rz-.9],[dx,6.75,rz-.5],[dx,6.55,rz+.6]],.035,fibM,8)); }
+      g.add(box(31,.22,.22,mat(C.steel,{r:.5,m:.8}),HX,7.3,rz+1.2));
+      g.add(box(31,.05,.05,lit(C.hot,1.2),HX,7.18,rz+1.2));
     }
     repeat(g,monParts,monAt);
-    g.add(cyl(R+3.6,R+3.6,.16,trenchM,0,.16,0,48));
-    var cduAt=[]; for(var cd=0;cd<12;cd++){ var ac=(cd+.5)/12*Math.PI*2;
-      cduAt.push([Math.cos(ac)*(R+4.6),Math.sin(ac)*(R+4.6),-ac]); }
-    repeat(g,[[BG(1.8,1.5,1.3),mat(0x262c35,{r:.7,m:.5}),0,.75,0,1]],cduAt);
-    g.add(cyl(.75,1.15,31,mat(0x1b2129,{r:.6,m:.7}),0,15.5,0,16));
-    for(var sp=0;sp<4;sp++){var asp=sp/4*Math.PI*2;
-      g.add(box(.16,30,.16,coreM,Math.cos(asp)*1.05,15.5,Math.sin(asp)*1.05));}
-    for(var rg=0;rg<7;rg++) g.add(cyl(1.35,1.35,.12,coreM,0,3+rg*4.4,0,16));
-    var sh=halo(C.hotCore,9,.22); sh.position.set(0,20,0); g.add(sh);
+    g.add(box(33,.12,1.2,mat(0x0c0f14,{r:.95,m:.1}),HX,.17,HZ));           /* underfloor trench */
+    var hl=new T.PointLight(0xbfefff,120,22,1.6); hl.position.set(HX,4.5,HZ+1); g.add(hl);
 
-    /* ---- five compact mega-campuses feeding the core ---- */
-    var CR=23, trayC=mat(C.steelL,{r:.5,m:.8});
-    var campHall=[[BG(3.8,2.0,3.0),mat(C.concrete,{r:.88,m:.24}),0,1.0,0,1],
-                  [BG(3.5,.30,2.4),mat(0x232a33,{r:.7,m:.5}),0,2.15,0,0],
-                  [BG(3.7,.09,.09),lit(C.hot,2.2),0,.66,1.52,0]];
-    var campBess=[[BG(2.4,.9,.8),mat(0x21262e,{r:.8,m:.4}),0,.45,0,1],
-                  [BG(2.3,.07,.07),lit(C.hot,1.3),0,.62,.42,0]];
-    var campTurb=[[BG(2.6,1.0,1.0),mat(0x2a313a,{r:.7,m:.55}),0,.5,0,1],
-                  [CG(.26,.32,2.2,10),trayC,1.4,1.6,0,0]];
-    var hallAt=[], bessAt=[], turbAt=[];
-    function place2(cx,cz,ry,lx,lz){var c=Math.cos(ry),sn=Math.sin(ry);
-      return [cx+lx*c+lz*sn, cz-lx*sn+lz*c, ry];}
-    for(var k=0;k<5;k++){
-      var ak=(k/5)*Math.PI*2+.35, cx=Math.cos(ak)*CR, cz=Math.sin(ak)*CR, ry=-ak;
-      for(var hr=0;hr<2;hr++) for(var hc=0;hc<4;hc++)
-        hallAt.push(place2(cx,cz,ry,-6.6+hc*4.4,-2.6+hr*5.2));
-      turbAt.push(place2(cx,cz,ry,8.2,-2.6));
-      for(var bz2=0;bz2<3;bz2++) bessAt.push(place2(cx,cz,ry,8.2,1.2+bz2*1.4));
-      var u2=new T.Group(); u2.position.set(cx,0,cz); u2.rotation.y=ry;
-      ladder(u2,[-8.6,3.1,0],[8.6,3.1,0],.5,trayC,1.6);
-      g.add(u2);
-      g.add(tube([[cx*.86,1.4,cz*.86],[cx*.5,.9,cz*.5],[0,.5,0]],.10,fibM,14));
+    /* ---- four campus quadrants, sixteen halls ---- */
+    var QX=[-29,29], QZ=[-22,22];
+    QX.forEach(function(cx){ QZ.forEach(function(cz){
+      for(var hr=0;hr<2;hr++) for(var hc=0;hc<2;hc++)
+        hallShell(g,cx+(hc?7:-7),cz+(hr?5.6:-5.6),12,7,3.4,C.hot,{chillers:4});
+      ladder(g,[cx-14,4.6,cz-9.5],[cx+14,4.6,cz-9.5],.7,trayM,1.8);
+      ladder(g,[cx-14,4.6,cz+1.6],[cx+14,4.6,cz+1.6],.7,trayM,1.8);
+    });});
+    /* trunks from the core to every quadrant: tray, and the fibre in it */
+    QX.forEach(function(cx){ QZ.forEach(function(cz){
+      var sx=cx<0?-17:17, ez=cz<0?-9.5:1.6;
+      ladder(g,[sx,1.2,HZ],[cx,1.2,HZ],.6,trayM,1.8);
+      ladder(g,[cx,1.2,HZ],[cx,1.2,ez],.6,trayM,1.8);
+      g.add(tube([[sx,1.15,HZ],[cx,1.15,HZ],[cx,1.15,ez]],.05,fibM,6));
+    });});
+    /* east-west trunk between the quadrants along the road */
+    ladder(g,[-43,1.2,-12],[43,1.2,-12],.6,trayM,2); ladder(g,[-43,1.2,12],[43,1.2,12],.6,trayM,2);
+
+    /* ---- north: substation, HV out over the boundary ---- */
+    var xp=[]; for(var t=0;t<4;t++) xp.push([-9+t*6,-19,0]); repeat(g,XFMR(),xp);
+    g.add(box(22,.4,.4,mat(0x3c4652,{r:.55,m:.75}),0,4.5,-19));
+    for(var bp=0;bp<4;bp++) g.add(cyl(.10,.10,1.9,SK(),-9+bp*6,3.6,-19,8));
+    pylon(g,-5,-27,12); pylon(g,5,-27,12);
+    var hv=mat(0x424b57,{r:.7,m:.6});
+    for(var w2=-1;w2<=1;w2++){
+      g.add(tube([[-5+w2*2,11.2,-27],[0,9.4,-23],[5+w2*2,11.2,-27]],.045,hv,10));
+      g.add(tube([[-5+w2*2,11.2,-27],[-6+w2*2,9.6,-36],[-7+w2*2,8.2,-45]],.045,hv,10));
+      g.add(tube([[5+w2*2,11.2,-27],[6+w2*2,9.6,-36],[7+w2*2,8.2,-45]],.045,hv,10));
     }
-    repeat(g,campHall,hallAt); repeat(g,campBess,bessAt); repeat(g,campTurb,turbAt);
-    /* campus-to-campus trunks */
-    for(var tt=0;tt<3;tt++){
-      var a1=(tt/5)*Math.PI*2+.35, a2=((tt+2)/5)*Math.PI*2+.35;
-      g.add(tube([[Math.cos(a1)*CR,.7,Math.sin(a1)*CR],
-                  [Math.cos((a1+a2)/2)*(CR+8),.5,Math.sin((a1+a2)/2)*(CR+8)],
-                  [Math.cos(a2)*CR,.7,Math.sin(a2)*CR]],.09,fibM,20));
+    /* ---- south: turbines, gas header, batteries ---- */
+    for(var tb=0;tb<3;tb++) turbineUnit(g,-10+tb*10,18,0);
+    g.add(box(30,.5,.5,mat(0x3c4652,{r:.55,m:.75}),0,1.1,23));
+    var bp2=[]; for(var bs=0;bs<6;bs++){ bp2.push([-13.5+bs*5.4,26.5,0]); bp2.push([-13.5+bs*5.4,30.5,0]); }
+    repeat(g,BESS(C.hot),bp2);
+    /* ---- east: closed-loop water and the chiller plant ---- */
+    for(var wt=0;wt<2;wt++){
+      g.add(cyl(3.4,3.4,6,mat(0x272e37,{r:.8,m:.4}),31,3,-5+wt*10,20));
+      g.add(cyl(3.5,3.5,.25,SK(),31,6.1,-5+wt*10,20)); }
+    g.add(box(6,3.2,9,mat(0x252b33,{r:.85,m:.3}),41,1.6,0,true));
+    g.add(box(5.6,.08,.08,lit(C.hot,1.1),41,2.2,4.55));
+    /* ---- west: ground stations ---- */
+    [[-36,-6],[-36,5],[-26,-1]].forEach(function(gp,gi){
+      var u3=new T.Group(); u3.position.set(gp[0],0,gp[1]); g.add(u3);
+      u3.add(box(3.2,.9,3.2,mat(0x1e232b,{r:.85,m:.3}),0,.45,0,true));
+      var yoke=new T.Group(); yoke.position.set(0,1.6,0); u3.add(yoke);
+      yoke.add(cyl(.20,.24,1.4,SK(),0,-.4,0,10));
+      var dish=new T.Mesh(G(new T.SphereGeometry(1.5,20,10,0,Math.PI*2,0,Math.PI/2.6)),mat(0xc9d3e0,{r:.4,m:.5,s:T.DoubleSide}));
+      dish.rotation.x=-Math.PI/3.2; yoke.add(dish);
+      anim.dishes.push({y:yoke,p:gi*2.1});
+      for(var pa=0;pa<2;pa++) u3.add(box(2.0,.14,1.4,mat(0x18202b,{r:.4,m:.7,e:C.hot,ei:.35}),-2.6,.5,-1.2+pa*2.4));
+    });
+    ladder(g,[-36,1.2,-6],[-36,1.2,5],.5,trayM,1.6); ladder(g,[-36,1.2,HZ],[-17,1.2,HZ],.5,trayM,1.6);
+
+    /* ---- the edge: cabinets and masts on the perimeter, cabs on the loop ---- */
+    var cabAt=[]; for(var ex=-35;ex<=35;ex+=14){ cabAt.push([ex,-(PZ-2.8),0]); cabAt.push([ex,PZ-2.8,Math.PI]); }
+    for(var ez2=-21;ez2<=21;ez2+=14){ cabAt.push([-(PX-2.8),ez2,-Math.PI/2]); cabAt.push([PX-2.8,ez2,Math.PI/2]); }
+    repeat(g,[[BG(1.2,1.6,.9),mat(0x252b33,{r:.75,m:.45}),0,.8,0,1],[BG(1.0,.07,.07),lit(C.hot,1.6),0,1.25,-.47,0]],cabAt);
+    [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(c){
+      var mx=c[0]*(PX-2.8), mz=c[1]*(PZ-2.8);
+      g.add(cyl(.14,.18,7.0,SK(),mx,3.5,mz,8));
+      for(var sc2=0;sc2<3;sc2++){ var as2=sc2/3*Math.PI*2;
+        g.add(box(.18,1.1,.5,mat(0xd4dae4,{r:.6,m:.3}),mx+Math.cos(as2)*.45,6.6,mz+Math.sin(as2)*.45).rotateY(-as2)); }
+      g.add(box(.10,.10,.10,lit(C.red,2.4),mx,7.1,mz));
+    });
+    function loop(off){ var px=PX+off, pz=PZ+off, k=6, pts=[
+        [-px+k,-pz],[0,-pz],[px-k,-pz],[px,-pz+k],[px,0],[px,pz-k],[px-k,pz],[0,pz],[-px+k,pz],[-px,pz-k],[-px,0],[-px,-pz+k]];
+      return new T.CatmullRomCurve3(pts.map(function(p){return new T.Vector3(p[0],.42,p[1]);}),true,'catmullrom',.1); }
+    var lanes=[loop(1.1),loop(-1.1)];
+    var body=mat(0x4a4133,{r:.35,m:.75}), canopy=mat(0x0f1621,{r:.12,m:.9,t:true,o:.72}), wheel=mat(0x14181e,{r:.9,m:.2});
+    for(var cb=0;cb<20;cb++){
+      var dir=cb%2?1:-1, u4=new T.Group();
+      u4.add(box(2.1,.48,.98,body,0,0,0));
+      u4.add(box(1.35,.38,.9,canopy,-.05,.42,0));
+      u4.add(box(.08,.08,.74,lit(0xf2f6ff,2.2),1.04,.04,0));
+      u4.add(box(.07,.07,.66,lit(C.red,1.8),-1.04,.04,0));
+      u4.add(cyl(.22,.22,.14,wheel,.66,-.2,.48,10).rotateZ(Math.PI/2)); u4.add(cyl(.22,.22,.14,wheel,-.66,-.2,.48,10).rotateZ(Math.PI/2));
+      u4.add(cyl(.22,.22,.14,wheel,.66,-.2,-.48,10).rotateZ(Math.PI/2)); u4.add(cyl(.22,.22,.14,wheel,-.66,-.2,-.48,10).rotateZ(Math.PI/2));
+      g.add(u4);
+      anim.cabs.push({o:u4,c:lanes[cb%2],t:(cb/20+Math.random()*.03)%1,d:dir,v:.011+Math.random()*.004});
     }
 
-    /* ---- the globe ---- */
-    var globe=new T.Group(); globe.position.set(0,53,0); g.add(globe);
+    /* ---- the Earth: Natural Earth land on a dark sphere, lit by the key ---- */
+    var globe=new T.Group(); globe.position.set(HX,46,HZ); g.add(globe);
     var GR=11;
-    var earth=new T.Mesh(SG(GR,40),mat(0x0d141c,{r:.95,m:.1})); globe.add(earth);
-    var wire=new T.Mesh(G(new T.SphereGeometry(GR*1.002,36,24)),
-      mat(0x000000,{e:C.hot,ei:.34,t:true,o:.30,r:.5,m:0}));
-    wire.material.wireframe=true; globe.add(wire);
+    var earthTex=new T.TextureLoader().load('img/earth.png'); geos.push({dispose:function(){earthTex.dispose();}});
+    if(T.SRGBColorSpace) earthTex.colorSpace=T.SRGBColorSpace; earthTex.anisotropy=4;
+    var earthM=mat(0xffffff,{r:.92,m:.02}); earthM.map=earthTex;
+    var earth=new T.Mesh(G(new T.SphereGeometry(GR,64,40)),earthM); globe.add(earth);
+    var atmo=new T.Mesh(G(new T.SphereGeometry(GR*1.045,48,32)),
+      new T.MeshBasicMaterial({color:C.hot,transparent:true,opacity:.055,side:T.BackSide,depthWrite:false,blending:T.AdditiveBlending}));
+    mats.push(atmo.material); globe.add(atmo);
     var sites=[[39.0,-77.5],[32.4,-99.7],[33.4,-112.1],[47.6,-122.3],[-23.5,-46.6],
                [53.3,-6.2],[51.5,-0.1],[50.1,8.7],[59.3,18.1],[6.5,3.4],
                [24.5,54.4],[19.1,72.9],[1.35,103.8],[35.7,139.7],[-33.9,151.2]];
+    /* three's sphere puts u=.5 (lon 0) on +x and lon 90E on -z */
     function ll(la,lo,rr){var p=la*Math.PI/180,q=lo*Math.PI/180;
-      return new T.Vector3(rr*Math.cos(p)*Math.sin(q),rr*Math.sin(p),rr*Math.cos(p)*Math.cos(q));}
+      return new T.Vector3(rr*Math.cos(p)*Math.cos(q),rr*Math.sin(p),-rr*Math.cos(p)*Math.sin(q));}
     var siteV=sites.map(function(s){return ll(s[0],s[1],GR);});
-    var cluster=inst(BG(.5,.24,.5),lit(C.hotCore,2.6),sites.length*3);
-    siteV.forEach(function(v){
-      var n=v.clone().normalize();
-      for(var q=0;q<3;q++){
-        var p=v.clone().addScaledVector(n,.10);
-        var t2=new T.Vector3(-n.z,0,n.x).normalize().multiplyScalar((q-1)*.42);
-        p.add(t2);
-        put(cluster,p.x,p.y,p.z,0,Math.atan2(n.x,n.z),0,1,.6+q*.3,1);
-      }});
+    var cluster=inst(BG(.34,.14,.34),lit(C.hotCore,2.0),sites.length*3);
+    siteV.forEach(function(v){ var n=v.clone().normalize();
+      for(var q=0;q<3;q++){ var p=v.clone().addScaledVector(n,.06);
+        p.add(new T.Vector3(-n.z,0,n.x).normalize().multiplyScalar((q-1)*.34));
+        put(cluster,p.x,p.y,p.z,0,Math.atan2(n.x,n.z),0,1,.6+q*.3,1); }});
     globe.add(cluster);
-    function arcPts(a,b,lift,n){
-      var out=[]; for(var i=0;i<=n;i++){var t2=i/n;
-        var v=a.clone().lerp(b,t2).normalize();
-        var h=Math.sin(t2*Math.PI);
-        out.push(v.multiplyScalar(GR*(1+lift*h)+ (lift?0:.06)));} return out;}
-    var cableM=mat(C.hot,{e:C.hot,ei:.95,r:.5,m:.1});
-    var pairs=[[0,5],[0,4],[1,0],[1,2],[2,3],[3,13],[5,6],[6,7],[7,8],[7,9],
-               [10,11],[11,12],[12,13],[12,14],[13,14],[9,10],[4,9],[2,12]];
-    pairs.forEach(function(p){
-      var pts=arcPts(siteV[p[0]],siteV[p[1]],0,22);
-      globe.add(new T.Mesh(G(new T.TubeGeometry(new T.CatmullRomCurve3(pts),22,.055,4,false)),cableM));
-    });
-    var bbM=mat(C.hotCore,{e:C.hotCore,ei:.8,r:.5,m:.1,t:true,o:.5});
+    function arcPts(a,b,lift,n){ var out=[]; for(var i=0;i<=n;i++){ var t2=i/n, v=a.clone().lerp(b,t2).normalize();
+        out.push(v.multiplyScalar(GR*(1+lift*Math.sin(t2*Math.PI))+(lift?0:.05))); } return out; }
+    var cableM=mat(C.hot,{e:C.hot,ei:.45,r:.5,m:.1,t:true,o:.85});
+    [[0,5],[0,4],[1,0],[1,2],[2,3],[3,13],[5,6],[6,7],[7,8],[7,9],[10,11],[11,12],[12,13],[12,14],[13,14],[9,10],[4,9],[2,12]]
+      .forEach(function(p){ globe.add(new T.Mesh(G(new T.TubeGeometry(new T.CatmullRomCurve3(arcPts(siteV[p[0]],siteV[p[1]],0,22)),22,.03,4,false)),cableM)); });
+    var bbM=mat(C.hotCore,{e:C.hotCore,ei:.35,r:.5,m:.1,t:true,o:.28});
     [[0,13],[6,12],[0,12],[4,7],[1,14],[9,3]].forEach(function(p){
-      var pts=arcPts(siteV[p[0]],siteV[p[1]],.36,30);
-      var cur=new T.CatmullRomCurve3(pts);
-      globe.add(new T.Mesh(G(new T.TubeGeometry(cur,30,.04,4,false)),bbM));
-      var dot=new T.Mesh(SG(.30,10),lit(C.hotCore,3.2)); globe.add(dot);
-      anim.pulses.push({c:cur,m:dot,t:Math.random(),v:.16+Math.random()*.1});
-    });
-    var gh=halo(C.hot,38,.14); gh.position.set(0,0,0); globe.add(gh);
-    anim.globe=globe; anim.wire=wire;
+      var cur=new T.CatmullRomCurve3(arcPts(siteV[p[0]],siteV[p[1]],.30,30));
+      globe.add(new T.Mesh(G(new T.TubeGeometry(cur,30,.025,4,false)),bbM));
+      var dot=new T.Mesh(SG(.16,8),lit(C.hotCore,2.4)); globe.add(dot);
+      anim.pulses.push({c:cur,m:dot,t:Math.random(),v:.14+Math.random()*.08}); });
+    anim.globe=globe;
 
-    /* ---- LEO shell: six planes of flat-panel satellites ---- */
-    var satM=mat(0x39414c,{r:.5,m:.8}), panM=mat(0x14202e,{r:.35,m:.7,e:C.hot,ei:.18});
+    /* ---- LEO shell: six planes, small flat-panel buses, unlit ---- */
+    var satM=mat(0x4a525d,{r:.5,m:.8}), panM=mat(0x1a2330,{r:.4,m:.6});
     for(var pl=0;pl<6;pl++){
-      var plane=new T.Group(); plane.rotation.x=Math.PI/2.6*Math.sin(pl/6*Math.PI*2)+.3;
-      plane.rotation.z=pl/6*Math.PI;
-      var bus=inst(BG(.30,.12,.22),satM,18), pan=inst(BG(.72,.03,.26),panM,18);
-      for(var s2=0;s2<18;s2++){
-        var as=s2/18*Math.PI*2, rr=17.5, sx=Math.cos(as)*rr, sz=Math.sin(as)*rr;
-        put(bus,sx,0,sz,0,-as,0); put(pan,sx,0,sz,0,-as,0);
-      }
+      var plane=new T.Group(); plane.rotation.x=Math.PI/2.6*Math.sin(pl/6*Math.PI*2)+.3; plane.rotation.z=pl/6*Math.PI;
+      var bus=inst(BG(.22,.09,.16),satM,18), pan=inst(BG(.62,.02,.2),panM,18);
+      for(var s2=0;s2<18;s2++){ var as=s2/18*Math.PI*2, rr=16.5, sx=Math.cos(as)*rr, sz=Math.sin(as)*rr;
+        put(bus,sx,0,sz,0,-as,0); put(pan,sx,0,sz,0,-as,0); }
       plane.add(bus); plane.add(pan); globe.add(plane);
-      anim.leo.push({g:plane,v:(pl%2?1:-1)*(.055+pl*.007)});
+      anim.leo.push({g:plane,v:(pl%2?1:-1)*(.05+pl*.006)});
     }
-
-    /* ---- eight large orbital compute satellites ---- */
-    var bigring=new T.Group(); globe.add(bigring); anim.bigring=bigring;
-    var solarM=mat(0x101a28,{r:.3,m:.75,e:C.hot,ei:.22}), radM=mat(0xb9c4d4,{r:.35,m:.6,e:C.hotCore,ei:.35});
-    for(var q2=0;q2<8;q2++){
-      var aq=q2/8*Math.PI*2, rq=27;
-      var sat=new T.Group(); sat.position.set(Math.cos(aq)*rq,Math.sin(aq*2)*3.5,Math.sin(aq)*rq); sat.rotation.y=-aq;
-      sat.add(box(1.5,.85,1.0,mat(0x2b323b,{r:.5,m:.8}),0,0,0));
-      sat.add(box(1.7,.06,.06,lit(C.hotCore,2.4),0,.56,0));
-      sat.add(box(3.2,.05,1.15,solarM, 2.7,0,0)); sat.add(box(3.2,.05,1.15,solarM,-2.7,0,0));
-      sat.add(box(.06,1.2,1.9,radM,0,0, 1.2));   sat.add(box(.06,1.2,1.9,radM,0,0,-1.2));
-      sat.add(cyl(.5,.16,.5,mat(0xd6dfeb,{r:.4,m:.5}),0,-.85,0,14));
+    /* ---- six large orbital compute satellites ---- */
+    var bigring=new T.Group(); bigring.rotation.x=.22; globe.add(bigring); anim.bigring=bigring;
+    var solarM=mat(0x121a26,{r:.35,m:.7}), radM=mat(0xaab5c4,{r:.4,m:.7}), busM=mat(0x39414c,{r:.5,m:.8});
+    for(var q2=0;q2<6;q2++){
+      var aq=q2/6*Math.PI*2, rq=23, sat=new T.Group();
+      sat.position.set(Math.cos(aq)*rq,0,Math.sin(aq)*rq); sat.rotation.y=-aq;
+      sat.add(box(1.3,.8,.9,busM,0,0,0));
+      sat.add(box(1.1,.04,.04,lit(C.hotCore,1.6),0,.44,0));
+      sat.add(box(2.6,.04,1.0,solarM,2.2,0,0)); sat.add(box(2.6,.04,1.0,solarM,-2.2,0,0));
+      sat.add(box(.04,1.0,1.6,radM,0,0,1.15));   sat.add(box(.04,1.0,1.6,radM,0,0,-1.15));
+      sat.add(cyl(.4,.12,.4,mat(0xd6dfeb,{r:.4,m:.5}),0,-.7,0,12));
       bigring.add(sat);
-      var nq=(q2+1)/8*Math.PI*2;
-      bigring.add(tube([[Math.cos(aq)*rq,Math.sin(aq*2)*3.5,Math.sin(aq)*rq],
-                        [Math.cos((aq+nq)/2)*(rq*.94),Math.sin((aq+nq))*2.4,Math.sin((aq+nq)/2)*(rq*.94)],
-                        [Math.cos(nq)*rq,Math.sin(nq*2)*3.5,Math.sin(nq)*rq]],.025,
-                        mat(C.hotCore,{e:C.hotCore,ei:.9,r:.5,m:.1,t:true,o:.55}),18));
-    }
-
-    /* ---- ground stations ---- */
-    for(var gs2=0;gs2<3;gs2++){
-      var ag=gs2/3*Math.PI*2+1.1, gx=Math.cos(ag)*28, gz=Math.sin(ag)*28;
-      var u3=new T.Group(); u3.position.set(gx,0,gz); g.add(u3);
-      u3.add(box(3.2,.9,3.2,mat(0x1e232b,{r:.85,m:.3}),0,.45,0,true));
-      var yoke=new T.Group(); yoke.position.set(0,1.6,0); u3.add(yoke);
-      yoke.add(cyl(.20,.24,1.4,mat(C.steelL,{r:.5,m:.8}),0,-.4,0,10));
-      var dish=new T.Mesh(G(new T.SphereGeometry(1.5,20,10,0,Math.PI*2,0,Math.PI/2.6)),
-        mat(0xc9d3e0,{r:.4,m:.5,s:T.DoubleSide}));
-      dish.rotation.x=-Math.PI/3.2; yoke.add(dish);
-      anim.dishes.push({y:yoke,p:gs2*2.1});
-      for(var pa=0;pa<2;pa++) u3.add(box(2.0,.14,1.4,mat(0x18202b,{r:.4,m:.7,e:C.hot,ei:.5}),-2.6,.5+pa*.02,-1.2+pa*2.4));
-      g.add(tube([[gx*.9,.5,gz*.9],[gx*.4,.35,gz*.4],[0,.3,0]],.055,fibM,12));
-    }
-
-    /* ---- the edge: ring road, cybercabs, cabinets, masts ---- */
-    var ER=30;
-    for(var rr3=0;rr3<5;rr3++){var ar3=(rr3/5)*Math.PI*2+.35;
-      g.add(box(ER-14,.06,2.2,mat(0x1a1e24,{r:.95,m:.08}),Math.cos(ar3)*(ER-7),.11,Math.sin(ar3)*(ER-7)).rotateY(-ar3));}
-    var ring=new T.Mesh(G(new T.RingGeometry(ER-2.4,ER+2.4,96)),mat(0x14181e,{r:.95,m:.06}));
-    ring.rotation.x=-Math.PI/2; ring.position.y=.12; g.add(ring);
-    var lane=new T.Mesh(G(new T.RingGeometry(ER-.08,ER+.08,96)),lit(0x9aa3b2,.5,.8));
-    lane.rotation.x=-Math.PI/2; lane.position.y=.16; g.add(lane);
-    g.add(new T.Mesh(G(new T.TorusGeometry(ER+3.2,.06,6,80)),fibM).rotateX(Math.PI/2));
-
-    var body=mat(0xc79a4e,{r:.32,m:.72}), canopy=mat(0x0f1621,{r:.12,m:.9,t:true,o:.72}),
-        wheel=mat(0x14181e,{r:.9,m:.2});
-    for(var cb=0;cb<22;cb++){
-      var dir=cb%2?1:-1, rr2=ER+dir*1.5;
-      var u4=new T.Group();
-      u4.add(box(2.3,.52,1.05,body,0,.42,0));
-      u4.add(box(1.45,.42,.96,canopy,-.05,.86,0));
-      u4.add(box(.10,.10,.80,lit(0xf2f6ff,2.6),1.13,.46,0));
-      u4.add(box(.09,.09,.72,lit(C.red,2.0),-1.13,.46,0));
-      u4.add(box(.55,.30,1.14,body,.72,.30,0)); u4.add(box(.55,.30,1.14,body,-.72,.30,0));
-      u4.add(cyl(.24,.24,.16,wheel,.72,.24,.52,10).rotateZ(Math.PI/2));
-      u4.add(cyl(.24,.24,.16,wheel,-.72,.24,.52,10).rotateZ(Math.PI/2));
-      g.add(u4);
-      anim.cabs.push({o:u4,a:cb/22*Math.PI*2,r:rr2,d:dir,v:(.10+Math.random()*.05)*dir});
-    }
-    for(var cab2=0;cab2<14;cab2++){
-      var aa=cab2/14*Math.PI*2, cx2=Math.cos(aa)*(ER+3.6), cz2=Math.sin(aa)*(ER+3.6);
-      var u5=new T.Group(); u5.position.set(cx2,0,cz2); u5.rotation.y=-aa; g.add(u5);
-      u5.add(box(1.2,1.6,.9,mat(0x252b33,{r:.75,m:.45}),0,.8,0,true));
-      u5.add(box(1.0,.08,.08,lit(C.hot,1.8),0,1.25,.47));
-      var pad=new T.Mesh(G(new T.RingGeometry(1.1,1.5,20)),lit(C.hot,1.1,.65));
-      pad.rotation.x=-Math.PI/2; pad.position.set(-2.6,.14,0); u5.add(pad);
-      if(cab2%3===0){
-        u5.add(cyl(.14,.18,7.0,mat(C.steelL,{r:.5,m:.8}),1.8,3.5,0,8));
-        for(var sc2=0;sc2<3;sc2++){
-          var as2=sc2/3*Math.PI*2;
-          u5.add(box(.18,1.1,.5,mat(0xd4dae4,{r:.6,m:.3}),1.8+Math.cos(as2)*.45,6.6,Math.sin(as2)*.45));
-        }
-        u5.add(box(.10,.10,.10,lit(C.red,2.4),1.8,7.1,0));
-      }
     }
   })();
 
@@ -1972,16 +1954,16 @@ function mountEras(host){
     {id:'wide', t:new T.Vector3(20,13,0),  w:184, h:58, th:1.47, ph:.93, era:-1},   /* the whole rail */
     {id:'cloud',t:new T.Vector3(X0,7,2),   w:44,  h:26, th:1.19, ph:.80, era:0},
     {id:'ai',   t:new T.Vector3(X1-3,4,-9),w:58,  h:30, th:1.14, ph:.84, era:1},
-    {id:'agi',  t:new T.Vector3(X2,26,2),  w:60,  h:46, th:1.26, ph:.80, era:2}
+    {id:'agi',  t:new T.Vector3(X2,20,-2), w:60,  h:44, th:1.26, ph:.84, era:2}
   ];
   /* inspect points: a close framing, and a pin in the scene at the same spot */
   var SPOTS=[
     {id:'metro',  n:'Metro colo',    era:0, t:new T.Vector3(X0+1,9.5,4),    w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
     {id:'nvl',    n:'NVL72 hall',    era:1, t:new T.Vector3(X1-14,2.4,-11), w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
     {id:'power',  n:'Power yard',    era:1, t:new T.Vector3(X1-6,2,18),     w:46, h:20, th:1.38, ph:.96,  pin:[X1-8,10.2,12,1]},
-    {id:'mono',   n:'1 MW racks',    era:2, t:new T.Vector3(X2,5,1),        w:24, h:14, th:1.18, ph:1.04, pin:[X2-12,9.2,7,1]},
-    {id:'orbit',  n:'Orbital layer', era:2, t:new T.Vector3(X2,53,0),       w:44, h:34, th:1.30, ph:1.22, pin:[X2+19,60,9,0]},
-    {id:'edge',   n:'Edge ring',     era:2, t:new T.Vector3(X2+2,1,28),     w:28, h:13, th:1.42, ph:1.08, pin:[X2+21,5.4,21,1]}
+    {id:'mono',   n:'1 MW racks',    era:2, t:new T.Vector3(X2,3.4,-2),     w:24, h:13, th:1.12, ph:1.02, pin:[X2+18.5,10,5.5,1]},
+    {id:'orbit',  n:'Orbital layer', era:2, t:new T.Vector3(X2,46,-2),      w:38, h:30, th:1.30, ph:1.22, pin:[X2+16,52,8,0]},
+    {id:'edge',   n:'Edge ring',     era:2, t:new T.Vector3(X2+28,1,24),    w:32, h:15, th:1.36, ph:.98,  pin:[X2+41.7,9.4,31.7,1]}
   ];
   /* the flythrough: framing, then how long to hold it */
   var TOUR=[[ERAS[0],7],[ERAS[1],5],[SPOTS[0],6],[ERAS[2],5],[SPOTS[1],7],[SPOTS[2],5],
@@ -2101,8 +2083,9 @@ function mountEras(host){
     if(anim.bigring) anim.bigring.rotation.y-=dt*.032;
     anim.dishes.forEach(function(d){ d.y.rotation.y=Math.sin(t*.22+d.p)*1.1; d.y.rotation.z=Math.sin(t*.15+d.p)*.14;});
     anim.pulses.forEach(function(p){ p.t=(p.t+dt*p.v)%1; p.c.getPoint(p.t,tmp); p.m.position.copy(tmp);});
-    anim.cabs.forEach(function(c){ c.a+=dt*c.v/8; var x=Math.cos(c.a)*c.r, z=Math.sin(c.a)*c.r;
-      c.o.position.set(x,0,z); c.o.rotation.y=-c.a+(c.d>0?Math.PI/2:-Math.PI/2);});
+    anim.cabs.forEach(function(c){ c.t=(c.t+dt*c.v*c.d+1)%1;
+      c.c.getPointAt(c.t,tmp); c.o.position.copy(tmp); c.c.getTangentAt(c.t,tmp);
+      c.o.rotation.y=Math.atan2(-tmp.z*c.d,tmp.x*c.d);});
     stacks.forEach(function(h,i){ h.material.opacity=.30+.14*Math.sin(t*1.3+i*1.7); });
     var fl=anim.flow, col=fl.m.instanceColor;
     for(var i2=0;i2<fl.t.length;i2++){

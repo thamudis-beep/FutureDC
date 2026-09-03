@@ -156,12 +156,21 @@ it, click the ground to pull back. All of that chrome is DOM over the canvas,
 never text in the scene, and every framing is {target, half-width,
 half-height, yaw, pitch} — the radius is derived from the panel's aspect, not
 baked in.
+The AGI stage is a site in the same building language as the campus — sealed
+halls, a 1 MW hall cut open, substation, turbines, batteries, a perimeter
+loop — never a hologram: no wireframe globe, no glowing stem, no visible orbit
+rings, no glowing pads. It was tried and read as cartoonish.
 It is mounted only when its topic opens and disposed on every navigation —
 `killScene()` runs at the top of `renderLayer` and `renderTopic`. Every moving
 part is posed by `tick()`, which is also called once at build so
 `prefers-reduced-motion` gets a correct resting state rather than a pile of
 cybercabs at the origin. Keep draw calls down: repeated assemblies go through
 `repeat()` or `inst()`/`put()`, never a mesh per copy.
+
+The globe in that scene is real too: `public/img/earth.png` is Natural Earth
+110m land drawn equirectangular by `tools/earth-texture.js` and wrapped on a
+sphere, lit by the key light so it has a terminator. The site clusters on it
+are real lat/lon. Regenerate with the script; never hand-paint continents.
 
 The world map is real: `world-atlas` 110m TopoJSON, Natural Earth projection,
 Antarctica dropped, fitted to the viewBox and rounded to integers, generated
