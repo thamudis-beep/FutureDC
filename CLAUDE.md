@@ -142,11 +142,11 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 
   Every label in this view is plain language: what it makes, what it costs,
   does it pay, what is short. Code names stay in the code. On the page the
-  sheets are "What one megawatt does", "How much gets built", "Does it pay?",
+  sheets are "What one gigawatt does", "How much gets built", "Does it pay?",
   "Elon's numbers", "Every number, sourced".
 
   The front door of that view is **the hall** (`mountHall`; on the page, "One
-  megawatt, live"): a cutaway of one
+  gigawatt, live"): a cutaway of one
   energized MW with four systems docked to it — watts in (pylon → transformer →
   bus duct whose thickness is that year's deliverable GW, a grey ghost duct for
   what the dollars want), silicon in (wafer → CoWoS press → HBM → the racks),

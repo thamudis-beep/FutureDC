@@ -431,7 +431,7 @@
   <div class="body"><aside class="mrail"><div class="msheets" id="msheets"></div><div class="mjudg" id="mjudg"></div></aside><div class="panel mpanel" id="mpanel"></div></div>
 </section>
 
-<div class="ver">v70 · No code names</div>
+<div class="ver">v71 · In gigawatts</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2445,7 +2445,7 @@ function mountHall(host,ctx){
   /* ---- chrome: cameras, the year strip, the plate, five gauges, tags. DOM, never in the scene ---- */
   var ui=document.createElement('div');ui.className='e3d in h3d';
   ui.innerHTML='<div class="e3d-bar h3d-bar"><div class="e3d-grp"><div class="e3d-row">'+
-      [['mw','One megawatt'],['works','All six years'],['atom','What is short']].map(function(v){return '<button class="e3d-chip" data-cam="'+v[0]+'" style="--ec:#b87333">'+v[1]+'</button>';}).join('')+
+      [['mw','One MW, cut open'],['works','All six years'],['atom','What is short']].map(function(v){return '<button class="e3d-chip" data-cam="'+v[0]+'" style="--ec:#b87333">'+v[1]+'</button>';}).join('')+
       '</div></div><div class="e3d-grp"><div class="e3d-row" id="h3dYears"></div></div></div>'+
     '<div class="h3d-plate" id="h3dPlate"></div>'+
     '<div class="h3d-gauges" id="h3dGauges"></div>'+
@@ -2618,13 +2618,13 @@ WM.IN={
  gpuHrH:   {v:2.2,lo:1.8,hi:2.6,t:'E',n:'Older GPU rent, $/hour',s:'market; DeepSeek cost basis $2'},
  gpuHrB:   {v:4.2,lo:3.5,hi:5.5,t:'E',n:'New GPU rent, $/hour',s:'market'},
  /* dollars to stand up one IT MW, $M per MW, 2026 dollars */
- cAcc:     {v:22.5,lo:20,hi:27,t:'E',n:'Chips and memory, $M per MW',s:'500 × $45k; vendor DC revenue ÷ units shipped, HBM ×5 since Q1-25'},
- cBox:     {v:1.5,lo:1,hi:2.5,t:'E',n:'Racks, $M per MW'},
- cNet:     {v:3.5,lo:2.5,hi:5,t:'E',n:'Networking, $M per MW',s:'800G pluggables $1–1.5k; ≈15% of silicon'},
- cSto:     {v:1.5,lo:1,hi:2,t:'E',n:'Storage, $M per MW'},
- cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Cooling, $M per MW'},
- cShell:   {v:14,lo:10,hi:16,t:'E',n:'Building and electrical, $M per MW',s:'powered-shell builds $10–16M/MW'},
- cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'On-site power, $M per MW',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
+ cAcc:     {v:22.5,lo:20,hi:27,t:'E',n:'Chips and memory, $B per GW',s:'500 × $45k; vendor DC revenue ÷ units shipped, HBM ×5 since Q1-25'},
+ cBox:     {v:1.5,lo:1,hi:2.5,t:'E',n:'Racks, $B per GW'},
+ cNet:     {v:3.5,lo:2.5,hi:5,t:'E',n:'Networking, $B per GW',s:'800G pluggables $1–1.5k; ≈15% of silicon'},
+ cSto:     {v:1.5,lo:1,hi:2,t:'E',n:'Storage, $B per GW'},
+ cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Cooling, $B per GW'},
+ cShell:   {v:14,lo:10,hi:16,t:'E',n:'Building and electrical, $B per GW',s:'powered-shell builds $10–16M/MW'},
+ cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'On-site power, $B per GW',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
  lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Chip life, years',s:'hyperscalers book 5–6; the frontier moves faster. Live control, left rail'},
  lifeShell:{v:15,t:'E',n:'Building life, years'},
  lifeGen:  {v:25,t:'E',n:'Power plant life, years'},
@@ -2768,8 +2768,8 @@ WM.calc=function(J,over){
 
 /* ---- sheets ------------------------------------------------ */
 WM.SHEETS=[
- {k:'hall',n:'One megawatt, live',t:'One megawatt of data center',eb:'PRODUCTION OF INTELLIGENCE IS PRODUCTION'},
- {k:'unit',n:'What one megawatt does',eb:'WHAT IT MAKES, WHAT IT COSTS',subs:['tokens, energy, cost','memory per token','cost to build']},
+ {k:'hall',n:'One gigawatt, live',t:'One gigawatt of data center',eb:'PRODUCTION OF INTELLIGENCE IS PRODUCTION'},
+ {k:'unit',n:'What one gigawatt does',eb:'WHAT IT MAKES, WHAT IT COSTS',subs:['tokens, energy, cost','memory per token','cost to build']},
  {k:'path',n:'How much gets built',eb:'POWER FIRST, THEN CHIPS, THEN MONEY',subs:['power per year','money per year','slowest parts','how far away']},
  {k:'rent',n:'Does it pay?',eb:'DOES IT PAY, AND WHO GETS PAID',subs:['earn vs owe','one dollar, chip to customer','the whole fleet','year by year']},
  {k:'chal',n:'Elon\'s numbers',eb:'HIS NUMBERS, OUR ARITHMETIC',subs:['his numbers vs ours','a gigawatt in space']},
@@ -2781,6 +2781,7 @@ const fT=x=>'$'+fN(x,x<10?2:1)+'T';
 const fP=(x,d)=>fN(x*100,d==null?0:d)+'%';
 const fX=(x,d)=>fN(x,d==null?1:d)+'×';
 const fM=x=>'$'+fN(x,x<10?1:0)+'M';
+const fG=x=>x>=1?'$'+fN(x,x<10?1:0)+'B':'$'+fN(x*1000,0)+'M';   /* $M per MW = $B per GW */
 const MC=V.blue, MRED=V.red, MDIM=V.dim;
 const TAGN={K:'physical constant',D:'company-reported',E:'engineering estimate',J:'our call'};
 const tagHtml=t=>'<span class="tag '+t+'">'+t+'</span>';
@@ -2855,26 +2856,26 @@ SHEET.unit=function(R,sub){
     return SV(s);
   }
   if(sub===2){ /* dollars per MW: one column, and the rent it owes */
-    let s=FTITLE(40,28,'What one megawatt costs to build, 2026');
+    let s=FTITLE(40,28,'What one gigawatt costs to build, 2026');
     const parts=[['acc','Chips and memory',MC,.85],['box','Racks',V.grey,.30],['net','Networking',V.grey,.38],['sto','Storage',V.grey,.46],['cool','Cooling',V.grey,.54],['shell','Building and electrical',V.amber,.85],['gen','On-site power',V.amber,.5]];
     const yb=372,yt=70,Y=v=>yb-(v/R.mw)*(yb-yt),x=200,w=120;let acc=0;const segs=[];
     parts.forEach((p,i)=>{const v=R.cost[p[0]],y0=Y(acc),y1=Y(acc+v);s+=COL(x,w,y0,y1,p[2],{op:p[3]});segs.push({my:(y0+y1)/2,ly:(y0+y1)/2,p:p,v:v});acc+=v;});
     for(let k=1;k<segs.length;k++)segs[k].ly=Math.min(segs[k].ly,segs[k-1].ly-15);   /* segments stack upward; a label never sits closer than a line to the one below */
-    segs.forEach(g=>{s+=LN(x+w/2+4,g.my,x+w/2+30,g.ly,V.ink,{sw:.6,op:.35});s+=T(x+w/2+36,g.ly+4,g.p[1]+'  '+fM(g.v),{s:11,f:V.ink});});
-    s+=VAL(x,yt-14,fM(R.mw)+' per MW');s+=T(x,yb+18,'chips '+fP(R.compShare)+' of the bill',{a:'middle',s:10,f:V.dim});
+    segs.forEach(g=>{s+=LN(x+w/2+4,g.my,x+w/2+30,g.ly,V.ink,{sw:.6,op:.35});s+=T(x+w/2+36,g.ly+4,g.p[1]+'  '+fG(g.v),{s:11,f:V.ink});});
+    s+=VAL(x,yt-14,fG(R.mw)+' per gigawatt');s+=T(x,yb+18,'chips '+fP(R.compShare)+' of the bill',{a:'middle',s:10,f:V.dim});
     const bx=620;s+=PANEL(bx,70,340,300,{r:10});
-    [['wears out over '+I.lifeAcc+' years',fM(R.depMW)+' / yr',fP(R.depRate)],['+ return investors need, '+fP(R.J.hurdle),fM(R.J.hurdle*R.mw)+' / yr',''],['= must earn every year',fM(R.rentMW),fP(R.rentRate)],['per GPU, per hour','$'+fN(R.rentGpuHr,2),'']].forEach((r,i)=>{const y=110+i*66;
+    [['wears out over '+I.lifeAcc+' years',fG(R.depMW)+' / yr',fP(R.depRate)],['+ return investors need, '+fP(R.J.hurdle),fG(R.J.hurdle*R.mw)+' / yr',''],['= must earn every year',fG(R.rentMW),fP(R.rentRate)],['per GPU, per hour','$'+fN(R.rentGpuHr,2),'']].forEach((r,i)=>{const y=110+i*66;
       s+=T(bx+22,y,r[0],{s:11,f:V.dim});s+=T(bx+22,y+26,r[1],{s:20,w:700,m:1,f:i>=2?MC:V.ink});if(r[2])s+=T(bx+318,y+26,r[2],{a:'end',s:12,m:1,f:V.dim});
       if(i<3)s+=LN(bx+22,y+42,bx+318,y+42,V.ink,{sw:.6,op:.15});});
-    s+=LINE('Chips are '+fP(R.compShare)+' of the bill; the megawatt must earn back '+fP(R.rentRate)+' of its cost every year, $'+fN(R.rentGpuHr,2)+' per GPU-hour.',424);
+    s+=LINE('Chips are '+fP(R.compShare)+' of the bill; the gigawatt must earn back '+fP(R.rentRate)+' of its cost every year, $'+fN(R.rentGpuHr,2)+' per GPU-hour.',424);
     return SV(s);
   }
   /* tokens, joules, dollars per MW */
-  let s=FTITLE(40,28,'What one megawatt of data center produces, and what it costs');
+  let s=FTITLE(40,28,'What one gigawatt of data center produces, and what it costs');
   const cols=[{k:'batch',n:'BULK',d:'20–30 tokens/s per user'},{k:'inter',n:'CHAT',d:'100 tokens/s per user'},{k:'reason',n:'REASONING',d:'long memory · 5–20× more tokens per task'}];
   const cx=[430,640,850],y0=104,rh=46;
   cols.forEach((c,i)=>{s+=T(cx[i],72,c.n,{a:'middle',s:11,w:700,m:1,f:i===0?MC:V.ink,ls:'.1em'});s+=T(cx[i],88,c.d,{a:'middle',s:9.5,f:V.dim});});
-  const rows=[['Tokens per second',c=>fN(R[c]/1e6,2)+' M'],['Tokens per year, at '+fP(I.util)+' use',c=>fN(R.tokYr[c]/1e12,0)+' T'],['Energy per token, at the meter',c=>fN(R.jTok[c],2)+' J'],['Electricity per million tokens · $'+I.elec+'/MWh',c=>'$'+fN(R.eTok[c],3)],['Hardware cost per million tokens',c=>'$'+fN(R.rentTok[c],2)]];
+  const rows=[['Tokens per second',c=>fN(R[c]*1000/1e9,2)+' billion'],['Tokens per year, at '+fP(I.util)+' use',c=>fN(R.tokYr[c]*1000/1e12,0)+' trillion'],['Energy per token, at the meter',c=>fN(R.jTok[c],2)+' J'],['Electricity per million tokens · $'+I.elec+'/MWh',c=>'$'+fN(R.eTok[c],3)],['Hardware cost per million tokens',c=>'$'+fN(R.rentTok[c],2)]];
   rows.forEach((r,j)=>{const y=y0+j*rh;s+=LN(40,y+22,960,y+22,V.ink,{sw:.6,op:.12});s+=T(40,y+6,r[0],{s:12.5,w:600,f:V.ink});
     cols.forEach((c,i)=>s+=T(cx[i],y+8,r[1](c.k),{a:'middle',s:j===4?17:15,w:700,m:1,f:j===4?MC:V.ink}));});
   s+=T(40,y0+rows.length*rh+14,'Measured: '+fN(I.dsOutAvg)+' tokens/s per 8-GPU server, fleet average (DeepSeek, Mar 2025) ÷ '+I.nodeKW+' kW → × '+I.blackX+' for the newer chip → ÷ '+I.interDiv+' chat · ÷ '+I.reasonDiv+' reasoning',{s:10.5,f:V.dim});
@@ -2959,15 +2960,15 @@ SHEET.path=function(R,sub){
 SHEET.rent=function(R,sub){
   const I=R.I,W=R.walk;
   if(sub===0){ /* three cases + training, one log axis */
-    let s=FTITLE(40,28,'What one megawatt can earn in a year, against what it must earn');
+    let s=FTITLE(40,28,'What one gigawatt can earn in a year, against what it must earn');
     const yb=340,yt=76,Y=LOGY(0.1,1000,yb,yt),x0=110;
-    [0.1,1,10,100,1000].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+(v<1?v:v>=1000?'1,000':v)+'M',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(x0-10,yt-10,'per megawatt, per year · log',{a:'end',s:9.5,m:1,f:V.dim});
+    [0.1,1,10,100,1000].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+(v<1?v:v>=1000?'1,000':v)+'B',{a:'end',s:10,m:1,f:V.dim});});
+    s+=T(x0-10,yt-10,'per gigawatt, per year · log',{a:'end',s:9.5,m:1,f:V.dim});
     const cases=[['Chat','at $'+I.pFront+' per million tokens',R.rev.interFront,R.cov.interFront,.85],['Bulk','at $'+I.pComm+' per million tokens',R.rev.batchComm,R.cov.batchComm,.85],['Bulk at chat prices','a ceiling, not a market',R.rev.batchFront,R.cov.batchFront,.35],['Training','earns nothing until the model does',R.rentMW,1,0]];
     cases.forEach((c,i)=>{const x=x0+110+i*200;
       s+=COL(x,90,yb,Y(c[2]),i===3?'none':MC,{op:c[4],stroke:i===3?V.amber:null});
-      s+=VAL(x,Y(c[2])-8,fM(c[2])+(i===3?' owed':' · '+fX(c[3],c[3]<3?2:0)));s+=LAB(x,yb+18,[c[0],c[1]],i===3?V.amber:V.ink);});
-    s+=RULEH(x0,960,Y(R.rentMW),MRED,'must earn '+fM(R.rentMW));s+=RULEH(x0,960,Y(R.elecYr),V.grey,'electricity '+fM(R.elecYr));
+      s+=VAL(x,Y(c[2])-8,fG(c[2])+(i===3?' owed':' · '+fX(c[3],c[3]<3?2:0)));s+=LAB(x,yb+18,[c[0],c[1]],i===3?V.amber:V.ink);});
+    s+=RULEH(x0,960,Y(R.rentMW),MRED,'must earn '+fG(R.rentMW));s+=RULEH(x0,960,Y(R.elecYr),V.grey,'electricity '+fG(R.elecYr));
     s+=T(40,392,'Where supply meets demand today: a new GPU rents for $'+fN(I.gpuHrB,2)+' an hour against $'+fN(R.rentGpuHr,2)+' needed → '+fX(R.covCloud,2)+'.',{s:11,f:V.dim});
     s+=LINE('Any price above $'+fN(R.rentTok.batch,2)+' per million tokens pays; the cheapest tokens already sell near it. The bet is how many sell at chat prices.',424);
     return SV(s);
