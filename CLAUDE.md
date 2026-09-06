@@ -107,7 +107,7 @@ Never run `pkill` in the same command as a commit; it kills the shell first.
 
 ## Structure
 
-Three views, hash-routed, in one file.
+Four views, hash-routed, in one file.
 
 - **Home** — title, a pill CTA, two cards that preview real content.
 - **The Atlas** (`#matrix`) — the master grid: the stack down the Y axis, time
@@ -123,6 +123,16 @@ Three views, hash-routed, in one file.
 
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
+- **The AI World Model** (`#model/<n>`) — a first-principles model of AI
+  compute, power, silicon and return on capital: physics, then production,
+  then finance. Capex and share mix are outputs; "$4T" is a claim under test.
+  `WM.IN` holds every input with a tag (`K` constant · `D` disclosure · `E`
+  engineering estimate with a range · `J` judgment); `WM.calc` derives
+  everything else; `SHEET.*` renders the ten outputs and the Challenger. The
+  four judgments the model asks the user for (fleet under test, hurdle, layer
+  margins, whether 2031 is still general-GPU) are live controls in the rail,
+  not hidden defaults. Add an input by tagging it; never type a derived number
+  into a sheet.
 
 ---
 
