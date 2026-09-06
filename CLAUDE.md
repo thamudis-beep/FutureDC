@@ -128,11 +128,17 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
   then finance. Capex and share mix are outputs; "$4T" is a claim under test.
   `WM.IN` holds every input with a tag (`K` constant · `D` disclosure · `E`
   engineering estimate with a range · `J` judgment); `WM.calc` derives
-  everything else; `SHEET.*` renders the ten outputs and the Challenger. The
-  judgments the model asks the user for (fleet under test, hurdle, silicon
-  life, realised $/MTok, layer margins, whether 2031 is still general-GPU) are
-  live controls in the rail, not hidden defaults. Add an input by tagging it;
-  never type a derived number into a sheet.
+  everything else; `SHEET.*` renders the book: one MW, watts → capex (with
+  the bottleneck ranking), rent → the stack (with the by-year copper strip),
+  the Challenger, and the inputs ledger last. One figure grammar: vertical
+  columns, one accent, a dashed rule for the reference, one line of
+  consequence, never a note; a log axis only where the spread is over a
+  hundredfold, and then the axis says so. The rail carries four judgments —
+  fleet under test, hurdle, silicon life, realised $/MTok; the three layer
+  margins live on the sheet that uses them. It is a global model: no country
+  is singled out. Deleting is the default: a sheet that only restates a
+  gauge, and a memo that restates a sheet, do not exist. Add an input by
+  tagging it; never type a derived number into a sheet.
 
   The front door of that view is **the hall** (`mountHall`): a cutaway of one
   energized MW with four systems docked to it — watts in (pylon → transformer →
