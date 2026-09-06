@@ -145,23 +145,13 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
   sheets are "What one gigawatt does", "How much gets built", "Does it pay?",
   "Elon's numbers", "Every number, sourced".
 
-  The front door of that view is **the hall** (`mountHall`; on the page, "One
-  gigawatt, live"): a cutaway of one
-  energized MW with four systems docked to it — watts in (pylon → transformer →
-  bus duct whose thickness is that year's deliverable GW, a grey ghost duct for
-  what the dollars want), silicon in (wafer → CoWoS press → HBM → the racks),
-  tokens out (three streams whose density is tok/s per MW), dollars out (the
-  stack as floors, each 1/(1−g) tall; below coverage 1.0 the upper floors go
-  translucent and a crack runs to the slab). Three cameras: the MW, the works
-  (six bays, one per year, sized by new GW; a bay pours only if the deliverable
-  GW exist and the MW pays its rent inside the tested fleet), and the scarce
-  atom (everything steel except the binding joint, which is copper and moves
-  with the year). Click any joint for a plate with four fields only:
-  time-to-add, idiot index, who collects if it binds, the observable. Five
-  gauges are the observables at their last disclosed values — they are not
-  feeds yet, and the page says so. `scene.add()` returns the scene: rotate a
-  part before adding it, never after. The world camera and the orbital bay
-  are deliberately not built; the build order says the MW pays rent first.
+  The front door of that view is one screen (`SHEET.year`; on the page,
+  "Year by year"): six years across the top, one number that changes when a
+  year is clicked — the gigawatts of AI data center switched on that year —
+  and one line under it naming what is short that year. Nothing else. The
+  rail is hidden on that screen and returns on the sheets behind it. A 3D
+  cutaway of one megawatt was built here and deleted: it was a render, not
+  an answer.
 
 ---
 
