@@ -123,35 +123,23 @@ Four views, hash-routed, in one file.
 
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
-- **The AI World Model** (`#model/<n>`) — a first-principles model of AI
-  compute, power, silicon and return on capital: physics, then production,
-  then finance. Capex and share mix are outputs; "$4T" is a claim under test.
-  `WM.IN` holds every input with a tag (`K` constant · `D` disclosure · `E`
-  engineering estimate with a range · `J` judgment); `WM.calc` derives
-  everything else; `SHEET.*` renders the book: one MW, watts → capex (with
-  the bottleneck ranking), rent → the stack (with the by-year copper strip),
-  the Challenger, and the inputs ledger last. One figure grammar: vertical
-  columns, one accent, a dashed rule for the reference, one line of
-  consequence, never a note; a log axis only where the spread is over a
-  hundredfold, and then the axis says so. The rail carries four judgments —
-  fleet under test, hurdle, silicon life, realised $/MTok; the three layer
-  margins live on the sheet that uses them. It is a global model: no country
-  is singled out. Deleting is the default: a sheet that only restates a
-  gauge, and a memo that restates a sheet, do not exist. Add an input by
-  tagging it; never type a derived number into a sheet.
-
-  Every label in this view is plain language: what it makes, what it costs,
-  does it pay, what is short. Code names stay in the code. On the page the
-  sheets are "What one gigawatt does", "How much gets built", "Does it pay?",
-  "Elon's numbers", "Every number, sourced".
-
-  The front door of that view is one screen (`SHEET.year`; on the page,
-  "Year by year"): six years across the top, one number that changes when a
-  year is clicked — the gigawatts of AI data center switched on that year —
-  and one line under it naming what is short that year. Nothing else. The
-  rail is hidden on that screen and returns on the sheets behind it. A 3D
-  cutaway of one megawatt was built here and deleted: it was a render, not
-  an answer.
+- **The AI World Model** (`#model/<n>`) — built from zero. Two kinds of
+  numbers only: physics, and figures a company or a measured fleet has
+  published, each with who said it and when (`FZ.F`, `FZ.GW`). Anything
+  else is an empty field the reader types into (`FZ.R`); the page shows what
+  their number implies and never supplies one of its own. Five screens, the
+  same shape each: published facts on the left with source and date, the
+  arithmetic in the middle as lines, the result on the right as big
+  figures, then a dashed "not published" box with the reader's fields and
+  one line of consequence. The screens: today's machine (one gigawatt at
+  published prices, payback in years); the margin stack (the customer's
+  dollar walked down through app, model, cloud, building, server, NVIDIA,
+  TSMC, each with its published margin); the gigawatts (every published or
+  announced figure by name and date, overlap flagged, as a share of world
+  electricity); watts to GDP (announced gigawatts × measured tokens ×
+  published prices, through the stack, as a share of world GDP); sources.
+  No sliders, no judgments, no code names, no 3D. Add a number only with a
+  publisher and a date; if none exists, it is a reader field.
 
 ---
 

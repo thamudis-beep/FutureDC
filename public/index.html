@@ -277,80 +277,61 @@
   .dpoints li b{color:var(--ink);font-weight:500}
   .dsec{font:600 10px var(--mono);letter-spacing:.16em;color:var(--ink-dim);margin:0 0 12px}
 
-  /* ===== THE AI WORLD MODEL (rail of sheets · live judgments · one sheet at a time) ===== */
-  #v-model .body{flex:1;min-height:0;display:grid;grid-template-columns:236px 1fr;gap:16px;padding:clamp(8px,1.6vh,18px) 0}
-  .mrail{min-height:0;display:flex;flex-direction:column;gap:10px;overflow:hidden}
-  .msheets{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);
-    padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow:auto;scrollbar-width:none;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
-  .msheets .mh{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--ink-dim);padding:2px 10px 6px;white-space:nowrap}
-  .ms{display:flex;align-items:center;gap:10px;padding:clamp(2px,.5vh,7px) 10px;border-radius:9px;cursor:pointer;transition:.18s;border:1px solid transparent}
-  .ms .no{font:600 10px var(--mono);color:var(--ink-dim);width:18px;flex:none}
-  .ms .nm{font:500 12.5px var(--sans);color:var(--ink-soft);letter-spacing:-.01em;white-space:nowrap}
-  .ms:hover{background:rgba(255,255,255,.05)}.ms:hover .nm{color:var(--ink)}
-  .ms.on{background:color-mix(in srgb,var(--accent) 13%,transparent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
-  .ms.on .no{color:var(--accent)}.ms.on .nm{color:var(--ink)}
-  .ms.chal{margin-top:4px;border-top:1px solid var(--line2);border-radius:0 0 9px 9px;padding-top:9px}
-  .mjudg{flex:none;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);padding:7px 12px 8px}
-  .mjudg .mh{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--accent);padding-bottom:6px}
-  .jrow{display:grid;grid-template-columns:1fr 58px 44px;align-items:center;gap:8px;padding:clamp(0px,.3vh,3px) 0}
-  .jrow label{font:400 10px/1.15 var(--sans);color:var(--ink-soft);display:contents}
-  .jrow label>span{display:block}
-  .jrow input[type=range]{width:100%;height:14px;margin:0;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
-  .jrow input[type=range]::-webkit-slider-runnable-track{height:2px;background:rgba(255,255,255,.14);border-radius:1px}
-  .jrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--accent);margin-top:-4.5px;box-shadow:0 0 0 3px rgba(0,0,0,.4)}
-  .jrow input[type=range]::-moz-range-track{height:2px;background:rgba(255,255,255,.14)}
-  .jrow input[type=range]::-moz-range-thumb{width:11px;height:11px;border:0;border-radius:50%;background:var(--accent)}
-  .jrow .jv{font:600 11.5px var(--mono);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
-  .jinline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 22px;padding:2px 4px 6px;flex:none}
-  .jinline .jrow{grid-template-columns:1fr 1fr 44px}
-  #v-model .panel{position:relative;left:0;top:0;bottom:auto;right:auto;min-width:0;height:100%}
-  .mpanel .peyebrow{margin-bottom:2px}
-  .mpanel .dtop{margin-bottom:8px;align-items:center}
-  .mpanel .ptitle{font-size:clamp(22px,2.2vw,32px);margin:0;flex:1}
-  .mpanel .dbody{gap:12px}
-  .mpanel .viz{flex:none;margin:0}
-  .mpanel .viz svg{max-height:calc(100vh - 272px)}
-  /* memo: one page of prose, numbers set in mono */
-  .memo{max-width:100ch;font:400 clamp(11px,1.45vh,14px)/1.42 var(--sans);color:var(--ink-soft)}
-  .memo p{margin:0 0 .5em}
-  .memo b{color:var(--ink);font-weight:600}
-  .memo .n{font:600 .93em var(--mono);color:var(--ink);letter-spacing:-.01em}
-  .memo .verdict{margin-top:.5em;padding:8px 12px;border-left:2px solid var(--accent);background:rgba(255,255,255,.04);border-radius:0 10px 10px 0;color:var(--ink)}
-  /* tables */
-  .mtab{width:100%;border-collapse:collapse;font:400 clamp(11px,1.6vh,12.5px)/1.32 var(--sans);color:var(--ink-soft)}
-  .mtab th{font:600 9.5px var(--mono);letter-spacing:.14em;color:var(--ink-dim);text-align:left;padding:2px 9px 7px;border-bottom:1px solid var(--line);white-space:nowrap}
-  .mtab td{padding:clamp(3px,.6vh,6px) 9px;border-bottom:1px solid var(--line2);vertical-align:top}
-  .mtab tr:last-child td{border-bottom:0}
-  .mtab td.k{font:600 .96em var(--mono);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
-  .mtab td.r{text-align:right}
-  .mtab td.w{white-space:normal}
-  .mtab.fixed{table-layout:fixed}
-  .mtab.tight td{padding-left:5px;padding-right:5px}
-  .mtab.tight th{padding-left:5px;padding-right:5px}
-  .mtab td.n{color:var(--ink);font-weight:500}
-  .mtab td.dim{color:var(--ink-dim);font-size:11px}
-  .mtab td.yr{font:700 12.5px var(--mono);color:var(--accent);white-space:nowrap}
-  .mtab .up{color:var(--future)}.mtab .dn{color:var(--red,#e5484d)}.mtab .hold{color:var(--ink)}
-  .tag{display:inline-block;font:700 9px var(--mono);letter-spacing:.06em;padding:2px 6px;border-radius:5px;border:1px solid;min-width:20px;text-align:center}
-  .tag.K{color:#c3c9d6;border-color:rgba(195,201,214,.5)}.tag.D{color:var(--future);border-color:rgba(87,199,221,.55)}
-  .tag.E{color:var(--today);border-color:rgba(224,163,85,.55)}.tag.J{color:var(--app);border-color:rgba(171,124,241,.6)}
-  .mfilt{display:flex;gap:6px;align-items:center;margin-left:auto}
-  .mfilt .pill{padding:4px 9px}
-  .mnote{font:400 11px/1.45 var(--sans);color:var(--ink-dim);max-width:100ch;margin:0}
-  #v-model .body.full{grid-template-columns:1fr}
-  #v-model .body.full .mrail{display:none}
-  .yscreen{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,3vh,30px);text-align:center;padding-bottom:4vh}
-  .ychips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  .ychips .pill{font-size:12px;padding:7px 14px}
-  .ybig{font:700 clamp(120px,24vh,280px)/1 var(--sans);letter-spacing:-.05em;color:var(--ink);font-variant-numeric:tabular-nums;animation:lu .35s ease}
-  .ylab{font:400 clamp(15px,2.2vh,22px) var(--sans);color:var(--ink-soft);max-width:48ch}
-  .yshort{font:400 clamp(13px,1.9vh,18px) var(--sans);color:var(--ink-soft)}
-  .yshort b{color:#d98a3a;font-weight:600}
-  .ynext{margin-top:1vh;font:500 12px var(--mono);letter-spacing:.06em;color:var(--ink-dim);cursor:pointer;padding:8px 14px;border:1px solid var(--line);border-radius:999px;transition:.18s}
-  .ynext:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}
-  .ms.hall{margin-bottom:4px;padding:clamp(5px,.9vh,10px) 10px;border:1px solid var(--line)}
-  .ms.hall .nm{font-weight:600;color:var(--ink)}
-  @media (max-width:900px){#v-model .body{grid-template-columns:1fr;overflow:auto}.mrail{max-height:220px}}
+  /* ===== THE AI WORLD MODEL, from zero: five screens, facts left, arithmetic middle, result right ===== */
+  #v-model .body{flex:1;min-height:0;display:flex;padding:clamp(8px,1.6vh,18px) 0}
+  #v-model .panel{position:relative;left:0;top:0;bottom:auto;right:auto;min-width:0;height:100%;flex:1}
+  .fzsteps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .fzstep{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border:1px solid var(--line2);border-radius:999px;font:500 11.5px var(--mono);color:var(--ink-dim);cursor:pointer;transition:.18s}
+  .fzstep b{width:18px;height:18px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft)}
+  .fzstep:hover{color:var(--ink-soft);border-color:var(--line)}
+  .fzstep.on{color:var(--ink);border-color:color-mix(in srgb,var(--accent) 50%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .fzstep.on b{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  .mpanel .ptitle{font-size:clamp(22px,2.2vw,32px);margin:0 0 6px}
+  .fzbody{gap:10px}
+  .fzcols{display:grid;grid-template-columns:1.1fr 1.4fr .9fr;gap:22px;flex:none}
+  .fzcols.three{grid-template-columns:1.6fr .8fr}
+  .fzbody h4{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--ink-dim);margin:0 0 8px;text-transform:uppercase}
+  .fzf{display:grid;grid-template-columns:auto 1fr;gap:0 10px;padding:clamp(2px,.4vh,4px) 0;border-top:1px solid var(--line2);font:400 10.5px/1.2 var(--sans);color:var(--ink-soft)}
+  .fzf b{font:600 12.5px var(--mono);color:var(--ink);grid-row:span 2;align-self:start;padding-top:1px}
+  .fzf i{font-style:normal;font-size:9.5px;color:var(--ink-dim)}
+  .fzl{display:grid;grid-template-columns:1fr auto;gap:12px;padding:clamp(3px,.7vh,6px) 0;border-top:1px solid var(--line2);font:400 11.5px/1.35 var(--sans);color:var(--ink-soft)}
+  .fzl b{font:600 12px var(--mono);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;max-width:30ch}
+  .fzl.big{border-top:1px solid var(--line);margin-top:6px}
+  .fzl.big b{color:var(--accent);font-size:13px}
+  .fzbig{padding:clamp(5px,.9vh,8px) 0 clamp(6px,1vh,10px);border-top:1px solid var(--line2)}
+  .fzbig b{display:block;font:700 clamp(22px,3.2vh,34px)/1 var(--sans);letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .fzbig span{display:block;font:400 11px/1.3 var(--sans);color:var(--ink-soft);margin-top:5px;max-width:26ch}
+  .fzopen{flex:none;border:1px dashed var(--line);border-radius:12px;padding:8px 14px 2px;margin-top:0}
+  .fzopen p{font:400 11.5px/1.4 var(--sans);color:var(--ink-soft);margin:0 0 6px;max-width:110ch}
+  .fzins{display:flex;gap:18px;flex-wrap:wrap;margin:2px 0 6px}
+  .fzin{display:inline-flex;align-items:center;gap:8px;font:400 11px var(--sans);color:var(--ink-soft)}
+  .fzin input{width:96px;padding:5px 8px;font:600 12px var(--mono);color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:7px;outline:none}
+  .fzin input:focus{border-color:var(--accent)}
+  .fzin i{font-style:normal;font:400 10px var(--mono);color:var(--ink-dim)}
+  .fzconseq{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:clamp(13px,1.8vh,16px);line-height:1.35;color:var(--ink);margin:4px 0 6px;max-width:120ch}
+  .fzbar{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);flex:none}
+  .fzslice{height:100%;min-width:1px}
+  .fzslice.rest{background:repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 4px,transparent 4px 8px)}
+  .fzbarlab{display:flex;gap:14px;flex-wrap:wrap;font:400 10.5px var(--sans);color:var(--ink-soft);flex:none}
+  .fzbarlab i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .fztab{width:100%;border-collapse:collapse;font:400 clamp(11px,1.6vh,12.5px)/1.35 var(--sans);color:var(--ink-soft);flex:none}
+  .fztab th{font:600 9.5px var(--mono);letter-spacing:.14em;color:var(--ink-dim);text-align:left;padding:4px 9px 7px;border-bottom:1px solid var(--line);text-transform:uppercase}
+  .fztab td{padding:clamp(3px,.6vh,7px) 9px;border-bottom:1px solid var(--line2);vertical-align:top}
+  .fztab td.w{color:var(--ink);font-weight:500}
+  .fztab td.k{font:600 .96em var(--mono);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .fztab td.s{color:var(--ink-dim);font-size:.9em}
+  .fztab em{color:var(--today);font-style:normal}
+  .fzchart{display:flex;gap:6px;align-items:flex-end;height:clamp(140px,24vh,230px);flex:none;padding:18px 4px 0}
+  .fzcol{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;text-align:center}
+  .fzc{width:70%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;position:relative;min-height:4px}
+  .fzc b{position:absolute;top:-16px;font:600 11px var(--mono);color:var(--ink)}
+  .fzc.added{background:#6f8dff}.fzc.planned{background:#e0a355}.fzc.announced{background:#57c7dd}
+  .fzcol span{font:600 9.5px/1.2 var(--sans);color:var(--ink);margin-top:6px;height:24px}
+  .fzcol i{font:400 8.5px/1.2 var(--sans);color:var(--ink-dim);font-style:normal;height:22px;overflow:hidden}
+  .fzkey{display:flex;gap:18px;font:400 10.5px var(--sans);color:var(--ink-soft);flex:none}
+  .fzkey i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+  .fzkey i.added{background:#6f8dff}.fzkey i.planned{background:#e0a355}.fzkey i.announced{background:#57c7dd}
+  @media (max-width:900px){.fzcols,.fzcols.three{grid-template-columns:1fr}}
 
   .ver{position:fixed;right:clamp(20px,4vw,52px);bottom:12px;z-index:20;font:400 10px var(--mono);color:var(--ink-dim);letter-spacing:.06em}
   @media (max-width:900px){
@@ -413,10 +394,10 @@
 
 <!-- AI WORLD MODEL -->
 <section class="view" id="v-model">
-  <div class="body"><aside class="mrail"><div class="msheets" id="msheets"></div><div class="mjudg" id="mjudg"></div></aside><div class="panel mpanel" id="mpanel"></div></div>
+  <div class="body"><div class="panel mpanel" id="mpanel"></div></div>
 </section>
 
-<div class="ver">v72 · One number</div>
+<div class="ver">v73 · From zero</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2294,532 +2275,213 @@ function mountScene(el){
 }
 
 /* ============================================================
-   THE AI WORLD MODEL — first principles: physics → production → finance.
-   Capex is an output. Share mix is an output. "$4T" is a claim under test.
-   Every input carries a tag:  K constant · D disclosure · E engineering
-   estimate (with a range) · J judgment (the user's call, live below).
-   Everything else on the sheets is arithmetic on these.
+   THE AI WORLD MODEL, from zero.
+   Two kinds of numbers only: physics, and figures a company or a
+   measured fleet has published, each with a date. Anything else is an
+   empty field the reader fills in. The page shows what their number
+   implies and never supplies one of its own.
    ============================================================ */
-const WM={};
-/* ---- inputs ------------------------------------------------ */
-WM.IN={
- /* physics */
- pue:      {v:1.15,lo:1.10,hi:1.30,t:'E',n:'Building power overhead (PUE)',s:'Google fleet PUE 1.10 disclosed; new liquid halls 1.1–1.3'},
- util:     {v:0.70,lo:0.55,hi:0.85,t:'E',n:'Average use of installed power',s:'fleet averages; diurnal + failed + idle'},
- gpuMW:    {v:500,lo:450,hi:600,t:'E',n:'GPUs per megawatt',s:'NVL72 ≈ 120–140 kW / 72 GPUs → 7–8 racks per MW, less storage and scale-out'},
- hbmBW:    {v:8,t:'D',n:'Memory speed per GPU, TB/s',s:'B200 spec'},
- hbmGB:    {v:192,t:'D',n:'Memory per GPU, GB',s:'B200 spec'},
- rackBW:   {v:576,t:'D',n:'Memory speed per rack, TB/s',s:'NVIDIA spec'},
- activeB:  {v:37,t:'D',n:'Model size used per token, billions',s:'DeepSeek-V3: 37B active of 671B'},
- totalB:   {v:671,t:'D',n:'Model size, billions',s:'DeepSeek-V3'},
- kvKB:     {v:70,t:'D',n:'Memory per token of conversation, KB',s:'DeepSeek-V3 architecture: 576 dims × 2 B × 61 layers'},
- kvDense:  {v:516,t:'D',n:'Same, for a dense 405B model, KB',s:'Llama-3 405B: 126 layers × 2 × 8 heads × 128 × 2 B'},
- ctxK:     {v:5,t:'D',n:'Average conversation length, thousand tokens',s:'DeepSeek: 4,989 tokens mean KV length per output token'},
- /* the one measured fleet: DeepSeek inference disclosure, Mar 2025 */
- dsOutNode:{v:14800,t:'D',n:'Peak output, tokens/s per 8-GPU server',s:'DeepSeek inference-system disclosure, Mar 2025'},
- dsOutAvg: {v:8575,t:'D',n:'Average output, tokens/s per server',s:'same: 168 B output tokens/day over 226.75 nodes'},
- dsInAvg:  {v:31300,t:'D',n:'Average input, tokens/s per server',s:'same: 608 B input tokens/day, 56% KV-cache hits'},
- dsRevHr:  {v:12.9,t:'D',n:'Revenue per GPU-hour at list price',s:'same: $562k/day theoretical ÷ 1,814 GPU'},
- dsCostHr: {v:2.0,t:'D',n:'GPU rental cost they assumed, $/hour',s:'same: $87k/day cost'},
- nodeKW:   {v:8,lo:7,hi:9,t:'E',n:'Power per 8-GPU server, kW',s:'8 × 700 W + host, NICs'},
- blackX:   {v:2.5,lo:2,hi:4,t:'E',n:'Newer chip vs older, tokens per MW',s:'bandwidth/W ×1.6, FP4 ×2 on weights, NVL72 batch ×1.2 → 2.5–4; vendor claims higher'},
- interDiv: {v:3,lo:2,hi:5,t:'E',n:'Bulk vs chat output, ratio',s:'small batch under-fills bandwidth; per-user latency bound'},
- reasonDiv:{v:1.6,lo:1.3,hi:2.5,t:'E',n:'Bulk vs reasoning output, ratio',s:'long KV per sequence shrinks batch; 5–20× output per task'},
- elec:     {v:60,lo:30,hi:100,t:'E',n:'Electricity price, $/MWh',s:'US industrial 2025 ≈ $70–80 public; Gulf/ERCOT/BTM gas lower'},
- /* prices touching the fleet */
- pFront:   {v:10,lo:10,hi:15,t:'D',n:'Chat-grade price per million tokens',s:'list prices 2025–26: GPT-5 $10 · Claude Sonnet $15 · Gemini Pro $10; verify current'},
- pComm:    {v:0.4,lo:0.2,hi:0.6,t:'D',n:'Bulk-grade price per million tokens',s:'DeepSeek-V3.2 $0.42 · open-weight 70–120B on providers $0.3–0.6'},
- gpuHrH:   {v:2.2,lo:1.8,hi:2.6,t:'E',n:'Older GPU rent, $/hour',s:'market; DeepSeek cost basis $2'},
- gpuHrB:   {v:4.2,lo:3.5,hi:5.5,t:'E',n:'New GPU rent, $/hour',s:'market'},
- /* dollars to stand up one IT MW, $M per MW, 2026 dollars */
- cAcc:     {v:22.5,lo:20,hi:27,t:'E',n:'Chips and memory, $B per GW',s:'500 × $45k; vendor DC revenue ÷ units shipped, HBM ×5 since Q1-25'},
- cBox:     {v:1.5,lo:1,hi:2.5,t:'E',n:'Racks, $B per GW'},
- cNet:     {v:3.5,lo:2.5,hi:5,t:'E',n:'Networking, $B per GW',s:'800G pluggables $1–1.5k; ≈15% of silicon'},
- cSto:     {v:1.5,lo:1,hi:2,t:'E',n:'Storage, $B per GW'},
- cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Cooling, $B per GW'},
- cShell:   {v:14,lo:10,hi:16,t:'E',n:'Building and electrical, $B per GW',s:'powered-shell builds $10–16M/MW'},
- cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'On-site power, $B per GW',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
- lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Chip life, years',s:'hyperscalers book 5–6; the frontier moves faster. Live control, left rail'},
- lifeShell:{v:15,t:'E',n:'Building life, years'},
- lifeGen:  {v:25,t:'E',n:'Power plant life, years'},
- /* the industrial base: firm new IT GW per year, world */
- gw0:      {v:15,lo:12,hi:20,t:'E',n:'AI power in use at start of 2026, GW',s:'cumulative accelerator revenue ÷ $/MW silicon slice'},
- grid26:   {v:10,lo:8,hi:12,t:'E',n:'New power from the grid in 2026, GW',s:'Big-4 guide 14 GW 2026, 20 GW 2027; world ≈ ×1.36 (capex ratio $1.0T ÷ $735B)'},
- gridG:    {v:0.15,lo:0.08,hi:0.25,t:'J',n:'Growth of grid additions per year',s:'LPT lead >3 yr; interconnect 3–7 yr'},
- gas:      {v:[5,8,11,14,17,19],t:'E',n:'New on-site gas power by year, GW',s:'heavy-duty turbines ≈ 50–60 GW-e/yr world, sold out to 2028; OEM expansions land 2028+'},
- solar26:  {v:1,lo:0.5,hi:2,t:'E',n:'New on-site solar + batteries in 2026, GW'},
- solarG:   {v:0.75,lo:0.4,hi:1.0,t:'J',n:'Growth of solar + batteries per year',s:'panels (>600 GW/yr) and cells (>1 TWh/yr) never bind; siting and firming do'},
- chip26:   {v:19,lo:16,hi:22,t:'E',n:'Chips available in 2026, as GW',s:'vendor supply-constrained; CoWoS ≈ 100k wpm; matched to the 2026 power path'},
- chipG:    {v:0.45,lo:0.30,hi:0.60,t:'E',n:'Chip supply growth per year',s:'vendor guide +70% 2027; CoWoS ~2×/yr; leading-edge wafers +20–30%/yr'},
- intl26:   {v:3,lo:2,hi:5,t:'E',n:'New power in Gulf, China, India, Nordics, 2026, GW'},
- intlG:    {v:0.30,lo:0.15,hi:0.45,t:'J',n:'Growth of that per year'},
- capex26:  {v:1000,t:'D',n:'AI data-center spending 2026, $B (used only as a check)',s:'Big-4 guided ≈ $725–745B; remainder Oracle, Apple, neoclouds, sovereigns, China, xAI'},
- claim:    {v:4000,t:'D',n:'The claim being tested: $4T by 2030',s:'a headline, not an input'},
- /* world scale (anchors) */
- worldTWh: {v:30900,t:'D',n:'World electricity 2024, TWh',s:'IEA / Ember'},
- worldAdd: {v:1200,lo:1000,hi:1400,t:'E',n:'Electricity added worldwide per year, TWh',s:'≈ +4% in 2024'},
- gdpW:     {v:115,t:'D',n:'World GDP, $T',s:'IMF 2025'},
- laborW:   {v:60,lo:55,hi:65,t:'E',n:'All wages paid worldwide, $T',s:'≈ 52% of GDP'},
- softW:    {v:1.1,t:'D',n:'All software sold worldwide, $T',s:'Gartner enterprise software 2025'},
- workers:  {v:3.5,t:'D',n:'World workers, B',s:'ILO'},
- brainW:   {v:20,t:'K',n:'Human brain, W'},
- hoursYr:  {v:2000,t:'K',n:'Working hours per year'},
- agentTokHr:{v:1,lo:0.3,hi:3,t:'E',n:'Tokens an AI agent writes per hour, millions',s:'agentic coding at 100–300 tok/s sustained; prefill on top'},
- cKmMs:    {v:200,t:'K',n:'Speed of light in fiber, km per ms'},
- solarK:   {v:1.36,t:'K',n:'Sunlight in space, kW/m²'},
- sigma:    {v:5.67e-8,t:'K',n:'Heat radiated per area (Stefan–Boltzmann)'},
- ssoSun:   {v:0.99,t:'K',n:'Share of the orbit in sunlight'},
- groundCF: {v:0.22,lo:0.18,hi:0.28,t:'E',n:'Solar panel output on the ground, share of peak'},
- emis:     {v:0.9,t:'K',n:'Radiator efficiency'},
- radT:     {v:320,lo:300,hi:350,t:'E',n:'Radiator temperature, K',s:'coolant 45 °C for 80 °C junctions'},
- sinkLoad: {v:150,lo:100,hi:250,t:'E',n:'Heat from Earth on one face, W/m²'},
- cellEff:  {v:0.30,lo:0.25,hi:0.35,t:'E',n:'Solar cell efficiency in space'},
- arrayDerate:{v:0.9,t:'E',n:'Panel losses'},
- arrayWkg: {v:150,lo:100,hi:300,t:'E',n:'Panel power per kg',s:'flexible arrays 100–200 today'},
- radKgM2:  {v:3,lo:2,hi:5,t:'E',n:'Radiator weight per m²'},
- spaceTMW: {v:7.5,lo:5,hi:11,t:'E',n:'Computer weight per MW, tonnes',s:'NVL72 ≈ 1.4 t per 130 kW on the ground = 10.8 t/MW; stripped + shielded 5–11'},
- structFrac:{v:0.2,t:'E',n:'Structure and wiring, extra share'},
- f9SSO:    {v:17,t:'D',n:'Falcon 9 payload to that orbit, tonnes'},
- kgF9:     {v:2000,lo:1500,hi:3000,t:'E',n:'Falcon 9 launch cost, $/kg'},
- kgSSnow:  {v:1000,lo:600,hi:1500,t:'E',n:'Starship launch cost today, $/kg',s:'≈ $100M per flight ÷ 100 t'},
- kgSSgoal: {v:150,lo:50,hi:200,t:'J',n:'Starship target cost, $/kg (his number)'},
- elonUS:   {v:[4,7],t:'J',n:'US electricity growth, %/yr (his)',s:'historical actual ≈ 1–3%'},
- elonChip: {v:[40,50],t:'J',n:'Chip output growth, %/yr (his)'},
- elonGW:   {v:10,t:'J',n:'Near-term fleet, GW (his)'},
- elonWY:   {v:[30,50],t:'J',n:'$ per watt-year, as he wrote it',s:'read as $30–50 per W of capex: $300–500B for 10 GW'},
- accGM:    {v:0.75,t:'D',n:'Chip maker margin, latest quarter',s:'DC revenue ≈ $89B; outlook 72–73%; hyperscale ≈ half'},
- accGrow:  {v:0.70,t:'D',n:'Chip maker growth guidance, next year',s:'supply-constrained'},
- asicQ:    {v:17,t:'D',n:'Custom-chip designer AI revenue, $B per quarter',s:'guided +30% next quarter'},
- euv:      {v:65,lo:60,hi:70,t:'D',n:'Chip-making machines (EUV) shipped per year',s:'one supplier, ~2-yr build'},
- cowos:    {v:100,lo:80,hi:120,t:'E',n:'Chip packaging capacity, thousand wafers per month',s:'≈ 35k end-2024 → 70–80k end-2025; ~2×/yr'},
- boxMk:    {v:0.15,lo:0.1,hi:0.2,t:'E',n:'Assembly markup on the chip'},
+const FZ={};
+/* published facts: value, unit, who said it, when */
+FZ.F={
+ rackGPU:  {v:72,   u:'GPUs per rack',            s:'NVIDIA GB200 NVL72 spec',                  d:'2024'},
+ rackKW:   {v:120,  u:'kW per rack',              s:'NVIDIA GB200 NVL72 spec',                  d:'2024'},
+ h800W:    {v:700,  u:'W per H800 GPU',           s:'NVIDIA H800 spec',                          d:'2023'},
+ dsPeak:   {v:14800,u:'tokens/s per 8-GPU server, peak',   s:'DeepSeek inference-system disclosure',     d:'Mar 2025'},
+ dsAvg:    {v:8575, u:'tokens/s per server, day average', s:'DeepSeek: 168B tokens/day ÷ 226.75 servers',d:'Mar 2025'},
+ dsRevDay: {v:562027,u:'$/day at list, 1,814 GPUs',s:'DeepSeek: theoretical revenue at R1 pricing', d:'Mar 2025'},
+ dsGPUs:   {v:1814, u:'GPUs in that fleet',       s:'DeepSeek: 226.75 servers × 8',              d:'Mar 2025'},
+ dsCostHr: {v:2,    u:'$ per GPU-hour, their cost basis', s:'DeepSeek',                          d:'Mar 2025'},
+ pR1:      {v:2.19, u:'$ per million output tokens, DeepSeek-R1', s:'DeepSeek price list',       d:'Jan 2025'},
+ pV32:     {v:0.42, u:'$ per million output tokens, DeepSeek-V3.2', s:'DeepSeek price list',     d:'Sep 2025'},
+ pGPT5:    {v:10,   u:'$ per million output tokens, GPT-5', s:'OpenAI price list',               d:'Aug 2025'},
+ pSonnet:  {v:15,   u:'$ per million output tokens, Claude Sonnet 4.5', s:'Anthropic price list',d:'Sep 2025'},
+ rentH100: {v:2.99, u:'$ per GPU-hour, H100 on demand', s:'Lambda public price list',            d:'2025'},
+ gpuPrice: {v:[30000,40000],u:'$ per Blackwell GPU', s:'Jensen Huang, CNBC interview',           d:'Mar 2024'},
+ stargate: {v:[500,10],u:'$B for GW, Stargate',   s:'OpenAI · SoftBank · Oracle announcement',   d:'Jan 2025'},
+ msLife:   {v:6,    u:'years, server useful life', s:'Microsoft 10-K, life extended from 4 to 6', d:'FY2023'},
+ gmTSMC:   {v:0.59, u:'gross margin, TSMC',       s:'TSMC quarterly report',                     d:'Q3 2025'},
+ gmNVDA:   {v:0.75, u:'gross margin, NVIDIA data center', s:'NVIDIA quarterly report',           d:'2025'},
+ gmSMCI:   {v:0.10, u:'gross margin, Supermicro',  s:'Supermicro annual report',                  d:'FY2025'},
+ omAWS:    {v:0.37, u:'operating margin, AWS',    s:'Amazon annual report, AWS segment',         d:'FY2024'},
+ gmCRM:    {v:0.77, u:'gross margin, Salesforce', s:'Salesforce annual report',                  d:'FY2025'},
+ gdpW:     {v:115,  u:'$T, world GDP',            s:'IMF World Economic Outlook',                d:'2025'},
+ elecW:    {v:30900,u:'TWh, world electricity',   s:'Ember Global Electricity Review',           d:'2024'},
+ priceFall:{v:10,   u:'× per year, price fall at constant quality', s:'Epoch AI analysis of API prices', d:'2025'},
 };
-/* judgments the model asks the user for — live controls */
-WM.J={fleet:75,hurdle:0.12,life:5,pReal:0.4,gCloud:0.30,gModel:0.50,gApp:0.50,gpu2031:true,priceDecline:2};
-WM.YEARS=[2026,2027,2028,2029,2030,2031];
-WM.SHORT=0.10;   /* a shortfall under 10% of the year's adds is noise, not a regime */
-
-WM.calc=function(J,over){
-  J=J||WM.J; const I={}; for(const k in WM.IN)I[k]=WM.IN[k].v; if(J.life)I.lifeAcc=J.life; if(over)Object.assign(I,over);
-  const R={I:I,J:J};
-  /* 1 · physics of one IT MW */
-  const nodesMW=1000/I.nodeKW;                               // H800 nodes per IT MW
-  R.hopAvg=I.dsOutAvg*nodesMW;                               // output tok/s per MW, fleet average, Hopper
-  R.hopPeak=I.dsOutNode*nodesMW;
-  R.hopIn=I.dsInAvg*nodesMW;
-  R.batch=R.hopAvg*I.blackX;                                 // Blackwell-class, batched, tok/s per IT MW
-  R.inter=R.batch/I.interDiv;
-  R.reason=R.batch/I.reasonDiv;
-  const secYr=3.156e7;
-  R.tokYr={batch:R.batch*secYr*I.util,inter:R.inter*secYr*I.util,reason:R.reason*secYr*I.util}; // tokens per MW-year
-  R.jTok={batch:1e6/R.batch*I.pue,inter:1e6/R.inter*I.pue,reason:1e6/R.reason*I.pue};          // J per token, at the meter
-  R.mwhYr=8760*I.pue*I.util;                                 // MWh per IT MW per year
-  R.elecYr=R.mwhYr*I.elec/1e6;                               // $M per MW-year
-  const eTok=j=>j*1e6/3.6e9*I.elec;                              // $ per MTok of electricity: J/tok × 1e6 ÷ 3.6e9 J/MWh × $/MWh
-  R.eTok={batch:eTok(R.jTok.batch),inter:eTok(R.jTok.inter),reason:eTok(R.jTok.reason)};
-  /* bytes per token: weights ÷ batch + KV per token, per rack step */
-  R.wBytes=I.totalB;                                         // GB at FP8, whole model touched per step at large batch
-  R.kvSeq=I.ctxK*1000*I.kvKB/1e6;                            // GB of KV per live sequence
-  R.stepMs=B=>(R.wBytes+B*R.kvSeq)/(I.rackBW*0.45)*1e3/1e3;  // ms per decode step at 45% of peak (est)
-  /* 2 · dollars per IT MW, $M */
-  R.cost={acc:I.cAcc,box:I.cBox,net:I.cNet,sto:I.cSto,cool:I.cCool,shell:I.cShell,gen:I.cGen};
-  R.mw=I.cAcc+I.cBox+I.cNet+I.cSto+I.cCool+I.cShell+I.cGen;
-  R.silicon=I.cAcc+I.cBox+I.cNet+I.cSto;
-  R.compShare=R.silicon/R.mw; R.accShare=(I.cAcc+I.cBox)/R.mw;
-  R.depMW=R.silicon/I.lifeAcc+(I.cCool+I.cShell)/I.lifeShell+I.cGen/I.lifeGen;   // $M/yr
-  R.depRate=R.depMW/R.mw;
-  R.rentMW=R.depMW+J.hurdle*R.mw;                            // $M per MW-year
-  R.rentRate=R.rentMW/R.mw;
-  R.rentGpuHr=R.rentMW*1e6/(I.gpuMW*8760*I.util);            // $ per GPU-hour required
-  R.rentTok={batch:R.rentMW*1e6/(R.tokYr.batch/1e6),inter:R.rentMW*1e6/(R.tokYr.inter/1e6),reason:R.rentMW*1e6/(R.tokYr.reason/1e6)}; // $/MTok to pay rent
-  /* 5 · does the MW pay its rent — revenue per MW-year, $M */
-  R.rev={interFront:R.tokYr.inter/1e6*I.pFront/1e6,batchComm:R.tokYr.batch/1e6*I.pComm/1e6,batchFront:R.tokYr.batch/1e6*I.pFront/1e6};
-  R.cov={interFront:R.rev.interFront/R.rentMW,batchComm:R.rev.batchComm/R.rentMW,batchFront:R.rev.batchFront/R.rentMW};
-  R.marketGpuHr=I.gpuHrB; R.covCloud=I.gpuHrB/R.rentGpuHr;
-  R.revReal=R.tokYr.batch/1e6*(J.pReal||I.pComm)/1e6; R.covReal=R.revReal/R.rentMW;   /* what the fleet's batched tokens realise, a judgment */
-  /* 6 · margin stack */
-  R.mult=1/((1-J.gCloud)*(1-J.gModel)*(1-J.gApp));
-  R.walk=(function(){const f=1,acc=f/(1-I.accGM),box=acc*(1+I.boxMk),inst=box/R.accShare,rent=inst*R.rentRate,cloud=rent/(1-J.gCloud),model=cloud/(1-J.gModel),app=model/(1-J.gApp);
-    return {foundry:f,acc:acc,box:box,inst:inst,rent:rent,cloud:cloud,model:model,app:app};})();
-  R.stockT=J.fleet*R.mw/1000;                                // $T of capital stock at the tested fleet
-  R.rentT=R.stockT*R.rentRate;
-  R.endT=R.rentT*R.mult;
-  R.endGDP=R.endT/I.gdpW; R.endLabor=R.endT/I.laborW; R.endSoft=R.endT/I.softW;
-  R.endTok={batch:R.rentTok.batch*R.mult,inter:R.rentTok.inter*R.mult};   // end-customer $/MTok needed
-  /* 4 · energized GW by year → capex as output */
-  const Y=WM.YEARS, n=Y.length; R.path=[]; let inst=I.gw0, stockBn=I.gw0*R.mw;
-  const refreshRate=R.silicon/I.lifeAcc;                     // $M per installed MW per year
-  for(let i=0;i<n;i++){
-    const grid=I.grid26*Math.pow(1+I.gridG,i), gas=I.gas[i], sol=I.solar26*Math.pow(1+I.solarG,i), intl=I.intl26*Math.pow(1+I.intlG,i);
-    const power=grid+gas+sol+intl, chips=I.grid26*0+I.chip26*Math.pow(1+I.chipG,i), nw=Math.min(power,chips), bind=chips<power?'silicon':'power', refresh=inst*refreshRate, newB=nw*R.mw;
-    const claim=I.capex26*Math.pow(I.claim/I.capex26,i/4);   // the $4T-by-2030 path, $B
-    const wantGW=(claim-refresh)/R.mw;                       // GW the dollars want at cost
-    const clearing=(wantGW>nw)?(claim-refresh)/nw:R.mw;      // $M/MW when supply is short
-    inst+=nw; const twh=inst*8.76*I.pue*I.util;
-    const stock=inst*R.mw/1000, rent=stock*R.rentRate;
-    R.path.push({y:Y[i],power:power,chips:chips,bind:bind,grid:grid,gas:gas,sol:sol,intl:intl,nw:nw,inst:inst,refresh:refresh,capex:newB+refresh,claim:claim,wantGW:wantGW,clearing:clearing,short:Math.max(0,wantGW-nw),twh:twh,twhShare:twh/I.worldTWh,addShare:nw*8.76*I.pue*I.util/I.worldAdd,stockT:stock,rentT:rent,endT:rent*R.mult,growth:(nw/(inst-nw))});
-  }
-  /* 7 · demand physics */
-  R.agent={W:I.agentTokHr*1e6*R.jTok.inter/3600, Wbatch:I.agentTokHr*1e6*R.jTok.batch/3600, usdFront:I.agentTokHr*I.pFront, usdComm:I.agentTokHr*I.pComm, usdEnd:I.agentTokHr*R.endTok.inter};
-  R.human={W:I.brainW,usdWorld:I.laborW*1e12/(I.workers*1e9)/1900};
-  /* challenger: orbital physics, his framing, our arithmetic */
-  const O=R.orbit={};
-  O.ratio=I.solarK*I.ssoSun/(1.0*I.groundCF);                        // photons per m² of panel, SSO vs ground
-  const rad=T=>I.sigma*I.emis*Math.pow(T,4);                          // W/m² per side
-  O.T=I.radT; O.perSide=rad(I.radT); O.net=2*O.perSide-I.sinkLoad;    // two-sided, less Earth IR + albedo on one face
-  O.radKm2=1e9/O.net/1e6;                                             // km² per GW of heat
-  O.solKm2=1e9/(I.solarK*1e3*I.cellEff*I.arrayDerate)/1e6;            // km² per GW-e
-  O.tArr=1e9/I.arrayWkg/1000; O.tRad=O.radKm2*1e6*I.radKgM2/1000; O.tCmp=I.spaceTMW*1000; O.tTot=(O.tArr+O.tRad+O.tCmp)*(1+I.structFrac);  // tonnes per GW
-  O.launches={ss100:O.tTot/100,ss150:O.tTot/150,f9:O.tTot/I.f9SSO};
-  O.usdGW={f9:O.tTot*1000*I.kgF9/1e9,ssNow:O.tTot*1000*I.kgSSnow/1e9,ssTarget:O.tTot*1000*I.kgSSgoal/1e9};   // $B per GW, launch only
-  O.groundPowerShell=(I.cShell+I.cGen+I.cCool);                       // $B per GW the orbit has to beat
-  O.kgBreak=O.groundPowerShell*1e9/(O.tTot*1000);                     // $/kg at which launch alone equals ground power + shell
-  O.twMW=1e12/1e6; O.twTWh=1e6*8.76*I.pue*I.util/1000;                // 1 TW of IT: TWh per year
-  /* light: how far a decode step travels */
-  R.lightKm=R.stepMs(2000)*I.cKmMs;
-  return R;
-};
-
-/* ---- sheets ------------------------------------------------ */
-WM.SHEETS=[
- {k:'year',n:'Year by year',eb:'PRODUCTION OF INTELLIGENCE IS PRODUCTION'},
- {k:'unit',n:'What one gigawatt does',eb:'WHAT IT MAKES, WHAT IT COSTS',subs:['tokens, energy, cost','memory per token','cost to build']},
- {k:'path',n:'How much gets built',eb:'POWER FIRST, THEN CHIPS, THEN MONEY',subs:['power per year','money per year','slowest parts','how far away']},
- {k:'rent',n:'Does it pay?',eb:'DOES IT PAY, AND WHO GETS PAID',subs:['earn vs owe','one dollar, chip to customer','the whole fleet','year by year']},
- {k:'chal',n:'Elon\'s numbers',eb:'HIS NUMBERS, OUR ARITHMETIC',subs:['his numbers vs ours','a gigawatt in space']},
- {k:'assump',n:'Every number, sourced',eb:'EVERY NUMBER, WITH ITS SOURCE',subs:['the numbers','what moves the result']},
+/* gigawatts, as published or announced, with the words used */
+FZ.GW=[
+ {who:'AWS',            gw:3.9, kind:'added',     note:'added in 2025; total to double by end-2027', s:'Amazon',               d:'2025'},
+ {who:'Big-4 clouds',   gw:14,  kind:'planned',   note:'to add in 2026',                            s:'company guidance',     d:'2025'},
+ {who:'Big-4 clouds',   gw:20,  kind:'planned',   note:'to add in 2027',                            s:'company guidance',     d:'2025'},
+ {who:'Stargate',       gw:10,  kind:'announced', note:'$500B, by 2029',                            s:'OpenAI · SoftBank · Oracle', d:'Jan 2025'},
+ {who:'OpenAI · Oracle',gw:4.5, kind:'announced', note:'$300B contract over 5 years',               s:'Oracle · OpenAI',      d:'Jul 2025'},
+ {who:'OpenAI · NVIDIA',gw:10,  kind:'announced', note:'letter of intent, first GW 2026',           s:'NVIDIA · OpenAI',      d:'Sep 2025'},
+ {who:'OpenAI · AMD',   gw:6,   kind:'announced', note:'first GW 2026',                             s:'AMD · OpenAI',         d:'Oct 2025'},
+ {who:'OpenAI · Broadcom',gw:10,kind:'announced', note:'custom chips, 2026–2029',                   s:'Broadcom · OpenAI',    d:'Oct 2025'},
+ {who:'Meta Hyperion',  gw:5,   kind:'announced', note:'Louisiana, by 2030',                        s:'Meta',                 d:'Jul 2025'},
+ {who:'Meta Prometheus',gw:1,   kind:'announced', note:'Ohio, 2026',                                s:'Meta',                 d:'Jul 2025'},
+ {who:'xAI Colossus 2', gw:1,   kind:'announced', note:'Memphis',                                   s:'xAI',                  d:'2025'},
+ {who:'Anthropic · Google',gw:1,kind:'announced', note:'TPUs, 2026',                                s:'Anthropic · Google',   d:'Oct 2025'},
 ];
-const fN=(x,d)=>{d=d==null?0:d;return Number(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});};
-const fB=x=>x>=1000?'$'+fN(x/1000,2)+'T':'$'+fN(x,0)+'B';
-const fT=x=>'$'+fN(x,x<10?2:1)+'T';
-const fP=(x,d)=>fN(x*100,d==null?0:d)+'%';
-const fX=(x,d)=>fN(x,d==null?1:d)+'×';
-const fM=x=>'$'+fN(x,x<10?1:0)+'M';
-const fG=x=>x>=1?'$'+fN(x,x<10?1:0)+'B':'$'+fN(x*1000,0)+'M';   /* $M per MW = $B per GW */
-const MC=V.blue, MRED=V.red, MDIM=V.dim;
-const TAGN={K:'physical constant',D:'company-reported',E:'engineering estimate',J:'our call'};
-const tagHtml=t=>'<span class="tag '+t+'">'+t+'</span>';
-const tagSvg=(x,y,t)=>{const c={K:'#c3c9d6',D:V.cyan,E:V.amber,J:V.pur}[t];return B(x,y-9,16,13,c,{r:3,fill:c+'22',sw:.9})+T(x+8,y+1,t,{a:'middle',s:8.5,w:700,m:1,f:c});};
-const SHEET={};
-/* one screen: click a year, one number changes */
-SHEET.year=function(R){const P=R.path,i=mcur.year||0,p=P[i];
-  const short=(R.covReal<1||p.inst>R.J.fleet)?'customers willing to pay for it':(p.bind==='silicon'?'chip packaging':(i===0?'memory chips':'transformers and gas turbines'));
-  return '<div class="yscreen"><div class="ychips">'+P.map((q,k)=>'<div class="pill'+(k===i?' on':'')+'" data-y="'+k+'">'+q.y+'</div>').join('')+'</div>'
-   +'<div class="ybig" key="'+i+'">'+fN(p.nw,0)+'</div>'
-   +'<div class="ylab">gigawatts of AI data center switched on in '+p.y+'</div>'
-   +'<div class="yshort">What is short that year: <b>'+short+'</b></div>'
-   +'<div class="ynext" data-go="1">The numbers behind it →</div></div>';};
-/* ---- one figure grammar -------------------------------------------
-   Vertical columns. One accent. A dashed rule for the reference. One line
-   of consequence under the figure, never a note. Log axis only where the
-   spread is over a hundredfold, and then the axis says so.               */
-function LINE(s,y){const l=WRAP(s,104);y=(y||424)-(l.length-1)*11;return l.map((t,i)=>FT(40,y+i*22,t,{s:16.5,f:V.ink})).join('');}
-function AXIS(x0,x1,yb,yt,ticks,Y,fmt){let s='';ticks.forEach((v,i)=>{s+=LN(x0,Y(v),x1,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,fmt?fmt(v):String(v),{a:'end',s:10,m:1,f:V.dim});});return s;}
-function COL(x,w,yb,y,c,o){o=o||{};return '<rect class="rise" x="'+(x-w/2)+'" y="'+y+'" width="'+w+'" height="'+Math.max(0,yb-y)+'" rx="3" fill="'+c+'" fill-opacity="'+(o.op==null?.85:o.op)+'"'+(o.stroke?' stroke="'+o.stroke+'" stroke-width="1.2" stroke-dasharray="4 3"':'')+'/>';}
-function LOGY(lo,hi,yb,yt){const a=Math.log10(lo),b=Math.log10(hi);return v=>yb-(yb-yt)*(Math.log10(Math.max(v,lo))-a)/(b-a);}
-function LAB(x,y,lines,c){return lines.map((l,i)=>T(x,y+i*13,l,{a:'middle',s:i?9.5:11,w:i?400:600,f:i?V.dim:(c||V.ink)})).join('');}
-function VAL(x,y,s,c){return T(x,y,s,{a:'middle',s:12,w:700,m:1,f:c||V.ink});}
-function RULEH(x0,x1,y,c,label){return LN(x0,y,x1,y,c,{sw:1.3,d:'7 5'})+T(x1,y-7,label,{a:'end',s:10.5,w:600,m:1,f:c});}
+/* the reader's numbers: blank until typed */
+FZ.R={use:null,price:null,gmLab:null,share:null};
 
-/* ---- inputs: the ledger, last ---- */
-SHEET.assump=function(R,sub,filt){
-  if(sub===1)return SHEET.sens(R);
-  const rows=Object.keys(WM.IN).map(k=>{const a=WM.IN[k];const v=Array.isArray(a.v)?a.v.join(' · '):(typeof a.v==='number'?(a.v<1&&a.v>0?String(a.v):fN(a.v,Number.isInteger(a.v)?0:2)):a.v);
-    const fR=x=>Number.isInteger(x)?fN(x,0):(x<1?String(x):fN(x,2));
-    return {k:k,a:a,v:v,rng:(a.lo!=null?fR(a.lo)+' – '+fR(a.hi):'')};}).filter(r=>!filt||filt==='all'||r.a.t===filt);
-  const J=[['Fleet size',R.J.fleet+' GW','slider, left'],['Return investors need',fP(R.J.hurdle),'slider, left'],['Chip life',R.J.life+' yr','slider, left'],['Price per million tokens, bulk','$'+fN(R.J.pReal,2),'slider, left'],['Cloud margin',fP(R.J.gCloud),'slider on “Does it pay?”'],['AI model margin',fP(R.J.gModel),'slider on “Does it pay?”'],['App margin',fP(R.J.gApp),'slider on “Does it pay?”'],['Price per token, fall per year',fX(R.J.priceDecline,0),'fixed; the year-by-year figure']];
-  let h='<table class="mtab"><tr><th>kind</th><th>number</th><th>value</th><th>range</th><th>source</th></tr>';
-  if(!filt||filt==='all'||filt==='J')J.forEach(j=>{h+='<tr><td>'+tagHtml('J')+'</td><td class="n">'+j[0]+'</td><td class="k">'+j[1]+'</td><td></td><td class="dim">'+j[2]+'</td></tr>';});
-  rows.forEach(r=>{h+='<tr><td>'+tagHtml(r.a.t)+'</td><td class="n">'+r.a.n+'</td><td class="k">'+r.v+'</td><td class="k" style="color:var(--ink-soft)">'+r.rng+'</td><td class="dim">'+(r.a.s||'')+'</td></tr>';});
-  return h+'</table>';
-};
-SHEET.sens=function(R){
-  const J=R.J;
-  const run=(over,j)=>WM.calc(Object.assign({},J,j||{}),over);
-  const out=r=>[fN(r.path[5].inst,0)+' GW',fB(r.path[5].capex),fT(r.rentT),fP(r.endGDP,1)];
-  const rows=[
-   ['Start-2026 installed GW','12 · 15 · 20',run({gw0:12}),run({gw0:20})],
-   ['Grid adds growth (transformer-limited)','8% · 15% · 25%',run({gridG:.08}),run({gridG:.25})],
-   ['Solar + storage growth','40% · 75% · 100%',run({solarG:.4}),run({solarG:1.0})],
-   ['Accelerator supply growth','30% · 45% · 60%',run({chipG:.3}),run({chipG:.6})],
-   ['$ per MW (all lines)','×0.85 · ×1 · ×1.2',run({cAcc:19.1,cBox:1.3,cNet:3,cSto:1.3,cCool:1.3,cShell:11.9,cGen:.77}),run({cAcc:27,cBox:1.8,cNet:4.2,cSto:1.8,cCool:1.8,cShell:16.8,cGen:1.08})],
-   ['Silicon life','4 · '+J.life+' · 6 yr',run(null,{life:4}),run(null,{life:6})],
-   ['Unlevered hurdle','8% · '+fP(J.hurdle)+' · 16%',run(null,{hurdle:.08}),run(null,{hurdle:.16})],
-   ['Layer gross margins, all three','−10 pts · base · +10 pts',run(null,{gCloud:J.gCloud-.1,gModel:J.gModel-.1,gApp:J.gApp-.1}),run(null,{gCloud:J.gCloud+.1,gModel:J.gModel+.1,gApp:J.gApp+.1})],
-   ['Fleet under test',fN(J.fleet/2,0)+' · '+J.fleet+' · '+fN(J.fleet*2,0)+' GW',run(null,{fleet:J.fleet/2}),run(null,{fleet:J.fleet*2})]];
-  let h='<table class="mtab tight"><tr><th>number</th><th>low · base · high</th><th colspan="3">GW built by 2031</th><th colspan="3">spent in 2031</th><th colspan="3">fleet must earn / yr</th><th colspan="3">customers pay · % world GDP</th></tr>';
-  const b=out(R);
-  rows.forEach(r=>{const lo=out(r[2]),hi=out(r[3]);h+='<tr><td class="n">'+r[0]+'</td><td class="dim">'+r[1]+'</td>';
-    for(let k=0;k<4;k++)h+='<td class="k dim r">'+lo[k]+'</td><td class="k r">'+b[k]+'</td><td class="k dim r">'+hi[k]+'</td>';h+='</tr>';});
-  return h+'</table>';
-};
+FZ.calc=function(){const F=FZ.F,R=FZ.R,o={};
+  /* one gigawatt: what it makes, from the measured fleet */
+  const wServer=8*F.h800W.v;                                 // GPU power only; the server draws more, so this overstates nothing in the fleet's favour
+  o.tokW=F.dsPeak.v/wServer; o.tokWavg=F.dsAvg.v/wServer;     // tokens per second per watt
+  o.tokGW=o.tokW*1e9; o.tokGWavg=o.tokWavg*1e9;
+  o.tokYr=o.tokGWavg*3.156e7;                                 // tokens per gigawatt-year at the measured average
+  o.gpusGW=1e9/(F.rackKW.v*1000)*F.rackGPU.v;                  // Blackwell GPUs per GW
+  o.chipsGW=[o.gpusGW*F.gpuPrice.v[0]/1e9,o.gpusGW*F.gpuPrice.v[1]/1e9];   // $B
+  o.allinGW=F.stargate.v[0]/F.stargate.v[1];                  // $B per GW, announced
+  o.chipShare=[o.chipsGW[0]/o.allinGW,o.chipsGW[1]/o.allinGW];
+  /* what it earns, at published prices, if every token sells */
+  const gpuDay=F.dsRevDay.v/F.dsGPUs.v, gpusH800=1e9/F.h800W.v;
+  o.revR1=gpuDay*gpusH800*365/1e9;                            // $B per GW-year at R1 list, measured throughput
+  o.revV32=o.revR1*F.pV32.v/F.pR1.v;
+  o.revRent=F.rentH100.v*gpusH800*8760/1e9;                   // $B per GW-year at the published GPU-hour
+  o.revGPT5=o.tokYr/1e6*F.pGPT5.v/1e9;
+  o.pay=r=>o.allinGW/r;                                       // years to pay back, undiscounted
+  /* the reader's machine */
+  const use=R.use==null?1:R.use, price=R.price==null?null:R.price;
+  o.revReader=price==null?null:o.tokYr*use/1e6*price/1e9;
+  o.payReader=o.revReader?o.allinGW/o.revReader:null;
+  /* the stack: the customer's dollar, down */
+  const gmLab=R.gmLab==null?null:R.gmLab;
+  o.stack=(function(){const rows=[];let d=1;
+    rows.push({who:'the app',        keeps:F.gmCRM.v, src:F.gmCRM});          d*=1-F.gmCRM.v;
+    rows.push({who:'the model lab',  keeps:gmLab,     src:null});             d*=gmLab==null?1:1-gmLab;
+    rows.push({who:'the cloud',      keeps:F.omAWS.v, src:F.omAWS});          d*=1-F.omAWS.v;
+    /* the cloud's cost is the machine: chips are a share of it, the rest is building, power, network */
+    const cs=(o.chipShare[0]+o.chipShare[1])/2;
+    rows.push({who:'building, power, network',keeps:1-cs,src:F.stargate,flat:true}); const toChip=d*cs; d=toChip;
+    rows.push({who:'the server maker',keeps:F.gmSMCI.v,src:F.gmSMCI});         d*=1-F.gmSMCI.v;
+    rows.push({who:'NVIDIA',         keeps:F.gmNVDA.v, src:F.gmNVDA});         d*=1-F.gmNVDA.v;
+    rows.push({who:'TSMC',           keeps:F.gmTSMC.v, src:F.gmTSMC});         d*=1-F.gmTSMC.v;
+    rows.push({who:'wafer, memory, packaging inputs',keeps:1,src:null,flat:true});
+    return rows;})();
+  /* gigawatts */
+  o.gwAdded=FZ.GW.filter(g=>g.kind!=='announced').reduce((a,g)=>a+g.gw,0);
+  o.gwAnn=FZ.GW.filter(g=>g.kind==='announced').reduce((a,g)=>a+g.gw,0);
+  o.gwOpenAI=FZ.GW.filter(g=>/OpenAI|Stargate/.test(g.who)).reduce((a,g)=>a+g.gw,0);
+  o.twh=gw=>gw*8.76;                                          // TWh per year at full draw
+  /* watts to GDP */
+  o.gw=o.gwAnn;
+  o.tokAll=o.tokYr*o.gw;                                      // tokens per year, all announced GW, measured average
+  o.revAll={v32:o.tokAll/1e6*F.pV32.v/1e12, gpt5:o.tokAll/1e6*F.pGPT5.v/1e12};   // $T
+  const mult=1/((1-F.gmCRM.v)*(gmLab==null?1:1-gmLab)*(1-F.omAWS.v));
+  o.mult=mult; o.custAll={v32:o.revAll.v32*mult,gpt5:o.revAll.gpt5*mult};
+  o.gdpShare={v32:o.custAll.v32/F.gdpW.v,gpt5:o.custAll.gpt5/F.gdpW.v};
+  o.elecShare=o.twh(o.gw)/F.elecW.v;
+  return o;};
 
-/* ---- one MW ---- */
-SHEET.unit=function(R,sub){
-  const I=R.I;
-  if(sub===1){ /* bytes per token, and the tiers that hold them */
-    let s=FTITLE(40,28,'How much memory one token reads, in one rack');
-    const B0=2000,w=R.wBytes/B0,kvM=R.kvSeq,kvD=I.kvDense/1e6*I.ctxK*1000;
-    const yb=330,yt=80,mx=(w*.6+kvD)*1000*1.1,Y=v=>yb-(v/mx)*(yb-yt);
-    s+=AXIS(90,470,yb,yt,[0,1000,2000,3000].filter(v=>v<mx),Y,v=>v?fN(v)+' MB':'0');
-    const col=(x,parts,lab)=>{let acc=0,o='';parts.forEach(p=>{o+=COL(x,90,Y(acc),Y(acc+p[1]),p[0],{op:p[2]});acc+=p[1];});o+=VAL(x,Y(acc)-8,fN(acc,0)+' MB');o+=LAB(x,yb+18,lab);return o;};
-    s+=col(200,[[V.grey,w*1000,.5],[MC,kvM*1000,.85]],['Large model','671B, sparse · 5k context']);
-    s+=col(370,[[V.grey,w*.6*1000,.5],[MC,kvD*1000,.85]],['Dense model','405B · 5k context']);
-    s+='<rect x="90" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(106,50,'the model, shared by '+fN(B0)+' users',{s:10.5,f:V.ink});
-    s+='<rect x="290" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(306,50,'each user\'s own memory',{s:10.5,f:V.ink});
-    /* the tiers: $/GB on a log axis, bandwidth as the label */
-    const tx0=560,YL=LOGY(0.05,20000,yb,yt);
-    [0.1,1,10,100,1000,10000].forEach((v,i)=>{s+=LN(tx0,YL(v),960,YL(v),V.ink,{sw:.6,op:.10});s+=T(tx0-10,YL(v)+4,v>=1000?fN(v/1000)+'k':String(v),{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(tx0-10,yt-10,'$/GB · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const tiers=[['on the chip',3000,'21 PB/s'],['next to the chip',20,'8 TB/s'],['in the server',7,'0.5 TB/s'],['on disk',0.15,'0.01 TB/s']];
-    tiers.forEach((t,i)=>{const x=tx0+60+i*100;s+=COL(x,58,yb,YL(t[1]),i===1?MC:V.grey,{op:i===1?.85:.5});s+=VAL(x,YL(t[1])-8,t[2]);s+=LAB(x,yb+18,[t[0],'per device']);});
-    s+=LINE('With a few hundred users the model itself is shared; what the rack reads is each user\'s memory. Each tier wins where its price per byte fits.',424);
-    return SV(s);
-  }
-  if(sub===2){ /* dollars per MW: one column, and the rent it owes */
-    let s=FTITLE(40,28,'What one gigawatt costs to build, 2026');
-    const parts=[['acc','Chips and memory',MC,.85],['box','Racks',V.grey,.30],['net','Networking',V.grey,.38],['sto','Storage',V.grey,.46],['cool','Cooling',V.grey,.54],['shell','Building and electrical',V.amber,.85],['gen','On-site power',V.amber,.5]];
-    const yb=372,yt=70,Y=v=>yb-(v/R.mw)*(yb-yt),x=200,w=120;let acc=0;const segs=[];
-    parts.forEach((p,i)=>{const v=R.cost[p[0]],y0=Y(acc),y1=Y(acc+v);s+=COL(x,w,y0,y1,p[2],{op:p[3]});segs.push({my:(y0+y1)/2,ly:(y0+y1)/2,p:p,v:v});acc+=v;});
-    for(let k=1;k<segs.length;k++)segs[k].ly=Math.min(segs[k].ly,segs[k-1].ly-15);   /* segments stack upward; a label never sits closer than a line to the one below */
-    segs.forEach(g=>{s+=LN(x+w/2+4,g.my,x+w/2+30,g.ly,V.ink,{sw:.6,op:.35});s+=T(x+w/2+36,g.ly+4,g.p[1]+'  '+fG(g.v),{s:11,f:V.ink});});
-    s+=VAL(x,yt-14,fG(R.mw)+' per gigawatt');s+=T(x,yb+18,'chips '+fP(R.compShare)+' of the bill',{a:'middle',s:10,f:V.dim});
-    const bx=620;s+=PANEL(bx,70,340,300,{r:10});
-    [['wears out over '+I.lifeAcc+' years',fG(R.depMW)+' / yr',fP(R.depRate)],['+ return investors need, '+fP(R.J.hurdle),fG(R.J.hurdle*R.mw)+' / yr',''],['= must earn every year',fG(R.rentMW),fP(R.rentRate)],['per GPU, per hour','$'+fN(R.rentGpuHr,2),'']].forEach((r,i)=>{const y=110+i*66;
-      s+=T(bx+22,y,r[0],{s:11,f:V.dim});s+=T(bx+22,y+26,r[1],{s:20,w:700,m:1,f:i>=2?MC:V.ink});if(r[2])s+=T(bx+318,y+26,r[2],{a:'end',s:12,m:1,f:V.dim});
-      if(i<3)s+=LN(bx+22,y+42,bx+318,y+42,V.ink,{sw:.6,op:.15});});
-    s+=LINE('Chips are '+fP(R.compShare)+' of the bill; the gigawatt must earn back '+fP(R.rentRate)+' of its cost every year, $'+fN(R.rentGpuHr,2)+' per GPU-hour.',424);
-    return SV(s);
-  }
-  /* tokens, joules, dollars per MW */
-  let s=FTITLE(40,28,'What one gigawatt of data center produces, and what it costs');
-  const cols=[{k:'batch',n:'BULK',d:'20–30 tokens/s per user'},{k:'inter',n:'CHAT',d:'100 tokens/s per user'},{k:'reason',n:'REASONING',d:'long memory · 5–20× more tokens per task'}];
-  const cx=[430,640,850],y0=104,rh=46;
-  cols.forEach((c,i)=>{s+=T(cx[i],72,c.n,{a:'middle',s:11,w:700,m:1,f:i===0?MC:V.ink,ls:'.1em'});s+=T(cx[i],88,c.d,{a:'middle',s:9.5,f:V.dim});});
-  const rows=[['Tokens per second',c=>fN(R[c]*1000/1e9,2)+' billion'],['Tokens per year, at '+fP(I.util)+' use',c=>fN(R.tokYr[c]*1000/1e12,0)+' trillion'],['Energy per token, at the meter',c=>fN(R.jTok[c],2)+' J'],['Electricity per million tokens · $'+I.elec+'/MWh',c=>'$'+fN(R.eTok[c],3)],['Hardware cost per million tokens',c=>'$'+fN(R.rentTok[c],2)]];
-  rows.forEach((r,j)=>{const y=y0+j*rh;s+=LN(40,y+22,960,y+22,V.ink,{sw:.6,op:.12});s+=T(40,y+6,r[0],{s:12.5,w:600,f:V.ink});
-    cols.forEach((c,i)=>s+=T(cx[i],y+8,r[1](c.k),{a:'middle',s:j===4?17:15,w:700,m:1,f:j===4?MC:V.ink}));});
-  s+=T(40,y0+rows.length*rh+14,'Measured: '+fN(I.dsOutAvg)+' tokens/s per 8-GPU server, fleet average (DeepSeek, Mar 2025) ÷ '+I.nodeKW+' kW → × '+I.blackX+' for the newer chip → ÷ '+I.interDiv+' chat · ÷ '+I.reasonDiv+' reasoning',{s:10.5,f:V.dim});
-  s+=LINE('Electricity is under three cents per million tokens; paying for the hardware costs '+fN(R.rentTok.batch/R.eTok.batch,0)+'× that.',424);
-  return SV(s);
-};
+/* ---- the screens ---- */
+FZ.STEPS=[['Today\'s machine','ONE GIGAWATT AT TODAY\'S PUBLISHED PRICES'],['The margin stack','THE CUSTOMER\'S DOLLAR, WALKED DOWN'],['The gigawatts','WHAT HAS BEEN PUBLISHED OR ANNOUNCED'],['Watts to GDP','WHAT THE ANNOUNCED GIGAWATTS MUST EARN'],['Sources','EVERY NUMBER, WHO SAID IT, WHEN']];
+const fzN=(x,d)=>Number(x).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+const fzB=x=>'$'+fzN(x,x<10?1:0)+'B', fzT=x=>'$'+fzN(x,x<10?2:1)+'T', fzP=(x,d)=>fzN(x*100,d||0)+'%';
+const fact=(k,label)=>{const f=FZ.F[k],v=Array.isArray(f.v)?f.v.map(x=>fzN(x)).join('–'):fzN(f.v,f.v<1?2:(f.v<10&&!Number.isInteger(f.v)?2:0));
+  return '<div class="fzf"><b>'+v+'</b><span>'+(label||f.u)+'</span><i>'+f.s+' · '+f.d+'</i></div>';};
+const line=(l,r)=>'<div class="fzl"><span>'+l+'</span><b>'+r+'</b></div>';
+const big=(v,l)=>'<div class="fzbig"><b>'+v+'</b><span>'+l+'</span></div>';
+const field=(k,label,ph,unit)=>'<label class="fzin"><span>'+label+'</span><input type="number" step="any" data-r="'+k+'" placeholder="'+ph+'" value="'+(FZ.R[k]==null?'':FZ.R[k])+'"><i>'+unit+'</i></label>';
 
-/* ---- watts → capex ---- */
-WM.LINKS=[
- ['Grid connection',3,7,'—','power'],['Chip factory',3,4,'≈ 4','silicon'],['Transformers',3,4,'≈ 3','power'],['Gas turbines',2.5,3.5,'≈ 5','power'],['Chip machines',2,2.5,'—','silicon'],['Chip design',1.5,2,'—',''],['Switchgear',1,2,'≈ 3','power'],['Buildings',1,2,'≈ 4',''],['Chip packaging',1,1.5,'—','silicon'],['Memory chips',1,1.5,'> 100','silicon'],['Solar panels',.2,.5,'≈ 1.5',''],['Battery cells',.2,.5,'≈ 1.5',''],['Software',0,.4,'—','']];
-SHEET.bottle=function(R){
-  let s=FTITLE(40,28,'How many years it takes to add more of each part');
-  const yb=330,yt=74,Y=v=>yb-(v/7.5)*(yb-yt),x0=90;
-  s+=AXIS(x0,960,yb,yt,[0,1,2,3,4,5,6,7],Y,v=>v+(v===7?' yr':''));
-  WM.LINKS.forEach((l,i)=>{const x=x0+40+i*68,c=l[4]==='power'?MRED:l[4]==='silicon'?MC:V.grey;
-    s+=COL(x,40,Y(l[1]),Y(l[2]),c,{op:l[4]?.85:.45});
-    s+=VAL(x,Y(l[2])-8,(l[1]?l[1]+'–':'< ')+l[2],c===V.grey?V.ink:c);
-    const nm=l[0].split(' ');s+=LAB(x,yb+18,[nm[0],nm.slice(1).join(' ')||' ',l[3]==='—'?'':l[3].replace(' ','')+'× raw cost'].filter(t=>t!==''));});
-  s+='<rect x="40" y="380" width="10" height="10" rx="2" fill="'+MRED+'"/>'+T(56,389,'limits where power can be connected',{s:10.5,f:V.ink});
-  s+='<rect x="330" y="380" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(346,389,'limits how many chips there are',{s:10.5,f:V.ink});
-  s+=T(620,389,'× raw cost: price ÷ raw material; high means a missing factory',{s:10.5,f:V.dim});
-  const first=R.path.find(x=>x.short>WM.SHORT*x.nw);
-  s+=LINE('Money cannot skip a factory that takes 2–4 years to build; the $4T path runs out of parts in '+(first?first.y:'no year to 2031')+'.',424);
-  return SV(s);
-};
-SHEET.path=function(R,sub){
-  const P=R.path,I=R.I;
-  if(sub===2)return SHEET.bottle(R);
-  if(sub===1){
-    let s=FTITLE(40,28,'Money spent each year: new power × cost per gigawatt, plus replacing old chips');
-    const x0=190,x1=940,yb=290,yt=66,mx=Math.max(P[5].claim,P[5].capex)*1.05,Y=v=>yb-(v/mx)*(yb-yt),bw=70;
-    s+=AXIS(x0,x1,yb,yt,[0,1000,2000,3000,4000,5000].filter(v=>v<mx),Y,v=>v?'$'+(v/1000)+'T':'0');
-    const cxs=P.map((p,i)=>x0+50+i*130);
-    s+='<polyline points="'+P.map((p,i)=>cxs[i]+','+Y(p.claim)).join(' ')+'" fill="none" stroke="'+MRED+'" stroke-width="1.2" stroke-dasharray="2 4"/>';
-    P.forEach((p,i)=>{const cx=cxs[i];
-      s+=COL(cx,bw,yb,Y(p.capex-p.refresh),MC);s+=COL(cx,bw,Y(p.capex-p.refresh),Y(p.capex),V.grey,{op:.5});
-      s+=T(cx,Y(p.capex-p.refresh)+16,fB(p.capex),{a:'middle',s:11.5,w:700,m:1,f:'#0a0c12'});
-      s+='<circle cx="'+cx+'" cy="'+Y(p.claim)+'" r="4" fill="#0c0e15" stroke="'+MRED+'" stroke-width="1.6"/>';
-      if(i===4)s+=T(cx-bw/2-6,Y(p.claim)-6,'$4T',{a:'end',s:10,w:600,m:1,f:MRED});
-      s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});
-      s+=T(cx,yb+36,fN(p.twh,0)+' TWh',{a:'middle',s:10.5,m:1,f:V.ink});s+=T(cx,yb+50,fP(p.twhShare,1)+' of world',{a:'middle',s:9.5,f:V.dim});s+=T(cx,yb+64,fP(p.addShare)+' of adds',{a:'middle',s:9.5,f:V.dim});});
-    s+='<rect x="40" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(56,50,'new',{s:10,f:V.ink});
-    s+='<rect x="150" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(166,50,'replacing chips after '+I.lifeAcc+' years',{s:10,f:V.ink});
-    s+='<circle cx="345" cy="46" r="4" fill="none" stroke="'+MRED+'" stroke-width="1.6"/>'+T(356,50,'the claim: $1T now to $4T by 2030',{s:10,f:V.ink});
-    s+=T(40,yb+36,'Electricity used',{s:10,f:V.dim});s+=T(40,yb+50,'of '+fN(I.worldTWh)+' TWh',{s:9.5,f:V.dim});s+=T(40,yb+64,'of ~'+fN(I.worldAdd)+' TWh added / yr',{s:9.5,f:V.dim});
-    s+=LINE('2026 comes out at '+fB(P[0].capex)+' without being told the $1T answer; in 2030, $4T buys '+fN(P[4].nw,0)+' GW at '+fM(P[4].clearing)+'/MW, not '+fN(P[4].wantGW,0)+' GW at today\'s price.',424);
-    return SV(s);
-  }
-  if(sub===3){ /* where inference sits: a ruler of distance */
-    let s=FTITLE(40,28,'How far away a data center can be before you notice');
-    const x0=60,x1=940,y=250,KM=12000,X=km=>x0+(x1-x0)*Math.min(km,KM)/KM;
-    s+=LN(x0,y,x1,y,V.ink,{sw:1.2,op:.5});
-    [0,2000,4000,6000,8000,10000,12000].forEach(k=>{s+=LN(X(k),y-5,X(k),y+5,V.ink,{sw:.8,op:.5});s+=T(X(k),y+20,fN(k)+(k===12000?' km':''),{a:'middle',s:9.5,m:1,f:V.dim});});
-    [[550,'LEO overhead'],[1900,'Ashburn – Dallas'],[5500,'Ashburn – Dublin'],[10700,'Ashburn – Riyadh']].forEach((p,i)=>{s+='<circle cx="'+X(p[0])+'" cy="'+y+'" r="4" fill="'+V.ink+'"/>';s+=T(X(p[0]),y+(i%2?52:38),p[1],{a:'middle',s:10.5,w:600,f:V.ink});});
-    [[R.stepMs(2000),'one step of writing',MC,-44],[10,'one token at 100 tokens/s',MC,-78],[50,'one token at 20 tokens/s',MC,-112],[0.5,'one training sync (estimate)',MRED,-146]].forEach(b=>{const km=b[0]*I.cKmMs,yy=y+b[3],inside=X(km)>700;
-      s+='<rect x="'+x0+'" y="'+(yy-7)+'" width="'+(X(km)-x0)+'" height="14" rx="3" fill="'+b[2]+'" fill-opacity=".55"/>';
-      s+=T(inside?X(km)-8:X(km)+8,yy+4,b[1]+' · '+fN(b[0],b[0]<1?1:0)+' ms ≈ '+fN(km,0)+' km',{a:inside?'end':'start',s:10.5,w:600,f:inside?'#0a0c12':V.ink});});
-    s+=T(x0,y-172,'HOW FAR LIGHT TRAVELS IN THAT TIME · '+I.cKmMs+' km per ms',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-    s+=LINE('A reader at 20 tokens a second cannot tell Virginia from Riyadh; bulk work goes where power is cheapest, training stays close.',424);
-    return SV(s);
-  }
-  let s=FTITLE(40,28,'New AI data-center power switched on each year, and what the money wants');
-  const x0=90,x1=940,yb=300,yt=76,mx=Math.max(P[5].chips,P[5].wantGW)*1.06,Y=v=>yb-(v/mx)*(yb-yt),bw=64;
-  const ticks=[];for(let v=0;v<mx;v+=25)ticks.push(v);s+=AXIS(x0,x1,yb,yt,ticks,Y);
-  const SRC=[['grid',MC,'from the grid'],['gas',V.amber,'on-site gas'],['sol',V.yel,'on-site solar + batteries'],['intl',V.pur,'Gulf · China · India · Nordics']];
-  const cxs=P.map((p,i)=>x0+60+i*140);
-  P.forEach((p,i)=>{const cx=cxs[i];let acc=0;SRC.forEach(sr=>{const v=p[sr[0]];s+=COL(cx,bw,Y(acc),Y(acc+v),sr[1]);acc+=v;});
-    s+=T(cx,Y(p.nw)+15,fN(p.nw,0)+' GW',{a:'middle',s:11.5,w:700,m:1,f:'#0a0c12'});
-    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+34,'total '+fN(p.inst,0)+' GW',{a:'middle',s:9.5,m:1,f:MDIM});
-    if(p.short>WM.SHORT*p.nw)s+=T(cx,yb+48,'price '+fM(p.clearing)+'/MW',{a:'middle',s:9.5,w:600,m:1,f:MRED});});
-  const poly=(k,c,d)=>{s+='<polyline points="'+P.map((p,i)=>cxs[i]+','+Y(p[k])).join(' ')+'" fill="none" stroke="'+c+'" stroke-width="1.5" stroke-dasharray="'+d+'"/>';};
-  poly('chips',V.cyan,'7 5');poly('wantGW',MRED,'2 4');
-  s+=T(cxs[5]+40,Y(P[5].chips)+4,'chips available',{s:10,w:600,m:1,f:V.cyan});s+=T(cxs[5]+40,Y(P[5].wantGW)+4,'what $4T needs',{s:10,w:600,m:1,f:MRED});
-  const cr=P.find(p=>p.inst>=R.J.fleet);
-  if(cr){const i=P.indexOf(cr),cx=cxs[i];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'your fleet size, '+R.J.fleet+' GW, reached',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
-  SRC.forEach((sr,i)=>{s+='<rect x="'+(40+i*225)+'" y="41" width="10" height="10" rx="2" fill="'+sr[1]+'"/>';s+=T(56+i*225,50,sr[2],{s:10.5,f:V.ink});});
-  s+=LINE('Each source grows only as fast as its factories can; power is the limit every year, and the shortfall shows up as price.',424);
-  return SV(s);
-};
+FZ.S=[];
+/* 1 · today's machine */
+FZ.S[0]=function(o){const F=FZ.F;
+  return '<div class="fzcols"><div class="fzfacts"><h4>Published</h4>'
+   +fact('dsPeak')+fact('h800W')+fact('rackGPU')+fact('rackKW')+fact('gpuPrice')+fact('stargate','$B for GW, all-in, Stargate')+fact('pV32')+fact('pGPT5')+fact('rentH100')
+   +'</div><div class="fzmath"><h4>Arithmetic</h4>'
+   +line('tokens per second per watt, peak','14,800 ÷ (8 × 700 W) = '+fzN(o.tokW,2))
+   +line('at the day average, per year',fzN(o.tokYr/1e12,0)+' trillion tokens')
+   +line('GPUs in one gigawatt of racks','1 GW ÷ 120 kW × 72 = '+fzN(o.gpusGW))
+   +line('chips at $30–40k each',fzB(o.chipsGW[0])+' – '+fzB(o.chipsGW[1]))
+   +line('all-in, as announced','$500B ÷ 10 GW = '+fzB(o.allinGW)+' per GW')
+   +line('so chips are',fzP(o.chipShare[0])+' – '+fzP(o.chipShare[1])+' of the build')
+   +line('earns per year if every token sells at $0.42',fzB(o.revV32))
+   +line('earns per year at GPT-5\'s $10',fzB(o.revGPT5))
+   +line('earns per year rented out at $2.99 a GPU-hour',fzB(o.revRent))
+   +'</div><div class="fzres"><h4>Result</h4>'
+   +big(fzN(o.tokGW/1e9,1)+' bn','tokens a second from one gigawatt, measured')
+   +big(fzB(o.allinGW),'to build one gigawatt, as announced')
+   +big(fzN(o.pay(o.revV32),1)+' yr','payback at the cheapest published price')
+   +big(fzN(o.pay(o.revRent),1)+' yr','payback rented out by the hour')
+   +'</div></div>'
+   +'<div class="fzopen"><h4>Not published</h4><p>How busy the machine is, and what a token really sells for after discounts and free use; DeepSeek said its real revenue was "substantially lower" than list. Type yours:</p>'
+   +'<div class="fzins">'+field('use','share of the year busy','e.g. 0.6','0 to 1')+field('price','$ per million tokens realised','e.g. 1.00','$')+'</div>'
+   +(o.revReader?'<div class="fzl big"><span>your machine earns</span><b>'+fzB(o.revReader)+' a year, payback '+fzN(o.payReader,1)+' years'+(o.payReader>F.msLife.v?', longer than Microsoft\'s '+F.msLife.v+'-year server life':'')+'</b></div>':'')
+   +'<p class="fzconseq">At published list prices and full use, one gigawatt pays for itself in one to two years. Everything after this screen is about whether tokens sell at those prices, and how many.</p></div>';};
+/* 2 · the margin stack */
+FZ.S[1]=function(o){const F=FZ.F;
+  let rows='',d=1,left=[];
+  o.stack.forEach((r,i)=>{const keeps=r.keeps==null?null:r.keeps; const take=r.flat?d*keeps:(keeps==null?0:d*keeps); const pass=r.flat?d-take:(keeps==null?d:d*(1-keeps));
+    rows+='<tr><td class="w">'+r.who+'</td><td class="k">'+(keeps==null?'<em>not published</em>':(r.flat?'—':fzP(keeps)))+'</td><td class="k">'+(keeps==null?'—':fzN(take*100,1)+'¢')+'</td><td class="k">'+fzN(pass*100,1)+'¢</td><td class="s">'+(r.src?r.src.s+' · '+r.src.d:(r.who==='the model lab'?'no lab publishes it; type one below':'what remains'))+'</td></tr>';
+    left.push({who:r.who,take:take}); d=pass;});
+  /* the bar: the customer's dollar as slices */
+  let x=0,bar='';const cols=['#ab7cf1','#6f8dff','#57c7dd','#8b93a6','#6a737f','#76b900','#e0a355','#39414c'];
+  left.forEach((l,i)=>{const w=l.take*100;if(w<=0)return;bar+='<div class="fzslice" style="width:'+w+'%;background:'+cols[i]+'" title="'+l.who+' '+fzN(w,1)+'¢"></div>';x+=w;});
+  const rest=100-x;if(rest>0)bar+='<div class="fzslice rest" style="width:'+rest+'%"></div>';
+  return '<div class="fzbar">'+bar+'</div><div class="fzbarlab">'+left.filter(l=>l.take>0).map((l,i)=>'<span><i style="background:'+cols[left.indexOf(l)]+'"></i>'+l.who+' '+fzN(l.take*100,1)+'¢</span>').join('')+'</div>'
+   +'<table class="fztab"><tr><th>who</th><th>keeps</th><th>of the customer\'s dollar</th><th>passes on</th><th>published margin</th></tr>'+rows+'</table>'
+   +'<div class="fzopen"><h4>Not published</h4><p>No foundation-model company publishes its gross margin. Type one and the table redraws:</p><div class="fzins">'+field('gmLab','model lab gross margin','e.g. 0.5','0 to 1')+'</div>'
+   +'<p class="fzconseq">Of each dollar a customer pays for AI software, about '+fzN((1-F.gmCRM.v)*100,0)+' cents reach the model, '+fzN(o.stack[0].keeps?((1-F.gmCRM.v)*(FZ.R.gmLab==null?1:1-FZ.R.gmLab))*100:0,0)+' cents reach the cloud, and the chip maker keeps three quarters of whatever reaches the chip. TSMC, the memory makers, the building and the power are paid at delivery, whatever happens above them.</p></div>';};
+/* 3 · the gigawatts */
+FZ.S[2]=function(o){const F=FZ.F;
+  const mx=Math.max(...FZ.GW.map(g=>g.gw))*1.15;
+  let bars='';FZ.GW.forEach(g=>{const h=g.gw/mx*100;bars+='<div class="fzcol"><div class="fzc '+g.kind+'" style="height:'+h+'%"><b>'+fzN(g.gw,g.gw<5?1:0)+'</b></div><span>'+g.who+'</span><i>'+g.note+'</i></div>';});
+  return '<div class="fzchart">'+bars+'</div><div class="fzkey"><span><i class="added"></i>added, as reported</span><span><i class="planned"></i>planned, in company guidance</span><span><i class="announced"></i>announced projects</span></div>'
+   +'<div class="fzcols three"><div class="fzmath"><h4>Arithmetic</h4>'
+   +line('added and planned by the four largest clouds, 2025–27',fzN(o.gwAdded,1)+' GW')
+   +line('announced projects, summed',fzN(o.gwAnn,1)+' GW')
+   +line('of which tied to OpenAI',fzN(o.gwOpenAI,1)+' GW')
+   +line('electricity if all announced ran flat out',fzN(o.twh(o.gwAnn),0)+' TWh a year')
+   +line('share of world electricity',fzP(o.elecShare,1))
+   +'</div><div class="fzres"><h4>Result</h4>'
+   +big(fzN(o.gwAnn,0)+' GW','announced, by name and date')
+   +big(fzP(o.elecShare,1),'of the world\'s electricity, if it all ran')
+   +'</div></div>'
+   +'<p class="fzconseq">Announced is not switched on. The four largest clouds say they will add '+fzN(o.gwAdded-3.9,0)+' GW over 2026 and 2027. The announced projects sum to '+fzN(o.gwAnn,0)+' GW with no dates a filing would hold them to, and the OpenAI deals overlap: a gigawatt of Stargate may be the same gigawatt as one in the NVIDIA letter.</p>';};
+/* 4 · watts to GDP */
+FZ.S[3]=function(o){const F=FZ.F,R=FZ.R;
+  const share=R.share==null?null:R.share;
+  return '<div class="fzcols"><div class="fzfacts"><h4>Published</h4>'+fact('gdpW')+fact('elecW')+fact('pV32')+fact('pGPT5')+fact('gmCRM')+fact('omAWS')+fact('priceFall')+'</div>'
+   +'<div class="fzmath"><h4>Arithmetic, announced gigawatts</h4>'
+   +line('gigawatts announced',fzN(o.gw,0)+' GW')
+   +line('tokens a year at the measured average',fzN(o.tokAll/1e15,0)+' quadrillion')
+   +line('sold at $0.42 per million',fzT(o.revAll.v32)+' a year')
+   +line('sold at GPT-5\'s $10',fzT(o.revAll.gpt5)+' a year')
+   +line('through the stack, × '+fzN(o.mult,1)+(R.gmLab==null?' (lab margin not typed, so counted as zero)':''),'customers pay '+fzT(o.custAll.v32)+' to '+fzT(o.custAll.gpt5))
+   +line('as a share of world GDP',fzP(o.gdpShare.v32,1)+' at $0.42; '+fzP(o.gdpShare.gpt5,0)+' at $10, more than the world makes, so chat prices cannot survive that volume')
+   +line('as a share of world electricity',fzP(o.elecShare,1))
+   +'</div><div class="fzres"><h4>Result</h4>'
+   +big(fzP(o.gdpShare.v32,1),'of world GDP, paid by customers every year, for the announced gigawatts to earn the cheapest published price')
+   +big(fzP(o.elecShare,1),'of world electricity')
+   +'</div></div>'
+   +'<div class="fzopen"><h4>Not published</h4><p>Where that spending comes from. It is either output that did not exist, or wages and software it replaces, or it does not arrive and the machines earn less. Type the share you believe is new output:</p>'
+   +'<div class="fzins">'+field('share','share that is new output','e.g. 0.3','0 to 1')+'</div>'
+   +(share!=null?'<div class="fzl big"><span>then</span><b>'+fzP(o.gdpShare.v32*share,1)+'–'+fzP(o.gdpShare.gpt5*share,1)+' of world GDP is added, and '+fzP(o.gdpShare.v32*(1-share),1)+'–'+fzP(o.gdpShare.gpt5*(1-share),1)+' of world GDP moves from wages and software to the stack</b></div>':'')
+   +'<p class="fzconseq">Prices at constant quality have fallen about '+F.priceFall.v+'× a year. So the same gigawatts earn the same money only if tokens sold grow '+F.priceFall.v+'× a year. Cheaper transistors were used '+F.priceFall.v+'× more for fifty years; whether cheaper cognition is depends on the machine finishing the job.</p></div>';};
+/* 5 · sources */
+FZ.S[4]=function(o){
+  let h='<table class="fztab src"><tr><th>number</th><th>value</th><th>who published it</th><th>when</th></tr>';
+  Object.keys(FZ.F).forEach(k=>{const f=FZ.F[k];h+='<tr><td class="w">'+f.u+'</td><td class="k">'+(Array.isArray(f.v)?f.v.map(x=>fzN(x)).join(' – '):fzN(f.v,f.v<1?2:(Number.isInteger(f.v)?0:2)))+'</td><td>'+f.s+'</td><td class="k">'+f.d+'</td></tr>';});
+  FZ.GW.forEach(g=>{h+='<tr><td class="w">'+g.who+', '+g.kind+' · '+g.note+'</td><td class="k">'+fzN(g.gw,1)+' GW</td><td>'+g.s+'</td><td class="k">'+g.d+'</td></tr>';});
+  h+='</table><p class="fzconseq">Two physical constants and '+Object.keys(FZ.F).length+' published figures. Nothing else is on the page unless the reader typed it. The page shows one measured fleet on H800s and prices one built on Blackwell; the newer chip makes more tokens per watt, so the payback is, if anything, overstated against the reader.</p>';return h;};
 
-/* ---- rent → the stack ---- */
-SHEET.rent=function(R,sub){
-  const I=R.I,W=R.walk;
-  if(sub===0){ /* three cases + training, one log axis */
-    let s=FTITLE(40,28,'What one gigawatt can earn in a year, against what it must earn');
-    const yb=340,yt=76,Y=LOGY(0.1,1000,yb,yt),x0=110;
-    [0.1,1,10,100,1000].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+(v<1?v:v>=1000?'1,000':v)+'B',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(x0-10,yt-10,'per gigawatt, per year · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const cases=[['Chat','at $'+I.pFront+' per million tokens',R.rev.interFront,R.cov.interFront,.85],['Bulk','at $'+I.pComm+' per million tokens',R.rev.batchComm,R.cov.batchComm,.85],['Bulk at chat prices','a ceiling, not a market',R.rev.batchFront,R.cov.batchFront,.35],['Training','earns nothing until the model does',R.rentMW,1,0]];
-    cases.forEach((c,i)=>{const x=x0+110+i*200;
-      s+=COL(x,90,yb,Y(c[2]),i===3?'none':MC,{op:c[4],stroke:i===3?V.amber:null});
-      s+=VAL(x,Y(c[2])-8,fG(c[2])+(i===3?' owed':' · '+fX(c[3],c[3]<3?2:0)));s+=LAB(x,yb+18,[c[0],c[1]],i===3?V.amber:V.ink);});
-    s+=RULEH(x0,960,Y(R.rentMW),MRED,'must earn '+fG(R.rentMW));s+=RULEH(x0,960,Y(R.elecYr),V.grey,'electricity '+fG(R.elecYr));
-    s+=T(40,392,'Where supply meets demand today: a new GPU rents for $'+fN(I.gpuHrB,2)+' an hour against $'+fN(R.rentGpuHr,2)+' needed → '+fX(R.covCloud,2)+'.',{s:11,f:V.dim});
-    s+=LINE('Any price above $'+fN(R.rentTok.batch,2)+' per million tokens pays; the cheapest tokens already sell near it. The bet is how many sell at chat prices.',424);
-    return SV(s);
-  }
-  if(sub===1){ /* the walk */
-    let s=FTITLE(40,28,'One dollar spent making a chip, followed to the customer');
-    const steps=[['making the chip',W.foundry,'silicon + memory',''],['chip maker sells it',W.acc,'margin '+fP(I.accGM),fX(W.acc/W.foundry,1)],['in the rack',W.box,'assembly +'+fP(I.boxMk),fX(W.box/W.acc,2)],['installed',W.inst,'chips are '+fP(R.accShare)+' of the build',fX(W.inst/W.box,1)],
-                 ['must earn / yr',W.rent,fP(R.rentRate)+' of the cost, yearly','× '+fN(R.rentRate,2)],['cloud',W.cloud,'margin '+fP(R.J.gCloud),fX(W.cloud/W.rent,2)],['AI model',W.model,'margin '+fP(R.J.gModel),fX(W.model/W.cloud,2)],['apps',W.app,'margin '+fP(R.J.gApp),fX(W.app/W.model,2)]];
-    const x0=70,bw=76,yb=320,yt=84,mx=Math.max(W.app,W.inst)*1.15,Y=v=>yb-(v/mx)*(yb-yt);
-    s+=LN(40,yb,960,yb,MDIM,{sw:1});
-    steps.forEach((st,i)=>{const x=x0+i*112+bw/2,cap=i<4,c=cap?V.grey:MC;s+=COL(x,bw,yb,Y(st[1]),c,{op:cap?.45:.85});
-      s+=VAL(x,Y(st[1])-8,'$'+fN(st[1],2));s+=LAB(x,yb+18,[st[0],st[2]],cap?V.ink:MC);if(st[3])s+=T(x,yt-8,st[3],{a:'middle',s:10,w:600,m:1,f:cap?MDIM:MC});});
-    const dx=x0+4*112-18;s+=LN(dx,yt-20,dx,yb,V.ink,{sw:.8,d:'3 3',op:.4});
-    s+=T(dx-8,yt-24,'SPENT ONCE',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});s+=T(dx+8,yt-24,'EARNED EVERY YEAR',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-    s+=LINE('Each dollar of chip becomes $'+fN(W.inst,2)+' of data center, which then needs $'+fN(W.app,2)+' of customer spending every year.',424);
-    return SV(s);
-  }
-  if(sub===2){ /* at fleet scale, one log axis */
-    let s=FTITLE(40,28,'What a '+R.J.fleet+' GW fleet must earn each year, next to the world it sells to');
-    const yb=340,yt=76,Y=LOGY(0.1,200,yb,yt),x0=110;
-    [0.1,1,10,100].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+v+'T',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(x0-10,yt-10,'per year · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const bars=[['the fleet must earn',fP(R.endGDP,1)+' of world GDP',R.endT,MC,.85],['all software sold',fX(R.endSoft,1)+' this',I.softW,V.grey,.5],['all wages paid',fP(R.endLabor,1)+' of this',I.laborW,V.grey,.5],['world GDP','',I.gdpW,V.grey,.5]];
-    bars.forEach((b,i)=>{const x=x0+110+i*200;s+=COL(x,90,yb,Y(b[2]),b[3],{op:b[4]});s+=VAL(x,Y(b[2])-8,fT(b[2]));s+=LAB(x,yb+18,[b[0],b[1]],i===0?MC:V.ink);});
-    s+=RULEH(x0,960,Y(R.endT),MRED,'');
-    s+=T(40,392,'If money falls short, prices give way in this order: GPU rental, tokens, apps, then chips. Paid no matter what: connected power, chip fabs, memory.',{s:11,f:V.dim});
-    s+=LINE(fT(R.stockT)+' of data centers × '+fP(R.rentRate)+' a year × '+fX(R.mult,1)+' for the layers above = '+fT(R.endT)+' a year; move the margins to see what has to be true.',424);
-    return SV(s);
-  }
-  /* by year: what the fleet must be paid, and which link binds */
-  let s=FTITLE(40,28,'Year by year: what everything built must earn, and what is short');
-  const P=R.path,x0=250,x1=940,yb=248,yt=70,mx=P[5].endT*1.08,Y=v=>yb-(v/mx)*(yb-yt),bw=64,cxs=P.map((p,i)=>x0+60+i*118);
-  const ticks=[];for(let v=0;v<mx;v+=5)ticks.push(v);s+=AXIS(x0,x1,yb,yt,ticks,Y,v=>v?'$'+v+'T':'0');
-  const cr=P.find(p=>p.inst>=R.J.fleet);
-  P.forEach((p,i)=>{const cx=cxs[i],beyond=p.inst>R.J.fleet;s+=COL(cx,bw,yb,Y(p.endT),MC,{op:beyond?.3:.85,stroke:beyond?MRED:null});
-    s+=VAL(cx,Y(p.endT)-8,fT(p.endT));s+=T(cx,Y(p.endT)-22,fP(p.endT/I.gdpW,1)+' GDP',{a:'middle',s:9.5,m:1,f:V.dim});
-    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+33,fN(p.inst,0)+' GW · needs '+fN((1+p.growth)*R.J.priceDecline,1)+'× the tokens sold',{a:'middle',s:9,m:1,f:MDIM});});
-  if(cr){const cx=cxs[P.indexOf(cr)];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'your fleet size, '+R.J.fleet+' GW',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
-  /* the copper strip: which joint binds each year */
-  const links=[['hbm','chips: memory, packaging'],['transformer','power: transformers, turbines'],['rent','customers: the next MW does not pay']],sy=282,rh=26;
-  const atom=(p,i)=>(R.covReal<1||p.inst>R.J.fleet)?'rent':(p.bind==='silicon'?'hbm':(i===0?'hbm':'transformer'));
-  links.forEach((l,r)=>{const y=sy+r*rh;s+=T(x0-10,y+15,l[1],{a:'end',s:10,f:V.ink});
-    P.forEach((p,i)=>{const on=atom(p,i)===l[0];s+='<rect x="'+(cxs[i]-bw/2)+'" y="'+(y+2)+'" width="'+bw+'" height="'+(rh-6)+'" rx="3" fill="'+(on?'#b87333':'#39414c')+'" fill-opacity="'+(on?.95:.35)+'"/>';});});
-  s+=T(x0-10,sy-8,'ORANGE = WHAT IS SHORT THAT YEAR',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-  s+=LINE('Everything built must earn every year; past your fleet size the next megawatt does not pay unless new value shows up.',424);
-  return SV(s);
-};
-
-/* ---- the challenger: his numbers, our arithmetic ---- */
-SHEET.chal=function(R,sub){
-  const I=R.I,O=R.orbit,P=R.path;
-  if(sub===1){ /* one GW in orbit */
-    let s=FTITLE(40,28,'A gigawatt of computers in orbit: his physics, checked');
-    /* mass per GW, one column */
-    const yb=330,yt=80;let x=150,w=100;
-    const parts=[['solar panels, '+I.arrayWkg+' W/kg',O.tArr,V.grey,.45],['radiators, '+I.radKgM2+' kg/m²',O.tRad,V.grey,.6],['computers, '+I.spaceTMW+' t/MW',O.tCmp,MC,.85],['structure +'+fP(I.structFrac),O.tTot-(O.tArr+O.tRad+O.tCmp),V.grey,.3]];
-    const Y1=v=>yb-(v/(O.tTot*1.1))*(yb-yt);let acc=0;
-    parts.forEach(p=>{const y0=Y1(acc),y1=Y1(acc+p[1]);s+=COL(x,w,y0,y1,p[2],{op:p[3]});s+=LN(x+w/2+4,(y0+y1)/2,x+w/2+22,(y0+y1)/2,V.ink,{sw:.6,op:.35});s+=T(x+w/2+28,(y0+y1)/2+4,p[0]+'  '+fN(p[1],0)+' t',{s:10.5,f:V.ink});acc+=p[1];});
-    s+=VAL(x,Y1(acc)-8,fN(O.tTot,0)+' t per GW');s+=LAB(x,yb+18,['weight per gigawatt',fN(O.launches.ss100,0)+' Starship launches at 100 t']);
-    /* $/GW launch only, against what the ground charges for power + shell */
-    const bx=560,YL=LOGY(1,100,yb,yt);[1,10,100].forEach((v,i)=>{s+=LN(bx,YL(v),960,YL(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(bx-10,YL(v)+4,'$'+v+'B',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(bx-10,yt-10,'launch cost per GW · log',{a:'end',s:9.5,m:1,f:V.dim});
-    [['Falcon 9','$'+fN(I.kgF9)+'/kg',O.usdGW.f9],['Starship today','$'+fN(I.kgSSnow)+'/kg',O.usdGW.ssNow],['his target','$'+fN(I.kgSSgoal)+'/kg',O.usdGW.ssTarget]].forEach((b,i)=>{const xx=bx+70+i*130;s+=COL(xx,70,yb,YL(b[2]),MC,{op:i===2?.4:.85});s+=VAL(xx,YL(b[2])-8,fB(b[2]));s+=LAB(xx,yb+18,[b[0],b[1]]);});
-    s+=RULEH(bx,960,YL(O.groundPowerShell),MRED,'building + power on the ground '+fB(O.groundPowerShell)+'/GW');
-    s+=T(40,392,fX(O.ratio,1)+' the sunlight of a good ground site · '+fN(O.radKm2,2)+' km² of radiators · '+fN(O.solKm2,2)+' km² of panels · launch must cost under $'+fN(O.kgBreak,0)+'/kg to break even, before radiation, repairs or margin',{s:11,f:V.dim});
-    s+=LINE('Bulk work only, and not before 2031: the same sunlight on the ground comes without the launch bill.',424);
-    return SV(s);
-  }
-  /* his numbers against the base, pair by pair, each on its own unit */
-  let s=FTITLE(40,28,'His numbers next to ours');
-  const tw=1e6*8.76*I.pue*I.util/1e3;
-  const pairs=[['US grid growth','% / yr',5.5,2,'his 4–7','actual 1–3'],['Chip output growth','% / yr',45,I.chipG*100,'his 40–50','ours '+fP(I.chipG)],['Cost per watt','$ / W',40,R.mw,'his 30–50','ours '+fN(R.mw,0)],['Build rate','GW / yr',1000,P[5].nw,'his 1 TW / yr','ours, 2031: '+fN(P[5].nw,0)],['Sunlight in space','× ground',5,O.ratio,'his ≈ 5×','ours '+fX(O.ratio,1)]];
-  const yb=300,yt=90,pw=176;
-  pairs.forEach((p,i)=>{const x0=60+i*pw,log=p[2]/Math.max(p[3],1e-9)>20||p[3]/p[2]>20,mx=Math.max(p[2],p[3])*1.15,Y=log?LOGY(Math.min(p[2],p[3])/10,mx,yb,yt):v=>yb-(v/mx)*(yb-yt);
-    s+=PANEL(x0,yt-30,pw-14,yb-yt+62,{r:10});s+=T(x0+(pw-14)/2,yt-12,p[0],{a:'middle',s:11.5,w:600,f:V.ink});s+=T(x0+(pw-14)/2,yt+2,p[1]+(log?' · log':''),{a:'middle',s:9.5,m:1,f:V.dim});
-    s+=COL(x0+52,44,yb,Y(p[2]),V.amber,{op:.85});s+=COL(x0+112,44,yb,Y(p[3]),MC,{op:.85});
-    s+=VAL(x0+52,Y(p[2])-8,fN(p[2],p[2]<10?1:0),V.amber);s+=VAL(x0+112,Y(p[3])-8,fN(p[3],p[3]<10?1:0),MC);
-    s+=T(x0+52,yb+16,p[4],{a:'middle',s:9,m:1,f:V.amber});s+=T(x0+112,yb+16,p[5],{a:'middle',s:9,m:1,f:MC});});
-  s+='<rect x="40" y="350" width="10" height="10" rx="2" fill="'+V.amber+'"/>'+T(56,359,'his',{s:10.5,f:V.ink});s+='<rect x="100" y="350" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(116,359,'ours',{s:10.5,f:V.ink});
-  s+=T(40,392,'Same direction: build the power, build the chips. Different clocks: 1 TW a year would draw '+fN(tw,0)+' TWh, '+fP(tw/I.worldTWh)+' of world electricity, added every year.',{s:11,f:V.dim});
-  s+=LINE('The disagreement is about time, not physics: our numbers only count a factory from the day it exists.',424);
-  return SV(s);
-};
-
-/* ---- the view ---------------------------------------------- */
-const mpanel=document.getElementById('mpanel'), mrail=document.getElementById('msheets');
-let mcur={i:0,sub:0,filt:'all',year:0};
-function buildRail(){
-  mrail.innerHTML=WM.SHEETS.map((s,i)=>i===0?'<div class="ms hall" data-i="0"><span class="no">▣</span><span class="nm">'+s.n+'</span></div><div class="mh">THE NUMBERS BEHIND IT</div>':'<div class="ms'+(s.k==='chal'?' chal':'')+'" data-i="'+i+'"><span class="no">'+String(i).padStart(2,'0')+'</span><span class="nm">'+s.n+'</span></div>').join('');
-  mrail.querySelectorAll('.ms').forEach(el=>el.addEventListener('click',()=>go('model',undefined,+el.dataset.i)));
-  const J=WM.J, jb=document.getElementById('mjudg');
-  const sl=(k,lab,min,max,step,fmt)=>'<div class="jrow"><label><span>'+lab+'</span><input type="range" data-j="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+J[k]+'" aria-label="'+lab+'"></label><span class="jv" data-jv="'+k+'">'+fmt(J[k])+'</span></div>';
-  jb.innerHTML='<div class="mh">YOUR CALLS</div>'
-   +sl('fleet','Fleet size',20,300,5,v=>v+' GW')
-   +sl('hurdle','Return investors need',0.06,0.20,0.01,v=>fP(v))
-   +sl('life','Chip life',3,7,0.5,v=>v+' yr')
-   +sl('pReal','Price per million tokens',0.2,10,0.1,v=>'$'+fN(v,1));
-  const FMT={fleet:v=>v+' GW',hurdle:fP,life:v=>v+' yr',pReal:v=>'$'+fN(v,1),gCloud:fP,gModel:fP,gApp:fP,priceDecline:v=>fX(v,1)};
-  jb.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{const k=inp.dataset.j;J[k]=+inp.value;jb.querySelector('[data-jv="'+k+'"]').textContent=FMT[k](J[k]);renderSheet();}));
-}
-const JSL=(k,lab,min,max,step,fmt)=>'<div class="jrow"><label><span>'+lab+'</span><input type="range" data-j="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+WM.J[k]+'" aria-label="'+lab+'"></label><span class="jv" data-jv="'+k+'">'+fmt(WM.J[k])+'</span></div>';
-function renderSheet(){
-  const S=WM.SHEETS[mcur.i], R=WM.calc(WM.J);
-  killScene();
-  mrail.querySelectorAll('.ms').forEach(el=>el.classList.toggle('on',+el.dataset.i===mcur.i));
-  const subs=S.subs?'<div class="pills">'+S.subs.map((x,j)=>'<div class="pill'+(j===mcur.sub?' on':'')+'" data-s="'+j+'">'+x+'</div>').join('')+'</div>':'';
-  const filt=(S.k==='assump'&&mcur.sub===0)?'<div class="mfilt">'+['all','K','D','E','J'].map(t=>'<div class="pill'+(mcur.filt===t?' on':'')+'" data-f="'+t+'">'+(t==='all'?'all':t+' · '+TAGN[t])+'</div>').join('')+'</div>':'';
-  const body=SHEET[S.k](R,mcur.sub,mcur.filt);
-  const gms=(S.k==='rent'&&mcur.sub>=1&&mcur.sub<=2)?'<div class="jinline">'+JSL('gCloud','Cloud margin',0,.8,.05,fP)+JSL('gModel','AI model margin',0,.8,.05,fP)+JSL('gApp','App margin',0,.8,.05,fP)+'</div>':'';
-  const isSvg=body.trim().charAt(0)==='<'&&body.trim().slice(0,4)==='<svg';
-  mpanel.innerHTML=S.k==='year'?'<div class="dtop"><div class="peyebrow">'+S.eb+'</div></div><div class="dbody">'+body+'</div>'
-    :'<div class="dtop"><div class="peyebrow">'+(mcur.i?'SHEET '+String(mcur.i).padStart(2,'0')+' · ':'')+S.eb+'</div></div><div class="dtop"><div class="ptitle">'+(S.t||S.n)+'</div>'+subs+filt+'</div><div class="dbody">'+gms+(isSvg?'<div class="viz">'+body+'</div>':body)+'</div>';
-  mpanel.querySelectorAll('.jinline input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{WM.J[inp.dataset.j]=+inp.value;mpanel.querySelector('[data-jv="'+inp.dataset.j+'"]').textContent=fP(WM.J[inp.dataset.j]);const R2=WM.calc(WM.J);mpanel.querySelector('.viz').innerHTML=SHEET[S.k](R2,mcur.sub,mcur.filt);}));
-  mpanel.querySelectorAll('.pill[data-s]').forEach(p=>p.addEventListener('click',()=>{mcur.sub=+p.dataset.s;renderSheet();}));
-  mpanel.querySelectorAll('.pill[data-y]').forEach(p=>p.addEventListener('click',()=>{mcur.year=+p.dataset.y;renderSheet();}));
-  mpanel.querySelectorAll('[data-go]').forEach(p=>p.addEventListener('click',()=>go('model',undefined,+p.dataset.go)));
-  document.querySelector('#v-model .body').classList.toggle('full',S.k==='year');
-  mpanel.querySelectorAll('.pill[data-f]').forEach(p=>p.addEventListener('click',()=>{mcur.filt=p.dataset.f;renderSheet();}));
-}
-
-function renderModel(i){const n=WM.SHEETS.length;i=(i==null||isNaN(i))?0:Math.max(0,Math.min(n-1,i));if(i!==mcur.i)mcur.sub=0;mcur.i=i;if(!mrail.children.length)buildRail();renderSheet();}
-/* home preview: the GW path, drawn from the model */
-(function(){const R=WM.calc(WM.J),P=R.path,mx=P[5].chips*1.05;
-  let h='<svg viewBox="0 0 300 116" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
-  const Y=v=>104-(v/mx)*84,X=i=>34+i*46;
-  P.forEach((p,i)=>{let acc=0;[['grid',V.blue],['gas',V.amber],['sol',V.yel],['intl',V.pur]].forEach(sr=>{const v=p[sr[0]];h+='<rect x="'+(X(i)-14)+'" y="'+Y(acc+v)+'" width="28" height="'+(Y(acc)-Y(acc+v))+'" fill="'+sr[1]+'" opacity=".85"/>';acc+=v;});
-    h+='<text x="'+X(i)+'" y="114" text-anchor="middle" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5">'+p.y+'</text>';});
-  h+='<polyline points="'+P.map((p,i)=>X(i)+','+Y(p.chips)).join(' ')+'" fill="none" stroke="'+V.cyan+'" stroke-width="1.2" stroke-dasharray="4 3"/>';
-  h+='<polyline points="'+P.map((p,i)=>X(i)+','+Y(p.wantGW)).join(' ')+'" fill="none" stroke="'+V.red+'" stroke-width="1.2" stroke-dasharray="1.5 3"/>';
-  h+='<text x="6" y="12" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing="1">NEW POWER PER YEAR</text></svg>';
+/* ---- the view ---- */
+const mpanel=document.getElementById('mpanel');
+let fzcur=0;
+function renderModel(i){fzcur=Math.max(0,Math.min(FZ.S.length-1,i||0));renderFZ();}
+function renderFZ(){const o=FZ.calc(),S=FZ.STEPS[fzcur];
+  mpanel.innerHTML='<div class="fzsteps">'+FZ.STEPS.map((s,i)=>'<div class="fzstep'+(i===fzcur?' on':'')+'" data-i="'+i+'"><b>'+(i<4?i+1:'')+'</b>'+s[0]+'</div>').join('')+'</div>'
+   +'<div class="dtop"><div class="peyebrow">'+S[1]+'</div></div><div class="ptitle">'+S[0]+'</div><div class="dbody fzbody">'+FZ.S[fzcur](o)+'</div>';
+  mpanel.querySelectorAll('.fzstep').forEach(el=>el.addEventListener('click',()=>go('model',undefined,+el.dataset.i)));
+  mpanel.querySelectorAll('input[data-r]').forEach(inp=>inp.addEventListener('change',()=>{const v=parseFloat(inp.value);FZ.R[inp.dataset.r]=isNaN(v)?null:v;renderFZ();}));}
+/* home preview: the announced gigawatts */
+(function(){const mx=Math.max(...FZ.GW.map(g=>g.gw));let h='<svg viewBox="0 0 300 116" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
+  FZ.GW.forEach((g,i)=>{const x=10+i*24,hh=g.gw/mx*80,c=g.kind==='announced'?'#57c7dd':g.kind==='planned'?'#e0a355':'#6f8dff';h+='<rect x="'+x+'" y="'+(100-hh)+'" width="16" height="'+hh+'" fill="'+c+'" opacity=".85"/>';});
+  h+='<text x="6" y="12" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing="1">GIGAWATTS, AS ANNOUNCED</text></svg>';
   document.getElementById('miniModel').innerHTML=h;})();
 
 /* ============ ROUTER ============ */
@@ -2848,7 +2510,7 @@ function go(view,layer,topic){
     if(wasStack){panel.classList.add('swap');setTimeout(()=>{doRender();panel.classList.remove('swap');},190);}else doRender();
     cur={view,layer:L.id,topic:goTopic?topic:undefined};
     location.hash='stack/'+L.id+(cur.topic!=null?'/'+cur.topic:'');
-  }else if(view==='model'){killScene();themeFor(null);renderModel(topic);cur={view,topic:mcur.i};location.hash='model/'+mcur.i;
+  }else if(view==='model'){killScene();themeFor(null);renderModel(topic);cur={view,topic:fzcur};location.hash='model/'+fzcur;
   }else{killScene();cur={view};location.hash=view==='home'?'':view;}}
 document.querySelectorAll('[data-nav]').forEach(el=>el.addEventListener('click',()=>go(el.dataset.nav)));
 function fromHash(){const p=(location.hash||'').replace('#','').split('/').filter(Boolean);
