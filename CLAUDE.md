@@ -129,10 +129,27 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
   `WM.IN` holds every input with a tag (`K` constant · `D` disclosure · `E`
   engineering estimate with a range · `J` judgment); `WM.calc` derives
   everything else; `SHEET.*` renders the ten outputs and the Challenger. The
-  four judgments the model asks the user for (fleet under test, hurdle, layer
-  margins, whether 2031 is still general-GPU) are live controls in the rail,
-  not hidden defaults. Add an input by tagging it; never type a derived number
-  into a sheet.
+  judgments the model asks the user for (fleet under test, hurdle, silicon
+  life, realised $/MTok, layer margins, whether 2031 is still general-GPU) are
+  live controls in the rail, not hidden defaults. Add an input by tagging it;
+  never type a derived number into a sheet.
+
+  The front door of that view is **the hall** (`mountHall`): a cutaway of one
+  energized MW with four systems docked to it — watts in (pylon → transformer →
+  bus duct whose thickness is that year's deliverable GW, a grey ghost duct for
+  what the dollars want), silicon in (wafer → CoWoS press → HBM → the racks),
+  tokens out (three streams whose density is tok/s per MW), dollars out (the
+  stack as floors, each 1/(1−g) tall; below coverage 1.0 the upper floors go
+  translucent and a crack runs to the slab). Three cameras: the MW, the works
+  (six bays, one per year, sized by new GW; a bay pours only if the deliverable
+  GW exist and the MW pays its rent inside the tested fleet), and the scarce
+  atom (everything steel except the binding joint, which is copper and moves
+  with the year). Click any joint for a plate with four fields only:
+  time-to-add, idiot index, who collects if it binds, the observable. Five
+  gauges are the observables at their last disclosed values — they are not
+  feeds yet, and the page says so. `scene.add()` returns the scene: rotate a
+  part before adding it, never after. The world camera and the orbital bay
+  are deliberately not built; the build order says the MW pays rent first.
 
 ---
 

@@ -283,17 +283,17 @@
   .msheets{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);
     padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow:auto;scrollbar-width:none;box-shadow:0 30px 80px -30px rgba(0,0,0,.9)}
   .msheets .mh{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--ink-dim);padding:2px 10px 6px;white-space:nowrap}
-  .ms{display:flex;align-items:center;gap:10px;padding:clamp(3px,.75vh,7px) 10px;border-radius:9px;cursor:pointer;transition:.18s;border:1px solid transparent}
+  .ms{display:flex;align-items:center;gap:10px;padding:clamp(2px,.5vh,7px) 10px;border-radius:9px;cursor:pointer;transition:.18s;border:1px solid transparent}
   .ms .no{font:600 10px var(--mono);color:var(--ink-dim);width:18px;flex:none}
   .ms .nm{font:500 12.5px var(--sans);color:var(--ink-soft);letter-spacing:-.01em;white-space:nowrap}
   .ms:hover{background:rgba(255,255,255,.05)}.ms:hover .nm{color:var(--ink)}
   .ms.on{background:color-mix(in srgb,var(--accent) 13%,transparent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
   .ms.on .no{color:var(--accent)}.ms.on .nm{color:var(--ink)}
   .ms.chal{margin-top:4px;border-top:1px solid var(--line2);border-radius:0 0 9px 9px;padding-top:9px}
-  .mjudg{flex:none;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);padding:9px 12px 10px}
+  .mjudg{flex:none;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(15,17,26,.94),rgba(10,12,19,.96));backdrop-filter:blur(14px);padding:7px 12px 8px}
   .mjudg .mh{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--accent);padding-bottom:6px}
-  .jrow{display:grid;grid-template-columns:1fr 58px 44px;align-items:center;gap:8px;padding:clamp(1px,.4vh,3px) 0}
-  .jrow label{font:400 10.5px/1.2 var(--sans);color:var(--ink-soft);display:contents}
+  .jrow{display:grid;grid-template-columns:1fr 58px 44px;align-items:center;gap:8px;padding:clamp(0px,.3vh,3px) 0}
+  .jrow label{font:400 10px/1.15 var(--sans);color:var(--ink-soft);display:contents}
   .jrow label>span{display:block}
   .jrow input[type=range]{width:100%;height:14px;margin:0;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
   .jrow input[type=range]::-webkit-slider-runnable-track{height:2px;background:rgba(255,255,255,.14);border-radius:1px}
@@ -339,6 +339,34 @@
   .mfilt{display:flex;gap:6px;align-items:center;margin-left:auto}
   .mfilt .pill{padding:4px 9px}
   .mnote{font:400 11px/1.45 var(--sans);color:var(--ink-dim);max-width:100ch;margin:0}
+  /* the hall: chrome over the canvas */
+  .mpanel .viz.scene.hall{flex:1;min-height:0;margin:0}
+  .h3d .e3d-bar{left:12px;top:10px;right:12px;justify-content:space-between}
+  .h3d .e3d-chip{padding-left:20px}
+  .h3d-plate{position:absolute;right:12px;top:52px;width:250px;padding:12px 14px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(8,10,14,.86);backdrop-filter:blur(10px);
+    opacity:0;transform:translateX(8px);transition:opacity .25s,transform .25s;pointer-events:none;font-family:var(--sans)}
+  .h3d-plate.on{opacity:1;transform:none;pointer-events:auto}
+  .h3d-pn{font:600 13px/1.25 var(--sans);color:var(--ink);margin:0 24px 8px 0}
+  .h3d-pn b{display:block;font:600 9.5px var(--mono);letter-spacing:.1em;color:#d98a3a;margin-top:4px}
+  .h3d-pr{display:grid;grid-template-columns:86px 1fr;gap:8px;padding:5px 0;border-top:1px solid rgba(255,255,255,.08)}
+  .h3d-pr i{font:500 9px var(--mono);letter-spacing:.08em;color:var(--ink-dim);text-transform:uppercase;font-style:normal;padding-top:2px}
+  .h3d-pr span{font:400 11.5px/1.35 var(--sans);color:var(--ink)}
+  .h3d-x{position:absolute;right:8px;top:8px;width:22px;height:22px;padding:0;border-radius:50%!important;font-size:14px!important;line-height:1}
+  .h3d-gauges{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:8px;align-items:flex-end;pointer-events:none}
+  .h3d-g{flex:1;min-width:0;padding:6px 8px 7px;border:1px solid rgba(255,255,255,.10);border-radius:10px;background:rgba(8,10,14,.72);backdrop-filter:blur(8px);text-align:center}
+  .h3d-g svg{width:64px;height:38px;display:block;margin:0 auto}
+  .h3d-g.off svg{opacity:.5}
+  .h3d-gv{font:600 10.5px var(--mono);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .h3d-gn{font:500 9px var(--mono);letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .h3d-gd{font:400 9px var(--sans);color:var(--ink-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .h3d-gnote{position:absolute;left:0;right:0;bottom:calc(100% + 4px);text-align:center;font:400 9px var(--mono);letter-spacing:.06em;color:var(--ink-dim)}
+  .h3d-tags{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .h3d-tag{position:absolute;transform:translate(-50%,-100%);font:600 9.5px var(--mono);letter-spacing:.12em;color:var(--ink-soft);text-shadow:0 1px 6px #000,0 0 2px #000;white-space:nowrap}
+  .h3d-tag.fl{transform:translate(0,-50%);font-weight:500;letter-spacing:.06em;color:var(--ink-dim)}
+  .h3d-tag.bay{transform:translate(-50%,-100%);color:var(--ink-dim)}
+  .h3d-tag.l{transform:translate(-100%,-50%)}
+  .ms.hall{margin-bottom:4px;padding:clamp(5px,.9vh,10px) 10px;border:1px solid var(--line)}
+  .ms.hall .nm{font-weight:600;color:var(--ink)}
   @media (max-width:900px){#v-model .body{grid-template-columns:1fr;overflow:auto}.mrail{max-height:220px}}
 
   .ver{position:fixed;right:clamp(20px,4vw,52px);bottom:12px;z-index:20;font:400 10px var(--mono);color:var(--ink-dim);letter-spacing:.06em}
@@ -405,7 +433,7 @@
   <div class="body"><aside class="mrail"><div class="msheets" id="msheets"></div><div class="mjudg" id="mjudg"></div></aside><div class="panel mpanel" id="mpanel"></div></div>
 </section>
 
-<div class="ver">v65 · AI World Model</div>
+<div class="ver">v66 · The hall</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2259,6 +2287,277 @@ function mountEras(host){
 window.mountEras=mountEras;
 })();
 
+/* ============================================================
+   THE HALL — a cutaway of one energized MW with four systems
+   docked to it: watts in, silicon in, tokens out, dollars out.
+   Every dimension is a number from WM.calc. Blue cells drive
+   mesh scale, never the other way. One joint is copper: the
+   binding link that year. No text in the scene; tags are DOM.
+   ============================================================ */
+(function(){
+'use strict';
+/* the joints you can click, and what the plate is allowed to say about them */
+var JOINTS={
+  interconnect:{n:'Large-load interconnect',tta:'3–7 yr',idiot:'—',collects:'the utility; whoever already holds a hooked site',obs:'firm GW energized per quarter'},
+  transformer: {n:'Large power transformer',tta:'> 3 yr',idiot:'≈ 3 · copper, GOES steel, oil',collects:'owners of hooked MW; the five OEMs',obs:'firm GW energized per quarter · dock-to-live days'},
+  turbine:     {n:'Heavy-duty gas turbine',tta:'2.5–3.5 yr · sold out to 2028',idiot:'≈ 5, rising with the queue',collects:'three OEMs; behind-the-meter site owners',obs:'firm GW energized per quarter'},
+  solar:       {n:'Solar + storage, behind the meter',tta:'months',idiot:'≈ 1.5–2 · at physics',collects:'no one: it never binds; siting and firming do',obs:'none needed'},
+  wafer:       {n:'Leading-edge wafer',tta:'3–4 yr for a fab',idiot:'≈ 4 at the accelerator: margin, not physics',collects:'TSMC, regardless of whose die',obs:'accelerator-vendor gross margin'},
+  package:     {n:'CoWoS-class package',tta:'12–18 months',idiot:'—',collects:'TSMC; OSAT overflow',obs:'accelerator-vendor gross margin · lead time'},
+  hbm:         {n:'HBM stack',tta:'12–18 months',idiot:'≫ 100 · a missing factory',collects:'HBM makers; one at 55–60% share',obs:'HBM contract price'},
+  cooling:     {n:'Liquid cooling plant',tta:'1–2 yr with the shell',idiot:'≈ 4 · steel, copper, pumps',collects:'fragmented; the shell builder',obs:'dock-to-live days'},
+  rack:        {n:'The MW itself: rack, package, HBM',tta:'dock-to-live, not disclosed',idiot:'≈ 4: the vendor\'s margin',collects:'capital, only if the rent is paid',obs:'GPU-hour on the newest generation'},
+  rent:        {n:'Rent: 1 ÷ life + hurdle',tta:'every year of the life',idiot:'—',collects:'nobody, if coverage < 1: closure C',obs:'GPU-hour on the newest generation vs the rent rate'},
+  floors:      {n:'The stack above the hall',tta:'set by pricing power, least first',idiot:'—',collects:'application and agent layers, if the value is new GDP or substitution',obs:'frontier-tier list price'}
+};
+function mountHall(host,ctx){
+  var T=window.THREE; if(!T||!host) return null;
+  var RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
+  var C={bg:0x09090b,slab:0x171a20,plinth:0x1f232a,steel:0x434c58,steelL:0x76808c,dark:0x262c35,copper:0xb87333,copperLit:0xd98a3a,
+         cyan:0x57c7dd,grey:0x8b93a6,glass:0x141c26,green:0x6fbf6a,red:0xd8493c,concrete:0x2a2f37,blue:0x5b8def};
+  var mats=[],geos=[],gc={},disposed=false,raf=0;
+  function mat(color,o){o=o||{};var m=new T.MeshStandardMaterial({color:color,roughness:o.r!=null?o.r:.72,metalness:o.m!=null?o.m:.4,
+      emissive:o.e!=null?o.e:0x000000,emissiveIntensity:o.ei!=null?o.ei:1,transparent:!!o.t,opacity:o.o!=null?o.o:1,side:o.s||T.FrontSide,depthWrite:o.dw!=null?o.dw:true});
+    mats.push(m);return m;}
+  function G(g){geos.push(g);return g;}
+  function BG(w,h,d){var k='b'+w+'_'+h+'_'+d;return gc[k]||(gc[k]=G(new T.BoxGeometry(w,h,d)));}
+  function CG(rt,rb,h,s){var k='c'+rt+'_'+rb+'_'+h+'_'+(s||12);return gc[k]||(gc[k]=G(new T.CylinderGeometry(rt,rb,h,s||12)));}
+  function box(w,h,d,m,x,y,z){var e=new T.Mesh(BG(w,h,d),m);e.position.set(x||0,y||0,z||0);e.castShadow=true;e.receiveShadow=true;return e;}
+  function cyl(rt,rb,h,m,x,y,z,s){var e=new T.Mesh(CG(rt,rb,h,s),m);e.position.set(x||0,y||0,z||0);e.castShadow=true;return e;}
+  function edges(w,h,d,color,x,y,z,op){var g=G(new T.EdgesGeometry(BG(w,h,d)));var lm=new T.LineBasicMaterial({color:color,transparent:true,opacity:op==null?.5:op});mats.push(lm);
+    var l=new T.LineSegments(g,lm);l.position.set(x||0,y||0,z||0);return l;}
+  var dummy=new T.Object3D();
+  function inst(geom,material,count){var im=new T.InstancedMesh(geom,material,count);im.count=0;im.userData.n=0;im.castShadow=true;return im;}
+  function put(im,x,y,z,rx,ry,rz,s){dummy.position.set(x,y,z);dummy.rotation.set(rx||0,ry||0,rz||0);dummy.scale.setScalar(s==null?1:s);dummy.updateMatrix();
+    var i=im.userData.n++;im.setMatrixAt(i,dummy.matrix);im.count=im.userData.n;return i;}
+
+  /* materials: steel is the ground state; copper is the one scarce atom; cyan is tokens */
+  var M={slab:mat(C.slab,{r:.9,m:.1}),plinth:mat(C.plinth,{r:.85,m:.15}),steel:mat(C.steel),steelL:mat(C.steelL,{r:.5,m:.6}),dark:mat(C.dark,{r:.8}),
+         copper:mat(C.copper,{r:.42,m:.8}),copperLit:mat(C.copper,{r:.4,m:.7,e:C.copperLit,ei:.9}),
+         ghost:mat(C.grey,{t:true,o:.18,r:.9,m:0,dw:false}),glass:mat(0x1b2531,{t:true,o:.5,r:.3,m:.2,dw:false}),
+         floor:mat(0x1f2733,{t:true,o:.55,r:.5,m:.3,dw:false}),floorHi:mat(0x24303f,{t:true,o:.6,r:.5,m:.3,dw:false}),
+         cyan:mat(0x000000,{e:C.cyan,ei:2.6,r:.5,m:0}),cyanSoft:mat(C.cyan,{t:true,o:.14,r:.6,m:0,dw:false}),
+         die:mat(0x0d1116,{e:C.green,ei:.35,r:.6,m:.2}),dieDim:mat(0x0d1116,{e:C.green,ei:.06,r:.6,m:.2}),
+         coolant:mat(0x1d3140,{r:.5,m:.5}),concrete:mat(C.concrete,{r:.95,m:.05}),panel:mat(0x101a2a,{r:.35,m:.5}),
+         crack:new T.LineBasicMaterial({color:C.red,transparent:true,opacity:.9})};
+  mats.push(M.crack);
+
+  var scene=new T.Scene();scene.background=new T.Color(C.bg);scene.fog=new T.Fog(C.bg,90,260);
+  var renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.75;if(T.SRGBColorSpace)renderer.outputColorSpace=T.SRGBColorSpace;
+  var el=renderer.domElement;el.style.cssText='display:block;width:100%;height:100%;cursor:grab';host.appendChild(el);
+  var camera=new T.PerspectiveCamera(40,1,.2,600);
+  scene.add(new T.HemisphereLight(0x55627e,0x0c0e13,2.1));
+  var key=new T.DirectionalLight(0xdce6f6,2.4);key.position.set(-40,60,40);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+  var sc=key.shadow.camera;sc.left=-60;sc.right=60;sc.top=50;sc.bottom=-50;sc.near=10;sc.far=200;key.shadow.bias=-0.0008;key.shadow.normalBias=.3;
+  scene.add(key);scene.add(key.target);
+  var rim=new T.DirectionalLight(0x5a7ea8,.5);rim.position.set(50,20,-60);scene.add(rim);
+
+  /* ---- the slab and the MW ------------------------------------ */
+  var joints={},picks=[];
+  function joint(id,mesh){mesh.userData.joint=id;joints[id]=joints[id]||[];joints[id].push(mesh);picks.push(mesh);return mesh;}
+  scene.add(box(90,.4,60,M.slab,0,-.2,-8));
+  scene.add(box(9,.12,2.4,M.plinth,0,.06,0));
+  var RACKS=7,RX=function(i){return (i-(RACKS-1)/2)*.8;};
+  var trays=inst(BG(.5,.07,1.0),M.steelL,18),dies=inst(BG(.075,.05,.075),M.die,18*4),dieDims=inst(BG(.075,.05,.075),M.dieDim,18*4);
+  for(var i=0;i<RACKS;i++){var x=RX(i),cut=i===3;
+    var fr=box(.62,2.2,1.2,M.dark,x,1.22,0);fr.userData.joint='rack';picks.push(fr);
+    if(cut){fr.material=M.steel;fr.geometry=BG(.62,.06,1.2);fr.position.y=2.36;   /* the cut rack: a lid, open sides, trays showing */
+      scene.add(box(.62,.06,1.2,M.steel,x,.12,0));scene.add(box(.04,2.2,1.2,M.steel,x-.3,1.22,0));scene.add(box(.04,2.2,1.2,M.steel,x+.3,1.22,0));
+      for(var t=0;t<18;t++){var y=.24+t*.114;put(trays,x,y,0);for(var d=0;d<4;d++){put(dies,x-.19+d*.125,y+.06,.1);put(dieDims,x-.19+d*.125,y+.06,.1);}}}
+    else{scene.add(edges(.62,2.2,1.2,0x6a737f,x,1.22,0,.35));for(var s=0;s<9;s++)scene.add(box(.5,.02,.02,M.steelL,x,.3+s*.22,.61));}
+    scene.add(fr);}
+  scene.add(trays);scene.add(dies);scene.add(dieDims);
+  scene.add(joint('cooling',box(.9,2.2,1.2,M.steel,RX(RACKS)+.3,1.22,0)));                   /* the CDU */
+  [2.0,1.85].forEach(function(y){var mp=cyl(.05,.05,6.4,M.coolant,0,y,-.62,8);mp.rotation.z=Math.PI/2;scene.add(mp);});   /* supply and return manifolds */
+  var busway=joint('rack',box(6.6,.22,.32,M.copper,0,2.6,0));scene.add(busway);            /* overhead bus down the row */
+
+  /* ---- watts in: pylon → transformer → bus duct, turbine and array behind ---- */
+  var pylon=new T.Group();pylon.position.set(-30,0,-4);
+  [[-.9,-.9],[.9,-.9],[-.9,.9],[.9,.9]].forEach(function(p){var l=box(.12,14,.12,M.steel,p[0]*.6,7,p[1]*.6);l.rotation.z=p[0]*.045;l.rotation.x=-p[1]*.045;pylon.add(l);});
+  pylon.add(box(5,.14,.14,M.steel,0,12.5,0));pylon.add(box(3.6,.14,.14,M.steel,0,10.2,0));
+  scene.add(pylon);joint('interconnect',pylon.children[0]);joint('interconnect',pylon.children[4]);
+  var line=new T.Mesh(G(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(-30,12.4,-4),new T.Vector3(-22,9.5,-3),new T.Vector3(-14.5,3.2,-1.2)]),16,.04,5,false)),M.steelL);scene.add(line);
+  var xf=new T.Group();xf.position.set(-13,0,0);
+  xf.add(joint('transformer',box(2.6,2.1,1.7,M.steel,0,1.05,0)));
+  var fins=inst(BG(.06,1.7,.5),M.steelL,28);for(var f=0;f<14;f++){put(fins,-1.35-.0,1.05,-.75+f*.115);put(fins,1.35,1.05,-.75+f*.115);}xf.add(fins);
+  for(var b=0;b<3;b++)xf.add(cyl(.09,.12,.8,M.steelL,-.8+b*.8,2.5,0,8));
+  scene.add(xf);
+  var duct=joint('transformer',box(8.4,.3,.34,M.copper,-7.9,2.6,0));scene.add(duct);        /* live: thickness = GW that energize this year */
+  var ghost=box(8.4,.3,.34,M.ghost,-7.9,3.25,0);ghost.castShadow=false;scene.add(ghost);      /* announced: what the dollars want */
+  var turb=new T.Group();turb.position.set(-14,0,-9);
+  turb.add(box(5,.3,2.2,M.concrete,0,.15,0));var tb=cyl(.85,.85,3.2,M.steel,-.6,1.3,0,14);tb.rotation.z=Math.PI/2;turb.add(joint('turbine',tb));
+  var gen=cyl(.5,.5,2.0,M.steelL,1.9,1.3,0,12);gen.rotation.z=Math.PI/2;turb.add(gen);turb.add(cyl(.42,.5,6,M.steel,-2.9,3.3,0,10));
+  turb.add(joint('turbine',box(1.6,1.4,1.4,M.dark,3.6,.9,0)));scene.add(turb);
+  var pipe=new T.Mesh(G(new T.TubeGeometry(new T.CatmullRomCurve3([new T.Vector3(-10.4,.9,-9),new T.Vector3(-10.4,.9,-3),new T.Vector3(-12,.9,-1)]),12,.08,6,false)),M.steelL);scene.add(pipe);
+  var PN=48,panels=inst(BG(2.0,.05,1.1),M.panel,PN);
+  for(var p2=0;p2<PN;p2++){put(panels,-24+(p2%8)*2.3,.7,-14-Math.floor(p2/8)*1.5,-.42,0,0);}panels.userData.joint='solar';picks.push(panels);scene.add(panels);
+  var bess=joint('solar',box(3.0,1.4,1.2,M.dark,-5,.7,-14));scene.add(bess);
+
+  /* ---- silicon in: fab tool → CoWoS press → HBM → the racks ---- */
+  scene.add(box(12.5,.12,.9,M.steelL,10.3,1.0,0));for(var lg=0;lg<5;lg++)scene.add(box(.08,1.0,.08,M.steel,5+lg*2.6,.5,.3));
+  var fab=joint('wafer',box(1.8,2.4,1.8,M.steel,15.6,1.2,-1.4));scene.add(fab);
+  var press=joint('package',box(1.5,1.9,1.5,M.steel,11.2,.95,-1.3));scene.add(press);scene.add(cyl(.18,.18,.9,M.steelL,11.2,2.3,-1.3,8));
+  var hbmSt=joint('hbm',box(1.4,1.6,1.0,M.dark,7.6,.8,-1.2));scene.add(hbmSt);
+  var hbmCubes=inst(BG(.14,.34,.14),M.steelL,12);for(var h=0;h<12;h++)put(hbmCubes,7.1+(h%4)*.3,1.62+Math.floor(h/4)*.0,-1.5+Math.floor(h/4)*.3);scene.add(hbmCubes);
+  var WN=10,wafers=inst(CG(.28,.28,.03,18),M.steelL,WN),pkg=inst(BG(.42,.05,.42),M.dark,WN),pkgDie=inst(BG(.18,.04,.18),M.die,WN),pkgHbm=inst(BG(.06,.06,.06),M.steelL,WN*8);
+  for(var w=0;w<WN;w++){put(wafers,0,0,0);put(pkg,0,0,0);put(pkgDie,0,0,0);for(var q=0;q<8;q++)put(pkgHbm,0,0,0);}
+  scene.add(wafers);scene.add(pkg);scene.add(pkgDie);scene.add(pkgHbm);
+  var belt={t:[]};for(var w2=0;w2<WN;w2++)belt.t.push(w2/WN);
+
+  /* ---- tokens out: three streams from the row front ---- */
+  var TN={inter:80,batch:260,reason:160},tok={};
+  function stream(n,x,r){var im=inst(new T.SphereGeometry(r,6,4),M.cyan,n);var s={im:im,x:x,n:n,t:[],ph:[]};for(var i=0;i<n;i++){s.t.push(Math.random());s.ph.push(Math.random()*6.28);}scene.add(im);return s;}
+  tok.inter=stream(TN.inter,-2.0,.05);tok.batch=stream(TN.batch,0.6,.075);tok.reason=stream(TN.reason,2.8,.065);
+  var pipeB=cyl(.42,.42,17,M.cyanSoft,0.6,1.2,9.2,14);pipeB.rotation.x=Math.PI/2;pipeB.castShadow=false;scene.add(pipeB);
+  scene.add(box(9,.08,1.4,M.plinth,0,.04,18.2));
+
+  /* ---- dollars out: the stack as floors above the hall ---- */
+  var FL=['foundry','vendor','cloud','model','app'],floors={},floorEdges={};
+  FL.forEach(function(k){var m=box(6.4,1,3.4,M.floor,0,0,0);m.castShadow=false;m.userData.joint=k==='foundry'||k==='vendor'?'rack':'floors';picks.push(m);scene.add(m);floors[k]=m;
+    var e=edges(6.4,1,3.4,0x8b93a6,0,0,0,.45);scene.add(e);floorEdges[k]=e;});
+  var roof=box(16,.12,9,M.floorHi,0,0,0);roof.castShadow=false;roof.userData.joint='floors';picks.push(roof);scene.add(roof);
+  var roofEdge=edges(16,.12,9,0xc3c9d6,0,0,0,.5);scene.add(roofEdge);
+  var rentSlab=joint('rent',box(7,.5,3.8,M.steel,0,4.4,0));scene.add(rentSlab);           /* the rent line: the slab the floors stand on */
+  var crackPts=[],cp=new Float32Array(12*3);var crackG=G(new T.BufferGeometry());crackG.setAttribute('position',new T.BufferAttribute(cp,3));
+  var crack=new T.Line(crackG,M.crack);crack.position.z=1.75;crack.frustumCulled=false;scene.add(crack);
+
+  /* ---- the works: six bays behind the hall, one per year ---- */
+  var bays=[];for(var by=0;by<6;by++){var g=new T.Group();g.position.set(-42+by*16,0,-34);
+    var slab=box(1,.5,12,M.concrete,0,.25,0);slab.castShadow=false;var shell=box(1,7,12,M.glass,0,3.75,0);shell.castShadow=false;
+    var wire=edges(1,7,12,0x8b93a6,0,3.75,0,.55);g.add(slab);g.add(shell);g.add(wire);scene.add(g);bays.push({g:g,slab:slab,shell:shell,wire:wire});}
+
+  /* ---- camera ---- */
+  var VIEWS={mw:{t:[0,3.2,1],w:24,h:14,th:.8,ph:1.18},works:{t:[-2,3,-18],w:62,h:30,th:1.45,ph:.98},atom:null};
+  function fitRadius(v){var ht=Math.tan(camera.fov*Math.PI/360);return Math.max(3,Math.min(300,Math.max(v.w/(ht*Math.max(.6,camera.aspect)),v.h/ht)));}
+  var tgt=new T.Vector3().fromArray(VIEWS.mw.t),gTgt=tgt.clone(),rad=20,gRad=20,th=VIEWS.mw.th,gTh=th,ph=VIEWS.mw.ph,gPh=ph,drag=false,px=0,py=0,moved=0,mode='mw';
+  function place(){camera.position.set(tgt.x+rad*Math.sin(ph)*Math.cos(th),tgt.y+rad*Math.cos(ph),tgt.z+rad*Math.sin(ph)*Math.sin(th));camera.lookAt(tgt);}
+  function goView(v){gTgt.fromArray(v.t);gRad=fitRadius(v);while(v.th-gTh>Math.PI)gTh+=Math.PI*2;while(v.th-gTh<-Math.PI)gTh-=Math.PI*2;gTh=v.th;gPh=v.ph;
+    if(RM){tgt.copy(gTgt);rad=gRad;th=gTh;ph=gPh;}}
+  function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
+  function move(e){if(!drag)return;var dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;moved+=Math.abs(dx)+Math.abs(dy);gTh-=dx*.005;gPh=Math.max(.2,Math.min(1.45,gPh-dy*.004));}
+  function up(e){if(drag&&moved<5)pick(e);drag=false;el.style.cursor='grab';}
+  function wheel(e){e.preventDefault();gRad=Math.max(3,Math.min(300,gRad*(1+(e.deltaY>0?.12:-.12))));}
+  var ray=new T.Raycaster(),ndc=new T.Vector2();
+  function pick(e){var b=el.getBoundingClientRect();ndc.set((e.clientX-b.left)/b.width*2-1,-((e.clientY-b.top)/b.height)*2+1);ray.setFromCamera(ndc,camera);
+    var hit=ray.intersectObjects(picks,false);showPlate(hit.length?hit[0].object.userData.joint:null);}
+  el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('wheel',wheel,{passive:false});
+
+  /* ---- chrome: cameras, the year strip, the plate, five gauges, tags. DOM, never in the scene ---- */
+  var ui=document.createElement('div');ui.className='e3d in h3d';
+  ui.innerHTML='<div class="e3d-bar h3d-bar"><div class="e3d-grp"><div class="e3d-row">'+
+      [['mw','The MW'],['works','The works'],['atom','Scarce atom']].map(function(v){return '<button class="e3d-chip" data-cam="'+v[0]+'" style="--ec:#b87333">'+v[1]+'</button>';}).join('')+
+      '</div></div><div class="e3d-grp"><div class="e3d-row" id="h3dYears"></div></div></div>'+
+    '<div class="h3d-plate" id="h3dPlate"></div>'+
+    '<div class="h3d-gauges" id="h3dGauges"></div>'+
+    '<div class="h3d-tags" id="h3dTags"></div>';
+  host.appendChild(ui);
+  var years=ui.querySelector('#h3dYears'),plate=ui.querySelector('#h3dPlate'),gaugeEl=ui.querySelector('#h3dGauges'),tagsEl=ui.querySelector('#h3dTags');
+  years.innerHTML=ctx.years.map(function(y,i){return '<button class="e3d-chip" data-y="'+i+'" style="--ec:#57c7dd">'+y+'</button>';}).join('');
+  ui.querySelectorAll('[data-cam]').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.cam);});});
+  years.querySelectorAll('[data-y]').forEach(function(b){b.addEventListener('click',function(){ctx.setYear(+b.dataset.y);});});
+  function syncChips(){ui.querySelectorAll('[data-cam]').forEach(function(b){b.classList.toggle('on',b.dataset.cam===mode);});years.querySelectorAll('[data-y]').forEach(function(b){b.classList.toggle('on',+b.dataset.y===yi);});}
+  /* tags: a name for each docked system and floor, projected each frame */
+  var TAGS=[['WATTS IN',[-13,3.6,0]],['SILICON IN',[11,3.2,-1.3]],['TOKENS OUT',[0.6,2.6,9]],['DOLLARS OUT',[0,0,0],'roof'],
+            ['foundry',[4.8,0,0],'foundry'],['vendor',[4.8,0,0],'vendor'],['cloud',[4.8,0,0],'cloud'],['model',[4.8,0,0],'model'],['app · agent',[4.8,0,0],'app'],['rent',[-4.0,4.4,0],'','l']];
+  var tagEls=TAGS.map(function(t){var s=document.createElement('span');s.className='h3d-tag'+(t[2]?' fl':'')+(t[3]?' l':'');s.textContent=t[0];tagsEl.appendChild(s);return s;});
+  var bayTags=ctx.years.map(function(y,i){var s=document.createElement('span');s.className='h3d-tag bay';s.textContent=y;tagsEl.appendChild(s);return s;});
+  var pv=new T.Vector3();
+  function placeTags(){var w=host.clientWidth,h=host.clientHeight;
+    function at(s,x,y,z){pv.set(x,y,z).project(camera);var vis=pv.z<1&&pv.x>-1.05&&pv.x<1.05&&pv.y>-1.05&&pv.y<1.05;s.style.display=vis?'block':'none';if(vis){s.style.left=((pv.x+1)/2*w).toFixed(0)+'px';s.style.top=((1-pv.y)/2*h).toFixed(0)+'px';}}
+    TAGS.forEach(function(t,i){var p=t[1];if(mode==='works'&&(t[2]||t[3])){tagEls[i].style.display='none';return;}if(t[2]==='roof')at(tagEls[i],roof.position.x+8*roof.scale.x+.6,roof.position.y,roof.position.z);else if(t[2])at(tagEls[i],p[0],floors[t[2]].position.y,p[2]);else at(tagEls[i],p[0],p[1],p[2]);});
+    bays.forEach(function(b,i){at(bayTags[i],b.g.position.x,7.8,b.g.position.z);if(mode!=='works')bayTags[i].style.display='none';});
+    tagsEl.style.opacity=mode==='atom'?'.35':'1';}
+  function showPlate(id){plate.classList.toggle('on',!!id);if(!id)return;var j=JOINTS[id]||JOINTS.rack,bind=id===atom;
+    plate.innerHTML='<div class="h3d-pn">'+j.n+(bind?'<b>· copper this year</b>':'')+'</div>'+
+      [['time-to-add',j.tta],['idiot index',j.idiot],['who collects if this binds',j.collects],['observable this quarter',j.obs]].map(function(r){return '<div class="h3d-pr"><i>'+r[0]+'</i><span>'+r[1]+'</span></div>';}).join('')+
+      '<button class="h3d-x" aria-label="close">×</button>';
+    plate.querySelector('.h3d-x').addEventListener('click',function(){showPlate(null);});}
+  /* the five gauges: last disclosed value against the line that flips the regime. Not feeds; say so */
+  function gauge(id,name,val,lo,hi,mark,txt,dir,feed){var f=feed===false;var a=v=>Math.max(0,Math.min(1,(v-lo)/(hi-lo)));
+    var arc=function(t){var A=Math.PI*(1-t);return [40+34*Math.cos(A),42-34*Math.sin(A)];};var pv2=arc(a(val)),pm=arc(a(mark));
+    return '<div class="h3d-g'+(f?' off':'')+'" data-g="'+id+'"><svg viewBox="0 0 80 48"><path d="M6 42 A34 34 0 0 1 74 42" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="3"/>'+
+      (f?'':'<path d="M6 42 A34 34 0 0 1 '+pv2[0].toFixed(1)+' '+pv2[1].toFixed(1)+'" fill="none" stroke="#57c7dd" stroke-width="3"/>')+
+      '<line x1="40" y1="42" x2="'+pm[0].toFixed(1)+'" y2="'+pm[1].toFixed(1)+'" stroke="#b87333" stroke-width="1.5"/>'+
+      (f?'':'<circle cx="'+pv2[0].toFixed(1)+'" cy="'+pv2[1].toFixed(1)+'" r="3" fill="#e9ebf2"/>')+'</svg>'+
+      '<div class="h3d-gv">'+txt+'</div><div class="h3d-gn">'+name+'</div><div class="h3d-gd">'+dir+'</div></div>';}
+  function drawGauges(R){var I=R.I;
+    gaugeEl.innerHTML=gauge('hbm','HBM contract',5,1,6,1,'×5 vs Q1-25','falls → memory unbinds')+
+      gauge('gpuh','GPU-hour, newest gen',I.gpuHrB,2,6,R.rentGpuHr,'$'+I.gpuHrB.toFixed(2)+' vs $'+R.rentGpuHr.toFixed(2)+' rent','below the line → closure C')+
+      gauge('gm','Vendor gross margin',I.accGM*100,55,85,70,(I.accGM*100).toFixed(0)+'% · outlook 72–73','< 70% → handed off')+
+      gauge('gw','Firm GW energized / qtr',R.path[yi].nw/4,0,20,3.5,(R.path[yi].nw/4).toFixed(1)+' GW modelled · guide 3.5','below guide → power binds')+
+      gauge('d2l','Dock-to-live days',0,0,1,.5,'no feed','rising → shell binds',false)+
+      '<div class="h3d-gnote">last disclosed values, not feeds. When these five are wired live, this is a desk.</div>';}
+
+  /* ---- apply the model: every dimension from R ---- */
+  var yi=ctx.year||0,atom='hbm',R=null;
+  function atomFor(R,i){var p=R.path[i];if(R.covReal<1||p.inst>R.J.fleet)return 'rent';if(p.bind==='silicon')return 'package';if(i===0)return 'hbm';return 'transformer';}
+  function apply(R2,i){R=R2;yi=i;var P=R.path,p=P[i],mx=Math.max(P[5].chips,P[5].wantGW);
+    atom=atomFor(R,i);
+    /* watts: live duct = deliverable GW, ghost = what the dollars want */
+    duct.scale.y=(.4+2.2*p.nw/mx);ghost.scale.y=(.4+2.2*p.wantGW/mx);ghost.visible=p.wantGW>p.nw*1.05;
+    turb.scale.setScalar(.7+.5*p.gas/19);panels.count=Math.max(6,Math.round(PN*Math.min(1,p.sol/16)));
+    /* silicon: belt speed from that year's supply */
+    belt.v=.05+.16*p.chips/P[5].chips;
+    /* tokens: stream density from tok/s per MW */
+    tok.inter.live=Math.round(TN.inter*Math.min(1,R.inter/R.batch*3));tok.batch.live=TN.batch;tok.reason.live=Math.round(TN.reason*Math.min(1,R.reason/R.batch*1.6));
+    /* dollars: floor height = 1/(1−g); above the rent, translucent with a crack when coverage < 1 */
+    var g={foundry:0,vendor:R.I.accGM,cloud:R.J.gCloud,model:R.J.gModel,app:R.J.gApp},y=4.7,paid=R.covReal>=1;
+    FL.forEach(function(k){var hgt=.55/(1-Math.min(.9,g[k]));var m=floors[k];m.scale.y=hgt;m.position.y=y+hgt/2;floorEdges[k].scale.y=hgt;floorEdges[k].position.y=y+hgt/2;
+      var upper=k==='cloud'||k==='model'||k==='app';m.material=paid||!upper?M.floor:M.ghost;floorEdges[k].material.opacity=paid||!upper?.45:.15;y+=hgt+.08;});
+    roof.position.y=y+.1;roofEdge.position.y=y+.1;roof.scale.x=roof.scale.z=Math.max(.6,Math.min(1.6,R.endGDP*14));roofEdge.scale.x=roofEdge.scale.z=roof.scale.x;roof.material=paid?M.floorHi:M.ghost;
+    crack.visible=!paid;if(!paid){var top=y+.1,n=12;for(var c=0;c<n;c++){var tt=c/(n-1);cp[c*3]=1.2+Math.sin(c*2.7)*.55*(1-tt*.4);cp[c*3+1]=top-(top-.1)*tt;cp[c*3+2]=0;}crackG.attributes.position.needsUpdate=true;}
+    /* the works: a bay pours only if the deliverable GW exist and the MW pays its rent within the tested fleet */
+    bays.forEach(function(b,k){var q=P[k],L=5+q.nw*.16,pour=k===0||(q.inst<=R.J.fleet&&paid);b.slab.scale.x=L;b.shell.scale.x=L;b.wire.scale.x=L;b.slab.visible=pour;b.shell.visible=pour;
+      b.wire.material.color.setHex(k===i?0x57c7dd:(pour?0x8b93a6:0x8a4a48));var far=mode!=='works';b.wire.material.opacity=(k===i?.9:(pour?.5:.28))*(far?.25:1);b.shell.material=far?M.ghost:M.glass;b.slab.visible=pour&&!far;});
+    /* the scarce atom is the only copper */
+    Object.keys(joints).forEach(function(id){joints[id].forEach(function(m){if(m===busway||m===duct)m.material=id===atom?M.copperLit:M.copper;else m.material=id===atom?M.copperLit:(mode==='atom'?M.steel:(m.userData.base||m.material));});});
+    dies.visible=atom!=='package'&&atom!=='hbm';dieDims.visible=!dies.visible;
+    if(mode==='atom')goAtom();syncChips();drawGauges(R);if(plate.classList.contains('on'))showPlate(plate.dataset.id);}
+  Object.keys(joints).forEach(function(id){joints[id].forEach(function(m){m.userData.base=m.material;});});
+  function goAtom(){var m=joints[atom][0],pos=new T.Vector3();m.getWorldPosition(pos);var v={t:[pos.x,pos.y,pos.z],w:14,h:9,th:atom==='transformer'||atom==='hbm'?.9:.75,ph:1.05};if(atom==='hbm')v.t=[7.6,1.2,-1.2];goView(v);}
+  function setMode(m){mode=m;if(m==='atom')goAtom();else goView(VIEWS[m]);apply(R,yi);}
+
+  function resize(){var w=host.clientWidth||900,h=host.clientHeight||500;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(mode!=='atom')gRad=fitRadius(VIEWS[mode]);}
+  var ro=window.ResizeObserver?new ResizeObserver(resize):null;if(ro)ro.observe(host);else addEventListener('resize',resize);
+  resize();rad=gRad;tgt.copy(gTgt);place();
+
+  /* ---- loop ---- */
+  var clock=new T.Clock(),tmp=new T.Vector3();
+  function tick(dt,t){
+    /* wafers ride the belt into the press, come out as packages, ride on into the racks */
+    var v=belt.v||.1;for(var i=0;i<WN;i++){belt.t[i]=(belt.t[i]+dt*v)%1;var u=belt.t[i],x=16.2-u*12.4,onW=x>11.2,y=1.06;
+      dummy.position.set(onW?x:99,y,0);dummy.rotation.set(0,0,0);dummy.scale.setScalar(1);dummy.updateMatrix();wafers.setMatrixAt(i,dummy.matrix);
+      dummy.position.set(onW?99:x,y+.02,0);dummy.updateMatrix();pkg.setMatrixAt(i,dummy.matrix);dummy.position.y=y+.06;dummy.updateMatrix();pkgDie.setMatrixAt(i,dummy.matrix);
+      for(var q=0;q<8;q++){var a=q*Math.PI/4;dummy.position.set(onW?99:x+Math.cos(a)*.16,y+.07,Math.sin(a)*.16);dummy.updateMatrix();pkgHbm.setMatrixAt(i*8+q,dummy.matrix);}}
+    wafers.instanceMatrix.needsUpdate=pkg.instanceMatrix.needsUpdate=pkgDie.instanceMatrix.needsUpdate=pkgHbm.instanceMatrix.needsUpdate=true;
+    /* tokens leave the row front and travel to the delivery plate */
+    ['inter','batch','reason'].forEach(function(k){var s=tok[k],live=s.live==null?s.n:s.live,sp=k==='inter'?.55:k==='batch'?.32:.4;
+      for(var i=0;i<s.n;i++){var on=i<live;if(k==='reason')on=on&&(Math.sin(t*1.7+s.ph[i]*0.3)>-.2);
+        s.t[i]=(s.t[i]+dt*sp*(1+(i%7)*.04))%1;var z=.9+s.t[i]*17,spread=k==='batch'?.3:k==='reason'?.16:.05,a=s.ph[i]+t*(k==='inter'?4:1.2);
+        dummy.position.set(on?s.x+Math.cos(a)*spread*(i%3+1)/3:99,1.2+Math.sin(a)*spread*(i%3+1)/3,z);dummy.rotation.set(0,0,0);dummy.scale.setScalar(1);dummy.updateMatrix();s.im.setMatrixAt(i,dummy.matrix);}
+      s.im.instanceMatrix.needsUpdate=true;});
+    if(atom&&joints[atom]&&!RM){var e=.7+.45*Math.sin(t*2.4);M.copperLit.emissiveIntensity=e;}
+    placeTags();}
+  tick(0,0);
+  function frame(){if(disposed)return;raf=requestAnimationFrame(frame);var dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+    var k=RM?1:1-Math.pow(.002,dt);th+=(gTh-th)*k;ph+=(gPh-ph)*k;rad+=(gRad-rad)*k;tgt.lerp(gTgt,k);place();tick(RM?0:dt,t);renderer.render(scene,camera);}
+  frame();
+  function dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);
+    el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);el.removeEventListener('wheel',wheel);
+    if(ro)ro.disconnect();else removeEventListener('resize',resize);
+    scene.traverse(function(o){if(o.geometry)o.geometry.dispose();});geos.forEach(function(g){g.dispose&&g.dispose();});mats.forEach(function(m){m.dispose&&m.dispose();});renderer.dispose();
+    if(el.parentNode)el.parentNode.removeChild(el);if(ui.parentNode)ui.parentNode.removeChild(ui);}
+  /* first state */
+  goView(VIEWS.mw);tgt.copy(gTgt);rad=gRad;th=gTh;ph=gPh;place();
+  var showPlateBase=showPlate;showPlate=function(id){plate.dataset.id=id||'';showPlateBase(id);};
+  apply(ctx.calc(),yi);
+  return {dispose:dispose,update:function(R2,i){apply(R2,i==null?yi:i);},year:function(i){apply(R,i);},pick:function(id){showPlate(id);},mode:setMode};
+}
+window.mountHall=mountHall;
+})();
+
 /* ============ THE 3D SCENE — loaded only when its topic opens ============ */
 let __three=null;
 function loadThree(){
@@ -2328,7 +2627,7 @@ WM.IN={
  cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Liquid cooling plant: CDUs, loops, dry coolers'},
  cShell:   {v:14,lo:10,hi:16,t:'E',n:'Shell + electrical, incl. 800 VDC chain, BESS',s:'powered-shell builds $10–16M/MW'},
  cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'Behind-the-meter generation slice',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
- lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Economic life, silicon (yr)',s:'hyperscalers book 5–6; the frontier moves faster'},
+ lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Economic life, silicon (yr)',s:'hyperscalers book 5–6; the frontier moves faster. Live control, left rail'},
  lifeShell:{v:15,t:'E',n:'Life, shell + cooling (yr)'},
  lifeGen:  {v:25,t:'E',n:'Life, generation (yr)'},
  /* the industrial base: firm new IT GW per year, world */
@@ -2386,12 +2685,12 @@ WM.IN={
  boxMk:    {v:0.15,lo:0.1,hi:0.2,t:'E',n:'OEM / box markup over accelerator'},
 };
 /* judgments the model asks the user for — live controls */
-WM.J={fleet:75,hurdle:0.12,gCloud:0.30,gModel:0.50,gApp:0.50,gpu2031:true,priceDecline:2};
+WM.J={fleet:75,hurdle:0.12,life:5,pReal:0.4,gCloud:0.30,gModel:0.50,gApp:0.50,gpu2031:true,priceDecline:2};
 WM.YEARS=[2026,2027,2028,2029,2030,2031];
 WM.SHORT=0.10;   /* a shortfall under 10% of the year's adds is noise, not a regime */
 
 WM.calc=function(J,over){
-  J=J||WM.J; const I={}; for(const k in WM.IN)I[k]=WM.IN[k].v; if(over)Object.assign(I,over);
+  J=J||WM.J; const I={}; for(const k in WM.IN)I[k]=WM.IN[k].v; if(J.life)I.lifeAcc=J.life; if(over)Object.assign(I,over);
   const R={I:I,J:J};
   /* 1 · physics of one IT MW */
   const nodesMW=1000/I.nodeKW;                               // H800 nodes per IT MW
@@ -2427,6 +2726,7 @@ WM.calc=function(J,over){
   R.rev={interFront:R.tokYr.inter/1e6*I.pFront/1e6,batchComm:R.tokYr.batch/1e6*I.pComm/1e6,batchFront:R.tokYr.batch/1e6*I.pFront/1e6};
   R.cov={interFront:R.rev.interFront/R.rentMW,batchComm:R.rev.batchComm/R.rentMW,batchFront:R.rev.batchFront/R.rentMW};
   R.marketGpuHr=I.gpuHrB; R.covCloud=I.gpuHrB/R.rentGpuHr;
+  R.revReal=R.tokYr.batch/1e6*(J.pReal||I.pComm)/1e6; R.covReal=R.revReal/R.rentMW;   /* what the fleet's batched tokens realise, a judgment */
   /* 6 · margin stack */
   R.mult=1/((1-J.gCloud)*(1-J.gModel)*(1-J.gApp));
   R.walk=(function(){const f=1,acc=f/(1-I.accGM),box=acc*(1+I.boxMk),inst=box/R.accShare,rent=inst*R.rentRate,cloud=rent/(1-J.gCloud),model=cloud/(1-J.gModel),app=model/(1-J.gApp);
@@ -2472,6 +2772,7 @@ WM.calc=function(J,over){
 
 /* ---- sheets ------------------------------------------------ */
 WM.SHEETS=[
+ {k:'hall',n:'The hall',eb:'ONE MW · FOUR SYSTEMS · ONE COPPER JOINT'},
  {k:'memo',n:'Logic memo',eb:'ONE PAGE · NO TAM'},
  {k:'assump',n:'Assumption sheet',eb:'EVERY INPUT, TAGGED'},
  {k:'unit',n:'Unit sheet · one MW',eb:'PHYSICS, THEN DOLLARS',subs:['tokens & joules','bytes per token','dollars per MW']},
@@ -2495,6 +2796,7 @@ const TAGN={K:'constant',D:'disclosure',E:'engineering estimate',J:'judgment'};
 const tagHtml=t=>'<span class="tag '+t+'">'+t+'</span>';
 const tagSvg=(x,y,t)=>{const c={K:'#c3c9d6',D:V.cyan,E:V.amber,J:V.pur}[t];return B(x,y-9,16,13,c,{r:3,fill:c+'22',sw:.9})+T(x+8,y+1,t,{a:'middle',s:8.5,w:700,m:1,f:c});};
 const SHEET={};
+SHEET.hall=function(){return '<div class="viz scene hall" id="hall3d"></div>';};
 /* caption + note, stacked: the note starts under the caption's last line */
 function FOOT(cap,note,y){y=y||402;const l=WRAP(cap,104);let s=l.map((t,i)=>FT(40,y+i*22,t,{s:16.5,f:V.ink})).join('');
   if(note){const ny=y+l.length*22+2;s+=WRAP(note,150).map((t,i)=>T(40,ny+i*13,t,{s:10,f:V.dim})).join('');}return s;}
@@ -2518,7 +2820,7 @@ SHEET.assump=function(R,sub,filt){
   const rows=Object.keys(WM.IN).map(k=>{const a=WM.IN[k];const v=Array.isArray(a.v)?a.v.join(' · '):(typeof a.v==='number'?(a.v<1&&a.v>0?String(a.v):fN(a.v,Number.isInteger(a.v)?0:2)):a.v);
     const fR=x=>Number.isInteger(x)?fN(x,0):(x<1?String(x):fN(x,2));
     return {k:k,a:a,v:v,rng:(a.lo!=null?fR(a.lo)+' – '+fR(a.hi):'')};}).filter(r=>!filt||filt==='all'||r.a.t===filt);
-  const J=[['Fleet under test',R.J.fleet+' GW'],['Unlevered hurdle',fP(R.J.hurdle)],['Cloud gross margin',fP(R.J.gCloud)],['Model gross margin',fP(R.J.gModel)],['Application / agent gross margin',fP(R.J.gApp)],['Fleet-blended price per token, decline per year',fX(R.J.priceDecline,0)],['2031 work still a general-GPU problem',R.J.gpu2031?'yes':'no']];
+  const J=[['Fleet under test',R.J.fleet+' GW'],['Unlevered hurdle',fP(R.J.hurdle)],['Economic life, silicon',R.J.life+' yr'],['Realised $/MTok, batched fleet',"$"+fN(R.J.pReal,2)],['Cloud gross margin',fP(R.J.gCloud)],['Model gross margin',fP(R.J.gModel)],['Application / agent gross margin',fP(R.J.gApp)],['Fleet-blended price per token, decline per year',fX(R.J.priceDecline,0)],['2031 work still a general-GPU problem',R.J.gpu2031?'yes':'no']];
   let h='<table class="mtab"><tr><th>tag</th><th>input</th><th>value</th><th>range</th><th>source / note</th></tr>';
   if(!filt||filt==='all'||filt==='J')J.forEach(j=>{h+='<tr><td>'+tagHtml('J')+'</td><td class="n">'+j[0]+'</td><td class="k">'+j[1]+'</td><td></td><td class="dim">live control, left rail</td></tr>';});
   rows.forEach(r=>{h+='<tr><td>'+tagHtml(r.a.t)+'</td><td class="n">'+r.a.n+'</td><td class="k">'+r.v+'</td><td class="k" style="color:var(--ink-soft)">'+r.rng+'</td><td class="dim">'+(r.a.s||'')+'</td></tr>';});
@@ -2818,7 +3120,7 @@ SHEET.sens=function(R){
    ['Solar + storage growth','40% · 75% · 100%',run({solarG:.4}),run({solarG:1.0})],
    ['Accelerator supply growth','30% · 45% · 60%',run({chipG:.3}),run({chipG:.6})],
    ['$ per MW (all lines)','×0.85 · ×1 · ×1.2',run({cAcc:19.1,cBox:1.3,cNet:3,cSto:1.3,cCool:1.3,cShell:11.9,cGen:.77}),run({cAcc:27,cBox:1.8,cNet:4.2,cSto:1.8,cCool:1.8,cShell:16.8,cGen:1.08})],
-   ['Silicon life','4 · 5 · 6 yr',run({lifeAcc:4}),run({lifeAcc:6})],
+   ['Silicon life','4 · '+J.life+' · 6 yr',run(null,{life:4}),run(null,{life:6})],
    ['Unlevered hurdle','8% · '+fP(J.hurdle)+' · 16%',run(null,{hurdle:.08}),run(null,{hurdle:.16})],
    ['Layer gross margins, all three','−10 pts · base · +10 pts',run(null,{gCloud:J.gCloud-.1,gModel:J.gModel-.1,gApp:J.gApp-.1}),run(null,{gCloud:J.gCloud+.1,gModel:J.gModel+.1,gApp:J.gApp+.1})],
    ['Fleet under test',fN(J.fleet/2,0)+' · '+J.fleet+' · '+fN(J.fleet*2,0)+' GW',run(null,{fleet:J.fleet/2}),run(null,{fleet:J.fleet*2})]];
@@ -2873,35 +3175,44 @@ SHEET.chal=function(R,sub){
 
 /* ---- the view ---------------------------------------------- */
 const mpanel=document.getElementById('mpanel'), mrail=document.getElementById('msheets');
-let mcur={i:0,sub:0,filt:'all'};
+let mcur={i:0,sub:0,filt:'all',year:0};
 function buildRail(){
-  mrail.innerHTML='<div class="mh">TEN OUTPUTS · A CHALLENGER</div>'+WM.SHEETS.map((s,i)=>'<div class="ms'+(s.k==='chal'?' chal':'')+'" data-i="'+i+'"><span class="no">'+String(i+1).padStart(2,'0')+'</span><span class="nm">'+s.n+'</span></div>').join('');
+  mrail.innerHTML=WM.SHEETS.map((s,i)=>i===0?'<div class="ms hall" data-i="0"><span class="no">▣</span><span class="nm">'+s.n+'</span></div><div class="mh">THE BOOK</div>':'<div class="ms'+(s.k==='chal'?' chal':'')+'" data-i="'+i+'"><span class="no">'+String(i).padStart(2,'0')+'</span><span class="nm">'+s.n+'</span></div>').join('');
   mrail.querySelectorAll('.ms').forEach(el=>el.addEventListener('click',()=>go('model',undefined,+el.dataset.i)));
   const J=WM.J, jb=document.getElementById('mjudg');
   const sl=(k,lab,min,max,step,fmt)=>'<div class="jrow"><label><span>'+lab+'</span><input type="range" data-j="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+J[k]+'" aria-label="'+lab+'"></label><span class="jv" data-jv="'+k+'">'+fmt(J[k])+'</span></div>';
   jb.innerHTML='<div class="mh">JUDGMENTS · YOURS</div>'
    +sl('fleet','Fleet under test',20,300,5,v=>v+' GW')
    +sl('hurdle','Hurdle, unlevered',0.06,0.20,0.01,v=>fP(v))
+   +sl('life','Silicon life',3,7,0.5,v=>v+' yr')
+   +sl('pReal','Realised $/MTok',0.2,10,0.1,v=>'$'+fN(v,1))
    +sl('gCloud','Cloud GM',0,0.8,0.05,v=>fP(v))
    +sl('gModel','Model GM',0,0.8,0.05,v=>fP(v))
    +sl('gApp','Application GM',0,0.8,0.05,v=>fP(v))
    +sl('priceDecline','$/token decline / yr',1,10,0.5,v=>fX(v,1))
    +'<div class="jrow tog"><label>2031 still general-GPU</label><span class="jtog" data-j="gpu2031"><span class="'+(J.gpu2031?'on':'')+'" data-v="1">YES</span><span class="'+(J.gpu2031?'':'on')+'" data-v="0">NO</span></span></div>';
-  const FMT={fleet:v=>v+' GW',hurdle:fP,gCloud:fP,gModel:fP,gApp:fP,priceDecline:v=>fX(v,1)};
+  const FMT={fleet:v=>v+' GW',hurdle:fP,life:v=>v+' yr',pReal:v=>'$'+fN(v,1),gCloud:fP,gModel:fP,gApp:fP,priceDecline:v=>fX(v,1)};
   jb.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{const k=inp.dataset.j;J[k]=+inp.value;jb.querySelector('[data-jv="'+k+'"]').textContent=FMT[k](J[k]);renderSheet();}));
   jb.querySelectorAll('.jtog span').forEach(sp=>sp.addEventListener('click',()=>{J.gpu2031=sp.dataset.v==='1';jb.querySelectorAll('.jtog span').forEach(x=>x.classList.toggle('on',x===sp));renderSheet();}));
 }
 function renderSheet(){
   const S=WM.SHEETS[mcur.i], R=WM.calc(WM.J);
+  if(S.k==='hall'&&liveScene&&liveScene.update&&mpanel.querySelector('#hall3d')){liveScene.update(R,mcur.year);return;}
+  killScene();
   mrail.querySelectorAll('.ms').forEach(el=>el.classList.toggle('on',+el.dataset.i===mcur.i));
   const subs=S.subs?'<div class="pills">'+S.subs.map((x,j)=>'<div class="pill'+(j===mcur.sub?' on':'')+'" data-s="'+j+'">'+x+'</div>').join('')+'</div>':'';
   const filt=S.k==='assump'?'<div class="mfilt">'+['all','K','D','E','J'].map(t=>'<div class="pill'+(mcur.filt===t?' on':'')+'" data-f="'+t+'">'+(t==='all'?'all':t+' · '+TAGN[t])+'</div>').join('')+'</div>':'';
   const body=SHEET[S.k](R,mcur.sub,mcur.filt);
   const isSvg=body.trim().charAt(0)==='<'&&body.trim().slice(0,4)==='<svg';
-  mpanel.innerHTML='<div class="dtop"><div class="peyebrow">SHEET '+String(mcur.i+1).padStart(2,'0')+' · '+S.eb+'</div></div><div class="dtop"><div class="ptitle">'+S.n+'</div>'+subs+filt+'</div><div class="dbody">'+(isSvg?'<div class="viz">'+body+'</div>':body)+'</div>';
+  mpanel.innerHTML='<div class="dtop"><div class="peyebrow">'+(mcur.i?'SHEET '+String(mcur.i).padStart(2,'0')+' · ':'')+S.eb+'</div></div><div class="dtop"><div class="ptitle">'+S.n+'</div>'+subs+filt+'</div><div class="dbody">'+(isSvg?'<div class="viz">'+body+'</div>':body)+'</div>';
   mpanel.querySelectorAll('.pill[data-s]').forEach(p=>p.addEventListener('click',()=>{mcur.sub=+p.dataset.s;renderSheet();}));
   mpanel.querySelectorAll('.pill[data-f]').forEach(p=>p.addEventListener('click',()=>{mcur.filt=p.dataset.f;renderSheet();}));
+  if(S.k==='hall')mountHallScene(mpanel.querySelector('#hall3d'));
 }
+function mountHallScene(el){if(!el)return;const my=++sceneTok;
+  loadThree().then(()=>{if(my!==sceneTok||!el.isConnected)return;
+    liveScene=window.mountHall(el,{calc:()=>WM.calc(WM.J),years:WM.YEARS,year:mcur.year,setYear:i=>{mcur.year=i;if(liveScene&&liveScene.year)liveScene.year(i);}});
+  }).catch(()=>{});}
 function renderModel(i){const n=WM.SHEETS.length;i=(i==null||isNaN(i))?0:Math.max(0,Math.min(n-1,i));if(i!==mcur.i)mcur.sub=0;mcur.i=i;if(!mrail.children.length)buildRail();renderSheet();}
 /* home preview: the GW path, drawn from the model */
 (function(){const R=WM.calc(WM.J),P=R.path,mx=P[5].chips*1.05;
