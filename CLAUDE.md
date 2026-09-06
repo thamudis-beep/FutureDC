@@ -107,7 +107,7 @@ Never run `pkill` in the same command as a commit; it kills the shell first.
 
 ## Structure
 
-Four views, hash-routed, in one file.
+Three views, hash-routed, in one file.
 
 - **Home** — title, a pill CTA, two cards that preview real content.
 - **The Atlas** (`#matrix`) — the master grid: the stack down the Y axis, time
@@ -123,24 +123,6 @@ Four views, hash-routed, in one file.
 
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
-- **The AI World Model** (`#model/<n>`) — built from zero. Two kinds of
-  numbers only: physics, and figures a company or a measured fleet has
-  published, each with who said it and when (`FZ.F`, `FZ.GW`). Anything
-  else is an empty field the reader types into (`FZ.R`); the page shows what
-  their number implies and never supplies one of its own. Five screens, the
-  same shape each: published facts on the left with source and date, the
-  arithmetic in the middle as lines, the result on the right as big
-  figures, then a dashed "not published" box with the reader's fields and
-  one line of consequence. The screens: today's machine (one gigawatt at
-  published prices, payback in years); the margin stack (the customer's
-  dollar walked down through app, model, cloud, building, server, NVIDIA,
-  TSMC, each with its published margin); the gigawatts (every published or
-  announced figure by name and date, overlap flagged, as a share of world
-  electricity); watts to GDP (announced gigawatts × measured tokens ×
-  published prices, through the stack, as a share of world GDP); sources.
-  No sliders, no judgments, no code names, no 3D. Add a number only with a
-  publisher and a date; if none exists, it is a reader field.
-
 ---
 
 ## Diagrams

@@ -79,9 +79,8 @@
   .cta .bars i{display:block;height:1.5px;background:var(--ink);border-radius:1px}
   .cta .bars i:nth-child(1){width:13px}.cta .bars i:nth-child(2){width:9px}.cta .bars i:nth-child(3){width:11px}
   .hright{position:relative;height:100%;min-height:0}
-  .hcard.k1{left:0;top:1%}
-  .hcard.k2{right:0;top:31%}
-  .hcard.k3{left:0;top:61%}
+  .hcard.k1{left:0;top:8%}
+  .hcard.k2{right:0;top:44%}
   #v-home h1{font-size:clamp(38px,5.2vw,76px);line-height:.94;letter-spacing:-.03em;font-weight:700;max-width:11ch}
   #v-home h1 .sub{display:block;font-style:italic;color:#cfd6ea;font-size:.62em;margin-top:.06em}
   #v-home .kick{font:500 12px var(--mono);letter-spacing:.28em;color:var(--accent);margin-bottom:20px;text-transform:uppercase}
@@ -277,62 +276,6 @@
   .dpoints li b{color:var(--ink);font-weight:500}
   .dsec{font:600 10px var(--mono);letter-spacing:.16em;color:var(--ink-dim);margin:0 0 12px}
 
-  /* ===== THE AI WORLD MODEL, from zero: five screens, facts left, arithmetic middle, result right ===== */
-  #v-model .body{flex:1;min-height:0;display:flex;padding:clamp(8px,1.6vh,18px) 0}
-  #v-model .panel{position:relative;left:0;top:0;bottom:auto;right:auto;min-width:0;height:100%;flex:1}
-  .fzsteps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-  .fzstep{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border:1px solid var(--line2);border-radius:999px;font:500 11.5px var(--mono);color:var(--ink-dim);cursor:pointer;transition:.18s}
-  .fzstep b{width:18px;height:18px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft)}
-  .fzstep:hover{color:var(--ink-soft);border-color:var(--line)}
-  .fzstep.on{color:var(--ink);border-color:color-mix(in srgb,var(--accent) 50%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
-  .fzstep.on b{background:var(--accent);color:var(--bg);border-color:var(--accent)}
-  .mpanel .ptitle{font-size:clamp(22px,2.2vw,32px);margin:0 0 6px}
-  .fzbody{gap:10px}
-  .fzcols{display:grid;grid-template-columns:1.1fr 1.4fr .9fr;gap:22px;flex:none}
-  .fzcols.three{grid-template-columns:1.6fr .8fr}
-  .fzbody h4{font:600 9.5px var(--mono);letter-spacing:.16em;color:var(--ink-dim);margin:0 0 8px;text-transform:uppercase}
-  .fzf{display:grid;grid-template-columns:auto 1fr;gap:0 10px;padding:clamp(2px,.4vh,4px) 0;border-top:1px solid var(--line2);font:400 10.5px/1.2 var(--sans);color:var(--ink-soft)}
-  .fzf b{font:600 12.5px var(--mono);color:var(--ink);grid-row:span 2;align-self:start;padding-top:1px}
-  .fzf i{font-style:normal;font-size:9.5px;color:var(--ink-dim)}
-  .fzl{display:grid;grid-template-columns:1fr auto;gap:12px;padding:clamp(3px,.7vh,6px) 0;border-top:1px solid var(--line2);font:400 11.5px/1.35 var(--sans);color:var(--ink-soft)}
-  .fzl b{font:600 12px var(--mono);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;max-width:30ch}
-  .fzl.big{border-top:1px solid var(--line);margin-top:6px}
-  .fzl.big b{color:var(--accent);font-size:13px}
-  .fzbig{padding:clamp(5px,.9vh,8px) 0 clamp(6px,1vh,10px);border-top:1px solid var(--line2)}
-  .fzbig b{display:block;font:700 clamp(22px,3.2vh,34px)/1 var(--sans);letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
-  .fzbig span{display:block;font:400 11px/1.3 var(--sans);color:var(--ink-soft);margin-top:5px;max-width:26ch}
-  .fzopen{flex:none;border:1px dashed var(--line);border-radius:12px;padding:8px 14px 2px;margin-top:0}
-  .fzopen p{font:400 11.5px/1.4 var(--sans);color:var(--ink-soft);margin:0 0 6px;max-width:110ch}
-  .fzins{display:flex;gap:18px;flex-wrap:wrap;margin:2px 0 6px}
-  .fzin{display:inline-flex;align-items:center;gap:8px;font:400 11px var(--sans);color:var(--ink-soft)}
-  .fzin input{width:96px;padding:5px 8px;font:600 12px var(--mono);color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:7px;outline:none}
-  .fzin input:focus{border-color:var(--accent)}
-  .fzin i{font-style:normal;font:400 10px var(--mono);color:var(--ink-dim)}
-  .fzconseq{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:clamp(13px,1.8vh,16px);line-height:1.35;color:var(--ink);margin:4px 0 6px;max-width:120ch}
-  .fzbar{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);flex:none}
-  .fzslice{height:100%;min-width:1px}
-  .fzslice.rest{background:repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 4px,transparent 4px 8px)}
-  .fzbarlab{display:flex;gap:14px;flex-wrap:wrap;font:400 10.5px var(--sans);color:var(--ink-soft);flex:none}
-  .fzbarlab i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-  .fztab{width:100%;border-collapse:collapse;font:400 clamp(11px,1.6vh,12.5px)/1.35 var(--sans);color:var(--ink-soft);flex:none}
-  .fztab th{font:600 9.5px var(--mono);letter-spacing:.14em;color:var(--ink-dim);text-align:left;padding:4px 9px 7px;border-bottom:1px solid var(--line);text-transform:uppercase}
-  .fztab td{padding:clamp(3px,.6vh,7px) 9px;border-bottom:1px solid var(--line2);vertical-align:top}
-  .fztab td.w{color:var(--ink);font-weight:500}
-  .fztab td.k{font:600 .96em var(--mono);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
-  .fztab td.s{color:var(--ink-dim);font-size:.9em}
-  .fztab em{color:var(--today);font-style:normal}
-  .fzchart{display:flex;gap:6px;align-items:flex-end;height:clamp(140px,24vh,230px);flex:none;padding:18px 4px 0}
-  .fzcol{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;text-align:center}
-  .fzc{width:70%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;position:relative;min-height:4px}
-  .fzc b{position:absolute;top:-16px;font:600 11px var(--mono);color:var(--ink)}
-  .fzc.added{background:#6f8dff}.fzc.planned{background:#e0a355}.fzc.announced{background:#57c7dd}
-  .fzcol span{font:600 9.5px/1.2 var(--sans);color:var(--ink);margin-top:6px;height:24px}
-  .fzcol i{font:400 8.5px/1.2 var(--sans);color:var(--ink-dim);font-style:normal;height:22px;overflow:hidden}
-  .fzkey{display:flex;gap:18px;font:400 10.5px var(--sans);color:var(--ink-soft);flex:none}
-  .fzkey i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-  .fzkey i.added{background:#6f8dff}.fzkey i.planned{background:#e0a355}.fzkey i.announced{background:#57c7dd}
-  @media (max-width:900px){.fzcols,.fzcols.three{grid-template-columns:1fr}}
-
   .ver{position:fixed;right:clamp(20px,4vw,52px);bottom:12px;z-index:20;font:400 10px var(--mono);color:var(--ink-dim);letter-spacing:.06em}
   @media (max-width:900px){
     #v-home .cards,#v-stack .body{grid-template-columns:1fr;overflow:auto;align-items:start}
@@ -350,7 +293,7 @@
 
 <div class="bar">
   <div class="brand" data-nav="home"><span class="dia"></span><b>FUTURE&nbsp;OF&nbsp;THE&nbsp;DATA&nbsp;CENTER</b></div>
-  <div class="topnav"><span class="slider" id="navSlider"></span><a data-nav="home">Home</a><a data-nav="atlas">The Atlas</a><a data-nav="stack">Inside the Data Center</a><a data-nav="model">AI World Model</a></div>
+  <div class="topnav"><span class="slider" id="navSlider"></span><a data-nav="home">Home</a><a data-nav="atlas">The Atlas</a><a data-nav="stack">Inside the Data Center</a></div>
 </div>
 
 <!-- HOME -->
@@ -372,11 +315,6 @@
       <div class="meta"><h3>Inside the Data Center</h3></div>
       <div class="go">&rarr;</div>
      </div>
-     <div class="hcard k3" data-nav="model" style="--ca:var(--future);--sd:5s">
-      <div class="pic"><div class="mini-stack" id="miniModel"></div></div>
-      <div class="meta"><h3>AI World Model</h3></div>
-      <div class="go">&rarr;</div>
-     </div>
     </div>
    </div>
   </div>
@@ -392,12 +330,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<!-- AI WORLD MODEL -->
-<section class="view" id="v-model">
-  <div class="body"><div class="panel mpanel" id="mpanel"></div></div>
-</section>
-
-<div class="ver">v73 · From zero</div>
+<div class="ver">v74 · Three views</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2274,216 +2207,6 @@ function mountScene(el){
   }).catch(()=>{});
 }
 
-/* ============================================================
-   THE AI WORLD MODEL, from zero.
-   Two kinds of numbers only: physics, and figures a company or a
-   measured fleet has published, each with a date. Anything else is an
-   empty field the reader fills in. The page shows what their number
-   implies and never supplies one of its own.
-   ============================================================ */
-const FZ={};
-/* published facts: value, unit, who said it, when */
-FZ.F={
- rackGPU:  {v:72,   u:'GPUs per rack',            s:'NVIDIA GB200 NVL72 spec',                  d:'2024'},
- rackKW:   {v:120,  u:'kW per rack',              s:'NVIDIA GB200 NVL72 spec',                  d:'2024'},
- h800W:    {v:700,  u:'W per H800 GPU',           s:'NVIDIA H800 spec',                          d:'2023'},
- dsPeak:   {v:14800,u:'tokens/s per 8-GPU server, peak',   s:'DeepSeek inference-system disclosure',     d:'Mar 2025'},
- dsAvg:    {v:8575, u:'tokens/s per server, day average', s:'DeepSeek: 168B tokens/day ÷ 226.75 servers',d:'Mar 2025'},
- dsRevDay: {v:562027,u:'$/day at list, 1,814 GPUs',s:'DeepSeek: theoretical revenue at R1 pricing', d:'Mar 2025'},
- dsGPUs:   {v:1814, u:'GPUs in that fleet',       s:'DeepSeek: 226.75 servers × 8',              d:'Mar 2025'},
- dsCostHr: {v:2,    u:'$ per GPU-hour, their cost basis', s:'DeepSeek',                          d:'Mar 2025'},
- pR1:      {v:2.19, u:'$ per million output tokens, DeepSeek-R1', s:'DeepSeek price list',       d:'Jan 2025'},
- pV32:     {v:0.42, u:'$ per million output tokens, DeepSeek-V3.2', s:'DeepSeek price list',     d:'Sep 2025'},
- pGPT5:    {v:10,   u:'$ per million output tokens, GPT-5', s:'OpenAI price list',               d:'Aug 2025'},
- pSonnet:  {v:15,   u:'$ per million output tokens, Claude Sonnet 4.5', s:'Anthropic price list',d:'Sep 2025'},
- rentH100: {v:2.99, u:'$ per GPU-hour, H100 on demand', s:'Lambda public price list',            d:'2025'},
- gpuPrice: {v:[30000,40000],u:'$ per Blackwell GPU', s:'Jensen Huang, CNBC interview',           d:'Mar 2024'},
- stargate: {v:[500,10],u:'$B for GW, Stargate',   s:'OpenAI · SoftBank · Oracle announcement',   d:'Jan 2025'},
- msLife:   {v:6,    u:'years, server useful life', s:'Microsoft 10-K, life extended from 4 to 6', d:'FY2023'},
- gmTSMC:   {v:0.59, u:'gross margin, TSMC',       s:'TSMC quarterly report',                     d:'Q3 2025'},
- gmNVDA:   {v:0.75, u:'gross margin, NVIDIA data center', s:'NVIDIA quarterly report',           d:'2025'},
- gmSMCI:   {v:0.10, u:'gross margin, Supermicro',  s:'Supermicro annual report',                  d:'FY2025'},
- omAWS:    {v:0.37, u:'operating margin, AWS',    s:'Amazon annual report, AWS segment',         d:'FY2024'},
- gmCRM:    {v:0.77, u:'gross margin, Salesforce', s:'Salesforce annual report',                  d:'FY2025'},
- gdpW:     {v:115,  u:'$T, world GDP',            s:'IMF World Economic Outlook',                d:'2025'},
- elecW:    {v:30900,u:'TWh, world electricity',   s:'Ember Global Electricity Review',           d:'2024'},
- priceFall:{v:10,   u:'× per year, price fall at constant quality', s:'Epoch AI analysis of API prices', d:'2025'},
-};
-/* gigawatts, as published or announced, with the words used */
-FZ.GW=[
- {who:'AWS',            gw:3.9, kind:'added',     note:'added in 2025; total to double by end-2027', s:'Amazon',               d:'2025'},
- {who:'Big-4 clouds',   gw:14,  kind:'planned',   note:'to add in 2026',                            s:'company guidance',     d:'2025'},
- {who:'Big-4 clouds',   gw:20,  kind:'planned',   note:'to add in 2027',                            s:'company guidance',     d:'2025'},
- {who:'Stargate',       gw:10,  kind:'announced', note:'$500B, by 2029',                            s:'OpenAI · SoftBank · Oracle', d:'Jan 2025'},
- {who:'OpenAI · Oracle',gw:4.5, kind:'announced', note:'$300B contract over 5 years',               s:'Oracle · OpenAI',      d:'Jul 2025'},
- {who:'OpenAI · NVIDIA',gw:10,  kind:'announced', note:'letter of intent, first GW 2026',           s:'NVIDIA · OpenAI',      d:'Sep 2025'},
- {who:'OpenAI · AMD',   gw:6,   kind:'announced', note:'first GW 2026',                             s:'AMD · OpenAI',         d:'Oct 2025'},
- {who:'OpenAI · Broadcom',gw:10,kind:'announced', note:'custom chips, 2026–2029',                   s:'Broadcom · OpenAI',    d:'Oct 2025'},
- {who:'Meta Hyperion',  gw:5,   kind:'announced', note:'Louisiana, by 2030',                        s:'Meta',                 d:'Jul 2025'},
- {who:'Meta Prometheus',gw:1,   kind:'announced', note:'Ohio, 2026',                                s:'Meta',                 d:'Jul 2025'},
- {who:'xAI Colossus 2', gw:1,   kind:'announced', note:'Memphis',                                   s:'xAI',                  d:'2025'},
- {who:'Anthropic · Google',gw:1,kind:'announced', note:'TPUs, 2026',                                s:'Anthropic · Google',   d:'Oct 2025'},
-];
-/* the reader's numbers: blank until typed */
-FZ.R={use:null,price:null,gmLab:null,share:null};
-
-FZ.calc=function(){const F=FZ.F,R=FZ.R,o={};
-  /* one gigawatt: what it makes, from the measured fleet */
-  const wServer=8*F.h800W.v;                                 // GPU power only; the server draws more, so this overstates nothing in the fleet's favour
-  o.tokW=F.dsPeak.v/wServer; o.tokWavg=F.dsAvg.v/wServer;     // tokens per second per watt
-  o.tokGW=o.tokW*1e9; o.tokGWavg=o.tokWavg*1e9;
-  o.tokYr=o.tokGWavg*3.156e7;                                 // tokens per gigawatt-year at the measured average
-  o.gpusGW=1e9/(F.rackKW.v*1000)*F.rackGPU.v;                  // Blackwell GPUs per GW
-  o.chipsGW=[o.gpusGW*F.gpuPrice.v[0]/1e9,o.gpusGW*F.gpuPrice.v[1]/1e9];   // $B
-  o.allinGW=F.stargate.v[0]/F.stargate.v[1];                  // $B per GW, announced
-  o.chipShare=[o.chipsGW[0]/o.allinGW,o.chipsGW[1]/o.allinGW];
-  /* what it earns, at published prices, if every token sells */
-  const gpuDay=F.dsRevDay.v/F.dsGPUs.v, gpusH800=1e9/F.h800W.v;
-  o.revR1=gpuDay*gpusH800*365/1e9;                            // $B per GW-year at R1 list, measured throughput
-  o.revV32=o.revR1*F.pV32.v/F.pR1.v;
-  o.revRent=F.rentH100.v*gpusH800*8760/1e9;                   // $B per GW-year at the published GPU-hour
-  o.revGPT5=o.tokYr/1e6*F.pGPT5.v/1e9;
-  o.pay=r=>o.allinGW/r;                                       // years to pay back, undiscounted
-  /* the reader's machine */
-  const use=R.use==null?1:R.use, price=R.price==null?null:R.price;
-  o.revReader=price==null?null:o.tokYr*use/1e6*price/1e9;
-  o.payReader=o.revReader?o.allinGW/o.revReader:null;
-  /* the stack: the customer's dollar, down */
-  const gmLab=R.gmLab==null?null:R.gmLab;
-  o.stack=(function(){const rows=[];let d=1;
-    rows.push({who:'the app',        keeps:F.gmCRM.v, src:F.gmCRM});          d*=1-F.gmCRM.v;
-    rows.push({who:'the model lab',  keeps:gmLab,     src:null});             d*=gmLab==null?1:1-gmLab;
-    rows.push({who:'the cloud',      keeps:F.omAWS.v, src:F.omAWS});          d*=1-F.omAWS.v;
-    /* the cloud's cost is the machine: chips are a share of it, the rest is building, power, network */
-    const cs=(o.chipShare[0]+o.chipShare[1])/2;
-    rows.push({who:'building, power, network',keeps:1-cs,src:F.stargate,flat:true}); const toChip=d*cs; d=toChip;
-    rows.push({who:'the server maker',keeps:F.gmSMCI.v,src:F.gmSMCI});         d*=1-F.gmSMCI.v;
-    rows.push({who:'NVIDIA',         keeps:F.gmNVDA.v, src:F.gmNVDA});         d*=1-F.gmNVDA.v;
-    rows.push({who:'TSMC',           keeps:F.gmTSMC.v, src:F.gmTSMC});         d*=1-F.gmTSMC.v;
-    rows.push({who:'wafer, memory, packaging inputs',keeps:1,src:null,flat:true});
-    return rows;})();
-  /* gigawatts */
-  o.gwAdded=FZ.GW.filter(g=>g.kind!=='announced').reduce((a,g)=>a+g.gw,0);
-  o.gwAnn=FZ.GW.filter(g=>g.kind==='announced').reduce((a,g)=>a+g.gw,0);
-  o.gwOpenAI=FZ.GW.filter(g=>/OpenAI|Stargate/.test(g.who)).reduce((a,g)=>a+g.gw,0);
-  o.twh=gw=>gw*8.76;                                          // TWh per year at full draw
-  /* watts to GDP */
-  o.gw=o.gwAnn;
-  o.tokAll=o.tokYr*o.gw;                                      // tokens per year, all announced GW, measured average
-  o.revAll={v32:o.tokAll/1e6*F.pV32.v/1e12, gpt5:o.tokAll/1e6*F.pGPT5.v/1e12};   // $T
-  const mult=1/((1-F.gmCRM.v)*(gmLab==null?1:1-gmLab)*(1-F.omAWS.v));
-  o.mult=mult; o.custAll={v32:o.revAll.v32*mult,gpt5:o.revAll.gpt5*mult};
-  o.gdpShare={v32:o.custAll.v32/F.gdpW.v,gpt5:o.custAll.gpt5/F.gdpW.v};
-  o.elecShare=o.twh(o.gw)/F.elecW.v;
-  return o;};
-
-/* ---- the screens ---- */
-FZ.STEPS=[['Today\'s machine','ONE GIGAWATT AT TODAY\'S PUBLISHED PRICES'],['The margin stack','THE CUSTOMER\'S DOLLAR, WALKED DOWN'],['The gigawatts','WHAT HAS BEEN PUBLISHED OR ANNOUNCED'],['Watts to GDP','WHAT THE ANNOUNCED GIGAWATTS MUST EARN'],['Sources','EVERY NUMBER, WHO SAID IT, WHEN']];
-const fzN=(x,d)=>Number(x).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
-const fzB=x=>'$'+fzN(x,x<10?1:0)+'B', fzT=x=>'$'+fzN(x,x<10?2:1)+'T', fzP=(x,d)=>fzN(x*100,d||0)+'%';
-const fact=(k,label)=>{const f=FZ.F[k],v=Array.isArray(f.v)?f.v.map(x=>fzN(x)).join('–'):fzN(f.v,f.v<1?2:(f.v<10&&!Number.isInteger(f.v)?2:0));
-  return '<div class="fzf"><b>'+v+'</b><span>'+(label||f.u)+'</span><i>'+f.s+' · '+f.d+'</i></div>';};
-const line=(l,r)=>'<div class="fzl"><span>'+l+'</span><b>'+r+'</b></div>';
-const big=(v,l)=>'<div class="fzbig"><b>'+v+'</b><span>'+l+'</span></div>';
-const field=(k,label,ph,unit)=>'<label class="fzin"><span>'+label+'</span><input type="number" step="any" data-r="'+k+'" placeholder="'+ph+'" value="'+(FZ.R[k]==null?'':FZ.R[k])+'"><i>'+unit+'</i></label>';
-
-FZ.S=[];
-/* 1 · today's machine */
-FZ.S[0]=function(o){const F=FZ.F;
-  return '<div class="fzcols"><div class="fzfacts"><h4>Published</h4>'
-   +fact('dsPeak')+fact('h800W')+fact('rackGPU')+fact('rackKW')+fact('gpuPrice')+fact('stargate','$B for GW, all-in, Stargate')+fact('pV32')+fact('pGPT5')+fact('rentH100')
-   +'</div><div class="fzmath"><h4>Arithmetic</h4>'
-   +line('tokens per second per watt, peak','14,800 ÷ (8 × 700 W) = '+fzN(o.tokW,2))
-   +line('at the day average, per year',fzN(o.tokYr/1e12,0)+' trillion tokens')
-   +line('GPUs in one gigawatt of racks','1 GW ÷ 120 kW × 72 = '+fzN(o.gpusGW))
-   +line('chips at $30–40k each',fzB(o.chipsGW[0])+' – '+fzB(o.chipsGW[1]))
-   +line('all-in, as announced','$500B ÷ 10 GW = '+fzB(o.allinGW)+' per GW')
-   +line('so chips are',fzP(o.chipShare[0])+' – '+fzP(o.chipShare[1])+' of the build')
-   +line('earns per year if every token sells at $0.42',fzB(o.revV32))
-   +line('earns per year at GPT-5\'s $10',fzB(o.revGPT5))
-   +line('earns per year rented out at $2.99 a GPU-hour',fzB(o.revRent))
-   +'</div><div class="fzres"><h4>Result</h4>'
-   +big(fzN(o.tokGW/1e9,1)+' bn','tokens a second from one gigawatt, measured')
-   +big(fzB(o.allinGW),'to build one gigawatt, as announced')
-   +big(fzN(o.pay(o.revV32),1)+' yr','payback at the cheapest published price')
-   +big(fzN(o.pay(o.revRent),1)+' yr','payback rented out by the hour')
-   +'</div></div>'
-   +'<div class="fzopen"><h4>Not published</h4><p>How busy the machine is, and what a token really sells for after discounts and free use; DeepSeek said its real revenue was "substantially lower" than list. Type yours:</p>'
-   +'<div class="fzins">'+field('use','share of the year busy','e.g. 0.6','0 to 1')+field('price','$ per million tokens realised','e.g. 1.00','$')+'</div>'
-   +(o.revReader?'<div class="fzl big"><span>your machine earns</span><b>'+fzB(o.revReader)+' a year, payback '+fzN(o.payReader,1)+' years'+(o.payReader>F.msLife.v?', longer than Microsoft\'s '+F.msLife.v+'-year server life':'')+'</b></div>':'')
-   +'<p class="fzconseq">At published list prices and full use, one gigawatt pays for itself in one to two years. Everything after this screen is about whether tokens sell at those prices, and how many.</p></div>';};
-/* 2 · the margin stack */
-FZ.S[1]=function(o){const F=FZ.F;
-  let rows='',d=1,left=[];
-  o.stack.forEach((r,i)=>{const keeps=r.keeps==null?null:r.keeps; const take=r.flat?d*keeps:(keeps==null?0:d*keeps); const pass=r.flat?d-take:(keeps==null?d:d*(1-keeps));
-    rows+='<tr><td class="w">'+r.who+'</td><td class="k">'+(keeps==null?'<em>not published</em>':(r.flat?'—':fzP(keeps)))+'</td><td class="k">'+(keeps==null?'—':fzN(take*100,1)+'¢')+'</td><td class="k">'+fzN(pass*100,1)+'¢</td><td class="s">'+(r.src?r.src.s+' · '+r.src.d:(r.who==='the model lab'?'no lab publishes it; type one below':'what remains'))+'</td></tr>';
-    left.push({who:r.who,take:take}); d=pass;});
-  /* the bar: the customer's dollar as slices */
-  let x=0,bar='';const cols=['#ab7cf1','#6f8dff','#57c7dd','#8b93a6','#6a737f','#76b900','#e0a355','#39414c'];
-  left.forEach((l,i)=>{const w=l.take*100;if(w<=0)return;bar+='<div class="fzslice" style="width:'+w+'%;background:'+cols[i]+'" title="'+l.who+' '+fzN(w,1)+'¢"></div>';x+=w;});
-  const rest=100-x;if(rest>0)bar+='<div class="fzslice rest" style="width:'+rest+'%"></div>';
-  return '<div class="fzbar">'+bar+'</div><div class="fzbarlab">'+left.filter(l=>l.take>0).map((l,i)=>'<span><i style="background:'+cols[left.indexOf(l)]+'"></i>'+l.who+' '+fzN(l.take*100,1)+'¢</span>').join('')+'</div>'
-   +'<table class="fztab"><tr><th>who</th><th>keeps</th><th>of the customer\'s dollar</th><th>passes on</th><th>published margin</th></tr>'+rows+'</table>'
-   +'<div class="fzopen"><h4>Not published</h4><p>No foundation-model company publishes its gross margin. Type one and the table redraws:</p><div class="fzins">'+field('gmLab','model lab gross margin','e.g. 0.5','0 to 1')+'</div>'
-   +'<p class="fzconseq">Of each dollar a customer pays for AI software, about '+fzN((1-F.gmCRM.v)*100,0)+' cents reach the model, '+fzN(o.stack[0].keeps?((1-F.gmCRM.v)*(FZ.R.gmLab==null?1:1-FZ.R.gmLab))*100:0,0)+' cents reach the cloud, and the chip maker keeps three quarters of whatever reaches the chip. TSMC, the memory makers, the building and the power are paid at delivery, whatever happens above them.</p></div>';};
-/* 3 · the gigawatts */
-FZ.S[2]=function(o){const F=FZ.F;
-  const mx=Math.max(...FZ.GW.map(g=>g.gw))*1.15;
-  let bars='';FZ.GW.forEach(g=>{const h=g.gw/mx*100;bars+='<div class="fzcol"><div class="fzc '+g.kind+'" style="height:'+h+'%"><b>'+fzN(g.gw,g.gw<5?1:0)+'</b></div><span>'+g.who+'</span><i>'+g.note+'</i></div>';});
-  return '<div class="fzchart">'+bars+'</div><div class="fzkey"><span><i class="added"></i>added, as reported</span><span><i class="planned"></i>planned, in company guidance</span><span><i class="announced"></i>announced projects</span></div>'
-   +'<div class="fzcols three"><div class="fzmath"><h4>Arithmetic</h4>'
-   +line('added and planned by the four largest clouds, 2025–27',fzN(o.gwAdded,1)+' GW')
-   +line('announced projects, summed',fzN(o.gwAnn,1)+' GW')
-   +line('of which tied to OpenAI',fzN(o.gwOpenAI,1)+' GW')
-   +line('electricity if all announced ran flat out',fzN(o.twh(o.gwAnn),0)+' TWh a year')
-   +line('share of world electricity',fzP(o.elecShare,1))
-   +'</div><div class="fzres"><h4>Result</h4>'
-   +big(fzN(o.gwAnn,0)+' GW','announced, by name and date')
-   +big(fzP(o.elecShare,1),'of the world\'s electricity, if it all ran')
-   +'</div></div>'
-   +'<p class="fzconseq">Announced is not switched on. The four largest clouds say they will add '+fzN(o.gwAdded-3.9,0)+' GW over 2026 and 2027. The announced projects sum to '+fzN(o.gwAnn,0)+' GW with no dates a filing would hold them to, and the OpenAI deals overlap: a gigawatt of Stargate may be the same gigawatt as one in the NVIDIA letter.</p>';};
-/* 4 · watts to GDP */
-FZ.S[3]=function(o){const F=FZ.F,R=FZ.R;
-  const share=R.share==null?null:R.share;
-  return '<div class="fzcols"><div class="fzfacts"><h4>Published</h4>'+fact('gdpW')+fact('elecW')+fact('pV32')+fact('pGPT5')+fact('gmCRM')+fact('omAWS')+fact('priceFall')+'</div>'
-   +'<div class="fzmath"><h4>Arithmetic, announced gigawatts</h4>'
-   +line('gigawatts announced',fzN(o.gw,0)+' GW')
-   +line('tokens a year at the measured average',fzN(o.tokAll/1e15,0)+' quadrillion')
-   +line('sold at $0.42 per million',fzT(o.revAll.v32)+' a year')
-   +line('sold at GPT-5\'s $10',fzT(o.revAll.gpt5)+' a year')
-   +line('through the stack, × '+fzN(o.mult,1)+(R.gmLab==null?' (lab margin not typed, so counted as zero)':''),'customers pay '+fzT(o.custAll.v32)+' to '+fzT(o.custAll.gpt5))
-   +line('as a share of world GDP',fzP(o.gdpShare.v32,1)+' at $0.42; '+fzP(o.gdpShare.gpt5,0)+' at $10, more than the world makes, so chat prices cannot survive that volume')
-   +line('as a share of world electricity',fzP(o.elecShare,1))
-   +'</div><div class="fzres"><h4>Result</h4>'
-   +big(fzP(o.gdpShare.v32,1),'of world GDP, paid by customers every year, for the announced gigawatts to earn the cheapest published price')
-   +big(fzP(o.elecShare,1),'of world electricity')
-   +'</div></div>'
-   +'<div class="fzopen"><h4>Not published</h4><p>Where that spending comes from. It is either output that did not exist, or wages and software it replaces, or it does not arrive and the machines earn less. Type the share you believe is new output:</p>'
-   +'<div class="fzins">'+field('share','share that is new output','e.g. 0.3','0 to 1')+'</div>'
-   +(share!=null?'<div class="fzl big"><span>then</span><b>'+fzP(o.gdpShare.v32*share,1)+'–'+fzP(o.gdpShare.gpt5*share,1)+' of world GDP is added, and '+fzP(o.gdpShare.v32*(1-share),1)+'–'+fzP(o.gdpShare.gpt5*(1-share),1)+' of world GDP moves from wages and software to the stack</b></div>':'')
-   +'<p class="fzconseq">Prices at constant quality have fallen about '+F.priceFall.v+'× a year. So the same gigawatts earn the same money only if tokens sold grow '+F.priceFall.v+'× a year. Cheaper transistors were used '+F.priceFall.v+'× more for fifty years; whether cheaper cognition is depends on the machine finishing the job.</p></div>';};
-/* 5 · sources */
-FZ.S[4]=function(o){
-  let h='<table class="fztab src"><tr><th>number</th><th>value</th><th>who published it</th><th>when</th></tr>';
-  Object.keys(FZ.F).forEach(k=>{const f=FZ.F[k];h+='<tr><td class="w">'+f.u+'</td><td class="k">'+(Array.isArray(f.v)?f.v.map(x=>fzN(x)).join(' – '):fzN(f.v,f.v<1?2:(Number.isInteger(f.v)?0:2)))+'</td><td>'+f.s+'</td><td class="k">'+f.d+'</td></tr>';});
-  FZ.GW.forEach(g=>{h+='<tr><td class="w">'+g.who+', '+g.kind+' · '+g.note+'</td><td class="k">'+fzN(g.gw,1)+' GW</td><td>'+g.s+'</td><td class="k">'+g.d+'</td></tr>';});
-  h+='</table><p class="fzconseq">Two physical constants and '+Object.keys(FZ.F).length+' published figures. Nothing else is on the page unless the reader typed it. The page shows one measured fleet on H800s and prices one built on Blackwell; the newer chip makes more tokens per watt, so the payback is, if anything, overstated against the reader.</p>';return h;};
-
-/* ---- the view ---- */
-const mpanel=document.getElementById('mpanel');
-let fzcur=0;
-function renderModel(i){fzcur=Math.max(0,Math.min(FZ.S.length-1,i||0));renderFZ();}
-function renderFZ(){const o=FZ.calc(),S=FZ.STEPS[fzcur];
-  mpanel.innerHTML='<div class="fzsteps">'+FZ.STEPS.map((s,i)=>'<div class="fzstep'+(i===fzcur?' on':'')+'" data-i="'+i+'"><b>'+(i<4?i+1:'')+'</b>'+s[0]+'</div>').join('')+'</div>'
-   +'<div class="dtop"><div class="peyebrow">'+S[1]+'</div></div><div class="ptitle">'+S[0]+'</div><div class="dbody fzbody">'+FZ.S[fzcur](o)+'</div>';
-  mpanel.querySelectorAll('.fzstep').forEach(el=>el.addEventListener('click',()=>go('model',undefined,+el.dataset.i)));
-  mpanel.querySelectorAll('input[data-r]').forEach(inp=>inp.addEventListener('change',()=>{const v=parseFloat(inp.value);FZ.R[inp.dataset.r]=isNaN(v)?null:v;renderFZ();}));}
-/* home preview: the announced gigawatts */
-(function(){const mx=Math.max(...FZ.GW.map(g=>g.gw));let h='<svg viewBox="0 0 300 116" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">';
-  FZ.GW.forEach((g,i)=>{const x=10+i*24,hh=g.gw/mx*80,c=g.kind==='announced'?'#57c7dd':g.kind==='planned'?'#e0a355':'#6f8dff';h+='<rect x="'+x+'" y="'+(100-hh)+'" width="16" height="'+hh+'" fill="'+c+'" opacity=".85"/>';});
-  h+='<text x="6" y="12" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing="1">GIGAWATTS, AS ANNOUNCED</text></svg>';
-  document.getElementById('miniModel').innerHTML=h;})();
-
 /* ============ ROUTER ============ */
 let cur={view:null};
 function moveSlider(){const a=document.querySelector('.topnav a.on'),s=document.getElementById('navSlider');if(!a||!s)return;s.style.width=a.offsetWidth+'px';s.style.transform='translateX('+a.offsetLeft+'px)';}
@@ -2510,12 +2233,10 @@ function go(view,layer,topic){
     if(wasStack){panel.classList.add('swap');setTimeout(()=>{doRender();panel.classList.remove('swap');},190);}else doRender();
     cur={view,layer:L.id,topic:goTopic?topic:undefined};
     location.hash='stack/'+L.id+(cur.topic!=null?'/'+cur.topic:'');
-  }else if(view==='model'){killScene();themeFor(null);renderModel(topic);cur={view,topic:fzcur};location.hash='model/'+fzcur;
   }else{killScene();cur={view};location.hash=view==='home'?'':view;}}
 document.querySelectorAll('[data-nav]').forEach(el=>el.addEventListener('click',()=>go(el.dataset.nav)));
 function fromHash(){const p=(location.hash||'').replace('#','').split('/').filter(Boolean);
   if(!p.length||p[0]==='home')return go('home');if(p[0]==='atlas'||p[0]==='matrix')return go('atlas');
-  if(p[0]==='model')return go('model',undefined,p[1]!=null?+p[1]:0);
   if(p[0]==='stack'){if(!p[1])return go('stack');const id=LAYERS.find(x=>x.id===p[1])?p[1]:'power';const t=p[2]!=null?+p[2]:undefined;return go('stack',id,t);}go('home');}
 addEventListener('hashchange',fromHash);fromHash();
 addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS].reverse().map(l=>l.id);const i=vis.indexOf(cur.layer);
@@ -2592,7 +2313,7 @@ addEventListener('keydown',e=>{if(cur.view!=='stack')return;const vis=[...LAYERS
   /* one reticle per blob; the field already knows where they are */
   const hud=document.getElementById('hud'),TRK=[];
   /* three, spread as a triangle clear of the title and both cards */
-  const ANCH=[[.145,.180,'#6ee7a8'],[.858,.175,'#57c7dd'],[.330,.855,'#e0a355']];
+  const ANCH=[[.145,.180,'#6ee7a8'],[.858,.175,'#57c7dd'],[.500,.855,'#e0a355']];
   (function(){ANCH.forEach(function(a,k){const d=document.createElement('div');
       d.className='trk';d.style.setProperty('--tc',a[2]);
       d.innerHTML='<i></i><i></i><i></i><i></i><b></b>';

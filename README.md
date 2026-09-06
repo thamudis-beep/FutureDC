@@ -21,7 +21,7 @@ Or just open `public/index.html` in a browser — every route works from
 
 ## Views
 
-Four views, hash-routed.
+Three views, hash-routed.
 
 | Route             | View                                                  |
 |-------------------|-------------------------------------------------------|
@@ -29,7 +29,6 @@ Four views, hash-routed.
 | `#matrix`         | The Atlas — the stack down Y, time across X            |
 | `#stack/<layer>`  | Inside the Data Center — a layer's topics              |
 | `#stack/<layer>/<n>` | one topic and its diagram                           |
-| `#model/<n>`      | The AI World Model — `0` today's machine · `1` the margin stack · `2` the gigawatts · `3` watts to GDP · `4` sources |
 
 Layers, bottom to top: Power (6 topics) · Compute (7) · Data Center (7) ·
 Applications (3).
