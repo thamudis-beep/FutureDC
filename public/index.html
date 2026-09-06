@@ -431,7 +431,7 @@
   <div class="body"><aside class="mrail"><div class="msheets" id="msheets"></div><div class="mjudg" id="mjudg"></div></aside><div class="panel mpanel" id="mpanel"></div></div>
 </section>
 
-<div class="ver">v69 · Plain words</div>
+<div class="ver">v70 · No code names</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2296,17 +2296,17 @@ window.mountEras=mountEras;
 'use strict';
 /* the joints you can click, and what the plate is allowed to say about them */
 var JOINTS={
-  interconnect:{n:'Large-load interconnect',tta:'3–7 yr',idiot:'—',collects:'the utility; whoever already holds a hooked site',obs:'firm GW energized per quarter'},
-  transformer: {n:'Large power transformer',tta:'> 3 yr',idiot:'≈ 3 · copper, GOES steel, oil',collects:'owners of hooked MW; the five OEMs',obs:'firm GW energized per quarter · dock-to-live days'},
-  turbine:     {n:'Heavy-duty gas turbine',tta:'2.5–3.5 yr · sold out to 2028',idiot:'≈ 5, rising with the queue',collects:'three OEMs; behind-the-meter site owners',obs:'firm GW energized per quarter'},
-  solar:       {n:'Solar + storage, behind the meter',tta:'months',idiot:'≈ 1.5–2 · at physics',collects:'no one: it never binds; siting and firming do',obs:'none needed'},
-  wafer:       {n:'Leading-edge wafer',tta:'3–4 yr for a fab',idiot:'≈ 4 at the accelerator: margin, not physics',collects:'TSMC, regardless of whose die',obs:'accelerator-vendor gross margin'},
-  package:     {n:'CoWoS-class package',tta:'12–18 months',idiot:'—',collects:'TSMC; OSAT overflow',obs:'accelerator-vendor gross margin · lead time'},
-  hbm:         {n:'HBM stack',tta:'12–18 months',idiot:'≫ 100 · a missing factory',collects:'HBM makers; one at 55–60% share',obs:'HBM contract price'},
-  cooling:     {n:'Liquid cooling plant',tta:'1–2 yr with the shell',idiot:'≈ 4 · steel, copper, pumps',collects:'fragmented; the shell builder',obs:'dock-to-live days'},
-  rack:        {n:'The megawatt itself: racks, chips, memory',tta:'dock-to-live, not disclosed',idiot:'≈ 4: the vendor\'s margin',collects:'capital, only if the rent is paid',obs:'GPU-hour on the newest generation'},
-  rent:        {n:'What the megawatt must earn each year',tta:'every year of the life',idiot:'—',collects:'nobody, if coverage < 1: closure C',obs:'GPU-hour on the newest generation vs the rent rate'},
-  floors:      {n:'The businesses above the data center',tta:'set by pricing power, least first',idiot:'—',collects:'application and agent layers, if the value is new GDP or substitution',obs:'frontier-tier list price'}
+  interconnect:{n:'Grid connection',tta:'3–7 years',idiot:'—',collects:'the utility, and whoever already has a connected site',obs:'GW switched on per quarter'},
+  transformer: {n:'Transformer',tta:'over 3 years',idiot:'≈ 3 (copper, steel, oil)',collects:'owners of connected power; the five transformer makers',obs:'GW switched on per quarter · days from delivery to live'},
+  turbine:     {n:'Gas turbine',tta:'2.5–3.5 years · sold out to 2028',idiot:'≈ 5, rising with the queue',collects:'three turbine makers; owners of on-site power',obs:'GW switched on per quarter'},
+  solar:       {n:'On-site solar + batteries',tta:'months',idiot:'≈ 1.5–2 (near raw cost)',collects:'no one: panels are never short; land and permits are',obs:'none needed'},
+  wafer:       {n:'Chip factory (TSMC)',tta:'3–4 years to build',idiot:'≈ 4 by the time it is a GPU: margin, not physics',collects:'TSMC, whoever designs the chip',obs:'chip maker\'s margin'},
+  package:     {n:'Chip packaging',tta:'12–18 months',idiot:'—',collects:'TSMC and the packaging contractors',obs:'chip maker\'s margin · lead time'},
+  hbm:         {n:'Memory chips',tta:'12–18 months',idiot:'over 100: a missing factory',collects:'the three memory makers; one holds 55–60%',obs:'memory price'},
+  cooling:     {n:'Cooling',tta:'1–2 years, with the building',idiot:'≈ 4 (steel, copper, pumps)',collects:'many small builders',obs:'days from delivery to live'},
+  rack:        {n:'The megawatt itself: racks, chips, memory',tta:'delivery to live: not published',idiot:'≈ 4: the chip maker\'s margin',collects:'the investors, only if it earns enough',obs:'GPU rent per hour'},
+  rent:        {n:'What the megawatt must earn each year',tta:'every year of its life',idiot:'—',collects:'nobody, if it earns less than this: write-downs',obs:'GPU rent per hour vs what is needed'},
+  floors:      {n:'The businesses above the data center',tta:'prices give way here first',idiot:'—',collects:'the apps, if the value is new output or replaced wages',obs:'chat-grade price per million tokens'}
 };
 function mountHall(host,ctx){
   var T=window.THREE; if(!T||!host) return null;
@@ -2590,95 +2590,95 @@ const WM={};
 /* ---- inputs ------------------------------------------------ */
 WM.IN={
  /* physics */
- pue:      {v:1.15,lo:1.10,hi:1.30,t:'E',n:'PUE, liquid-cooled AI hall',s:'Google fleet PUE 1.10 disclosed; new liquid halls 1.1–1.3'},
- util:     {v:0.70,lo:0.55,hi:0.85,t:'E',n:'Annual draw ÷ nameplate IT',s:'fleet averages; diurnal + failed + idle'},
- gpuMW:    {v:500,lo:450,hi:600,t:'E',n:'Accelerators per IT MW',s:'NVL72 ≈ 120–140 kW / 72 GPUs → 7–8 racks per MW, less storage and scale-out'},
- hbmBW:    {v:8,t:'D',n:'HBM bandwidth per accelerator, TB/s',s:'B200 spec'},
- hbmGB:    {v:192,t:'D',n:'HBM per accelerator, GB',s:'B200 spec'},
- rackBW:   {v:576,t:'D',n:'NVL72 aggregate HBM bandwidth, TB/s',s:'NVIDIA spec'},
- activeB:  {v:37,t:'D',n:'Active parameters, frontier-class MoE (B)',s:'DeepSeek-V3: 37B active of 671B'},
- totalB:   {v:671,t:'D',n:'Total parameters, same model (B)',s:'DeepSeek-V3'},
- kvKB:     {v:70,t:'D',n:'KV cache per token, KB (MLA)',s:'DeepSeek-V3 architecture: 576 dims × 2 B × 61 layers'},
- kvDense:  {v:516,t:'D',n:'KV cache per token, KB, dense 405B (FP16)',s:'Llama-3 405B: 126 layers × 2 × 8 heads × 128 × 2 B'},
- ctxK:     {v:5,t:'D',n:'Mean live context per sequence, k tokens',s:'DeepSeek: 4,989 tokens mean KV length per output token'},
+ pue:      {v:1.15,lo:1.10,hi:1.30,t:'E',n:'Building power overhead (PUE)',s:'Google fleet PUE 1.10 disclosed; new liquid halls 1.1–1.3'},
+ util:     {v:0.70,lo:0.55,hi:0.85,t:'E',n:'Average use of installed power',s:'fleet averages; diurnal + failed + idle'},
+ gpuMW:    {v:500,lo:450,hi:600,t:'E',n:'GPUs per megawatt',s:'NVL72 ≈ 120–140 kW / 72 GPUs → 7–8 racks per MW, less storage and scale-out'},
+ hbmBW:    {v:8,t:'D',n:'Memory speed per GPU, TB/s',s:'B200 spec'},
+ hbmGB:    {v:192,t:'D',n:'Memory per GPU, GB',s:'B200 spec'},
+ rackBW:   {v:576,t:'D',n:'Memory speed per rack, TB/s',s:'NVIDIA spec'},
+ activeB:  {v:37,t:'D',n:'Model size used per token, billions',s:'DeepSeek-V3: 37B active of 671B'},
+ totalB:   {v:671,t:'D',n:'Model size, billions',s:'DeepSeek-V3'},
+ kvKB:     {v:70,t:'D',n:'Memory per token of conversation, KB',s:'DeepSeek-V3 architecture: 576 dims × 2 B × 61 layers'},
+ kvDense:  {v:516,t:'D',n:'Same, for a dense 405B model, KB',s:'Llama-3 405B: 126 layers × 2 × 8 heads × 128 × 2 B'},
+ ctxK:     {v:5,t:'D',n:'Average conversation length, thousand tokens',s:'DeepSeek: 4,989 tokens mean KV length per output token'},
  /* the one measured fleet: DeepSeek inference disclosure, Mar 2025 */
- dsOutNode:{v:14800,t:'D',n:'Peak decode, output tok/s per H800 node (8 GPU)',s:'DeepSeek inference-system disclosure, Mar 2025'},
- dsOutAvg: {v:8575,t:'D',n:'Fleet-average output tok/s per node',s:'same: 168 B output tokens/day over 226.75 nodes'},
- dsInAvg:  {v:31300,t:'D',n:'Fleet-average input tok/s per node',s:'same: 608 B input tokens/day, 56% KV-cache hits'},
- dsRevHr:  {v:12.9,t:'D',n:'Revenue per GPU-hour at R1 list, H800',s:'same: $562k/day theoretical ÷ 1,814 GPU'},
- dsCostHr: {v:2.0,t:'D',n:'H800 rental assumed by DeepSeek, $/GPU-h',s:'same: $87k/day cost'},
- nodeKW:   {v:8,lo:7,hi:9,t:'E',n:'H800 node IT draw, kW',s:'8 × 700 W + host, NICs'},
- blackX:   {v:2.5,lo:2,hi:4,t:'E',n:'Blackwell ÷ Hopper tokens per MW',s:'bandwidth/W ×1.6, FP4 ×2 on weights, NVL72 batch ×1.2 → 2.5–4; vendor claims higher'},
- interDiv: {v:3,lo:2,hi:5,t:'E',n:'Batched ÷ interactive throughput (100 tok/s/user)',s:'small batch under-fills bandwidth; per-user latency bound'},
- reasonDiv:{v:1.6,lo:1.3,hi:2.5,t:'E',n:'Batched ÷ reasoning throughput',s:'long KV per sequence shrinks batch; 5–20× output per task'},
- elec:     {v:60,lo:30,hi:100,t:'E',n:'Electricity, $/MWh delivered',s:'US industrial 2025 ≈ $70–80 public; Gulf/ERCOT/BTM gas lower'},
+ dsOutNode:{v:14800,t:'D',n:'Peak output, tokens/s per 8-GPU server',s:'DeepSeek inference-system disclosure, Mar 2025'},
+ dsOutAvg: {v:8575,t:'D',n:'Average output, tokens/s per server',s:'same: 168 B output tokens/day over 226.75 nodes'},
+ dsInAvg:  {v:31300,t:'D',n:'Average input, tokens/s per server',s:'same: 608 B input tokens/day, 56% KV-cache hits'},
+ dsRevHr:  {v:12.9,t:'D',n:'Revenue per GPU-hour at list price',s:'same: $562k/day theoretical ÷ 1,814 GPU'},
+ dsCostHr: {v:2.0,t:'D',n:'GPU rental cost they assumed, $/hour',s:'same: $87k/day cost'},
+ nodeKW:   {v:8,lo:7,hi:9,t:'E',n:'Power per 8-GPU server, kW',s:'8 × 700 W + host, NICs'},
+ blackX:   {v:2.5,lo:2,hi:4,t:'E',n:'Newer chip vs older, tokens per MW',s:'bandwidth/W ×1.6, FP4 ×2 on weights, NVL72 batch ×1.2 → 2.5–4; vendor claims higher'},
+ interDiv: {v:3,lo:2,hi:5,t:'E',n:'Bulk vs chat output, ratio',s:'small batch under-fills bandwidth; per-user latency bound'},
+ reasonDiv:{v:1.6,lo:1.3,hi:2.5,t:'E',n:'Bulk vs reasoning output, ratio',s:'long KV per sequence shrinks batch; 5–20× output per task'},
+ elec:     {v:60,lo:30,hi:100,t:'E',n:'Electricity price, $/MWh',s:'US industrial 2025 ≈ $70–80 public; Gulf/ERCOT/BTM gas lower'},
  /* prices touching the fleet */
- pFront:   {v:10,lo:10,hi:15,t:'D',n:'Frontier-tier output price, $/MTok',s:'list prices 2025–26: GPT-5 $10 · Claude Sonnet $15 · Gemini Pro $10; verify current'},
- pComm:    {v:0.4,lo:0.2,hi:0.6,t:'D',n:'Commodity-tier output price, $/MTok',s:'DeepSeek-V3.2 $0.42 · open-weight 70–120B on providers $0.3–0.6'},
- gpuHrH:   {v:2.2,lo:1.8,hi:2.6,t:'E',n:'H100-class rental, $/GPU-h 2025–26',s:'market; DeepSeek cost basis $2'},
- gpuHrB:   {v:4.2,lo:3.5,hi:5.5,t:'E',n:'B200-class rental, $/GPU-h',s:'market'},
+ pFront:   {v:10,lo:10,hi:15,t:'D',n:'Chat-grade price per million tokens',s:'list prices 2025–26: GPT-5 $10 · Claude Sonnet $15 · Gemini Pro $10; verify current'},
+ pComm:    {v:0.4,lo:0.2,hi:0.6,t:'D',n:'Bulk-grade price per million tokens',s:'DeepSeek-V3.2 $0.42 · open-weight 70–120B on providers $0.3–0.6'},
+ gpuHrH:   {v:2.2,lo:1.8,hi:2.6,t:'E',n:'Older GPU rent, $/hour',s:'market; DeepSeek cost basis $2'},
+ gpuHrB:   {v:4.2,lo:3.5,hi:5.5,t:'E',n:'New GPU rent, $/hour',s:'market'},
  /* dollars to stand up one IT MW, $M per MW, 2026 dollars */
- cAcc:     {v:22.5,lo:20,hi:27,t:'E',n:'Accelerator + HBM + board, incl. Grace / NVSwitch share',s:'500 × $45k; vendor DC revenue ÷ units shipped, HBM ×5 since Q1-25'},
- cBox:     {v:1.5,lo:1,hi:2.5,t:'E',n:'Rack, power shelves, in-rack CDU'},
- cNet:     {v:3.5,lo:2.5,hi:5,t:'E',n:'Scale-out network + optics',s:'800G pluggables $1–1.5k; ≈15% of silicon'},
- cSto:     {v:1.5,lo:1,hi:2,t:'E',n:'Storage + head nodes'},
- cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Liquid cooling plant: CDUs, loops, dry coolers'},
- cShell:   {v:14,lo:10,hi:16,t:'E',n:'Shell + electrical, incl. 800 VDC chain, BESS',s:'powered-shell builds $10–16M/MW'},
- cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'Behind-the-meter generation slice',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
- lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Economic life, silicon (yr)',s:'hyperscalers book 5–6; the frontier moves faster. Live control, left rail'},
- lifeShell:{v:15,t:'E',n:'Life, shell + cooling (yr)'},
- lifeGen:  {v:25,t:'E',n:'Life, generation (yr)'},
+ cAcc:     {v:22.5,lo:20,hi:27,t:'E',n:'Chips and memory, $M per MW',s:'500 × $45k; vendor DC revenue ÷ units shipped, HBM ×5 since Q1-25'},
+ cBox:     {v:1.5,lo:1,hi:2.5,t:'E',n:'Racks, $M per MW'},
+ cNet:     {v:3.5,lo:2.5,hi:5,t:'E',n:'Networking, $M per MW',s:'800G pluggables $1–1.5k; ≈15% of silicon'},
+ cSto:     {v:1.5,lo:1,hi:2,t:'E',n:'Storage, $M per MW'},
+ cCool:    {v:1.5,lo:1,hi:2,t:'E',n:'Cooling, $M per MW'},
+ cShell:   {v:14,lo:10,hi:16,t:'E',n:'Building and electrical, $M per MW',s:'powered-shell builds $10–16M/MW'},
+ cGen:     {v:0.9,lo:0.5,hi:2.5,t:'E',n:'On-site power, $M per MW',s:'40% of sites × $2M/MW-e × PUE; turbines at premium'},
+ lifeAcc:  {v:5,lo:4,hi:6,t:'J',n:'Chip life, years',s:'hyperscalers book 5–6; the frontier moves faster. Live control, left rail'},
+ lifeShell:{v:15,t:'E',n:'Building life, years'},
+ lifeGen:  {v:25,t:'E',n:'Power plant life, years'},
  /* the industrial base: firm new IT GW per year, world */
- gw0:      {v:15,lo:12,hi:20,t:'E',n:'AI IT GW installed, start of 2026',s:'cumulative accelerator revenue ÷ $/MW silicon slice'},
- grid26:   {v:10,lo:8,hi:12,t:'E',n:'Grid-connected new IT GW, 2026',s:'Big-4 guide 14 GW 2026, 20 GW 2027; world ≈ ×1.36 (capex ratio $1.0T ÷ $735B)'},
- gridG:    {v:0.15,lo:0.08,hi:0.25,t:'J',n:'Grid adds growth / yr (transformer-limited)',s:'LPT lead >3 yr; interconnect 3–7 yr'},
- gas:      {v:[5,8,11,14,17,19],t:'E',n:'Behind-the-meter gas, new IT GW by year',s:'heavy-duty turbines ≈ 50–60 GW-e/yr world, sold out to 2028; OEM expansions land 2028+'},
- solar26:  {v:1,lo:0.5,hi:2,t:'E',n:'BTM solar + storage new IT GW, 2026'},
- solarG:   {v:0.75,lo:0.4,hi:1.0,t:'J',n:'Solar + storage growth / yr',s:'panels (>600 GW/yr) and cells (>1 TWh/yr) never bind; siting and firming do'},
- chip26:   {v:19,lo:16,hi:22,t:'E',n:'Accelerator supply, IT GW-equivalent, 2026',s:'vendor supply-constrained; CoWoS ≈ 100k wpm; matched to the 2026 power path'},
- chipG:    {v:0.45,lo:0.30,hi:0.60,t:'E',n:'Accelerator supply growth / yr (wafers, CoWoS, HBM)',s:'vendor guide +70% 2027; CoWoS ~2×/yr; leading-edge wafers +20–30%/yr'},
- intl26:   {v:3,lo:2,hi:5,t:'E',n:'International new IT GW, 2026 (Gulf, China, India, Nordics)'},
- intlG:    {v:0.30,lo:0.15,hi:0.45,t:'J',n:'International growth / yr'},
- capex26:  {v:1000,t:'D',n:'2026 all-in AI infra capex, $B (anchor)',s:'Big-4 guided ≈ $725–745B; remainder Oracle, Apple, neoclouds, sovereigns, China, xAI'},
- claim:    {v:4000,t:'D',n:'The claim under test: $4T by 2030, $B',s:'a headline, not an input'},
+ gw0:      {v:15,lo:12,hi:20,t:'E',n:'AI power in use at start of 2026, GW',s:'cumulative accelerator revenue ÷ $/MW silicon slice'},
+ grid26:   {v:10,lo:8,hi:12,t:'E',n:'New power from the grid in 2026, GW',s:'Big-4 guide 14 GW 2026, 20 GW 2027; world ≈ ×1.36 (capex ratio $1.0T ÷ $735B)'},
+ gridG:    {v:0.15,lo:0.08,hi:0.25,t:'J',n:'Growth of grid additions per year',s:'LPT lead >3 yr; interconnect 3–7 yr'},
+ gas:      {v:[5,8,11,14,17,19],t:'E',n:'New on-site gas power by year, GW',s:'heavy-duty turbines ≈ 50–60 GW-e/yr world, sold out to 2028; OEM expansions land 2028+'},
+ solar26:  {v:1,lo:0.5,hi:2,t:'E',n:'New on-site solar + batteries in 2026, GW'},
+ solarG:   {v:0.75,lo:0.4,hi:1.0,t:'J',n:'Growth of solar + batteries per year',s:'panels (>600 GW/yr) and cells (>1 TWh/yr) never bind; siting and firming do'},
+ chip26:   {v:19,lo:16,hi:22,t:'E',n:'Chips available in 2026, as GW',s:'vendor supply-constrained; CoWoS ≈ 100k wpm; matched to the 2026 power path'},
+ chipG:    {v:0.45,lo:0.30,hi:0.60,t:'E',n:'Chip supply growth per year',s:'vendor guide +70% 2027; CoWoS ~2×/yr; leading-edge wafers +20–30%/yr'},
+ intl26:   {v:3,lo:2,hi:5,t:'E',n:'New power in Gulf, China, India, Nordics, 2026, GW'},
+ intlG:    {v:0.30,lo:0.15,hi:0.45,t:'J',n:'Growth of that per year'},
+ capex26:  {v:1000,t:'D',n:'AI data-center spending 2026, $B (used only as a check)',s:'Big-4 guided ≈ $725–745B; remainder Oracle, Apple, neoclouds, sovereigns, China, xAI'},
+ claim:    {v:4000,t:'D',n:'The claim being tested: $4T by 2030',s:'a headline, not an input'},
  /* world scale (anchors) */
  worldTWh: {v:30900,t:'D',n:'World electricity 2024, TWh',s:'IEA / Ember'},
- worldAdd: {v:1200,lo:1000,hi:1400,t:'E',n:'World generation added per year, TWh/yr',s:'≈ +4% in 2024'},
+ worldAdd: {v:1200,lo:1000,hi:1400,t:'E',n:'Electricity added worldwide per year, TWh',s:'≈ +4% in 2024'},
  gdpW:     {v:115,t:'D',n:'World GDP, $T',s:'IMF 2025'},
- laborW:   {v:60,lo:55,hi:65,t:'E',n:'World labor compensation, $T',s:'≈ 52% of GDP'},
- softW:    {v:1.1,t:'D',n:'World software spend, $T',s:'Gartner enterprise software 2025'},
+ laborW:   {v:60,lo:55,hi:65,t:'E',n:'All wages paid worldwide, $T',s:'≈ 52% of GDP'},
+ softW:    {v:1.1,t:'D',n:'All software sold worldwide, $T',s:'Gartner enterprise software 2025'},
  workers:  {v:3.5,t:'D',n:'World workers, B',s:'ILO'},
  brainW:   {v:20,t:'K',n:'Human brain, W'},
  hoursYr:  {v:2000,t:'K',n:'Working hours per year'},
- agentTokHr:{v:1,lo:0.3,hi:3,t:'E',n:'Output tokens per agent-hour, M',s:'agentic coding at 100–300 tok/s sustained; prefill on top'},
- cKmMs:    {v:200,t:'K',n:'Light in fiber, km/ms'},
- solarK:   {v:1.36,t:'K',n:'Solar constant, kW/m²'},
- sigma:    {v:5.67e-8,t:'K',n:'Stefan–Boltzmann, W/m²K⁴'},
- ssoSun:   {v:0.99,t:'K',n:'Sunlit fraction, dawn-dusk SSO'},
- groundCF: {v:0.22,lo:0.18,hi:0.28,t:'E',n:'Ground PV capacity factor, fixed tilt, good site'},
- emis:     {v:0.9,t:'K',n:'Radiator emissivity'},
+ agentTokHr:{v:1,lo:0.3,hi:3,t:'E',n:'Tokens an AI agent writes per hour, millions',s:'agentic coding at 100–300 tok/s sustained; prefill on top'},
+ cKmMs:    {v:200,t:'K',n:'Speed of light in fiber, km per ms'},
+ solarK:   {v:1.36,t:'K',n:'Sunlight in space, kW/m²'},
+ sigma:    {v:5.67e-8,t:'K',n:'Heat radiated per area (Stefan–Boltzmann)'},
+ ssoSun:   {v:0.99,t:'K',n:'Share of the orbit in sunlight'},
+ groundCF: {v:0.22,lo:0.18,hi:0.28,t:'E',n:'Solar panel output on the ground, share of peak'},
+ emis:     {v:0.9,t:'K',n:'Radiator efficiency'},
  radT:     {v:320,lo:300,hi:350,t:'E',n:'Radiator temperature, K',s:'coolant 45 °C for 80 °C junctions'},
- sinkLoad: {v:150,lo:100,hi:250,t:'E',n:'Earth IR + albedo absorbed, W/m² one face'},
- cellEff:  {v:0.30,lo:0.25,hi:0.35,t:'E',n:'Space cell efficiency'},
- arrayDerate:{v:0.9,t:'E',n:'Array pointing + degradation'},
- arrayWkg: {v:150,lo:100,hi:300,t:'E',n:'Array specific power, W/kg',s:'flexible arrays 100–200 today'},
- radKgM2:  {v:3,lo:2,hi:5,t:'E',n:'Deployable radiator, kg/m²'},
- spaceTMW: {v:7.5,lo:5,hi:11,t:'E',n:'Compute mass per MW, tonnes',s:'NVL72 ≈ 1.4 t per 130 kW on the ground = 10.8 t/MW; stripped + shielded 5–11'},
- structFrac:{v:0.2,t:'E',n:'Structure, power conditioning, comms: fraction on top'},
- f9SSO:    {v:17,t:'D',n:'Falcon 9 to SSO, tonnes'},
- kgF9:     {v:2000,lo:1500,hi:3000,t:'E',n:'Falcon 9 commercial, $/kg'},
- kgSSnow:  {v:1000,lo:600,hi:1500,t:'E',n:'Starship today, $/kg',s:'≈ $100M per flight ÷ 100 t'},
- kgSSgoal: {v:150,lo:50,hi:200,t:'J',n:'Starship target, $/kg (his)'},
+ sinkLoad: {v:150,lo:100,hi:250,t:'E',n:'Heat from Earth on one face, W/m²'},
+ cellEff:  {v:0.30,lo:0.25,hi:0.35,t:'E',n:'Solar cell efficiency in space'},
+ arrayDerate:{v:0.9,t:'E',n:'Panel losses'},
+ arrayWkg: {v:150,lo:100,hi:300,t:'E',n:'Panel power per kg',s:'flexible arrays 100–200 today'},
+ radKgM2:  {v:3,lo:2,hi:5,t:'E',n:'Radiator weight per m²'},
+ spaceTMW: {v:7.5,lo:5,hi:11,t:'E',n:'Computer weight per MW, tonnes',s:'NVL72 ≈ 1.4 t per 130 kW on the ground = 10.8 t/MW; stripped + shielded 5–11'},
+ structFrac:{v:0.2,t:'E',n:'Structure and wiring, extra share'},
+ f9SSO:    {v:17,t:'D',n:'Falcon 9 payload to that orbit, tonnes'},
+ kgF9:     {v:2000,lo:1500,hi:3000,t:'E',n:'Falcon 9 launch cost, $/kg'},
+ kgSSnow:  {v:1000,lo:600,hi:1500,t:'E',n:'Starship launch cost today, $/kg',s:'≈ $100M per flight ÷ 100 t'},
+ kgSSgoal: {v:150,lo:50,hi:200,t:'J',n:'Starship target cost, $/kg (his number)'},
  elonUS:   {v:[4,7],t:'J',n:'US electricity growth, %/yr (his)',s:'historical actual ≈ 1–3%'},
  elonChip: {v:[40,50],t:'J',n:'Chip output growth, %/yr (his)'},
  elonGW:   {v:10,t:'J',n:'Near-term fleet, GW (his)'},
- elonWY:   {v:[30,50],t:'J',n:'$ per watt-year, thousands as written (his)',s:'read as $30–50 per W of capex: $300–500B for 10 GW'},
- accGM:    {v:0.75,t:'D',n:'Accelerator vendor gross margin, latest quarter',s:'DC revenue ≈ $89B; outlook 72–73%; hyperscale ≈ half'},
- accGrow:  {v:0.70,t:'D',n:'Accelerator vendor next-year growth guide',s:'supply-constrained'},
- asicQ:    {v:17,t:'D',n:'Custom-ASIC design house AI revenue, $B / quarter',s:'guided +30% next quarter'},
- euv:      {v:65,lo:60,hi:70,t:'D',n:'EUV tools shipped per year',s:'one supplier, ~2-yr build'},
- cowos:    {v:100,lo:80,hi:120,t:'E',n:'CoWoS-class capacity, k wafers / month, 2026',s:'≈ 35k end-2024 → 70–80k end-2025; ~2×/yr'},
- boxMk:    {v:0.15,lo:0.1,hi:0.2,t:'E',n:'OEM / box markup over accelerator'},
+ elonWY:   {v:[30,50],t:'J',n:'$ per watt-year, as he wrote it',s:'read as $30–50 per W of capex: $300–500B for 10 GW'},
+ accGM:    {v:0.75,t:'D',n:'Chip maker margin, latest quarter',s:'DC revenue ≈ $89B; outlook 72–73%; hyperscale ≈ half'},
+ accGrow:  {v:0.70,t:'D',n:'Chip maker growth guidance, next year',s:'supply-constrained'},
+ asicQ:    {v:17,t:'D',n:'Custom-chip designer AI revenue, $B per quarter',s:'guided +30% next quarter'},
+ euv:      {v:65,lo:60,hi:70,t:'D',n:'Chip-making machines (EUV) shipped per year',s:'one supplier, ~2-yr build'},
+ cowos:    {v:100,lo:80,hi:120,t:'E',n:'Chip packaging capacity, thousand wafers per month',s:'≈ 35k end-2024 → 70–80k end-2025; ~2×/yr'},
+ boxMk:    {v:0.15,lo:0.1,hi:0.2,t:'E',n:'Assembly markup on the chip'},
 };
 /* judgments the model asks the user for — live controls */
 WM.J={fleet:75,hurdle:0.12,life:5,pReal:0.4,gCloud:0.30,gModel:0.50,gApp:0.50,gpu2031:true,priceDecline:2};
@@ -2805,7 +2805,7 @@ SHEET.assump=function(R,sub,filt){
   const rows=Object.keys(WM.IN).map(k=>{const a=WM.IN[k];const v=Array.isArray(a.v)?a.v.join(' · '):(typeof a.v==='number'?(a.v<1&&a.v>0?String(a.v):fN(a.v,Number.isInteger(a.v)?0:2)):a.v);
     const fR=x=>Number.isInteger(x)?fN(x,0):(x<1?String(x):fN(x,2));
     return {k:k,a:a,v:v,rng:(a.lo!=null?fR(a.lo)+' – '+fR(a.hi):'')};}).filter(r=>!filt||filt==='all'||r.a.t===filt);
-  const J=[['Fleet under test',R.J.fleet+' GW','live control, left rail'],['Unlevered hurdle',fP(R.J.hurdle),'live control, left rail'],['Economic life, silicon',R.J.life+' yr','live control, left rail'],['Realised $/MTok, batched fleet','$'+fN(R.J.pReal,2),'live control, left rail'],['Cloud gross margin',fP(R.J.gCloud),'set on the rent sheet'],['Model gross margin',fP(R.J.gModel),'set on the rent sheet'],['Application / agent gross margin',fP(R.J.gApp),'set on the rent sheet'],['Price per token, decline per year',fX(R.J.priceDecline,0),'fixed; the by-year figure']];
+  const J=[['Fleet size',R.J.fleet+' GW','slider, left'],['Return investors need',fP(R.J.hurdle),'slider, left'],['Chip life',R.J.life+' yr','slider, left'],['Price per million tokens, bulk','$'+fN(R.J.pReal,2),'slider, left'],['Cloud margin',fP(R.J.gCloud),'slider on “Does it pay?”'],['AI model margin',fP(R.J.gModel),'slider on “Does it pay?”'],['App margin',fP(R.J.gApp),'slider on “Does it pay?”'],['Price per token, fall per year',fX(R.J.priceDecline,0),'fixed; the year-by-year figure']];
   let h='<table class="mtab"><tr><th>kind</th><th>number</th><th>value</th><th>range</th><th>source</th></tr>';
   if(!filt||filt==='all'||filt==='J')J.forEach(j=>{h+='<tr><td>'+tagHtml('J')+'</td><td class="n">'+j[0]+'</td><td class="k">'+j[1]+'</td><td></td><td class="dim">'+j[2]+'</td></tr>';});
   rows.forEach(r=>{h+='<tr><td>'+tagHtml(r.a.t)+'</td><td class="n">'+r.a.n+'</td><td class="k">'+r.v+'</td><td class="k" style="color:var(--ink-soft)">'+r.rng+'</td><td class="dim">'+(r.a.s||'')+'</td></tr>';});
@@ -2841,7 +2841,7 @@ SHEET.unit=function(R,sub){
     const yb=330,yt=80,mx=(w*.6+kvD)*1000*1.1,Y=v=>yb-(v/mx)*(yb-yt);
     s+=AXIS(90,470,yb,yt,[0,1000,2000,3000].filter(v=>v<mx),Y,v=>v?fN(v)+' MB':'0');
     const col=(x,parts,lab)=>{let acc=0,o='';parts.forEach(p=>{o+=COL(x,90,Y(acc),Y(acc+p[1]),p[0],{op:p[2]});acc+=p[1];});o+=VAL(x,Y(acc)-8,fN(acc,0)+' MB');o+=LAB(x,yb+18,lab);return o;};
-    s+=col(200,[[V.grey,w*1000,.5],[MC,kvM*1000,.85]],['Frontier model','671B, sparse · 5k context']);
+    s+=col(200,[[V.grey,w*1000,.5],[MC,kvM*1000,.85]],['Large model','671B, sparse · 5k context']);
     s+=col(370,[[V.grey,w*.6*1000,.5],[MC,kvD*1000,.85]],['Dense model','405B · 5k context']);
     s+='<rect x="90" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(106,50,'the model, shared by '+fN(B0)+' users',{s:10.5,f:V.ink});
     s+='<rect x="290" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(306,50,'each user\'s own memory',{s:10.5,f:V.ink});
@@ -2849,7 +2849,7 @@ SHEET.unit=function(R,sub){
     const tx0=560,YL=LOGY(0.05,20000,yb,yt);
     [0.1,1,10,100,1000,10000].forEach((v,i)=>{s+=LN(tx0,YL(v),960,YL(v),V.ink,{sw:.6,op:.10});s+=T(tx0-10,YL(v)+4,v>=1000?fN(v/1000)+'k':String(v),{a:'end',s:10,m:1,f:V.dim});});
     s+=T(tx0-10,yt-10,'$/GB · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const tiers=[['on-chip',3000,'21 PB/s'],['HBM',20,'8 TB/s'],['DRAM · CXL',7,'0.5 TB/s'],['Flash',0.15,'0.01 TB/s']];
+    const tiers=[['on the chip',3000,'21 PB/s'],['next to the chip',20,'8 TB/s'],['in the server',7,'0.5 TB/s'],['on disk',0.15,'0.01 TB/s']];
     tiers.forEach((t,i)=>{const x=tx0+60+i*100;s+=COL(x,58,yb,YL(t[1]),i===1?MC:V.grey,{op:i===1?.85:.5});s+=VAL(x,YL(t[1])-8,t[2]);s+=LAB(x,yb+18,[t[0],'per device']);});
     s+=LINE('With a few hundred users the model itself is shared; what the rack reads is each user\'s memory. Each tier wins where its price per byte fits.',424);
     return SV(s);
@@ -2884,7 +2884,7 @@ SHEET.unit=function(R,sub){
 
 /* ---- watts → capex ---- */
 WM.LINKS=[
- ['Interconnect',3,7,'—','power'],['Logic fab',3,4,'≈ 4','silicon'],['Transformers',3,4,'≈ 3','power'],['Gas turbines',2.5,3.5,'≈ 5','power'],['EUV tools',2,2.5,'—','silicon'],['Chip design',1.5,2,'—',''],['HV switchgear',1,2,'≈ 3','power'],['Shells',1,2,'≈ 4',''],['CoWoS',1,1.5,'—','silicon'],['HBM',1,1.5,'≫ 100','silicon'],['Solar panels',.2,.5,'≈ 1.5',''],['Battery cells',.2,.5,'≈ 1.5',''],['Software',0,.4,'—','']];
+ ['Grid connection',3,7,'—','power'],['Chip factory',3,4,'≈ 4','silicon'],['Transformers',3,4,'≈ 3','power'],['Gas turbines',2.5,3.5,'≈ 5','power'],['Chip machines',2,2.5,'—','silicon'],['Chip design',1.5,2,'—',''],['Switchgear',1,2,'≈ 3','power'],['Buildings',1,2,'≈ 4',''],['Chip packaging',1,1.5,'—','silicon'],['Memory chips',1,1.5,'> 100','silicon'],['Solar panels',.2,.5,'≈ 1.5',''],['Battery cells',.2,.5,'≈ 1.5',''],['Software',0,.4,'—','']];
 SHEET.bottle=function(R){
   let s=FTITLE(40,28,'How many years it takes to add more of each part');
   const yb=330,yt=74,Y=v=>yb-(v/7.5)*(yb-yt),x0=90;
@@ -2892,10 +2892,10 @@ SHEET.bottle=function(R){
   WM.LINKS.forEach((l,i)=>{const x=x0+40+i*68,c=l[4]==='power'?MRED:l[4]==='silicon'?MC:V.grey;
     s+=COL(x,40,Y(l[1]),Y(l[2]),c,{op:l[4]?.85:.45});
     s+=VAL(x,Y(l[2])-8,(l[1]?l[1]+'–':'< ')+l[2],c===V.grey?V.ink:c);
-    s+=LAB(x,yb+18,[l[0],'price ÷ raw '+l[3]]);});
+    const nm=l[0].split(' ');s+=LAB(x,yb+18,[nm[0],nm.slice(1).join(' ')||' ',l[3]==='—'?'':l[3].replace(' ','')+'× raw cost'].filter(t=>t!==''));});
   s+='<rect x="40" y="380" width="10" height="10" rx="2" fill="'+MRED+'"/>'+T(56,389,'limits where power can be connected',{s:10.5,f:V.ink});
   s+='<rect x="330" y="380" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(346,389,'limits how many chips there are',{s:10.5,f:V.ink});
-  s+=T(620,389,'price ÷ raw material: high means a missing factory',{s:10.5,f:V.dim});
+  s+=T(620,389,'× raw cost: price ÷ raw material; high means a missing factory',{s:10.5,f:V.dim});
   const first=R.path.find(x=>x.short>WM.SHORT*x.nw);
   s+=LINE('Money cannot skip a factory that takes 2–4 years to build; the $4T path runs out of parts in '+(first?first.y:'no year to 2031')+'.',424);
   return SV(s);
@@ -2962,7 +2962,7 @@ SHEET.rent=function(R,sub){
     let s=FTITLE(40,28,'What one megawatt can earn in a year, against what it must earn');
     const yb=340,yt=76,Y=LOGY(0.1,1000,yb,yt),x0=110;
     [0.1,1,10,100,1000].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+(v<1?v:v>=1000?'1,000':v)+'M',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(x0-10,yt-10,'per MW-year · log',{a:'end',s:9.5,m:1,f:V.dim});
+    s+=T(x0-10,yt-10,'per megawatt, per year · log',{a:'end',s:9.5,m:1,f:V.dim});
     const cases=[['Chat','at $'+I.pFront+' per million tokens',R.rev.interFront,R.cov.interFront,.85],['Bulk','at $'+I.pComm+' per million tokens',R.rev.batchComm,R.cov.batchComm,.85],['Bulk at chat prices','a ceiling, not a market',R.rev.batchFront,R.cov.batchFront,.35],['Training','earns nothing until the model does',R.rentMW,1,0]];
     cases.forEach((c,i)=>{const x=x0+110+i*200;
       s+=COL(x,90,yb,Y(c[2]),i===3?'none':MC,{op:c[4],stroke:i===3?V.amber:null});
@@ -3007,11 +3007,11 @@ SHEET.rent=function(R,sub){
     s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+33,fN(p.inst,0)+' GW · needs '+fN((1+p.growth)*R.J.priceDecline,1)+'× the tokens sold',{a:'middle',s:9,m:1,f:MDIM});});
   if(cr){const cx=cxs[P.indexOf(cr)];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'your fleet size, '+R.J.fleet+' GW',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
   /* the copper strip: which joint binds each year */
-  const links=[['hbm','memory · chip packaging'],['transformer','transformers · turbines'],['rent','customers: the next MW does not pay']],sy=282,rh=26;
+  const links=[['hbm','chips: memory, packaging'],['transformer','power: transformers, turbines'],['rent','customers: the next MW does not pay']],sy=282,rh=26;
   const atom=(p,i)=>(R.covReal<1||p.inst>R.J.fleet)?'rent':(p.bind==='silicon'?'hbm':(i===0?'hbm':'transformer'));
   links.forEach((l,r)=>{const y=sy+r*rh;s+=T(x0-10,y+15,l[1],{a:'end',s:10,f:V.ink});
     P.forEach((p,i)=>{const on=atom(p,i)===l[0];s+='<rect x="'+(cxs[i]-bw/2)+'" y="'+(y+2)+'" width="'+bw+'" height="'+(rh-6)+'" rx="3" fill="'+(on?'#b87333':'#39414c')+'" fill-opacity="'+(on?.95:.35)+'"/>';});});
-  s+=T(x0-10,sy-8,'COPPER = WHAT IS SHORT',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});
+  s+=T(x0-10,sy-8,'ORANGE = WHAT IS SHORT THAT YEAR',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});
   s+=LINE('Everything built must earn every year; past your fleet size the next megawatt does not pay unless new value shows up.',424);
   return SV(s);
 };
