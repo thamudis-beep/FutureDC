@@ -431,7 +431,7 @@
   <div class="body"><aside class="mrail"><div class="msheets" id="msheets"></div><div class="mjudg" id="mjudg"></div></aside><div class="panel mpanel" id="mpanel"></div></div>
 </section>
 
-<div class="ver">v68 · One grammar</div>
+<div class="ver">v69 · Plain words</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2304,9 +2304,9 @@ var JOINTS={
   package:     {n:'CoWoS-class package',tta:'12–18 months',idiot:'—',collects:'TSMC; OSAT overflow',obs:'accelerator-vendor gross margin · lead time'},
   hbm:         {n:'HBM stack',tta:'12–18 months',idiot:'≫ 100 · a missing factory',collects:'HBM makers; one at 55–60% share',obs:'HBM contract price'},
   cooling:     {n:'Liquid cooling plant',tta:'1–2 yr with the shell',idiot:'≈ 4 · steel, copper, pumps',collects:'fragmented; the shell builder',obs:'dock-to-live days'},
-  rack:        {n:'The MW itself: rack, package, HBM',tta:'dock-to-live, not disclosed',idiot:'≈ 4: the vendor\'s margin',collects:'capital, only if the rent is paid',obs:'GPU-hour on the newest generation'},
-  rent:        {n:'Rent: 1 ÷ life + hurdle',tta:'every year of the life',idiot:'—',collects:'nobody, if coverage < 1: closure C',obs:'GPU-hour on the newest generation vs the rent rate'},
-  floors:      {n:'The stack above the hall',tta:'set by pricing power, least first',idiot:'—',collects:'application and agent layers, if the value is new GDP or substitution',obs:'frontier-tier list price'}
+  rack:        {n:'The megawatt itself: racks, chips, memory',tta:'dock-to-live, not disclosed',idiot:'≈ 4: the vendor\'s margin',collects:'capital, only if the rent is paid',obs:'GPU-hour on the newest generation'},
+  rent:        {n:'What the megawatt must earn each year',tta:'every year of the life',idiot:'—',collects:'nobody, if coverage < 1: closure C',obs:'GPU-hour on the newest generation vs the rent rate'},
+  floors:      {n:'The businesses above the data center',tta:'set by pricing power, least first',idiot:'—',collects:'application and agent layers, if the value is new GDP or substitution',obs:'frontier-tier list price'}
 };
 function mountHall(host,ctx){
   var T=window.THREE; if(!T||!host) return null;
@@ -2445,7 +2445,7 @@ function mountHall(host,ctx){
   /* ---- chrome: cameras, the year strip, the plate, five gauges, tags. DOM, never in the scene ---- */
   var ui=document.createElement('div');ui.className='e3d in h3d';
   ui.innerHTML='<div class="e3d-bar h3d-bar"><div class="e3d-grp"><div class="e3d-row">'+
-      [['mw','The MW'],['works','The works'],['atom','Scarce atom']].map(function(v){return '<button class="e3d-chip" data-cam="'+v[0]+'" style="--ec:#b87333">'+v[1]+'</button>';}).join('')+
+      [['mw','One megawatt'],['works','All six years'],['atom','What is short']].map(function(v){return '<button class="e3d-chip" data-cam="'+v[0]+'" style="--ec:#b87333">'+v[1]+'</button>';}).join('')+
       '</div></div><div class="e3d-grp"><div class="e3d-row" id="h3dYears"></div></div></div>'+
     '<div class="h3d-plate" id="h3dPlate"></div>'+
     '<div class="h3d-gauges" id="h3dGauges"></div>'+
@@ -2457,8 +2457,8 @@ function mountHall(host,ctx){
   years.querySelectorAll('[data-y]').forEach(function(b){b.addEventListener('click',function(){ctx.setYear(+b.dataset.y);});});
   function syncChips(){ui.querySelectorAll('[data-cam]').forEach(function(b){b.classList.toggle('on',b.dataset.cam===mode);});years.querySelectorAll('[data-y]').forEach(function(b){b.classList.toggle('on',+b.dataset.y===yi);});}
   /* tags: a name for each docked system and floor, projected each frame */
-  var TAGS=[['WATTS IN',[-13,3.6,0]],['SILICON IN',[11,3.2,-1.3]],['TOKENS OUT',[0.6,2.6,9]],['DOLLARS OUT',[0,0,0],'roof'],
-            ['foundry',[4.8,0,0],'foundry'],['vendor',[4.8,0,0],'vendor'],['cloud',[4.8,0,0],'cloud'],['model',[4.8,0,0],'model'],['app · agent',[4.8,0,0],'app'],['rent',[-4.0,4.4,0],'','l']];
+  var TAGS=[['POWER IN',[-13,3.6,0]],['CHIPS IN',[11,3.2,-1.3]],['TOKENS OUT',[0.6,2.6,9]],['MONEY OUT',[0,0,0],'roof'],
+            ['chip fab',[4.8,0,0],'foundry'],['chip maker',[4.8,0,0],'vendor'],['cloud',[4.8,0,0],'cloud'],['AI model',[4.8,0,0],'model'],['apps',[4.8,0,0],'app'],['must earn',[-4.0,4.4,0],'','l']];
   var tagEls=TAGS.map(function(t){var s=document.createElement('span');s.className='h3d-tag'+(t[2]?' fl':'')+(t[3]?' l':'');s.textContent=t[0];tagsEl.appendChild(s);return s;});
   var bayTags=ctx.years.map(function(y,i){var s=document.createElement('span');s.className='h3d-tag bay';s.textContent=y;tagsEl.appendChild(s);return s;});
   var pv=new T.Vector3();
@@ -2468,8 +2468,8 @@ function mountHall(host,ctx){
     bays.forEach(function(b,i){at(bayTags[i],b.g.position.x,7.8,b.g.position.z);if(mode!=='works')bayTags[i].style.display='none';});
     tagsEl.style.opacity=mode==='atom'?'.35':'1';}
   function showPlate(id){plate.classList.toggle('on',!!id);if(!id)return;var j=JOINTS[id]||JOINTS.rack,bind=id===atom;
-    plate.innerHTML='<div class="h3d-pn">'+j.n+(bind?'<b>· copper this year</b>':'')+'</div>'+
-      [['time-to-add',j.tta],['idiot index',j.idiot],['who collects if this binds',j.collects],['observable this quarter',j.obs]].map(function(r){return '<div class="h3d-pr"><i>'+r[0]+'</i><span>'+r[1]+'</span></div>';}).join('')+
+    plate.innerHTML='<div class="h3d-pn">'+j.n+(bind?'<b>· short this year</b>':'')+'</div>'+
+      [['years to add more',j.tta],['price ÷ raw material',j.idiot],['who gets paid if it is short',j.collects],['what to watch',j.obs]].map(function(r){return '<div class="h3d-pr"><i>'+r[0]+'</i><span>'+r[1]+'</span></div>';}).join('')+
       '<button class="h3d-x" aria-label="close">×</button>';
     plate.querySelector('.h3d-x').addEventListener('click',function(){showPlate(null);});}
   /* the five gauges: last disclosed value against the line that flips the regime. Not feeds; say so */
@@ -2481,12 +2481,12 @@ function mountHall(host,ctx){
       (f?'':'<circle cx="'+pv2[0].toFixed(1)+'" cy="'+pv2[1].toFixed(1)+'" r="3" fill="#e9ebf2"/>')+'</svg>'+
       '<div class="h3d-gv">'+txt+'</div><div class="h3d-gn">'+name+'</div><div class="h3d-gd">'+dir+'</div></div>';}
   function drawGauges(R){var I=R.I;
-    gaugeEl.innerHTML=gauge('hbm','HBM contract',5,1,6,1,'×5 vs Q1-25','falls → memory unbinds')+
-      gauge('gpuh','GPU-hour, newest gen',I.gpuHrB,2,6,R.rentGpuHr,'$'+I.gpuHrB.toFixed(2)+' vs $'+R.rentGpuHr.toFixed(2)+' rent','below the line → closure C')+
-      gauge('gm','Vendor gross margin',I.accGM*100,55,85,70,(I.accGM*100).toFixed(0)+'% · outlook 72–73','< 70% → handed off')+
-      gauge('gw','Firm GW energized / qtr',R.path[yi].nw/4,0,20,3.5,(R.path[yi].nw/4).toFixed(1)+' GW modelled · guide 3.5','below guide → power binds')+
-      gauge('d2l','Dock-to-live days',0,0,1,.5,'no feed','rising → shell binds',false)+
-      '<div class="h3d-gnote">last disclosed values, not feeds. When these five are wired live, this is a desk.</div>';}
+    gaugeEl.innerHTML=gauge('hbm','Memory price',5,1,6,1,'×5 since early 2025','falling = memory not short')+
+      gauge('gpuh','GPU rent per hour',I.gpuHrB,2,6,R.rentGpuHr,'$'+I.gpuHrB.toFixed(2)+' vs $'+R.rentGpuHr.toFixed(2)+' needed','below line = write-downs')+
+      gauge('gm','Chip maker\'s margin',I.accGM*100,55,85,70,(I.accGM*100).toFixed(0)+'% · outlook 72–73','under 70% = chips not short')+
+      gauge('gw','GW switched on / quarter',R.path[yi].nw/4,0,20,3.5,(R.path[yi].nw/4).toFixed(1)+' modelled · plan 3.5','below plan = power short')+
+      gauge('d2l','Delivery to live, days',0,0,1,.5,'not published','rising = buildings short',false)+
+      '<div class="h3d-gnote">last published values, not live feeds</div>';}
 
   /* ---- apply the model: every dimension from R ---- */
   var yi=ctx.year||0,atom='hbm',R=null;
@@ -2768,12 +2768,12 @@ WM.calc=function(J,over){
 
 /* ---- sheets ------------------------------------------------ */
 WM.SHEETS=[
- {k:'hall',n:'The hall',eb:'PRODUCTION OF INTELLIGENCE IS PRODUCTION'},
- {k:'unit',n:'One MW',eb:'PHYSICS, THEN DOLLARS',subs:['tokens & joules','bytes per token','dollars per MW']},
- {k:'path',n:'Watts → capex',eb:'BY YEAR, BY SOURCE · CAPEX IS THE OUTPUT',subs:['GW by source','capex & TWh','bottlenecks','where inference sits']},
- {k:'rent',n:'Rent → the stack',eb:'DOES THE MW PAY, AND WHO IS PAID',subs:['three cases','the walk','at fleet scale','by year']},
- {k:'chal',n:'Challenger',eb:'HIS NUMBERS, OUR ARITHMETIC',subs:['his numbers','one GW in orbit']},
- {k:'assump',n:'Inputs',eb:'EVERY INPUT, TAGGED · ONE SENSITIVITY TABLE',subs:['inputs','sensitivity']},
+ {k:'hall',n:'One megawatt, live',t:'One megawatt of data center',eb:'PRODUCTION OF INTELLIGENCE IS PRODUCTION'},
+ {k:'unit',n:'What one megawatt does',eb:'WHAT IT MAKES, WHAT IT COSTS',subs:['tokens, energy, cost','memory per token','cost to build']},
+ {k:'path',n:'How much gets built',eb:'POWER FIRST, THEN CHIPS, THEN MONEY',subs:['power per year','money per year','slowest parts','how far away']},
+ {k:'rent',n:'Does it pay?',eb:'DOES IT PAY, AND WHO GETS PAID',subs:['earn vs owe','one dollar, chip to customer','the whole fleet','year by year']},
+ {k:'chal',n:'Elon\'s numbers',eb:'HIS NUMBERS, OUR ARITHMETIC',subs:['his numbers vs ours','a gigawatt in space']},
+ {k:'assump',n:'Every number, sourced',eb:'EVERY NUMBER, WITH ITS SOURCE',subs:['the numbers','what moves the result']},
 ];
 const fN=(x,d)=>{d=d==null?0:d;return Number(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});};
 const fB=x=>x>=1000?'$'+fN(x/1000,2)+'T':'$'+fN(x,0)+'B';
@@ -2782,7 +2782,7 @@ const fP=(x,d)=>fN(x*100,d==null?0:d)+'%';
 const fX=(x,d)=>fN(x,d==null?1:d)+'×';
 const fM=x=>'$'+fN(x,x<10?1:0)+'M';
 const MC=V.blue, MRED=V.red, MDIM=V.dim;
-const TAGN={K:'constant',D:'disclosure',E:'engineering estimate',J:'judgment'};
+const TAGN={K:'physical constant',D:'company-reported',E:'engineering estimate',J:'our call'};
 const tagHtml=t=>'<span class="tag '+t+'">'+t+'</span>';
 const tagSvg=(x,y,t)=>{const c={K:'#c3c9d6',D:V.cyan,E:V.amber,J:V.pur}[t];return B(x,y-9,16,13,c,{r:3,fill:c+'22',sw:.9})+T(x+8,y+1,t,{a:'middle',s:8.5,w:700,m:1,f:c});};
 const SHEET={};
@@ -2806,7 +2806,7 @@ SHEET.assump=function(R,sub,filt){
     const fR=x=>Number.isInteger(x)?fN(x,0):(x<1?String(x):fN(x,2));
     return {k:k,a:a,v:v,rng:(a.lo!=null?fR(a.lo)+' – '+fR(a.hi):'')};}).filter(r=>!filt||filt==='all'||r.a.t===filt);
   const J=[['Fleet under test',R.J.fleet+' GW','live control, left rail'],['Unlevered hurdle',fP(R.J.hurdle),'live control, left rail'],['Economic life, silicon',R.J.life+' yr','live control, left rail'],['Realised $/MTok, batched fleet','$'+fN(R.J.pReal,2),'live control, left rail'],['Cloud gross margin',fP(R.J.gCloud),'set on the rent sheet'],['Model gross margin',fP(R.J.gModel),'set on the rent sheet'],['Application / agent gross margin',fP(R.J.gApp),'set on the rent sheet'],['Price per token, decline per year',fX(R.J.priceDecline,0),'fixed; the by-year figure']];
-  let h='<table class="mtab"><tr><th>tag</th><th>input</th><th>value</th><th>range</th><th>source / note</th></tr>';
+  let h='<table class="mtab"><tr><th>kind</th><th>number</th><th>value</th><th>range</th><th>source</th></tr>';
   if(!filt||filt==='all'||filt==='J')J.forEach(j=>{h+='<tr><td>'+tagHtml('J')+'</td><td class="n">'+j[0]+'</td><td class="k">'+j[1]+'</td><td></td><td class="dim">'+j[2]+'</td></tr>';});
   rows.forEach(r=>{h+='<tr><td>'+tagHtml(r.a.t)+'</td><td class="n">'+r.a.n+'</td><td class="k">'+r.v+'</td><td class="k" style="color:var(--ink-soft)">'+r.rng+'</td><td class="dim">'+(r.a.s||'')+'</td></tr>';});
   return h+'</table>';
@@ -2825,7 +2825,7 @@ SHEET.sens=function(R){
    ['Unlevered hurdle','8% · '+fP(J.hurdle)+' · 16%',run(null,{hurdle:.08}),run(null,{hurdle:.16})],
    ['Layer gross margins, all three','−10 pts · base · +10 pts',run(null,{gCloud:J.gCloud-.1,gModel:J.gModel-.1,gApp:J.gApp-.1}),run(null,{gCloud:J.gCloud+.1,gModel:J.gModel+.1,gApp:J.gApp+.1})],
    ['Fleet under test',fN(J.fleet/2,0)+' · '+J.fleet+' · '+fN(J.fleet*2,0)+' GW',run(null,{fleet:J.fleet/2}),run(null,{fleet:J.fleet*2})]];
-  let h='<table class="mtab tight"><tr><th>input</th><th>low · base · high</th><th colspan="3">2031 installed</th><th colspan="3">2031 capex</th><th colspan="3">rent / yr at fleet</th><th colspan="3">end spend · % GDP</th></tr>';
+  let h='<table class="mtab tight"><tr><th>number</th><th>low · base · high</th><th colspan="3">GW built by 2031</th><th colspan="3">spent in 2031</th><th colspan="3">fleet must earn / yr</th><th colspan="3">customers pay · % world GDP</th></tr>';
   const b=out(R);
   rows.forEach(r=>{const lo=out(r[2]),hi=out(r[3]);h+='<tr><td class="n">'+r[0]+'</td><td class="dim">'+r[1]+'</td>';
     for(let k=0;k<4;k++)h+='<td class="k dim r">'+lo[k]+'</td><td class="k r">'+b[k]+'</td><td class="k dim r">'+hi[k]+'</td>';h+='</tr>';});
@@ -2836,49 +2836,49 @@ SHEET.sens=function(R){
 SHEET.unit=function(R,sub){
   const I=R.I;
   if(sub===1){ /* bytes per token, and the tiers that hold them */
-    let s=FTITLE(40,28,'Bytes read per output token, one decode step, one NVL72 rack');
+    let s=FTITLE(40,28,'How much memory one token reads, in one rack');
     const B0=2000,w=R.wBytes/B0,kvM=R.kvSeq,kvD=I.kvDense/1e6*I.ctxK*1000;
     const yb=330,yt=80,mx=(w*.6+kvD)*1000*1.1,Y=v=>yb-(v/mx)*(yb-yt);
     s+=AXIS(90,470,yb,yt,[0,1000,2000,3000].filter(v=>v<mx),Y,v=>v?fN(v)+' MB':'0');
     const col=(x,parts,lab)=>{let acc=0,o='';parts.forEach(p=>{o+=COL(x,90,Y(acc),Y(acc+p[1]),p[0],{op:p[2]});acc+=p[1];});o+=VAL(x,Y(acc)-8,fN(acc,0)+' MB');o+=LAB(x,yb+18,lab);return o;};
-    s+=col(200,[[V.grey,w*1000,.5],[MC,kvM*1000,.85]],['Frontier MoE','671B FP8 · MLA · 5k ctx']);
-    s+=col(370,[[V.grey,w*.6*1000,.5],[MC,kvD*1000,.85]],['Dense 405B','FP16 KV · GQA · 5k ctx']);
-    s+='<rect x="90" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(106,50,'weights ÷ batch of '+fN(B0),{s:10.5,f:V.ink});
-    s+='<rect x="290" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(306,50,'KV cache per token',{s:10.5,f:V.ink});
+    s+=col(200,[[V.grey,w*1000,.5],[MC,kvM*1000,.85]],['Frontier model','671B, sparse · 5k context']);
+    s+=col(370,[[V.grey,w*.6*1000,.5],[MC,kvD*1000,.85]],['Dense model','405B · 5k context']);
+    s+='<rect x="90" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(106,50,'the model, shared by '+fN(B0)+' users',{s:10.5,f:V.ink});
+    s+='<rect x="290" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(306,50,'each user\'s own memory',{s:10.5,f:V.ink});
     /* the tiers: $/GB on a log axis, bandwidth as the label */
     const tx0=560,YL=LOGY(0.05,20000,yb,yt);
     [0.1,1,10,100,1000,10000].forEach((v,i)=>{s+=LN(tx0,YL(v),960,YL(v),V.ink,{sw:.6,op:.10});s+=T(tx0-10,YL(v)+4,v>=1000?fN(v/1000)+'k':String(v),{a:'end',s:10,m:1,f:V.dim});});
     s+=T(tx0-10,yt-10,'$/GB · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const tiers=[['SRAM',3000,'21 PB/s'],['HBM',20,'8 TB/s'],['DRAM · CXL',7,'0.5 TB/s'],['Flash',0.15,'0.01 TB/s']];
+    const tiers=[['on-chip',3000,'21 PB/s'],['HBM',20,'8 TB/s'],['DRAM · CXL',7,'0.5 TB/s'],['Flash',0.15,'0.01 TB/s']];
     tiers.forEach((t,i)=>{const x=tx0+60+i*100;s+=COL(x,58,yb,YL(t[1]),i===1?MC:V.grey,{op:i===1?.85:.5});s+=VAL(x,YL(t[1])-8,t[2]);s+=LAB(x,yb+18,[t[0],'per device']);});
-    s+=LINE('Past a few hundred sequences the weights amortise and the KV cache is what the rack reads; each tier wins where its bytes per dollar fit.',424);
+    s+=LINE('With a few hundred users the model itself is shared; what the rack reads is each user\'s memory. Each tier wins where its price per byte fits.',424);
     return SV(s);
   }
   if(sub===2){ /* dollars per MW: one column, and the rent it owes */
-    let s=FTITLE(40,28,'Dollars to stand up one energized IT megawatt, 2026');
-    const parts=[['acc','Accelerator + HBM + board',MC,.85],['box','Rack, shelves, in-rack CDU',V.grey,.30],['net','Scale-out network + optics',V.grey,.38],['sto','Storage + head nodes',V.grey,.46],['cool','Liquid cooling plant',V.grey,.54],['shell','Shell + electrical · 800 VDC · BESS',V.amber,.85],['gen','Behind-the-meter generation',V.amber,.5]];
+    let s=FTITLE(40,28,'What one megawatt costs to build, 2026');
+    const parts=[['acc','Chips and memory',MC,.85],['box','Racks',V.grey,.30],['net','Networking',V.grey,.38],['sto','Storage',V.grey,.46],['cool','Cooling',V.grey,.54],['shell','Building and electrical',V.amber,.85],['gen','On-site power',V.amber,.5]];
     const yb=372,yt=70,Y=v=>yb-(v/R.mw)*(yb-yt),x=200,w=120;let acc=0;const segs=[];
     parts.forEach((p,i)=>{const v=R.cost[p[0]],y0=Y(acc),y1=Y(acc+v);s+=COL(x,w,y0,y1,p[2],{op:p[3]});segs.push({my:(y0+y1)/2,ly:(y0+y1)/2,p:p,v:v});acc+=v;});
     for(let k=1;k<segs.length;k++)segs[k].ly=Math.min(segs[k].ly,segs[k-1].ly-15);   /* segments stack upward; a label never sits closer than a line to the one below */
     segs.forEach(g=>{s+=LN(x+w/2+4,g.my,x+w/2+30,g.ly,V.ink,{sw:.6,op:.35});s+=T(x+w/2+36,g.ly+4,g.p[1]+'  '+fM(g.v),{s:11,f:V.ink});});
-    s+=VAL(x,yt-14,fM(R.mw)+' per MW');s+=T(x,yb+18,'silicon '+fP(R.compShare)+' of the dollar',{a:'middle',s:10,f:V.dim});
+    s+=VAL(x,yt-14,fM(R.mw)+' per MW');s+=T(x,yb+18,'chips '+fP(R.compShare)+' of the bill',{a:'middle',s:10,f:V.dim});
     const bx=620;s+=PANEL(bx,70,340,300,{r:10});
-    [['1 ÷ life',fM(R.depMW)+' / yr',fP(R.depRate)],['+ hurdle '+fP(R.J.hurdle),fM(R.J.hurdle*R.mw)+' / yr',''],['= rent per MW-year',fM(R.rentMW),fP(R.rentRate)],['per GPU-hour at '+fP(I.util)+' draw','$'+fN(R.rentGpuHr,2),'']].forEach((r,i)=>{const y=110+i*66;
+    [['wears out over '+I.lifeAcc+' years',fM(R.depMW)+' / yr',fP(R.depRate)],['+ return investors need, '+fP(R.J.hurdle),fM(R.J.hurdle*R.mw)+' / yr',''],['= must earn every year',fM(R.rentMW),fP(R.rentRate)],['per GPU, per hour','$'+fN(R.rentGpuHr,2),'']].forEach((r,i)=>{const y=110+i*66;
       s+=T(bx+22,y,r[0],{s:11,f:V.dim});s+=T(bx+22,y+26,r[1],{s:20,w:700,m:1,f:i>=2?MC:V.ink});if(r[2])s+=T(bx+318,y+26,r[2],{a:'end',s:12,m:1,f:V.dim});
       if(i<3)s+=LN(bx+22,y+42,bx+318,y+42,V.ink,{sw:.6,op:.15});});
-    s+=LINE('Silicon is the sum, not an assumption; the MW owes '+fP(R.rentRate)+' of itself every year, or $'+fN(R.rentGpuHr,2)+' per GPU-hour.',424);
+    s+=LINE('Chips are '+fP(R.compShare)+' of the bill; the megawatt must earn back '+fP(R.rentRate)+' of its cost every year, $'+fN(R.rentGpuHr,2)+' per GPU-hour.',424);
     return SV(s);
   }
   /* tokens, joules, dollars per MW */
-  let s=FTITLE(40,28,'One energized IT megawatt: tokens, joules and dollars');
-  const cols=[{k:'batch',n:'BATCHED',d:'20–30 tok/s per user'},{k:'inter',n:'INTERACTIVE',d:'100 tok/s per user'},{k:'reason',n:'REASONING',d:'long KV · 5–20× tokens per task'}];
+  let s=FTITLE(40,28,'What one megawatt of data center produces, and what it costs');
+  const cols=[{k:'batch',n:'BULK',d:'20–30 tokens/s per user'},{k:'inter',n:'CHAT',d:'100 tokens/s per user'},{k:'reason',n:'REASONING',d:'long memory · 5–20× more tokens per task'}];
   const cx=[430,640,850],y0=104,rh=46;
   cols.forEach((c,i)=>{s+=T(cx[i],72,c.n,{a:'middle',s:11,w:700,m:1,f:i===0?MC:V.ink,ls:'.1em'});s+=T(cx[i],88,c.d,{a:'middle',s:9.5,f:V.dim});});
-  const rows=[['Output tokens / s per MW',c=>fN(R[c]/1e6,2)+' M'],['Tokens per MW-year at '+fP(I.util)+' draw',c=>fN(R.tokYr[c]/1e12,0)+' T'],['Joules per token at the meter · PUE '+I.pue,c=>fN(R.jTok[c],2)+' J'],['Electricity per million tokens · $'+I.elec+'/MWh',c=>'$'+fN(R.eTok[c],3)],['Rent per million tokens',c=>'$'+fN(R.rentTok[c],2)]];
+  const rows=[['Tokens per second',c=>fN(R[c]/1e6,2)+' M'],['Tokens per year, at '+fP(I.util)+' use',c=>fN(R.tokYr[c]/1e12,0)+' T'],['Energy per token, at the meter',c=>fN(R.jTok[c],2)+' J'],['Electricity per million tokens · $'+I.elec+'/MWh',c=>'$'+fN(R.eTok[c],3)],['Hardware cost per million tokens',c=>'$'+fN(R.rentTok[c],2)]];
   rows.forEach((r,j)=>{const y=y0+j*rh;s+=LN(40,y+22,960,y+22,V.ink,{sw:.6,op:.12});s+=T(40,y+6,r[0],{s:12.5,w:600,f:V.ink});
     cols.forEach((c,i)=>s+=T(cx[i],y+8,r[1](c.k),{a:'middle',s:j===4?17:15,w:700,m:1,f:j===4?MC:V.ink}));});
-  s+=T(40,y0+rows.length*rh+14,'Measured: '+fN(I.dsOutAvg)+' output tok/s per 8-GPU H800 node, fleet average (DeepSeek, Mar 2025) ÷ '+I.nodeKW+' kW → × '+I.blackX+' Blackwell → ÷ '+I.interDiv+' interactive · ÷ '+I.reasonDiv+' reasoning',{s:10.5,f:V.dim});
-  s+=LINE('Electricity is under three cents a million tokens; rent is '+fN(R.rentTok.batch/R.eTok.batch,0)+'× that. The floor under a token is capital.',424);
+  s+=T(40,y0+rows.length*rh+14,'Measured: '+fN(I.dsOutAvg)+' tokens/s per 8-GPU server, fleet average (DeepSeek, Mar 2025) ÷ '+I.nodeKW+' kW → × '+I.blackX+' for the newer chip → ÷ '+I.interDiv+' chat · ÷ '+I.reasonDiv+' reasoning',{s:10.5,f:V.dim});
+  s+=LINE('Electricity is under three cents per million tokens; paying for the hardware costs '+fN(R.rentTok.batch/R.eTok.batch,0)+'× that.',424);
   return SV(s);
 };
 
@@ -2886,25 +2886,25 @@ SHEET.unit=function(R,sub){
 WM.LINKS=[
  ['Interconnect',3,7,'—','power'],['Logic fab',3,4,'≈ 4','silicon'],['Transformers',3,4,'≈ 3','power'],['Gas turbines',2.5,3.5,'≈ 5','power'],['EUV tools',2,2.5,'—','silicon'],['Chip design',1.5,2,'—',''],['HV switchgear',1,2,'≈ 3','power'],['Shells',1,2,'≈ 4',''],['CoWoS',1,1.5,'—','silicon'],['HBM',1,1.5,'≫ 100','silicon'],['Solar panels',.2,.5,'≈ 1.5',''],['Battery cells',.2,.5,'≈ 1.5',''],['Software',0,.4,'—','']];
 SHEET.bottle=function(R){
-  let s=FTITLE(40,28,'Rate-limiting steps, ranked by measured time-to-add');
+  let s=FTITLE(40,28,'How many years it takes to add more of each part');
   const yb=330,yt=74,Y=v=>yb-(v/7.5)*(yb-yt),x0=90;
   s+=AXIS(x0,960,yb,yt,[0,1,2,3,4,5,6,7],Y,v=>v+(v===7?' yr':''));
   WM.LINKS.forEach((l,i)=>{const x=x0+40+i*68,c=l[4]==='power'?MRED:l[4]==='silicon'?MC:V.grey;
     s+=COL(x,40,Y(l[1]),Y(l[2]),c,{op:l[4]?.85:.45});
     s+=VAL(x,Y(l[2])-8,(l[1]?l[1]+'–':'< ')+l[2],c===V.grey?V.ink:c);
-    s+=LAB(x,yb+18,[l[0],'idiot '+l[3]]);});
-  s+='<rect x="40" y="380" width="10" height="10" rx="2" fill="'+MRED+'"/>'+T(56,389,'binds where megawatts can be hooked',{s:10.5,f:V.ink});
-  s+='<rect x="330" y="380" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(346,389,'binds how much silicon fits on them',{s:10.5,f:V.ink});
-  s+=T(620,389,'idiot index = price ÷ raw material (E)',{s:10.5,f:V.dim});
+    s+=LAB(x,yb+18,[l[0],'price ÷ raw '+l[3]]);});
+  s+='<rect x="40" y="380" width="10" height="10" rx="2" fill="'+MRED+'"/>'+T(56,389,'limits where power can be connected',{s:10.5,f:V.ink});
+  s+='<rect x="330" y="380" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(346,389,'limits how many chips there are',{s:10.5,f:V.ink});
+  s+=T(620,389,'price ÷ raw material: high means a missing factory',{s:10.5,f:V.dim});
   const first=R.path.find(x=>x.short>WM.SHORT*x.nw);
-  s+=LINE('Money does not skip a factory with a 2–4 year lead time; the $4T path outruns the base in '+(first?first.y:'no year to 2031')+'.',424);
+  s+=LINE('Money cannot skip a factory that takes 2–4 years to build; the $4T path runs out of parts in '+(first?first.y:'no year to 2031')+'.',424);
   return SV(s);
 };
 SHEET.path=function(R,sub){
   const P=R.path,I=R.I;
   if(sub===2)return SHEET.bottle(R);
   if(sub===1){
-    let s=FTITLE(40,28,'Capex as an output: new GW × $/GW + refresh, against the $4T claim');
+    let s=FTITLE(40,28,'Money spent each year: new power × cost per gigawatt, plus replacing old chips');
     const x0=190,x1=940,yb=290,yt=66,mx=Math.max(P[5].claim,P[5].capex)*1.05,Y=v=>yb-(v/mx)*(yb-yt),bw=70;
     s+=AXIS(x0,x1,yb,yt,[0,1000,2000,3000,4000,5000].filter(v=>v<mx),Y,v=>v?'$'+(v/1000)+'T':'0');
     const cxs=P.map((p,i)=>x0+50+i*130);
@@ -2916,42 +2916,42 @@ SHEET.path=function(R,sub){
       if(i===4)s+=T(cx-bw/2-6,Y(p.claim)-6,'$4T',{a:'end',s:10,w:600,m:1,f:MRED});
       s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});
       s+=T(cx,yb+36,fN(p.twh,0)+' TWh',{a:'middle',s:10.5,m:1,f:V.ink});s+=T(cx,yb+50,fP(p.twhShare,1)+' of world',{a:'middle',s:9.5,f:V.dim});s+=T(cx,yb+64,fP(p.addShare)+' of adds',{a:'middle',s:9.5,f:V.dim});});
-    s+='<rect x="40" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(56,50,'new build',{s:10,f:V.ink});
-    s+='<rect x="150" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(166,50,'refresh: installed ÷ '+I.lifeAcc+' yr',{s:10,f:V.ink});
-    s+='<circle cx="345" cy="46" r="4" fill="none" stroke="'+MRED+'" stroke-width="1.6"/>'+T(356,50,'the claim: $1.0T → $4T by 2030, a straight line',{s:10,f:V.ink});
-    s+=T(40,yb+36,'Installed × PUE × draw',{s:10,f:V.dim});s+=T(40,yb+50,'of '+fN(I.worldTWh)+' TWh',{s:9.5,f:V.dim});s+=T(40,yb+64,'of ~'+fN(I.worldAdd)+' TWh/yr added',{s:9.5,f:V.dim});
-    s+=LINE('2026 derives to '+fB(P[0].capex)+' against a $1.0T anchor it was never given; in 2030 the $4T claim is '+fM(P[4].clearing)+'/MW on '+fN(P[4].nw,0)+' GW, not '+fN(P[4].wantGW,0)+' GW at cost.',424);
+    s+='<rect x="40" y="41" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(56,50,'new',{s:10,f:V.ink});
+    s+='<rect x="150" y="41" width="10" height="10" rx="2" fill="'+V.grey+'" fill-opacity=".5"/>'+T(166,50,'replacing chips after '+I.lifeAcc+' years',{s:10,f:V.ink});
+    s+='<circle cx="345" cy="46" r="4" fill="none" stroke="'+MRED+'" stroke-width="1.6"/>'+T(356,50,'the claim: $1T now to $4T by 2030',{s:10,f:V.ink});
+    s+=T(40,yb+36,'Electricity used',{s:10,f:V.dim});s+=T(40,yb+50,'of '+fN(I.worldTWh)+' TWh',{s:9.5,f:V.dim});s+=T(40,yb+64,'of ~'+fN(I.worldAdd)+' TWh added / yr',{s:9.5,f:V.dim});
+    s+=LINE('2026 comes out at '+fB(P[0].capex)+' without being told the $1T answer; in 2030, $4T buys '+fN(P[4].nw,0)+' GW at '+fM(P[4].clearing)+'/MW, not '+fN(P[4].wantGW,0)+' GW at today\'s price.',424);
     return SV(s);
   }
   if(sub===3){ /* where inference sits: a ruler of distance */
-    let s=FTITLE(40,28,'Speed of light in fiber against decode time: where inference can sit');
+    let s=FTITLE(40,28,'How far away a data center can be before you notice');
     const x0=60,x1=940,y=250,KM=12000,X=km=>x0+(x1-x0)*Math.min(km,KM)/KM;
     s+=LN(x0,y,x1,y,V.ink,{sw:1.2,op:.5});
     [0,2000,4000,6000,8000,10000,12000].forEach(k=>{s+=LN(X(k),y-5,X(k),y+5,V.ink,{sw:.8,op:.5});s+=T(X(k),y+20,fN(k)+(k===12000?' km':''),{a:'middle',s:9.5,m:1,f:V.dim});});
     [[550,'LEO overhead'],[1900,'Ashburn – Dallas'],[5500,'Ashburn – Dublin'],[10700,'Ashburn – Riyadh']].forEach((p,i)=>{s+='<circle cx="'+X(p[0])+'" cy="'+y+'" r="4" fill="'+V.ink+'"/>';s+=T(X(p[0]),y+(i%2?52:38),p[1],{a:'middle',s:10.5,w:600,f:V.ink});});
-    [[R.stepMs(2000),'one decode step',MC,-44],[10,'per token at 100 tok/s',MC,-78],[50,'per token at 20 tok/s',MC,-112],[0.5,'one training collective (E)',MRED,-146]].forEach(b=>{const km=b[0]*I.cKmMs,yy=y+b[3],inside=X(km)>700;
+    [[R.stepMs(2000),'one step of writing',MC,-44],[10,'one token at 100 tokens/s',MC,-78],[50,'one token at 20 tokens/s',MC,-112],[0.5,'one training sync (estimate)',MRED,-146]].forEach(b=>{const km=b[0]*I.cKmMs,yy=y+b[3],inside=X(km)>700;
       s+='<rect x="'+x0+'" y="'+(yy-7)+'" width="'+(X(km)-x0)+'" height="14" rx="3" fill="'+b[2]+'" fill-opacity=".55"/>';
       s+=T(inside?X(km)-8:X(km)+8,yy+4,b[1]+' · '+fN(b[0],b[0]<1?1:0)+' ms ≈ '+fN(km,0)+' km',{a:inside?'end':'start',s:10.5,w:600,f:inside?'#0a0c12':V.ink});});
-    s+=T(x0,y-172,'ROUND TRIP HIDDEN INSIDE ONE INTERVAL · '+I.cKmMs+' km per ms',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-    s+=LINE('A reader at 20 tokens a second cannot tell Virginia from Riyadh; batch goes to the cheapest photons, training stays home.',424);
+    s+=T(x0,y-172,'HOW FAR LIGHT TRAVELS IN THAT TIME · '+I.cKmMs+' km per ms',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
+    s+=LINE('A reader at 20 tokens a second cannot tell Virginia from Riyadh; bulk work goes where power is cheapest, training stays close.',424);
     return SV(s);
   }
-  let s=FTITLE(40,28,'Firm new AI IT gigawatts per year, by source, and what the dollars want');
+  let s=FTITLE(40,28,'New AI data-center power switched on each year, and what the money wants');
   const x0=90,x1=940,yb=300,yt=76,mx=Math.max(P[5].chips,P[5].wantGW)*1.06,Y=v=>yb-(v/mx)*(yb-yt),bw=64;
   const ticks=[];for(let v=0;v<mx;v+=25)ticks.push(v);s+=AXIS(x0,x1,yb,yt,ticks,Y);
-  const SRC=[['grid',MC,'grid interconnect'],['gas',V.amber,'behind-the-meter gas'],['sol',V.yel,'behind-the-meter solar + storage'],['intl',V.pur,'international']];
+  const SRC=[['grid',MC,'from the grid'],['gas',V.amber,'on-site gas'],['sol',V.yel,'on-site solar + batteries'],['intl',V.pur,'Gulf · China · India · Nordics']];
   const cxs=P.map((p,i)=>x0+60+i*140);
   P.forEach((p,i)=>{const cx=cxs[i];let acc=0;SRC.forEach(sr=>{const v=p[sr[0]];s+=COL(cx,bw,Y(acc),Y(acc+v),sr[1]);acc+=v;});
     s+=T(cx,Y(p.nw)+15,fN(p.nw,0)+' GW',{a:'middle',s:11.5,w:700,m:1,f:'#0a0c12'});
-    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+34,'installed '+fN(p.inst,0),{a:'middle',s:9.5,m:1,f:MDIM});
-    if(p.short>WM.SHORT*p.nw)s+=T(cx,yb+48,'clears '+fM(p.clearing)+'/MW',{a:'middle',s:9.5,w:600,m:1,f:MRED});});
+    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+34,'total '+fN(p.inst,0)+' GW',{a:'middle',s:9.5,m:1,f:MDIM});
+    if(p.short>WM.SHORT*p.nw)s+=T(cx,yb+48,'price '+fM(p.clearing)+'/MW',{a:'middle',s:9.5,w:600,m:1,f:MRED});});
   const poly=(k,c,d)=>{s+='<polyline points="'+P.map((p,i)=>cxs[i]+','+Y(p[k])).join(' ')+'" fill="none" stroke="'+c+'" stroke-width="1.5" stroke-dasharray="'+d+'"/>';};
   poly('chips',V.cyan,'7 5');poly('wantGW',MRED,'2 4');
-  s+=T(cxs[5]+40,Y(P[5].chips)+4,'silicon supply',{s:10,w:600,m:1,f:V.cyan});s+=T(cxs[5]+40,Y(P[5].wantGW)+4,'$4T path wants',{s:10,w:600,m:1,f:MRED});
+  s+=T(cxs[5]+40,Y(P[5].chips)+4,'chips available',{s:10,w:600,m:1,f:V.cyan});s+=T(cxs[5]+40,Y(P[5].wantGW)+4,'what $4T needs',{s:10,w:600,m:1,f:MRED});
   const cr=P.find(p=>p.inst>=R.J.fleet);
-  if(cr){const i=P.indexOf(cr),cx=cxs[i];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'fleet under test · '+R.J.fleet+' GW crossed',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
+  if(cr){const i=P.indexOf(cr),cx=cxs[i];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'your fleet size, '+R.J.fleet+' GW, reached',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
   SRC.forEach((sr,i)=>{s+='<rect x="'+(40+i*225)+'" y="41" width="10" height="10" rx="2" fill="'+sr[1]+'"/>';s+=T(56+i*225,50,sr[2],{s:10.5,f:V.ink});});
-  s+=LINE('Each source compounds only as fast as its industrial base; power binds every year, and the rest is price.',424);
+  s+=LINE('Each source grows only as fast as its factories can; power is the limit every year, and the shortfall shows up as price.',424);
   return SV(s);
 };
 
@@ -2959,60 +2959,60 @@ SHEET.path=function(R,sub){
 SHEET.rent=function(R,sub){
   const I=R.I,W=R.walk;
   if(sub===0){ /* three cases + training, one log axis */
-    let s=FTITLE(40,28,'Revenue one MW can earn in a year, against the rent it owes');
+    let s=FTITLE(40,28,'What one megawatt can earn in a year, against what it must earn');
     const yb=340,yt=76,Y=LOGY(0.1,1000,yb,yt),x0=110;
     [0.1,1,10,100,1000].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+(v<1?v:v>=1000?'1,000':v)+'M',{a:'end',s:10,m:1,f:V.dim});});
     s+=T(x0-10,yt-10,'per MW-year · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const cases=[['Interactive','frontier $'+I.pFront+'/MTok',R.rev.interFront,R.cov.interFront,.85],['Batch','commodity $'+I.pComm+'/MTok',R.rev.batchComm,R.cov.batchComm,.85],['Batch × frontier','the ceiling, not a market',R.rev.batchFront,R.cov.batchFront,.35],['Training MW','earns nothing until the model does',R.rentMW,1,0]];
+    const cases=[['Chat','at $'+I.pFront+' per million tokens',R.rev.interFront,R.cov.interFront,.85],['Bulk','at $'+I.pComm+' per million tokens',R.rev.batchComm,R.cov.batchComm,.85],['Bulk at chat prices','a ceiling, not a market',R.rev.batchFront,R.cov.batchFront,.35],['Training','earns nothing until the model does',R.rentMW,1,0]];
     cases.forEach((c,i)=>{const x=x0+110+i*200;
       s+=COL(x,90,yb,Y(c[2]),i===3?'none':MC,{op:c[4],stroke:i===3?V.amber:null});
       s+=VAL(x,Y(c[2])-8,fM(c[2])+(i===3?' owed':' · '+fX(c[3],c[3]<3?2:0)));s+=LAB(x,yb+18,[c[0],c[1]],i===3?V.amber:V.ink);});
-    s+=RULEH(x0,960,Y(R.rentMW),MRED,'rent '+fM(R.rentMW));s+=RULEH(x0,960,Y(R.elecYr),V.grey,'electricity '+fM(R.elecYr));
-    s+=T(40,392,'The one point where supply meets demand: a B200-class GPU-hour rents at $'+fN(I.gpuHrB,2)+' against $'+fN(R.rentGpuHr,2)+' required → '+fX(R.covCloud,2)+'.',{s:11,f:V.dim});
-    s+=LINE('Physics clears at every price above the batched rent; the market already prices commodity tokens at it. The bet is the mix.',424);
+    s+=RULEH(x0,960,Y(R.rentMW),MRED,'must earn '+fM(R.rentMW));s+=RULEH(x0,960,Y(R.elecYr),V.grey,'electricity '+fM(R.elecYr));
+    s+=T(40,392,'Where supply meets demand today: a new GPU rents for $'+fN(I.gpuHrB,2)+' an hour against $'+fN(R.rentGpuHr,2)+' needed → '+fX(R.covCloud,2)+'.',{s:11,f:V.dim});
+    s+=LINE('Any price above $'+fN(R.rentTok.batch,2)+' per million tokens pays; the cheapest tokens already sell near it. The bet is how many sell at chat prices.',424);
     return SV(s);
   }
   if(sub===1){ /* the walk */
-    let s=FTITLE(40,28,'One dollar of foundry cost, walked up the stack');
-    const steps=[['foundry',W.foundry,'die + HBM + substrate',''],['accelerator',W.acc,'vendor GM '+fP(I.accGM),fX(W.acc/W.foundry,1)],['in the rack',W.box,'OEM +'+fP(I.boxMk),fX(W.box/W.acc,2)],['installed MW',W.inst,'silicon '+fP(R.accShare)+' of the MW',fX(W.inst/W.box,1)],
-                 ['rent / yr',W.rent,fP(R.rentRate)+' of stock, yearly','× '+fN(R.rentRate,2)],['cloud',W.cloud,'GM '+fP(R.J.gCloud),fX(W.cloud/W.rent,2)],['model',W.model,'GM '+fP(R.J.gModel),fX(W.model/W.cloud,2)],['app · agent',W.app,'GM '+fP(R.J.gApp),fX(W.app/W.model,2)]];
+    let s=FTITLE(40,28,'One dollar spent making a chip, followed to the customer');
+    const steps=[['making the chip',W.foundry,'silicon + memory',''],['chip maker sells it',W.acc,'margin '+fP(I.accGM),fX(W.acc/W.foundry,1)],['in the rack',W.box,'assembly +'+fP(I.boxMk),fX(W.box/W.acc,2)],['installed',W.inst,'chips are '+fP(R.accShare)+' of the build',fX(W.inst/W.box,1)],
+                 ['must earn / yr',W.rent,fP(R.rentRate)+' of the cost, yearly','× '+fN(R.rentRate,2)],['cloud',W.cloud,'margin '+fP(R.J.gCloud),fX(W.cloud/W.rent,2)],['AI model',W.model,'margin '+fP(R.J.gModel),fX(W.model/W.cloud,2)],['apps',W.app,'margin '+fP(R.J.gApp),fX(W.app/W.model,2)]];
     const x0=70,bw=76,yb=320,yt=84,mx=Math.max(W.app,W.inst)*1.15,Y=v=>yb-(v/mx)*(yb-yt);
     s+=LN(40,yb,960,yb,MDIM,{sw:1});
     steps.forEach((st,i)=>{const x=x0+i*112+bw/2,cap=i<4,c=cap?V.grey:MC;s+=COL(x,bw,yb,Y(st[1]),c,{op:cap?.45:.85});
       s+=VAL(x,Y(st[1])-8,'$'+fN(st[1],2));s+=LAB(x,yb+18,[st[0],st[2]],cap?V.ink:MC);if(st[3])s+=T(x,yt-8,st[3],{a:'middle',s:10,w:600,m:1,f:cap?MDIM:MC});});
     const dx=x0+4*112-18;s+=LN(dx,yt-20,dx,yb,V.ink,{sw:.8,d:'3 3',op:.4});
-    s+=T(dx-8,yt-24,'CAPITAL, ONCE',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});s+=T(dx+8,yt-24,'PER YEAR, FOR THE LIFE',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-    s+=LINE('Each foundry dollar becomes '+fN(W.inst,1)+' of installed capital and then wants '+fN(W.app,1)+' of end-customer spend every year of its life.',424);
+    s+=T(dx-8,yt-24,'SPENT ONCE',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});s+=T(dx+8,yt-24,'EARNED EVERY YEAR',{s:9,w:600,m:1,f:MDIM,ls:'.1em'});
+    s+=LINE('Each dollar of chip becomes $'+fN(W.inst,2)+' of data center, which then needs $'+fN(W.app,2)+' of customer spending every year.',424);
     return SV(s);
   }
   if(sub===2){ /* at fleet scale, one log axis */
-    let s=FTITLE(40,28,'What a '+R.J.fleet+' GW fleet must be paid each year, against the world it sells into');
+    let s=FTITLE(40,28,'What a '+R.J.fleet+' GW fleet must earn each year, next to the world it sells to');
     const yb=340,yt=76,Y=LOGY(0.1,200,yb,yt),x0=110;
     [0.1,1,10,100].forEach((v,i)=>{s+=LN(x0,Y(v),960,Y(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(x0-10,Y(v)+4,'$'+v+'T',{a:'end',s:10,m:1,f:V.dim});});
     s+=T(x0-10,yt-10,'per year · log',{a:'end',s:9.5,m:1,f:V.dim});
-    const bars=[['the fleet needs',fP(R.endGDP,1)+' of world GDP',R.endT,MC,.85],['world software',fX(R.endSoft,1)+' this',I.softW,V.grey,.5],['world labor',fP(R.endLabor,1)+' of this',I.laborW,V.grey,.5],['world GDP',fP(R.endGDP,1)+' of this',I.gdpW,V.grey,.5]];
+    const bars=[['the fleet must earn',fP(R.endGDP,1)+' of world GDP',R.endT,MC,.85],['all software sold',fX(R.endSoft,1)+' this',I.softW,V.grey,.5],['all wages paid',fP(R.endLabor,1)+' of this',I.laborW,V.grey,.5],['world GDP','',I.gdpW,V.grey,.5]];
     bars.forEach((b,i)=>{const x=x0+110+i*200;s+=COL(x,90,yb,Y(b[2]),b[3],{op:b[4]});s+=VAL(x,Y(b[2])-8,fT(b[2]));s+=LAB(x,yb+18,[b[0],b[1]],i===0?MC:V.ink);});
     s+=RULEH(x0,960,Y(R.endT),MRED,'');
-    s+=T(40,392,'Compresses first: rented GPU-hour → $/token → application seats → silicon. Paid regardless: hooked MW, wafers, packaging, HBM, EUV.',{s:11,f:V.dim});
-    s+=LINE('Stock '+fT(R.stockT)+' × rent '+fP(R.rentRate)+' × the layers '+fX(R.mult,1)+' = '+fT(R.endT)+' a year; move the margins above to see what has to be true.',424);
+    s+=T(40,392,'If money falls short, prices give way in this order: GPU rental, tokens, apps, then chips. Paid no matter what: connected power, chip fabs, memory.',{s:11,f:V.dim});
+    s+=LINE(fT(R.stockT)+' of data centers × '+fP(R.rentRate)+' a year × '+fX(R.mult,1)+' for the layers above = '+fT(R.endT)+' a year; move the margins to see what has to be true.',424);
     return SV(s);
   }
   /* by year: what the fleet must be paid, and which link binds */
-  let s=FTITLE(40,28,'By year: what the built fleet must be paid, and the joint that binds');
+  let s=FTITLE(40,28,'Year by year: what everything built must earn, and what is short');
   const P=R.path,x0=250,x1=940,yb=248,yt=70,mx=P[5].endT*1.08,Y=v=>yb-(v/mx)*(yb-yt),bw=64,cxs=P.map((p,i)=>x0+60+i*118);
   const ticks=[];for(let v=0;v<mx;v+=5)ticks.push(v);s+=AXIS(x0,x1,yb,yt,ticks,Y,v=>v?'$'+v+'T':'0');
   const cr=P.find(p=>p.inst>=R.J.fleet);
   P.forEach((p,i)=>{const cx=cxs[i],beyond=p.inst>R.J.fleet;s+=COL(cx,bw,yb,Y(p.endT),MC,{op:beyond?.3:.85,stroke:beyond?MRED:null});
     s+=VAL(cx,Y(p.endT)-8,fT(p.endT));s+=T(cx,Y(p.endT)-22,fP(p.endT/I.gdpW,1)+' GDP',{a:'middle',s:9.5,m:1,f:V.dim});
-    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+33,fN(p.inst,0)+' GW · tokens ×'+fN((1+p.growth)*R.J.priceDecline,1)+'/yr',{a:'middle',s:9,m:1,f:MDIM});});
-  if(cr){const cx=cxs[P.indexOf(cr)];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'fleet under test · '+R.J.fleet+' GW',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
+    s+=T(cx,yb+18,String(p.y),{a:'middle',s:11.5,w:700,m:1,f:i===0?V.amber:i===5?V.cyan:V.ink});s+=T(cx,yb+33,fN(p.inst,0)+' GW · needs '+fN((1+p.growth)*R.J.priceDecline,1)+'× the tokens sold',{a:'middle',s:9,m:1,f:MDIM});});
+  if(cr){const cx=cxs[P.indexOf(cr)];s+=LN(cx-bw/2-8,yt-6,cx-bw/2-8,yb,V.pur,{sw:1.2,d:'3 3'});s+=T(cx-bw/2-12,yt+2,'your fleet size, '+R.J.fleet+' GW',{a:'end',s:9.5,w:600,m:1,f:V.pur});}
   /* the copper strip: which joint binds each year */
-  const links=[['hbm','HBM · packaging'],['transformer','transformers · turbines'],['rent','rent: the next MW unpaid']],sy=282,rh=26;
+  const links=[['hbm','memory · chip packaging'],['transformer','transformers · turbines'],['rent','customers: the next MW does not pay']],sy=282,rh=26;
   const atom=(p,i)=>(R.covReal<1||p.inst>R.J.fleet)?'rent':(p.bind==='silicon'?'hbm':(i===0?'hbm':'transformer'));
   links.forEach((l,r)=>{const y=sy+r*rh;s+=T(x0-10,y+15,l[1],{a:'end',s:10,f:V.ink});
     P.forEach((p,i)=>{const on=atom(p,i)===l[0];s+='<rect x="'+(cxs[i]-bw/2)+'" y="'+(y+2)+'" width="'+bw+'" height="'+(rh-6)+'" rx="3" fill="'+(on?'#b87333':'#39414c')+'" fill-opacity="'+(on?.95:.35)+'"/>';});});
-  s+=T(x0-10,sy-8,'COPPER = THE BINDING JOINT',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});
-  s+=LINE('Rent × the layers, every year, on everything built; beyond the tested fleet the next MW is unpaid unless value arrives.',424);
+  s+=T(x0-10,sy-8,'COPPER = WHAT IS SHORT',{a:'end',s:9,w:600,m:1,f:MDIM,ls:'.1em'});
+  s+=LINE('Everything built must earn every year; past your fleet size the next megawatt does not pay unless new value shows up.',424);
   return SV(s);
 };
 
@@ -3020,35 +3020,35 @@ SHEET.rent=function(R,sub){
 SHEET.chal=function(R,sub){
   const I=R.I,O=R.orbit,P=R.path;
   if(sub===1){ /* one GW in orbit */
-    let s=FTITLE(40,28,'One gigawatt in sun-synchronous orbit: his physics, checked');
+    let s=FTITLE(40,28,'A gigawatt of computers in orbit: his physics, checked');
     /* mass per GW, one column */
     const yb=330,yt=80;let x=150,w=100;
-    const parts=[['arrays '+I.arrayWkg+' W/kg',O.tArr,V.grey,.45],['radiators '+I.radKgM2+' kg/m²',O.tRad,V.grey,.6],['compute '+I.spaceTMW+' t/MW',O.tCmp,MC,.85],['structure +'+fP(I.structFrac),O.tTot-(O.tArr+O.tRad+O.tCmp),V.grey,.3]];
+    const parts=[['solar panels, '+I.arrayWkg+' W/kg',O.tArr,V.grey,.45],['radiators, '+I.radKgM2+' kg/m²',O.tRad,V.grey,.6],['computers, '+I.spaceTMW+' t/MW',O.tCmp,MC,.85],['structure +'+fP(I.structFrac),O.tTot-(O.tArr+O.tRad+O.tCmp),V.grey,.3]];
     const Y1=v=>yb-(v/(O.tTot*1.1))*(yb-yt);let acc=0;
     parts.forEach(p=>{const y0=Y1(acc),y1=Y1(acc+p[1]);s+=COL(x,w,y0,y1,p[2],{op:p[3]});s+=LN(x+w/2+4,(y0+y1)/2,x+w/2+22,(y0+y1)/2,V.ink,{sw:.6,op:.35});s+=T(x+w/2+28,(y0+y1)/2+4,p[0]+'  '+fN(p[1],0)+' t',{s:10.5,f:V.ink});acc+=p[1];});
-    s+=VAL(x,Y1(acc)-8,fN(O.tTot,0)+' t per GW');s+=LAB(x,yb+18,['mass per GW',fN(O.launches.ss100,0)+' Starship launches at 100 t']);
+    s+=VAL(x,Y1(acc)-8,fN(O.tTot,0)+' t per GW');s+=LAB(x,yb+18,['weight per gigawatt',fN(O.launches.ss100,0)+' Starship launches at 100 t']);
     /* $/GW launch only, against what the ground charges for power + shell */
     const bx=560,YL=LOGY(1,100,yb,yt);[1,10,100].forEach((v,i)=>{s+=LN(bx,YL(v),960,YL(v),V.ink,{sw:.6,op:i?.10:.25});s+=T(bx-10,YL(v)+4,'$'+v+'B',{a:'end',s:10,m:1,f:V.dim});});
-    s+=T(bx-10,yt-10,'launch per GW · log',{a:'end',s:9.5,m:1,f:V.dim});
+    s+=T(bx-10,yt-10,'launch cost per GW · log',{a:'end',s:9.5,m:1,f:V.dim});
     [['Falcon 9','$'+fN(I.kgF9)+'/kg',O.usdGW.f9],['Starship today','$'+fN(I.kgSSnow)+'/kg',O.usdGW.ssNow],['his target','$'+fN(I.kgSSgoal)+'/kg',O.usdGW.ssTarget]].forEach((b,i)=>{const xx=bx+70+i*130;s+=COL(xx,70,yb,YL(b[2]),MC,{op:i===2?.4:.85});s+=VAL(xx,YL(b[2])-8,fB(b[2]));s+=LAB(xx,yb+18,[b[0],b[1]]);});
-    s+=RULEH(bx,960,YL(O.groundPowerShell),MRED,'ground power + shell '+fB(O.groundPowerShell)+'/GW');
-    s+=T(40,392,fX(O.ratio,1)+' the photons of a good ground site · '+fN(O.radKm2,2)+' km² of radiator at '+O.T+' K · '+fN(O.solKm2,2)+' km² of array · breakeven launch $'+fN(O.kgBreak,0)+'/kg before radiation, repair or margin',{s:11,f:V.dim});
-    s+=LINE('Inference-only, batch-only, and not before 2031: the same photons on the ground come without the freight.',424);
+    s+=RULEH(bx,960,YL(O.groundPowerShell),MRED,'building + power on the ground '+fB(O.groundPowerShell)+'/GW');
+    s+=T(40,392,fX(O.ratio,1)+' the sunlight of a good ground site · '+fN(O.radKm2,2)+' km² of radiators · '+fN(O.solKm2,2)+' km² of panels · launch must cost under $'+fN(O.kgBreak,0)+'/kg to break even, before radiation, repairs or margin',{s:11,f:V.dim});
+    s+=LINE('Bulk work only, and not before 2031: the same sunlight on the ground comes without the launch bill.',424);
     return SV(s);
   }
   /* his numbers against the base, pair by pair, each on its own unit */
-  let s=FTITLE(40,28,'His numbers against the base, pair by pair');
+  let s=FTITLE(40,28,'His numbers next to ours');
   const tw=1e6*8.76*I.pue*I.util/1e3;
-  const pairs=[['US grid growth','% / yr',5.5,2,'his 4–7','actual 1–3'],['Chip output','% / yr',45,I.chipG*100,'his 40–50','base '+fP(I.chipG)],['Capex per watt','$ / W',40,R.mw,'his 30–50','base '+fN(R.mw,0)],['Build rate','GW / yr',1000,P[5].nw,'his 1 TW / yr','base 2031 '+fN(P[5].nw,0)],['Space photons','× ground',5,O.ratio,'his ≈ 5×','base '+fX(O.ratio,1)]];
+  const pairs=[['US grid growth','% / yr',5.5,2,'his 4–7','actual 1–3'],['Chip output growth','% / yr',45,I.chipG*100,'his 40–50','ours '+fP(I.chipG)],['Cost per watt','$ / W',40,R.mw,'his 30–50','ours '+fN(R.mw,0)],['Build rate','GW / yr',1000,P[5].nw,'his 1 TW / yr','ours, 2031: '+fN(P[5].nw,0)],['Sunlight in space','× ground',5,O.ratio,'his ≈ 5×','ours '+fX(O.ratio,1)]];
   const yb=300,yt=90,pw=176;
   pairs.forEach((p,i)=>{const x0=60+i*pw,log=p[2]/Math.max(p[3],1e-9)>20||p[3]/p[2]>20,mx=Math.max(p[2],p[3])*1.15,Y=log?LOGY(Math.min(p[2],p[3])/10,mx,yb,yt):v=>yb-(v/mx)*(yb-yt);
     s+=PANEL(x0,yt-30,pw-14,yb-yt+62,{r:10});s+=T(x0+(pw-14)/2,yt-12,p[0],{a:'middle',s:11.5,w:600,f:V.ink});s+=T(x0+(pw-14)/2,yt+2,p[1]+(log?' · log':''),{a:'middle',s:9.5,m:1,f:V.dim});
     s+=COL(x0+52,44,yb,Y(p[2]),V.amber,{op:.85});s+=COL(x0+112,44,yb,Y(p[3]),MC,{op:.85});
     s+=VAL(x0+52,Y(p[2])-8,fN(p[2],p[2]<10?1:0),V.amber);s+=VAL(x0+112,Y(p[3])-8,fN(p[3],p[3]<10?1:0),MC);
     s+=T(x0+52,yb+16,p[4],{a:'middle',s:9,m:1,f:V.amber});s+=T(x0+112,yb+16,p[5],{a:'middle',s:9,m:1,f:MC});});
-  s+='<rect x="40" y="350" width="10" height="10" rx="2" fill="'+V.amber+'"/>'+T(56,359,'his',{s:10.5,f:V.ink});s+='<rect x="100" y="350" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(116,359,'the base',{s:10.5,f:V.ink});
-  s+=T(40,392,'Agree on direction: manufacture the watt, manufacture the chip. Disagree on clocks: 1 TW/yr draws '+fN(tw,0)+' TWh a year, '+fP(tw/I.worldTWh)+' of world electricity per year added.',{s:11,f:V.dim});
-  s+=LINE('Where they disagree it is on clocks, not physics: the base compounds each factory from the day it exists.',424);
+  s+='<rect x="40" y="350" width="10" height="10" rx="2" fill="'+V.amber+'"/>'+T(56,359,'his',{s:10.5,f:V.ink});s+='<rect x="100" y="350" width="10" height="10" rx="2" fill="'+MC+'"/>'+T(116,359,'ours',{s:10.5,f:V.ink});
+  s+=T(40,392,'Same direction: build the power, build the chips. Different clocks: 1 TW a year would draw '+fN(tw,0)+' TWh, '+fP(tw/I.worldTWh)+' of world electricity, added every year.',{s:11,f:V.dim});
+  s+=LINE('The disagreement is about time, not physics: our numbers only count a factory from the day it exists.',424);
   return SV(s);
 };
 
@@ -3056,15 +3056,15 @@ SHEET.chal=function(R,sub){
 const mpanel=document.getElementById('mpanel'), mrail=document.getElementById('msheets');
 let mcur={i:0,sub:0,filt:'all',year:0};
 function buildRail(){
-  mrail.innerHTML=WM.SHEETS.map((s,i)=>i===0?'<div class="ms hall" data-i="0"><span class="no">▣</span><span class="nm">'+s.n+'</span></div><div class="mh">THE BOOK</div>':'<div class="ms'+(s.k==='chal'?' chal':'')+'" data-i="'+i+'"><span class="no">'+String(i).padStart(2,'0')+'</span><span class="nm">'+s.n+'</span></div>').join('');
+  mrail.innerHTML=WM.SHEETS.map((s,i)=>i===0?'<div class="ms hall" data-i="0"><span class="no">▣</span><span class="nm">'+s.n+'</span></div><div class="mh">THE NUMBERS BEHIND IT</div>':'<div class="ms'+(s.k==='chal'?' chal':'')+'" data-i="'+i+'"><span class="no">'+String(i).padStart(2,'0')+'</span><span class="nm">'+s.n+'</span></div>').join('');
   mrail.querySelectorAll('.ms').forEach(el=>el.addEventListener('click',()=>go('model',undefined,+el.dataset.i)));
   const J=WM.J, jb=document.getElementById('mjudg');
   const sl=(k,lab,min,max,step,fmt)=>'<div class="jrow"><label><span>'+lab+'</span><input type="range" data-j="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+J[k]+'" aria-label="'+lab+'"></label><span class="jv" data-jv="'+k+'">'+fmt(J[k])+'</span></div>';
-  jb.innerHTML='<div class="mh">JUDGMENTS · YOURS</div>'
-   +sl('fleet','Fleet under test',20,300,5,v=>v+' GW')
-   +sl('hurdle','Hurdle, unlevered',0.06,0.20,0.01,v=>fP(v))
-   +sl('life','Silicon life',3,7,0.5,v=>v+' yr')
-   +sl('pReal','Realised $/MTok',0.2,10,0.1,v=>'$'+fN(v,1));
+  jb.innerHTML='<div class="mh">YOUR CALLS</div>'
+   +sl('fleet','Fleet size',20,300,5,v=>v+' GW')
+   +sl('hurdle','Return investors need',0.06,0.20,0.01,v=>fP(v))
+   +sl('life','Chip life',3,7,0.5,v=>v+' yr')
+   +sl('pReal','Price per million tokens',0.2,10,0.1,v=>'$'+fN(v,1));
   const FMT={fleet:v=>v+' GW',hurdle:fP,life:v=>v+' yr',pReal:v=>'$'+fN(v,1),gCloud:fP,gModel:fP,gApp:fP,priceDecline:v=>fX(v,1)};
   jb.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{const k=inp.dataset.j;J[k]=+inp.value;jb.querySelector('[data-jv="'+k+'"]').textContent=FMT[k](J[k]);renderSheet();}));
 }
@@ -3077,9 +3077,9 @@ function renderSheet(){
   const subs=S.subs?'<div class="pills">'+S.subs.map((x,j)=>'<div class="pill'+(j===mcur.sub?' on':'')+'" data-s="'+j+'">'+x+'</div>').join('')+'</div>':'';
   const filt=(S.k==='assump'&&mcur.sub===0)?'<div class="mfilt">'+['all','K','D','E','J'].map(t=>'<div class="pill'+(mcur.filt===t?' on':'')+'" data-f="'+t+'">'+(t==='all'?'all':t+' · '+TAGN[t])+'</div>').join('')+'</div>':'';
   const body=SHEET[S.k](R,mcur.sub,mcur.filt);
-  const gms=(S.k==='rent'&&mcur.sub>=1&&mcur.sub<=2)?'<div class="jinline">'+JSL('gCloud','Cloud GM',0,.8,.05,fP)+JSL('gModel','Model GM',0,.8,.05,fP)+JSL('gApp','Application GM',0,.8,.05,fP)+'</div>':'';
+  const gms=(S.k==='rent'&&mcur.sub>=1&&mcur.sub<=2)?'<div class="jinline">'+JSL('gCloud','Cloud margin',0,.8,.05,fP)+JSL('gModel','AI model margin',0,.8,.05,fP)+JSL('gApp','App margin',0,.8,.05,fP)+'</div>':'';
   const isSvg=body.trim().charAt(0)==='<'&&body.trim().slice(0,4)==='<svg';
-  mpanel.innerHTML='<div class="dtop"><div class="peyebrow">'+(mcur.i?'SHEET '+String(mcur.i).padStart(2,'0')+' · ':'')+S.eb+'</div></div><div class="dtop"><div class="ptitle">'+S.n+'</div>'+subs+filt+'</div><div class="dbody">'+gms+(isSvg?'<div class="viz">'+body+'</div>':body)+'</div>';
+  mpanel.innerHTML='<div class="dtop"><div class="peyebrow">'+(mcur.i?'SHEET '+String(mcur.i).padStart(2,'0')+' · ':'')+S.eb+'</div></div><div class="dtop"><div class="ptitle">'+(S.t||S.n)+'</div>'+subs+filt+'</div><div class="dbody">'+gms+(isSvg?'<div class="viz">'+body+'</div>':body)+'</div>';
   mpanel.querySelectorAll('.jinline input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{WM.J[inp.dataset.j]=+inp.value;mpanel.querySelector('[data-jv="'+inp.dataset.j+'"]').textContent=fP(WM.J[inp.dataset.j]);const R2=WM.calc(WM.J);mpanel.querySelector('.viz').innerHTML=SHEET[S.k](R2,mcur.sub,mcur.filt);}));
   mpanel.querySelectorAll('.pill[data-s]').forEach(p=>p.addEventListener('click',()=>{mcur.sub=+p.dataset.s;renderSheet();}));
   mpanel.querySelectorAll('.pill[data-f]').forEach(p=>p.addEventListener('click',()=>{mcur.filt=p.dataset.f;renderSheet();}));
@@ -3098,7 +3098,7 @@ function renderModel(i){const n=WM.SHEETS.length;i=(i==null||isNaN(i))?0:Math.ma
     h+='<text x="'+X(i)+'" y="114" text-anchor="middle" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5">'+p.y+'</text>';});
   h+='<polyline points="'+P.map((p,i)=>X(i)+','+Y(p.chips)).join(' ')+'" fill="none" stroke="'+V.cyan+'" stroke-width="1.2" stroke-dasharray="4 3"/>';
   h+='<polyline points="'+P.map((p,i)=>X(i)+','+Y(p.wantGW)).join(' ')+'" fill="none" stroke="'+V.red+'" stroke-width="1.2" stroke-dasharray="1.5 3"/>';
-  h+='<text x="6" y="12" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing="1">NEW GW / YR · BY SOURCE</text></svg>';
+  h+='<text x="6" y="12" fill="#8b93a6" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing="1">NEW POWER PER YEAR</text></svg>';
   document.getElementById('miniModel').innerHTML=h;})();
 
 /* ============ ROUTER ============ */

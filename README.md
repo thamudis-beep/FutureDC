@@ -29,7 +29,7 @@ Four views, hash-routed.
 | `#matrix`         | The Atlas — the stack down Y, time across X            |
 | `#stack/<layer>`  | Inside the Data Center — a layer's topics              |
 | `#stack/<layer>/<n>` | one topic and its diagram                           |
-| `#model/<n>`      | The AI World Model — `0` the hall, `1`–`3` the book, `4` the Challenger, `5` the inputs |
+| `#model/<n>`      | The AI World Model — `0` one megawatt, live; `1`–`3` the numbers; `4` Elon's numbers; `5` every number, sourced |
 
 Layers, bottom to top: Power (6 topics) · Compute (7) · Data Center (7) ·
 Applications (3).
