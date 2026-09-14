@@ -1,0 +1,15 @@
+# Manual flag: firms that DISCLOSED an internal AI deployment with a quantified claim
+# (e.g. "more than X% of new code is written by AI"). Used as an alternative treatment
+# definition in analysis_did.py (--treatment disclosed).
+#
+# Rules: every entry needs the exact quote, the URL it was fetched from and the date of
+# the statement. Nothing goes here from memory. Empty until filled from sources.
+#
+# Schema:
+#   - ticker: GOOGL
+#     first_year: 2024            # first fiscal (calendar-aligned) year the claim applies to
+#     claim: "..."                # verbatim
+#     source_url: "https://..."
+#     source_date: "YYYY-MM-DD"
+#     kind: code_generation | customer_support | sales | internal_tools | other
+firms: []

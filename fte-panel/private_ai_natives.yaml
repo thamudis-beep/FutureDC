@@ -1,0 +1,37 @@
+# Private AI-native firms. PLACEHOLDER — NOT PART OF THE PANEL.
+#
+# Every figure here must be a run-rate revenue or headcount number reported by a
+# named source with a URL and an as-of date. All values are unaudited, self-reported
+# or press-reported, and are EXCLUDED from every regression and chart in this project.
+# They exist only so the memo can put the public-company panel next to the firms
+# people actually have in mind when they say "AI-native productivity".
+#
+# Rule (from the project brief): never hand-type a financial number. Each `value`
+# below is null until it has been filled from a fetched source and the source URL
+# has been stored in `source_url`. `make private-check` fails if a value is set
+# without a URL or an as_of date.
+#
+# Fields: metric ∈ {arr_run_rate_usd, revenue_run_rate_usd, headcount}
+
+firms:
+  - name: OpenAI
+    observations: []
+  - name: Anthropic
+    observations: []
+  - name: Cursor (Anysphere)
+    observations: []
+  - name: Lovable
+    observations: []
+  - name: Legora
+    observations: []
+  - name: Harvey
+    observations: []
+
+# Observation schema (copy for each entry):
+#   - metric: arr_run_rate_usd | revenue_run_rate_usd | headcount
+#     value: null            # number, fill only from the cited source
+#     as_of: null            # YYYY-MM-DD the figure refers to
+#     source_url: null       # exact URL fetched
+#     source_type: null      # company_blog | press | interview | filing
+#     quote: null            # the sentence the number came from, verbatim
+#     audited: false         # always false for these firms

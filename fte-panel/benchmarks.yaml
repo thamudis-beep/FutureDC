@@ -1,0 +1,13 @@
+# Sanity benchmarks from the project brief. `make check` fails loudly (exit 1) if the
+# pipeline's figure is more than `tolerance` away from `expected`. Adjust here, never in code.
+# Metric names are panel columns. Nominal USD per employee.
+benchmarks:
+  - {ticker: NVDA,  fiscal_year: 2025, metric: rev_per_fte, expected: 5000000, tolerance: 0.20,
+     note: "Brief: Nvidia FY2025 revenue/FTE roughly $5M"}
+  - {ticker: GOOGL, fiscal_year: 2024, metric: rev_per_fte, expected: 2000000, tolerance: 0.20,
+     note: "Brief: Google roughly $2M"}
+plausibility:
+  rev_per_fte_min: 20000        # USD; below this the headcount is almost certainly wrong
+  rev_per_fte_max: 20000000
+  headcount_coverage_min: 0.8   # share of a firm's fiscal years with a resolved headcount
+  headcount_vs_dei_tol: 0.05    # parsed 10-K headcount vs dei:EntityNumberOfEmployees

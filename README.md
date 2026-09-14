@@ -44,3 +44,8 @@ tracks `master`; pushing to it deploys. Bump the version tag in the footer
 `CLAUDE.md` is the standard this page is held to — what counts as slop, how
 diagrams are built, how to verify by screenshot before claiming anything works.
 Read it before changing the page.
+
+## Research
+
+`fte-panel/` is a separate, reproducible data project (tech-sector productivity per
+FTE, 2015–2026) with its own README, Makefile and memo. It does not ship with the site.

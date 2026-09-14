@@ -1,0 +1,109 @@
+# Sample definition for the tech-sector productivity-per-FTE panel.
+#
+# One entry per firm. Fields:
+#   ticker      exchange ticker (ADRs use the US ticker)
+#   cik         SEC Central Index Key, 10 digits, zero padded. Every CIK here is
+#               VALIDATED at run time against https://www.sec.gov/files/company_tickers.json
+#               by `make ciks`; a mismatch aborts the pipeline and prints the SEC value.
+#   fye_month   month in which the fiscal year ends (1-12); checked against the
+#               observed period-end dates in the XBRL facts and flagged if different.
+#   cohort      one of hyperscaler | internet | software | semis | itservices | nontech
+#   form        annual report form the firm files (10-K, 20-F or 40-F). 20-F/40-F filers
+#               are foreign private issuers: IFRS tags, Item 6.D "Employees", possibly
+#               non-USD reporting currency. See DATA_QUALITY.md.
+#   pilot       true for the five firms the pipeline is validated on first
+#   layoffs_names  names used for the company on layoffs.fyi (matching is exact, case-insensitive)
+#   notes       anything the analyst should know
+#
+# Non-tech control: 20 large-cap S&P 500 firms, listed explicitly, spanning staples,
+# industrials, healthcare and financials. Banks (JPM, BAC, WFC, GS) have no GrossProfit /
+# CostOfRevenue concept in US GAAP; those metrics are NA for them by construction.
+
+firms:
+  # ---- hyperscalers ---------------------------------------------------------
+  - {ticker: MSFT,  cik: "0000789019", fye_month: 6,  cohort: hyperscaler, form: 10-K, layoffs_names: [Microsoft]}
+  - {ticker: AMZN,  cik: "0001018724", fye_month: 12, cohort: hyperscaler, form: 10-K, layoffs_names: [Amazon],
+     notes: "Discloses full-time AND part-time employees in one figure; headcount parser flags this."}
+  - {ticker: GOOGL, cik: "0001652044", fye_month: 12, cohort: hyperscaler, form: 10-K, pilot: true, layoffs_names: [Google, Alphabet]}
+  - {ticker: META,  cik: "0001326801", fye_month: 12, cohort: hyperscaler, form: 10-K, layoffs_names: [Meta, Facebook]}
+  - {ticker: ORCL,  cik: "0001341439", fye_month: 5,  cohort: hyperscaler, form: 10-K, layoffs_names: [Oracle]}
+
+  # ---- internet / ads / marketplaces ----------------------------------------
+  - {ticker: NFLX,  cik: "0001065280", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Netflix]}
+  - {ticker: UBER,  cik: "0001543151", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Uber],
+     notes: "Public from 2019; drivers are not employees, so per-FTE ratios exclude the supply side."}
+  - {ticker: ABNB,  cik: "0001559720", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Airbnb], notes: "Public from Dec 2020."}
+  - {ticker: BKNG,  cik: "0001075531", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Booking.com, Booking Holdings]}
+  - {ticker: SPOT,  cik: "0001639920", fye_month: 12, cohort: internet, form: 20-F, layoffs_names: [Spotify],
+     notes: "Foreign private issuer (Luxembourg); IFRS, reports in EUR. Excluded from USD regressions unless converted."}
+  - {ticker: PINS,  cik: "0001506293", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Pinterest], notes: "Public from 2019."}
+  - {ticker: SNAP,  cik: "0001564408", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [Snap], notes: "Public from 2017."}
+  - {ticker: DASH,  cik: "0001792789", fye_month: 12, cohort: internet, form: 10-K, layoffs_names: [DoorDash], notes: "Public from Dec 2020."}
+
+  # ---- software / SaaS --------------------------------------------------------
+  - {ticker: CRM,   cik: "0001108524", fye_month: 1,  cohort: software, form: 10-K, pilot: true, layoffs_names: [Salesforce]}
+  - {ticker: NOW,   cik: "0001373715", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [ServiceNow]}
+  - {ticker: ADBE,  cik: "0000796343", fye_month: 11, cohort: software, form: 10-K, layoffs_names: [Adobe]}
+  - {ticker: INTU,  cik: "0000896878", fye_month: 7,  cohort: software, form: 10-K, layoffs_names: [Intuit]}
+  - {ticker: WDAY,  cik: "0001327811", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [Workday]}
+  - {ticker: SNOW,  cik: "0001640147", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [Snowflake], notes: "Public from 2020."}
+  - {ticker: DDOG,  cik: "0001561550", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [Datadog], notes: "Public from 2019."}
+  - {ticker: CRWD,  cik: "0001535527", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [CrowdStrike], notes: "Public from 2019."}
+  - {ticker: PANW,  cik: "0001327567", fye_month: 7,  cohort: software, form: 10-K, layoffs_names: [Palo Alto Networks]}
+  - {ticker: PLTR,  cik: "0001321655", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [Palantir], notes: "Public from 2020."}
+  - {ticker: HUBS,  cik: "0001404655", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [HubSpot]}
+  - {ticker: TEAM,  cik: "0001650372", fye_month: 6,  cohort: software, form: 10-K, layoffs_names: [Atlassian],
+     notes: "Filed 20-F through FY2022, 10-K from FY2023 after US redomiciliation; check tag continuity."}
+  - {ticker: ZS,    cik: "0001713683", fye_month: 7,  cohort: software, form: 10-K, layoffs_names: [Zscaler], notes: "Public from 2018."}
+  - {ticker: MDB,   cik: "0001441816", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [MongoDB], notes: "Public from 2017."}
+  - {ticker: TWLO,  cik: "0001447669", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [Twilio]}
+  - {ticker: OKTA,  cik: "0001660134", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [Okta], notes: "Public from 2017."}
+  - {ticker: ZM,    cik: "0001585521", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [Zoom], notes: "Public from 2019."}
+  - {ticker: DOCU,  cik: "0001261333", fye_month: 1,  cohort: software, form: 10-K, layoffs_names: [DocuSign], notes: "Public from 2018."}
+  - {ticker: SHOP,  cik: "0001594805", fye_month: 12, cohort: software, form: 10-K, layoffs_names: [Shopify],
+     notes: "Canadian; filed 40-F before switching to 10-K. 40-F years have no XBRL income statement in companyfacts."}
+
+  # ---- semis / AI infra -------------------------------------------------------
+  - {ticker: NVDA,  cik: "0001045810", fye_month: 1,  cohort: semis, form: 10-K, pilot: true, layoffs_names: [Nvidia]}
+  - {ticker: AMD,   cik: "0000002488", fye_month: 12, cohort: semis, form: 10-K, layoffs_names: [AMD]}
+  - {ticker: AVGO,  cik: "0001730168", fye_month: 10, cohort: semis, form: 10-K, layoffs_names: [Broadcom],
+     notes: "Fiscal year ends the Sunday nearest Oct 31 (some years spill into early Nov). CIK changed in 2018 redomiciliation; pre-2018 facts sit under the old CIK 0001441634."}
+  - {ticker: TSM,   cik: "0001046179", fye_month: 12, cohort: semis, form: 20-F, layoffs_names: [TSMC],
+     notes: "ADR; IFRS, reports in TWD. Excluded from USD regressions unless converted."}
+  - {ticker: MU,    cik: "0000723125", fye_month: 8,  cohort: semis, form: 10-K, layoffs_names: [Micron]}
+  - {ticker: ARM,   cik: "0001973239", fye_month: 3,  cohort: semis, form: 20-F, layoffs_names: [Arm],
+     notes: "Public from Sep 2023; 20-F filer reporting in USD."}
+
+  # ---- IT services (labour-heavy control within tech) ------------------------
+  - {ticker: ACN,   cik: "0001467373", fye_month: 8,  cohort: itservices, form: 10-K, pilot: true, layoffs_names: [Accenture]}
+  - {ticker: IBM,   cik: "0000051143", fye_month: 12, cohort: itservices, form: 10-K, layoffs_names: [IBM]}
+  - {ticker: CTSH,  cik: "0001058290", fye_month: 12, cohort: itservices, form: 10-K, layoffs_names: [Cognizant]}
+  - {ticker: EPAM,  cik: "0001352010", fye_month: 12, cohort: itservices, form: 10-K, layoffs_names: [EPAM]}
+  - {ticker: INFY,  cik: "0001067491", fye_month: 3,  cohort: itservices, form: 20-F, layoffs_names: [Infosys],
+     notes: "ADR; IFRS, 20-F reports in USD (and INR)."}
+  - {ticker: WIT,   cik: "0001123799", fye_month: 3,  cohort: itservices, form: 20-F, layoffs_names: [Wipro],
+     notes: "ADR; IFRS, reports in INR. Excluded from USD regressions unless converted."}
+
+  # ---- non-tech control (20 large-cap S&P 500) --------------------------------
+  - {ticker: PG,    cik: "0000080424", fye_month: 6,  cohort: nontech, sector: staples,     form: 10-K, pilot: true, layoffs_names: [Procter & Gamble]}
+  - {ticker: KO,    cik: "0000021344", fye_month: 12, cohort: nontech, sector: staples,     form: 10-K, layoffs_names: [Coca-Cola]}
+  - {ticker: PEP,   cik: "0000077476", fye_month: 12, cohort: nontech, sector: staples,     form: 10-K, layoffs_names: [PepsiCo]}
+  - {ticker: WMT,   cik: "0000104169", fye_month: 1,  cohort: nontech, sector: staples,     form: 10-K, layoffs_names: [Walmart],
+     notes: "Reports 'associates', full- and part-time combined."}
+  - {ticker: COST,  cik: "0000909832", fye_month: 8,  cohort: nontech, sector: staples,     form: 10-K, layoffs_names: [Costco]}
+  - {ticker: JNJ,   cik: "0000200406", fye_month: 12, cohort: nontech, sector: healthcare,  form: 10-K, layoffs_names: [Johnson & Johnson]}
+  - {ticker: PFE,   cik: "0000078003", fye_month: 12, cohort: nontech, sector: healthcare,  form: 10-K, layoffs_names: [Pfizer]}
+  - {ticker: UNH,   cik: "0000731766", fye_month: 12, cohort: nontech, sector: healthcare,  form: 10-K, layoffs_names: [UnitedHealth]}
+  - {ticker: MRK,   cik: "0000310158", fye_month: 12, cohort: nontech, sector: healthcare,  form: 10-K, layoffs_names: [Merck]}
+  - {ticker: ABT,   cik: "0000001800", fye_month: 12, cohort: nontech, sector: healthcare,  form: 10-K, layoffs_names: [Abbott]}
+  - {ticker: JPM,   cik: "0000019617", fye_month: 12, cohort: nontech, sector: financials,  form: 10-K, layoffs_names: [JPMorgan Chase], notes: "Bank: no gross profit / COGS."}
+  - {ticker: BAC,   cik: "0000070858", fye_month: 12, cohort: nontech, sector: financials,  form: 10-K, layoffs_names: [Bank of America], notes: "Bank: no gross profit / COGS."}
+  - {ticker: WFC,   cik: "0000072971", fye_month: 12, cohort: nontech, sector: financials,  form: 10-K, layoffs_names: [Wells Fargo], notes: "Bank: no gross profit / COGS."}
+  - {ticker: GS,    cik: "0000886982", fye_month: 12, cohort: nontech, sector: financials,  form: 10-K, layoffs_names: [Goldman Sachs], notes: "Bank: no gross profit / COGS."}
+  - {ticker: CAT,   cik: "0000018230", fye_month: 12, cohort: nontech, sector: industrials, form: 10-K, layoffs_names: [Caterpillar]}
+  - {ticker: HON,   cik: "0000773840", fye_month: 12, cohort: nontech, sector: industrials, form: 10-K, layoffs_names: [Honeywell]}
+  - {ticker: GE,    cik: "0000040545", fye_month: 12, cohort: nontech, sector: industrials, form: 10-K, layoffs_names: [GE, General Electric],
+     notes: "Spun off GE HealthCare (2023) and GE Vernova (2024); headcount and revenue series are not comparable across the splits."}
+  - {ticker: UPS,   cik: "0001090727", fye_month: 12, cohort: nontech, sector: industrials, form: 10-K, layoffs_names: [UPS]}
+  - {ticker: HD,    cik: "0000354950", fye_month: 1,  cohort: nontech, sector: retail,      form: 10-K, layoffs_names: [Home Depot]}
+  - {ticker: MCD,   cik: "0000063908", fye_month: 12, cohort: nontech, sector: consumer,    form: 10-K, layoffs_names: [McDonald's]}
