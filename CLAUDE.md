@@ -185,10 +185,19 @@ Satellite, Constellation — and five chips: the rack, the GPUs · solar,
 radiator · constellation. The chapters are the storyline: the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → the whole satellite → solar (a flyover down the wing) →
-radiator (a flyover up the wall) → sun-synchronous → laser links → the
-constellation → 1 GW in orbit. A chapter may glide from its framing to a
-second one over its hold (`CHAPTERS[i][2]`); a chapter with no name lights
-the chip it sits `under`. No pins in this scene — at rack scale they read as
+radiator (a flyover that ends looking along its edge, so the sheet reads
+thin) → sun-synchronous → laser links → the constellation → 1 GW in orbit. A
+chapter may glide from its framing to a second one over its hold
+(`CHAPTERS[i][2]`); a chapter with no name lights the chip it sits `under`.
+The rig calls `cfg.onChapter(framing)` as each chapter begins; the orbital
+scene uses it to dock a casing: a white lid slides in from outside along the
+rails and stays, one on the rack chapter and one on the GPU chapter, exactly
+as the video does it — never in-and-out, never oscillating. The GPU shot is
+low along the rails with the silver cold plates (serpentine channel, brushed
+aluminium, `plateTex`) exposed beneath the lids; the lids are extruded from
+`lidShape`, a flat slab with a wedge leading edge, with dogbone tie bars and
+bolts across every seam. Motion runs on the film's own accumulated `dt`, not
+the wall clock, so a slow renderer keeps camera and casings in step. No pins in this scene — at rack scale they read as
 props. Moving the cursor never pauses the film: only a drag with the button
 down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the user's
 figures: ~40 per rocket, ~125 kW, ~5 MW per launch, 1 GW ≈ 200 launches ·
