@@ -172,13 +172,16 @@ and rejected as cartoonish or unstable.
 **The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
 rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
 pins, chrome, dispose — a scene builds its world and hands the rig its stops).
-It is built to the user's reference video, not invented: a planar zig-zag
-mast the full span, two blanket wings between spars with cells to the sun, a
-wide corrugated radiator wall beside the rack in the plane that holds the sun
-so it stays in its own shade, the rack as white pull-out sleds of stacked
-tiers on two black rails with coolant mains and U-bends, laser terminals fore
-and aft. The sun lies exactly in the radiator's plane (dawn-dusk orbit) — tilt
-it and the wall shadows the whole rack. Rack shots hang the camera with Z up
+It is built to the user's reference video and the published AI1 figures,
+not invented: 74 m wingspan (`WL` 31 either side of a 12 m hub), wings
+18.5 m wide in three panels, a 30 m × 3.7 m radiator plate (≈110 m²)
+standing THROUGH the hub, perpendicular to the mast, in the plane that holds
+the sun so it stays in its own shade, with four casings of compute on each
+side of it — never a wall alongside the rack, never parallel to the mast. A
+planar zig-zag mast the full span; the rack as satin-steel casings on two
+graphite rails with coolant mains and U-bends; laser terminals fore and aft.
+The sun lies exactly in the plate's plane (dawn-dusk orbit) — tilt it and the
+plate shadows the rack. Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
 its `up` and the crane blends it. Three parts on the bar — Compute,
 Satellite, Constellation — and four chips: the rack · solar, radiator ·
