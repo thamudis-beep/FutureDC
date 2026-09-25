@@ -258,6 +258,17 @@
   .e3d-chip::before{content:'';position:absolute;left:9px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--ec);opacity:.5}
   .e3d-chip.on{color:var(--ink);border-color:var(--ec)}
   .e3d-chip.on::before{opacity:1;box-shadow:0 0 8px var(--ec)}
+  .e3d-panel{position:absolute;right:16px;top:50%;transform:translate(12px,-50%);width:238px;padding:14px 16px 12px;
+    background:rgba(8,10,14,.74);border:1px solid rgba(255,255,255,.10);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    opacity:0;pointer-events:none;transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .e3d-panel.show{opacity:1;transform:translate(0,-50%)}
+  .e3d-panel .r{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .e3d-panel .r:last-child{border-bottom:0}
+  .e3d-panel b{font-family:var(--sans);font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
+  .e3d-panel i{font-style:normal;font-size:10.5px;letter-spacing:.04em;color:var(--ink-soft)}
+  .e3d-panel em{font-style:normal;font-size:9.5px;letter-spacing:.02em;color:var(--future);margin-top:5px;white-space:nowrap}
+  .e3d-panel .sum{margin-top:4px;padding-top:12px;border-top:1px solid var(--future)}
+  .e3d-panel .sum b{color:var(--future);font-size:26px}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
   .e3d.in .e3d-enter button{pointer-events:none}
@@ -330,7 +341,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v64 · 150 kW racks</div>
+<div class="ver">v66 · racks in space</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -739,32 +750,6 @@ VIZ.ratios=function(){
 
 /* — the physical footprint is being rewritten — */
 /* — data centers in space — */
-VIZ.spacedc=function(){
-  let s='';
-  s+=T(30,26,'AI1 satellite',{s:14,w:700,f:V.dim});
-  const pan=(x,w)=>{let o=B(x,120,w,86,V.blue,{r:3,fill:V.blue+'22'});
-    for(let i=1;i<6;i++)o+=LN(x+w*i/6,120,x+w*i/6,206,V.blue,{sw:.6,op:.6});
-    o+=LN(x,163,x+w,163,V.blue,{sw:.6,op:.6});return o;};
-  s+=pan(70,300)+pan(500,300);
-  s+=B(388,86,84,154,V.ink,{r:3,fill:'#ffffff18'});
-  for(let i=0;i<14;i++)s+=LN(392,92+i*11,468,92+i*11,V.pink,{sw:.7,op:.55});
-  s+=T(430,74,'radiator',{a:'middle',s:10,f:V.pink,m:1});
-  s+=B(404,250,52,34,V.cyan,{r:4,fill:V.cyan+'2e'})+T(430,272,'GB300',{a:'middle',s:9,w:600,m:1,f:V.cyan});
-  s+=T(430,300,'centralized compute · 72 chips',{a:'middle',s:10,f:V.dim,m:1});
-  s+=T(70,232,'solar array',{s:10,f:V.blue,m:1});
-  s+=LN(70,330,800,330,V.dim,{sw:1})+T(435,352,'wingspan 70 m',{a:'middle',s:10.5,f:V.dim,m:1});
-  s+='<path d="M840 60 v300" stroke="'+V.amber+'" stroke-width="2" fill="none"/>';
-  const kv=(y,v,l)=>T(866,y,v,{s:17,w:700,f:V.amber,m:1})+T(866,y+20,l,{s:10.5,f:V.dim});
-  s+=kv(96,'~50','AI1 satellites per rocket')+kv(160,'~0.12 GW','per satellite')+kv(224,'~6 MW','per launch');
-  s+=LN(866,258,866,286,V.yel,{sw:2})+'<path d="M866 292 l-6 -10 h12 z" fill="'+V.yel+'"/>';
-  s+=T(866,320,'1 GW in orbit',{s:15,w:700,f:V.cyan});
-  s+=T(866,344,'≈ 167 launches · ~8,300 satellites',{s:11,f:V.dim});
-  s+=T(30,404,'Free 24/7 sun, passive radiative cooling, no land, no water, no permits.',{s:13,f:V.ink});
-  s+=T(30,432,'The cost is launch mass, radiation and servicing — which is a curve that falls, not a queue that lengthens.',{s:12,f:V.yel});
-  return SV(s);
-};
-
-/* — orbital economics — */
 VIZ.orbital=function(){
   let s='';
   s+=T(300,26,'TERRESTRIAL',{a:'middle',s:13,w:700,f:V.red,ls:'.14em',m:1});
@@ -1119,7 +1104,7 @@ const LAYERS=[
    {viz:'players',n:'The players',d:'Powered shell, bare metal, AI cloud — three businesses hiding behind one word.'},
    {viz:'economics',n:'The economics',d:'Same gigawatt: real-estate returns, utility returns, software returns.'},
    {viz:'software',n:'The software layer',d:'Scheduling, parallelism, serving — the engineering that decides tokens per dollar.'},
-   {viz:'spacedc',n:'Data centers in space',d:'Free power, passive cooling, no permits — at the cost of launch mass.'},
+   {scene:'orbit',n:'Data centers in space',d:'Free power, passive cooling, no permits — at the cost of launch mass.'},
    {viz:'orbital',n:'Space economics',d:'Terrestrial cost curves bend up; orbital ones bend down.'},
    {viz:'geodc',n:'Geography, regulation & labor',d:'Where it is legal, and who is actually available to build it.'},
   ]},
@@ -1193,7 +1178,7 @@ function renderTopic(L,i){killScene();markLayer(L.id);themeFor(L);
 
 
   const dia = s.img ? '<div class="viz img"><img src="'+s.img+'" alt="'+s.n+'" loading="lazy"></div>'
-            : s.scene ? '<div class="viz scene" id="scene3d"></div>'
+            : s.scene ? '<div class="viz scene" id="scene3d" data-scene="'+s.scene+'"></div>'
                     : ((s.viz&&VIZ[s.viz])?'<div class="viz">'+VIZ[s.viz]()+'</div>':'');
   panel.innerHTML='<div class="dtop"><div class="back" id="backBtn">‹ '+L.title+'</div><div class="pills">'+pills+'</div></div><div class="dhh"><span class="bico big in">'+topicIcon(L.id,i,L.accent)+'</span><div class="ptitle" style="margin:0">'+s.n+'</div></div><div class="dbody">'+dia+'</div>';
   panel.querySelector('#backBtn').addEventListener('click',()=>go('stack',L.id));
@@ -1201,17 +1186,291 @@ function renderTopic(L,i){killScene();markLayer(L.id);themeFor(L);
   if(s.scene) mountScene(panel.querySelector('#scene3d'));}
 
 /* ============================================================
-   COMPUTE ERAS — three stages of the machine on one rail.
-   Cloud metro colo  ·  1 GW AI campus  ·  planetary AGI fabric.
-   No text in the scene. Cold steel → forge amber → arc white.
+   THE 3D SCENES — one kit, one rig, two scenes.
+   sceneKit: geometry and material helpers with resource tracking.
+   sceneRig: renderer, film camera, chapters, pins, chrome, loop,
+   dispose. A scene builds its world and hands the rig its stops.
    ============================================================ */
 (function(){
 'use strict';
 
-function mountEras(host){
-  var T = window.THREE; if(!T || !host) return null;
-  var RM = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+function sceneKit(T){
+  var mats=[], geos=[], gc={}, K={mats:mats,geos:geos};
+  function mat(color,o){o=o||{};
+    var m=new T.MeshStandardMaterial({color:color,
+      roughness:o.r!=null?o.r:.74, metalness:o.m!=null?o.m:.36,
+      emissive:o.e!=null?o.e:0x000000, emissiveIntensity:o.ei!=null?o.ei:1,
+      transparent:!!o.t, opacity:o.o!=null?o.o:1, side:o.s||T.FrontSide,
+      depthWrite:o.dw!=null?o.dw:true});
+    if(o.env!=null) m.envMapIntensity=o.env;
+    mats.push(m); return m; }
+  function lit(color,i,op){ return mat(0x000000,{e:color,ei:i==null?2.2:i,r:.5,m:0,t:op!=null,o:op}); }
+  function G(g){ geos.push(g); return g; }
+  function BG(w,h,d){var k='b'+w+'_'+h+'_'+d; return gc[k]||(gc[k]=G(new T.BoxGeometry(w,h,d)));}
+  function CG(rt,rb,h,s){var k='c'+rt+'_'+rb+'_'+h+'_'+(s||10); return gc[k]||(gc[k]=G(new T.CylinderGeometry(rt,rb,h,s||10)));}
+  function SG(r,s){var k='s'+r+'_'+(s||12); return gc[k]||(gc[k]=G(new T.SphereGeometry(r,s||12,(s||12)/2)));}
+  function box(w,h,d,m,x,y,z,cast){var e=new T.Mesh(BG(w,h,d),m);e.position.set(x||0,y||0,z||0);
+    if(cast){e.castShadow=true;e.receiveShadow=true;} return e;}
+  function cyl(rt,rb,h,m,x,y,z,s){var e=new T.Mesh(CG(rt,rb,h,s),m);e.position.set(x||0,y||0,z||0);return e;}
+  function V(p){return new T.Vector3(p[0],p[1],p[2]);}
+  function tube(pts,r,m,seg,rad){
+    var c=new T.CatmullRomCurve3(pts.map(V));
+    return new T.Mesh(G(new T.TubeGeometry(c,seg||20,r,rad||5,false)),m);}
+  function bundle(g,pts,r,m,n,spread){
+    for(var i=0;i<n;i++){ var o=(i-(n-1)/2)*spread;
+      g.add(tube(pts.map(function(p){return [p[0],p[1]+(i%2?o*.4:0),p[2]+o];}),r,m,18)); } }
+  var dummy=new T.Object3D();
+  function inst(geom,material,count,cast){
+    var im=new T.InstancedMesh(geom,material,count); im.count=0;
+    if(cast){im.castShadow=true;im.receiveShadow=true;}
+    im.userData.n=0; return im;}
+  function put(im,x,y,z,rx,ry,rz,sx,sy,sz){
+    dummy.position.set(x,y,z); dummy.rotation.set(rx||0,ry||0,rz||0);
+    dummy.scale.set(sx==null?1:sx, sy==null?(sx==null?1:sx):sy, sz==null?(sx==null?1:sx):sz);
+    dummy.updateMatrix();
+    var i=im.userData.n++; im.setMatrixAt(i,dummy.matrix); im.count=im.userData.n; return i;}
+  /* many copies of one small assembly, one draw call per part */
+  function repeat(g,parts,places){
+    parts.forEach(function(pt){
+      var im=inst(pt[0],pt[1],places.length,pt[5]);
+      places.forEach(function(q){ var ry=q[2]||0, c=Math.cos(ry), sn=Math.sin(ry);
+        put(im,q[0]+pt[2]*c+pt[4]*sn, pt[3], q[1]-pt[2]*sn+pt[4]*c, 0, ry, 0); });
+      g.add(im); });}
+  /* overhead cable tray: two rails and rungs, axis-aligned */
+  function ladder(g,from,to,w,m,rung){
+    var ax = Math.abs(to[0]-from[0])>Math.abs(to[2]-from[2]) ? 0 : 2;
+    var len = Math.abs(to[ax]-from[ax]), mid=[(from[0]+to[0])/2,(from[1]+to[1])/2,(from[2]+to[2])/2];
+    var railD = ax===0 ? [len,.10,.09] : [.09,.10,len];
+    var o = ax===0 ? [0,0,w/2] : [w/2,0,0];
+    g.add(box(railD[0],railD[1],railD[2],m,mid[0]+o[0],mid[1],mid[2]+o[2]));
+    g.add(box(railD[0],railD[1],railD[2],m,mid[0]-o[0],mid[1],mid[2]-o[2]));
+    var step=rung||1.6, n=Math.max(2,Math.floor(len/step));
+    var im=inst(ax===0?BG(.07,.05,w):BG(w,.05,.07),m,n+1);
+    for(var i=0;i<=n;i++){ var t=from[ax]+(to[ax]-from[ax])*(i/n);
+      if(ax===0) put(im,t,mid[1],mid[2]); else put(im,mid[0],mid[1],t); }
+    g.add(im); }
+  /* a soft radial sprite */
+  function halo(color,size,op,inner){
+    var cv=document.createElement('canvas'); cv.width=cv.height=128;
+    var x=cv.getContext('2d'), g2=x.createRadialGradient(64,64,0,64,64,64);
+    var c=new T.Color(color), rgb=Math.round(c.r*255)+','+Math.round(c.g*255)+','+Math.round(c.b*255);
+    g2.addColorStop(0,'rgba('+rgb+',1)'); g2.addColorStop(inner||.35,'rgba('+rgb+',.34)'); g2.addColorStop(1,'rgba('+rgb+',0)');
+    x.fillStyle=g2; x.fillRect(0,0,128,128);
+    var tex=new T.CanvasTexture(cv); geos.push({dispose:function(){tex.dispose();}});
+    var sm=new T.SpriteMaterial({map:tex,blending:T.AdditiveBlending,depthWrite:false,transparent:true,opacity:op==null?.5:op});
+    mats.push(sm);
+    var s=new T.Sprite(sm); s.scale.set(size,size,1); return s;}
+  /* a canvas-drawn texture, tracked */
+  function canvasTex(w,h,draw,o){ var cv=document.createElement('canvas'); cv.width=w; cv.height=h; draw(cv.getContext('2d'),w,h);
+    var tex=new T.CanvasTexture(cv); if(o&&o.repeat){ tex.wrapS=tex.wrapT=T.RepeatWrapping; tex.repeat.set(o.repeat[0],o.repeat[1]); }
+    if(o&&o.srgb&&T.SRGBColorSpace) tex.colorSpace=T.SRGBColorSpace; tex.anisotropy=8;
+    geos.push({dispose:function(){tex.dispose();}}); return tex; }
+  K.mat=mat; K.lit=lit; K.G=G; K.BG=BG; K.CG=CG; K.SG=SG; K.box=box; K.cyl=cyl; K.V=V; K.tube=tube; K.bundle=bundle;
+  K.dummy=dummy; K.inst=inst; K.put=put; K.repeat=repeat; K.ladder=ladder; K.halo=halo; K.canvasTex=canvasTex;
+  return K;
+}
 
+/* ---------------------------------------------------------------
+   sceneRig(T, host, K, scene, cfg)
+   cfg: RM, far, groups [{n,sub,color}], wide, views (one framing per
+   group, for the bar and keys 1/2/3), stops, chapters [[framing,hold]],
+   picks (meshes with userData.view), tick(dt,t), exposure, fov.
+   Every framing is {id, t, w, h, th, ph, era}; the radius comes from
+   the panel's aspect. A move between framings is one crane.
+   --------------------------------------------------------------- */
+function sceneRig(T,host,K,scene,cfg){
+  var RM=cfg.RM, disposed=false, raf=0;
+  var renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance',logarithmicDepthBuffer:!!cfg.logDepth});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=cfg.exposure||1.58;
+  if(T.SRGBColorSpace) renderer.outputColorSpace=T.SRGBColorSpace;
+  renderer.domElement.style.display='block';
+  renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%';
+  renderer.domElement.style.cursor='grab';
+  host.appendChild(renderer.domElement);
+  var camera=new T.PerspectiveCamera(cfg.fov||42,1,cfg.near||.3,cfg.far||1400);
+
+  var stops=cfg.stops, wide=cfg.wide, views=cfg.views, groups=cfg.groups, chapters=cfg.chapters;
+  var byId={}; stops.forEach(function(s){byId[s.id]=s;});
+  function fitRadius(v){
+    var ht=Math.tan(camera.fov*Math.PI/360);
+    return Math.max(cfg.minR||6,Math.min(cfg.maxR||520,Math.max(v.w/(ht*Math.max(.6,camera.aspect)),v.h/ht)));}
+  var cur=wide, tgt=cur.t.clone(), gTgt=cur.t.clone(), YUP=new T.Vector3(0,1,0), up=(cur.up||YUP).clone();
+  var rad=0, gRad=0, th=cur.th, gTh=th, ph=cur.ph, gPh=ph;
+  var drag=false, px=0, py=0, moved=0, idle=0, zoomed=false;
+  var tour={on:false,entered:false,i:0,hold:0};
+  var mv=null;
+  function place(){
+    camera.position.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th));
+    camera.up.copy(up); camera.lookAt(tgt);}
+  function unwrap(a,ref){ while(a-ref>Math.PI) a-=Math.PI*2; while(a-ref<-Math.PI) a+=Math.PI*2; return a; }
+  function flyTo(v){
+    cur=v; zoomed=false; idle=0;
+    var dist=tgt.distanceTo(v.t), to={t:v.t.clone(),r:fitRadius(v),th:unwrap(v.th,th),ph:v.ph,up:(v.up||YUP).clone()};
+    if(RM){ tgt.copy(to.t); gTgt.copy(to.t); rad=gRad=to.r; th=gTh=to.th; ph=gPh=to.ph; up.copy(to.up); mv=null; syncUI(); return; }
+    var L=cfg.liftScale||1;
+    mv={from:{t:tgt.clone(),r:rad,th:th,ph:ph,up:up.clone()},to:to,t:0,dur:1.6+Math.min(1.4,dist/(120*L)),lift:Math.min(90*L,dist*.4)};
+    syncUI();}
+  function stepMove(dt){
+    if(!mv) return;
+    mv.t=Math.min(1,mv.t+dt/mv.dur);
+    var e=mv.t*mv.t*(3-2*mv.t), s=Math.sin(mv.t*Math.PI);
+    tgt.copy(mv.from.t).lerp(mv.to.t,e);
+    rad=mv.from.r+(mv.to.r-mv.from.r)*e+mv.lift*s;
+    th=mv.from.th+(mv.to.th-mv.from.th)*e;
+    ph=mv.from.ph+(mv.to.ph-mv.from.ph)*e-.22*s*Math.min(1,mv.lift/(40*(cfg.liftScale||1)));
+    up.copy(mv.from.up).lerp(mv.to.up,e).normalize();
+    gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph;
+    if(mv.t>=1){ gRad=mv.to.r; gTh=mv.to.th; gPh=mv.to.ph; up.copy(mv.to.up); mv=null; } }
+  function goView(v){ if(tour.on) pauseTour(); flyTo(v); }
+  function pauseTour(){ if(!tour.on) return; tour.on=false; mv=null; gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; syncUI(); }
+  function startTour(){ tour.on=true; tour.hold=0; flyTo(chapters[tour.i][0]); syncUI(); }
+  function tourStep(dt){
+    if(mv) return;
+    tour.hold+=dt;
+    gTh+=dt*.018; gRad*=1-dt*.012; th=gTh; rad=gRad;
+    if(tour.hold>=chapters[tour.i][1]){ tour.i=(tour.i+1)%chapters.length; tour.hold=0; flyTo(chapters[tour.i][0]); } }
+
+  /* ---- pins: one per stop that has something to point at ---- */
+  var pins=[], pinHits=[], PS=cfg.pinScale||1;
+  stops.forEach(function(sp){ if(!sp.pin) return;
+    var c=groups[sp.era].color, g=new T.Group(), p=sp.pin;
+    g.position.set(p[0],p[1],p[2]);
+    var core=new T.Mesh(K.SG(.5,12),K.lit(c,1.5)); g.add(core);
+    var ring=new T.Mesh(K.G(new T.RingGeometry(.9,1.15,28)),K.lit(c,1.6,.85)); ring.rotation.x=-Math.PI/2; g.add(ring);
+    var hit=new T.Mesh(K.SG(2.2,8),new T.MeshBasicMaterial({visible:false})); K.mats.push(hit.material);
+    hit.userData.spot=sp; g.add(hit); pinHits.push(hit);
+    if(p[3]){ var stalk=new T.Mesh(K.CG(.05,.05,1,6),K.mat(c,{e:c,ei:.9,r:.5,m:.1,t:true,o:.7}));
+      stalk.position.y=-p[3]/2; stalk.scale.y=p[3]; g.add(stalk); g.userData.stalk=stalk; }
+    g.userData.core=core; g.userData.ring=ring; g.userData.id=sp.id;
+    scene.add(g); pins.push(g);
+  });
+
+  var el=renderer.domElement;
+  function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
+  function move(e){ if(!drag) return;
+    var dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+    if(moved>5){ if(tour.on) pauseTour(); mv=null; }
+    gTh-=dx*.005; gPh=Math.max(.14,Math.min(cfg.maxPh||1.44,gPh-dy*.004)); idle=0;}
+  function up(e){ if(drag&&moved<5) pick(e); drag=false; el.style.cursor='grab';}
+  function wheel(e){ e.preventDefault(); pauseTour(); mv=null; zoomed=true;
+    gRad=Math.max(cfg.minR||6,Math.min((cfg.maxR||520)*1.1,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
+  var ray=new T.Raycaster(), ndc=new T.Vector2();
+  function pick(e){
+    var b=el.getBoundingClientRect();
+    ndc.set((e.clientX-b.left)/b.width*2-1, -((e.clientY-b.top)/b.height)*2+1);
+    ray.setFromCamera(ndc,camera);
+    var hp=ray.intersectObjects(pinHits,false);
+    if(hp.length){ goView(hp[0].object.userData.spot); return; }
+    var hit=ray.intersectObjects(cfg.picks||[],false);
+    goView(hit.length&&hit[0].object.userData.view ? hit[0].object.userData.view : wide);}
+  el.addEventListener('pointerdown',down); el.addEventListener('pointermove',move);
+  el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
+  el.addEventListener('wheel',wheel,{passive:false});
+
+  /* ---- the chrome: an entry, a bar, the stops. DOM, never in the scene ---- */
+  function hex(c){ return '#'+c.toString(16).padStart(6,'0'); }
+  var ui=document.createElement('div'); ui.className='e3d';
+  ui.innerHTML=
+    '<div class="e3d-bar">'+
+      groups.map(function(gp,i){return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+hex(gp.color)+'"><i></i>'+gp.n+(gp.sub?'<b>'+gp.sub+'</b>':'')+'</button>';}).join('')+
+      '<span class="e3d-gap"></span>'+
+      '<button class="e3d-play" data-play></button>'+
+    '</div>'+
+    '<div class="e3d-chips">'+groups.map(function(gp,e){
+      return '<div class="e3d-grp" style="--ec:'+hex(gp.color)+'"><div class="e3d-row">'+
+        stops.filter(function(sp){return sp.era===e&&sp.n;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
+    '<div class="e3d-enter"><button data-enter>Enter</button></div>'+
+    (cfg.panel?'<div class="e3d-panel">'+cfg.panel+'</div>':'');
+  host.appendChild(ui);
+  function syncUI(){
+    if(cfg.panel) ui.querySelector('.e3d-panel').classList.toggle('show',tour.entered&&cur.era===cfg.panelEra);
+    ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
+    var chipId=cur.n?cur.id:cur.under;
+    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===chipId); });
+    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause (space)':'Play (space)';
+    ui.classList.toggle('in',tour.entered);}
+  function enter(){ tour.entered=true; if(!RM){ tour.i=0; startTour(); } else syncUI(); }
+  function toggleTour(){ if(!tour.entered){enter();return;} if(tour.on) pauseTour(); else startTour(); }
+  ui.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.enter!=null) return enter();
+    if(b.dataset.play!=null) return toggleTour();
+    if(b.dataset.era!=null){ tour.entered=true; return goView(views[+b.dataset.era]); }
+    if(b.dataset.spot){ tour.entered=true; return goView(byId[b.dataset.spot]); }
+  });
+  ui.addEventListener('pointerdown',function(e){ e.stopPropagation(); });
+  ui.addEventListener('wheel',function(e){ e.stopPropagation(); });
+  function keys(e){
+    if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    var n=+e.key;
+    if(n>=1&&n<=views.length){ tour.entered=true; goView(views[n-1]); }
+    else if(e.key===' '){ e.preventDefault(); toggleTour(); }
+    else if(e.key==='0'){ tour.entered=true; goView(wide); }
+  }
+  addEventListener('keydown',keys);
+  syncUI();
+
+  function resize(){
+    var w=host.clientWidth||900, h=host.clientHeight||500;
+    renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+    if(!zoomed&&!mv) gRad=fitRadius(cur);}
+  var ro=window.ResizeObserver?new ResizeObserver(resize):null;
+  if(ro) ro.observe(host); else addEventListener('resize',resize);
+  resize(); rad=gRad; place();
+
+  var clock=new T.Clock();
+  function pinsTick(t){
+    pins.forEach(function(p,i){
+      var ps=Math.max(.4*PS,camera.position.distanceTo(p.position)*.0085);
+      var s=ps*(1+(RM?0:.10*Math.sin(t*2.6+i)));
+      p.userData.core.scale.setScalar(s); p.userData.ring.scale.setScalar(s*1.15);
+      if(p.userData.stalk) p.userData.stalk.scale.x=p.userData.stalk.scale.z=Math.max(.6*PS,ps*.7);
+      p.visible = cur.id!==p.userData.id;
+    });}
+  function frame(){
+    if(disposed) return;
+    raf=requestAnimationFrame(frame);
+    var dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
+    if(mv) stepMove(dt);
+    else if(tour.on&&!RM) tourStep(dt);
+    else{
+      if(!drag&&!RM){ idle+=dt; if(idle>4){ if(cur===wide) gTh=wide.th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
+      var k=RM?1:1-Math.pow(.002,dt);
+      th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
+    }
+    place();
+    cfg.tick(RM?0:dt,t,camera); pinsTick(t);
+    renderer.render(scene,camera);
+  }
+  function start(){ cfg.tick(0,0,camera); pinsTick(0); frame(); }
+  function dispose(){
+    if(disposed) return; disposed=true;
+    cancelAnimationFrame(raf);
+    el.removeEventListener('pointerdown',down); el.removeEventListener('pointermove',move);
+    el.removeEventListener('pointerup',up); el.removeEventListener('pointercancel',up);
+    el.removeEventListener('wheel',wheel); removeEventListener('keydown',keys);
+    if(ro) ro.disconnect(); else removeEventListener('resize',resize);
+    scene.traverse(function(o){ if(o.geometry) o.geometry.dispose(); });
+    K.geos.forEach(function(g){ g.dispose&&g.dispose(); });
+    K.mats.forEach(function(m){ m.dispose&&m.dispose(); });
+    if(scene.environment) scene.environment.dispose();
+    renderer.dispose();
+    if(el.parentNode) el.parentNode.removeChild(el);
+    if(ui.parentNode) ui.parentNode.removeChild(ui);
+  }
+  return {renderer:renderer,camera:camera,start:start,dispose:dispose,view:function(v){goView(v||wide);}};
+}
+
+/* ============================================================
+   COMPUTE ERAS — three stages of the machine on one rail.
+   Cloud metro colo  ·  1 GW AI campus  ·  the planet.
+   No text in the scene; the era colours carry the reading.
+   ============================================================ */
+function mountEras(host){
+  var T=window.THREE; if(!T||!host) return null;
+  var RM=window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
   /* ---- palette. era colours are the deck's: past / today / future ---- */
   var C = {
     bg:0x080a0e, rail:0x1a1f27, pad:0x0d1116,
@@ -1224,102 +1483,13 @@ function mountEras(host){
   };
   var ERA = [C.cold, C.forge, C.hot];
 
-  /* ---- bookkeeping so a dispose actually frees the GPU ---- */
-  var mats=[], geos=[], gc={}, disposed=false, raf=0;
-  function mat(color,o){o=o||{};
-    var m=new T.MeshStandardMaterial({color:color,
-      roughness:o.r!=null?o.r:.74, metalness:o.m!=null?o.m:.36,
-      emissive:o.e!=null?o.e:0x000000, emissiveIntensity:o.ei!=null?o.ei:1,
-      transparent:!!o.t, opacity:o.o!=null?o.o:1, side:o.s||T.FrontSide,
-      depthWrite:o.dw!=null?o.dw:true});
-    mats.push(m); return m; }
-  function lit(color,i,op){ return mat(0x000000,{e:color,ei:i==null?2.2:i,r:.5,m:0,t:op!=null,o:op}); }
-  function G(g){ geos.push(g); return g; }
-  function BG(w,h,d){var k='b'+w+'_'+h+'_'+d; return gc[k]||(gc[k]=G(new T.BoxGeometry(w,h,d)));}
-  function CG(rt,rb,h,s){var k='c'+rt+'_'+rb+'_'+h+'_'+(s||10); return gc[k]||(gc[k]=G(new T.CylinderGeometry(rt,rb,h,s||10)));}
-  function SG(r,s){var k='s'+r+'_'+(s||12); return gc[k]||(gc[k]=G(new T.SphereGeometry(r,s||12,(s||12)/2)));}
+  var K=sceneKit(T), mats=K.mats, geos=K.geos, mat=K.mat, lit=K.lit, G=K.G, BG=K.BG, CG=K.CG, SG=K.SG,
+      box=K.box, cyl=K.cyl, V=K.V, tube=K.tube, bundle=K.bundle, dummy=K.dummy, inst=K.inst, put=K.put,
+      repeat=K.repeat, ladder=K.ladder, halo=K.halo;
 
-  function box(w,h,d,m,x,y,z,cast){var e=new T.Mesh(BG(w,h,d),m);e.position.set(x||0,y||0,z||0);
-    if(cast){e.castShadow=true;e.receiveShadow=true;} return e;}
-  function cyl(rt,rb,h,m,x,y,z,s){var e=new T.Mesh(CG(rt,rb,h,s),m);e.position.set(x||0,y||0,z||0);return e;}
-  function V(p){return new T.Vector3(p[0],p[1],p[2]);}
-  function tube(pts,r,m,seg,rad){
-    var c=new T.CatmullRomCurve3(pts.map(V));
-    return new T.Mesh(G(new T.TubeGeometry(c,seg||20,r,rad||5,false)),m);}
-  function bundle(g,pts,r,m,n,spread){
-    for(var i=0;i<n;i++){
-      var o=(i-(n-1)/2)*spread;
-      g.add(tube(pts.map(function(p){return [p[0],p[1]+ (i%2?o*.4:0), p[2]+o];}),r,m,18));
-    } }
-  var dummy=new T.Object3D();
-  function inst(geom,material,count,cast){
-    var im=new T.InstancedMesh(geom,material,count); im.count=0;
-    if(cast){im.castShadow=true;im.receiveShadow=true;}
-    im.userData.n=0; return im;}
-  function put(im,x,y,z,rx,ry,rz,sx,sy,sz){
-    dummy.position.set(x,y,z);
-    dummy.rotation.set(rx||0,ry||0,rz||0);
-    dummy.scale.set(sx==null?1:sx, sy==null?(sx==null?1:sx):sy, sz==null?(sx==null?1:sx):sz);
-    dummy.updateMatrix();
-    var i=im.userData.n++; im.setMatrixAt(i,dummy.matrix); im.count=im.userData.n; return i;}
-
-  /* many copies of one small assembly, one draw call per part */
-  function repeat(g,parts,places){
-    parts.forEach(function(pt){
-      var im=inst(pt[0],pt[1],places.length,pt[5]);
-      places.forEach(function(q){
-        var ry=q[2]||0, c=Math.cos(ry), sn=Math.sin(ry);
-        put(im,q[0]+pt[2]*c+pt[4]*sn, pt[3], q[1]-pt[2]*sn+pt[4]*c, 0, ry, 0);
-      });
-      g.add(im);
-    });}
-
-  /* overhead cable tray: two rails and rungs, axis-aligned */
-  function ladder(g,from,to,w,m,rung){
-    var ax = Math.abs(to[0]-from[0])>Math.abs(to[2]-from[2]) ? 0 : 2;
-    var len = Math.abs(to[ax]-from[ax]), mid=[(from[0]+to[0])/2,(from[1]+to[1])/2,(from[2]+to[2])/2];
-    var railD = ax===0 ? [len,.10,.09] : [.09,.10,len];
-    var o = ax===0 ? [0,0,w/2] : [w/2,0,0];
-    g.add(box(railD[0],railD[1],railD[2],m,mid[0]+o[0],mid[1],mid[2]+o[2]));
-    g.add(box(railD[0],railD[1],railD[2],m,mid[0]-o[0],mid[1],mid[2]-o[2]));
-    var step=rung||1.6, n=Math.max(2,Math.floor(len/step));
-    var im=inst(ax===0?BG(.07,.05,w):BG(w,.05,.07),m,n+1);
-    for(var i=0;i<=n;i++){
-      var t=from[ax]+(to[ax]-from[ax])*(i/n);
-      if(ax===0) put(im,t,mid[1],mid[2]); else put(im,mid[0],mid[1],t);
-    }
-    g.add(im); }
-
-  function halo(color,size,op){
-    var cv=document.createElement('canvas'); cv.width=cv.height=128;
-    var x=cv.getContext('2d'), g2=x.createRadialGradient(64,64,0,64,64,64);
-    var c=new T.Color(color), rgb=Math.round(c.r*255)+','+Math.round(c.g*255)+','+Math.round(c.b*255);
-    g2.addColorStop(0,'rgba('+rgb+',1)'); g2.addColorStop(.35,'rgba('+rgb+',.34)'); g2.addColorStop(1,'rgba('+rgb+',0)');
-    x.fillStyle=g2; x.fillRect(0,0,128,128);
-    var tex=new T.CanvasTexture(cv); geos.push({dispose:function(){tex.dispose();}});
-    var sm=new T.SpriteMaterial({map:tex,blending:T.AdditiveBlending,depthWrite:false,transparent:true,opacity:op==null?.5:op});
-    mats.push(sm);
-    var s=new T.Sprite(sm); s.scale.set(size,size,1); return s;}
-
-  /* =========================================================
-     SCENE
-     ========================================================= */
   var scene=new T.Scene();
   scene.background=new T.Color(C.bg);
   scene.fog=new T.Fog(C.bg,210,640);
-
-  var renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
-  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
-  renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.58;
-  if(T.SRGBColorSpace) renderer.outputColorSpace=T.SRGBColorSpace;
-  renderer.domElement.style.display='block';
-  renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%';
-  renderer.domElement.style.cursor='grab';
-  host.appendChild(renderer.domElement);
-
-  var camera=new T.PerspectiveCamera(42,1,.3,1400);
-
   scene.add(new T.HemisphereLight(0x4a5c7c,0x0b0f18,1.95));
   var key=new T.DirectionalLight(0xdce6f6,2.55);
   key.position.set(-140,200,120); key.castShadow=true;
@@ -1937,18 +2107,12 @@ function mountEras(host){
   var fs=[]; for(var f3=0;f3<NP;f3++){ fs.push(Math.random()); put(flow,CA,CY,CZ); }
   scene.add(flow); anim.flow={m:flow,t:fs};
 
-  /* pick targets, one per stage */
+  /* pick targets, one per stage; each carries the framing a click flies to */
   var picks=[];
-  [[X0,44,40,26,10,0],[X1,92,66,26,10,1],[X2,150,76,86,40,2]].forEach(function(p){
+  [[X0,44,40,26,10],[X1,92,66,26,10],[X2,150,76,86,40]].forEach(function(p){
     var m=new T.Mesh(BG(p[1],p[3],p[2]),new T.MeshBasicMaterial({visible:false}));
-    mats.push(m.material); m.position.set(p[0],p[4],0); m.userData.stage=p[5];
-    scene.add(m); picks.push(m);});
+    mats.push(m.material); m.position.set(p[0],p[4],0); scene.add(m); picks.push(m);});
 
-  /* =========================================================
-     CAMERA — every framing is {target, half-width, half-height,
-     yaw, pitch}; the radius is derived from the panel's aspect.
-     A move between framings is one crane: rise, cross, settle.
-     ========================================================= */
   var ERAS=[
     {id:'wide', t:new T.Vector3(36,12,0),  w:206, h:60, th:1.47, ph:.93, era:-1},   /* the whole rail */
     {id:'cloud',t:new T.Vector3(X0,7,2),   w:44,  h:26, th:1.19, ph:.80, era:0},
@@ -1976,132 +2140,9 @@ function mountEras(host){
   var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.nvl,4.5],[byId.campus,3],[byId.onsite,4],[byId.grid,3.5],
                 [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4],[byId.cities,3.5],[byId.edge,5]];
 
-  function fitRadius(v){
-    var ht=Math.tan(camera.fov*Math.PI/360);
-    return Math.max(6,Math.min(520,Math.max(v.w/(ht*Math.max(.6,camera.aspect)),v.h/ht)));}
-  var cur=ERAS[0], tgt=cur.t.clone(), gTgt=cur.t.clone();
-  var rad=0, gRad=0, th=cur.th, gTh=th, ph=cur.ph, gPh=ph;
-  var drag=false, px=0, py=0, moved=0, idle=0, zoomed=false;
-  var tour={on:false,entered:false,i:0,hold:0};
-  var mv=null;   /* the move in progress: from, to, t, dur, lift */
-  function place(){
-    camera.position.set(tgt.x+rad*Math.sin(ph)*Math.cos(th), tgt.y+rad*Math.cos(ph), tgt.z+rad*Math.sin(ph)*Math.sin(th));
-    camera.lookAt(tgt);}
-  function unwrap(a,ref){ while(a-ref>Math.PI) a-=Math.PI*2; while(a-ref<-Math.PI) a+=Math.PI*2; return a; }
-  /* one crane from where the camera is to a framing */
-  function flyTo(v){
-    cur=v; zoomed=false; idle=0;
-    var dist=tgt.distanceTo(v.t), to={t:v.t.clone(),r:fitRadius(v),th:unwrap(v.th,th),ph:v.ph};
-    if(RM){ tgt.copy(to.t); gTgt.copy(to.t); rad=gRad=to.r; th=gTh=to.th; ph=gPh=to.ph; mv=null; syncUI(); return; }
-    mv={from:{t:tgt.clone(),r:rad,th:th,ph:ph},to:to,t:0,dur:1.6+Math.min(1.4,dist/120),lift:Math.min(90,dist*.4)};
-    syncUI();}
-  function stepMove(dt){
-    if(!mv) return;
-    mv.t=Math.min(1,mv.t+dt/mv.dur);
-    var e=mv.t*mv.t*(3-2*mv.t), s=Math.sin(mv.t*Math.PI);
-    tgt.copy(mv.from.t).lerp(mv.to.t,e);
-    rad=mv.from.r+(mv.to.r-mv.from.r)*e+mv.lift*s;
-    th=mv.from.th+(mv.to.th-mv.from.th)*e;
-    ph=mv.from.ph+(mv.to.ph-mv.from.ph)*e-.22*s*Math.min(1,mv.lift/40);
-    gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph;
-    if(mv.t>=1){ gRad=mv.to.r; gTh=mv.to.th; gPh=mv.to.ph; mv=null; } }
-  function goView(v){ if(tour.on) pauseTour(); flyTo(v); }
-  function pauseTour(){ if(!tour.on) return; tour.on=false; mv=null; gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; syncUI(); }
-  function startTour(){ tour.on=true; tour.hold=0; flyTo(CHAPTERS[tour.i][0]); syncUI(); }
-  function tourStep(dt){
-    if(mv) return;
-    tour.hold+=dt;
-    /* the hold: steady, with the slowest drift — a slow push-in and a hint of orbit */
-    gTh+=dt*.018; gRad*=1-dt*.012; th=gTh; rad=gRad;
-    if(tour.hold>=CHAPTERS[tour.i][1]){ tour.i=(tour.i+1)%CHAPTERS.length; tour.hold=0; flyTo(CHAPTERS[tour.i][0]); } }
+  picks.forEach(function(m,i){ m.userData.view=ERAS[i+1]; });
 
-  /* ---- pins: one per stop, sized to the camera so they never vanish ---- */
-  var pins=[], pinHits=[];
-  SPOTS.forEach(function(sp){ if(!sp.pin) return;
-    var c=ERA[sp.era], g=new T.Group(), p=sp.pin;
-    g.position.set(p[0],p[1],p[2]);
-    var core=new T.Mesh(SG(.5,12),lit(c,1.5)); g.add(core);
-    var ring=new T.Mesh(G(new T.RingGeometry(.9,1.15,28)),lit(c,1.6,.85)); ring.rotation.x=-Math.PI/2; g.add(ring);
-    var hit=new T.Mesh(SG(2.2,8),new T.MeshBasicMaterial({visible:false})); mats.push(hit.material);
-    hit.userData.spot=sp; g.add(hit); pinHits.push(hit);
-    if(p[3]){ var stalk=new T.Mesh(CG(.05,.05,1,6),mat(c,{e:c,ei:.9,r:.5,m:.1,t:true,o:.7}));
-      stalk.position.y=-p[1]/2; stalk.scale.y=p[1]; g.add(stalk); g.userData.stalk=stalk; }
-    g.userData.core=core; g.userData.ring=ring; g.userData.id=sp.id;
-    scene.add(g); pins.push(g); sp.node=g;
-  });
-
-  var el=renderer.domElement;
-  function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
-  function move(e){ if(!drag) return;
-    var dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
-    if(moved>5){ if(tour.on) pauseTour(); mv=null; }
-    gTh-=dx*.005; gPh=Math.max(.14,Math.min(1.44,gPh-dy*.004)); idle=0;}
-  function up(e){ if(drag&&moved<5) pick(e); drag=false; el.style.cursor='grab';}
-  function wheel(e){ e.preventDefault(); pauseTour(); mv=null; zoomed=true;
-    gRad=Math.max(6,Math.min(560,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
-  var ray=new T.Raycaster(), ndc=new T.Vector2();
-  function pick(e){
-    var b=el.getBoundingClientRect();
-    ndc.set((e.clientX-b.left)/b.width*2-1, -((e.clientY-b.top)/b.height)*2+1);
-    ray.setFromCamera(ndc,camera);
-    var hp=ray.intersectObjects(pinHits,false);
-    if(hp.length){ goView(hp[0].object.userData.spot); return; }
-    var hit=ray.intersectObjects(picks,false);
-    goView(hit.length? ERAS[hit[0].object.userData.stage+1] : ERAS[0]);}
-  el.addEventListener('pointerdown',down); el.addEventListener('pointermove',move);
-  el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
-  el.addEventListener('wheel',wheel,{passive:false});
-
-  /* ---- the chrome: an entry, an era bar, the stops. DOM, never in the scene ---- */
-  var ui=document.createElement('div'); ui.className='e3d';
-  ui.innerHTML=
-    '<div class="e3d-bar">'+
-      ERAS.slice(1).map(function(v,i){return '<button class="e3d-era" data-era="'+i+'" style="--ec:#'+ERA[i].toString(16).padStart(6,'0')+'"><i></i>'+['Cloud','Today','AGI'][i]+'<b>'+['2023','2026','2031'][i]+'</b></button>';}).join('')+
-      '<span class="e3d-gap"></span>'+
-      '<button class="e3d-play" data-play></button>'+
-    '</div>'+
-    '<div class="e3d-chips">'+[0,1,2].map(function(e){ var ec='#'+ERA[e].toString(16).padStart(6,'0');
-      return '<div class="e3d-grp" style="--ec:'+ec+'"><div class="e3d-row">'+
-        SPOTS.filter(function(sp){return sp.era===e;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
-    '<div class="e3d-enter"><button data-enter>Enter</button></div>';
-  host.appendChild(ui);
-  function syncUI(){
-    ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
-    ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===cur.id); });
-    var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause (space)':'Play (space)';
-    ui.classList.toggle('in',tour.entered);}
-  function enter(){ tour.entered=true; if(!RM){ tour.i=0; startTour(); } else syncUI(); }
-  function toggleTour(){ if(!tour.entered){enter();return;} if(tour.on) pauseTour(); else startTour(); }
-  ui.addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b) return;
-    if(b.dataset.enter!=null) return enter();
-    if(b.dataset.play!=null) return toggleTour();
-    if(b.dataset.era!=null){ tour.entered=true; return goView(ERAS[+b.dataset.era+1]); }
-    if(b.dataset.spot){ tour.entered=true; return goView(byId[b.dataset.spot]); }
-  });
-  ui.addEventListener('pointerdown',function(e){ e.stopPropagation(); });
-  ui.addEventListener('wheel',function(e){ e.stopPropagation(); });
-  function keys(e){
-    if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
-    if(e.key==='1'||e.key==='2'||e.key==='3'){ tour.entered=true; goView(ERAS[+e.key]); }
-    else if(e.key===' '){ e.preventDefault(); toggleTour(); }
-    else if(e.key==='0'){ tour.entered=true; goView(ERAS[0]); }
-  }
-  addEventListener('keydown',keys);
-  syncUI();
-
-  function resize(){
-    var w=host.clientWidth||900, h=host.clientHeight||500;
-    renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
-    if(!zoomed&&!mv) gRad=fitRadius(cur);}
-  var ro=window.ResizeObserver?new ResizeObserver(resize):null;
-  if(ro) ro.observe(host); else addEventListener('resize',resize);
-  resize(); rad=gRad; place();
-
-  /* =========================================================
-     LOOP
-     ========================================================= */
-  var clock=new T.Clock(), tmp=new T.Vector3();
+  var tmp=new T.Vector3();
   /* every moving part is posed by this, so it also supplies the resting state
      for prefers-reduced-motion — otherwise the cabs pile up at the origin */
   function tick(dt,t){
@@ -2137,51 +2178,264 @@ function mountEras(host){
       var c3=eraColor(x2); col.setXYZ(i2,c3.r,c3.g,c3.b);
     }
     fl.m.instanceMatrix.needsUpdate=true; col.needsUpdate=true;
-    /* pins hold a constant size on screen and breathe a little */
-    pins.forEach(function(p,i){
-      var ps=Math.max(.4,camera.position.distanceTo(p.position)*.0085);
-      var s=ps*(1+(RM?0:.10*Math.sin(t*2.6+i)));
-      p.userData.core.scale.setScalar(s); p.userData.ring.scale.setScalar(s*1.15);
-      if(p.userData.stalk) p.userData.stalk.scale.x=p.userData.stalk.scale.z=Math.max(.6,ps*.7);
-      p.visible = cur.id!==p.userData.id;
-    });
   }
-  tick(0,0);
-  function frame(){
-    if(disposed) return;
-    raf=requestAnimationFrame(frame);
-    var dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
-
-    if(mv) stepMove(dt);
-    else if(tour.on&&!RM) tourStep(dt);
-    else{
-      if(!drag&&!RM){ idle+=dt; if(idle>4){ if(cur===ERAS[0]) gTh=ERAS[0].th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
-      var k=RM?1:1-Math.pow(.002,dt);
-      th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
-    }
-    place();
-    tick(RM?0:dt,t);
-    renderer.render(scene,camera);
-  }
-  frame();
-
-  function dispose(){
-    if(disposed) return; disposed=true;
-    cancelAnimationFrame(raf);
-    el.removeEventListener('pointerdown',down); el.removeEventListener('pointermove',move);
-    el.removeEventListener('pointerup',up); el.removeEventListener('pointercancel',up);
-    el.removeEventListener('wheel',wheel); removeEventListener('keydown',keys);
-    if(ro) ro.disconnect(); else removeEventListener('resize',resize);
-    scene.traverse(function(o){ if(o.geometry) o.geometry.dispose(); });
-    geos.forEach(function(g){ g.dispose&&g.dispose(); });
-    mats.forEach(function(m){ m.dispose&&m.dispose(); });
-    renderer.dispose();
-    if(el.parentNode) el.parentNode.removeChild(el);
-    if(ui.parentNode) ui.parentNode.removeChild(ui);
-  }
-  return {dispose:dispose,view:function(i){goView(ERAS[i]||ERAS[0]);}};
+  var rig=sceneRig(T,host,K,scene,{RM:RM,far:1400,near:.3,exposure:1.58,
+    groups:[{n:'Cloud',sub:'2023',color:ERA[0]},{n:'Today',sub:'2026',color:ERA[1]},{n:'AGI',sub:'2031',color:ERA[2]}],
+    wide:ERAS[0],views:ERAS.slice(1),stops:SPOTS,chapters:CHAPTERS,picks:picks,tick:tick});
+  rig.start();
+  return rig;
 }
 window.mountEras=mountEras;
+
+/* ============================================================
+   ORBITAL DATA CENTER — racks in space, built to the reference.
+   A planar zig-zag mast the full span; two blanket wings between
+   spars, cells to the sun; a wide corrugated radiator wall beside
+   the rack, in the plane that contains the sun so it stays in its
+   own shade; the rack as white pull-out sleds on two black rails,
+   coolant mains with U-bends; laser terminals fore and aft, links
+   to the neighbours 3 km ahead and behind. Dawn-dusk orbit.
+   Units are metres. The Earth is NASA Blue Marble on a stage
+   sphere (R 2400); the satellite is over-scale against it on
+   purpose, or it could not be seen.
+   Axes: X along the mast, Y along the orbit (Earth at -Y),
+   Z toward the sun. Rack shots hang the camera with Z up, as the
+   video does; orbit shots with Y up, Earth below.
+   ============================================================ */
+function mountOrbit(host){
+  var T=window.THREE; if(!T||!host) return null;
+  var RM=window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  var K=sceneKit(T), mats=K.mats, geos=K.geos, mat=K.mat, lit=K.lit, G=K.G, BG=K.BG, CG=K.CG, SG=K.SG,
+      box=K.box, cyl=K.cyl, V=K.V, tube=K.tube, dummy=K.dummy, inst=K.inst, put=K.put, halo=K.halo, canvasTex=K.canvasTex;
+  var C={ cyan:0x57c7dd, core:0xeaf2ff, gpu:0x86e07a, amber:0xe0a355 };
+  var GRP=[{n:'Rack',color:C.cyan},{n:'Satellite',color:C.cyan},{n:'Constellation',color:C.cyan}];
+  var ZUP=new T.Vector3(0,0,1), YUP=new T.Vector3(0,1,0);
+
+  var scene=new T.Scene(); scene.background=new T.Color(0x000000);
+  var ER=24000, ALT=3500, EC=new T.Vector3(0,-ER-ALT,0), OR=ER+ALT;
+  var SUN=new T.Vector3(.16,0,1).normalize();
+
+  /* ---- light: the sun, earthshine from below, no sky ---- */
+  var sun=new T.DirectionalLight(0xfff3e2,3.4); sun.position.copy(SUN).multiplyScalar(300); sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-14; sun.shadow.camera.right=14; sun.shadow.camera.top=14; sun.shadow.camera.bottom=-14;
+  sun.shadow.camera.near=200; sun.shadow.camera.far=400; sun.shadow.bias=-0.0004; sun.shadow.normalBias=.03;
+  scene.add(sun); scene.add(sun.target);
+  scene.add(new T.HemisphereLight(0x141a24,0x2a3a50,.45));
+  var shine=new T.DirectionalLight(0x8fa7c4,.3); shine.position.set(0,-1,.35); scene.add(shine);
+
+  /* ---- stars, and the sun on the sky ---- */
+  (function(){ var n=6000, pos=new Float32Array(n*3);
+    for(var i=0;i<n;i++){ var u=Math.random()*2-1, a=Math.random()*Math.PI*2, r=Math.sqrt(1-u*u);
+      pos[i*3]=r*Math.cos(a)*800000; pos[i*3+1]=u*800000; pos[i*3+2]=r*Math.sin(a)*800000; }
+    var g=G(new T.BufferGeometry()); g.setAttribute('position',new T.BufferAttribute(pos,3));
+    var m=new T.PointsMaterial({color:0xdfe6f2,size:1.5,sizeAttenuation:false,transparent:true,opacity:.75}); mats.push(m);
+    scene.add(new T.Points(g,m)); })();
+  var sunCore=halo(0xffffff,42000,1,.5); sunCore.position.copy(SUN).multiplyScalar(750000); scene.add(sunCore);
+  var sunGlow=halo(0xffe6c4,240000,.8,.08); sunGlow.position.copy(sunCore.position); scene.add(sunGlow);
+
+  /* ---- the Earth: Blue Marble by day, Black Marble by night, ocean specular, clouds, scattering ---- */
+  var TL=new T.TextureLoader();
+  function tex(u,srgb){ var t=TL.load(u); geos.push({dispose:function(){t.dispose();}}); if(srgb&&T.SRGBColorSpace) t.colorSpace=T.SRGBColorSpace; t.anisotropy=8; return t; }
+  var tDay=tex('img/earth/day.jpg',true), tNight=tex('img/earth/night.jpg',true), tWater=tex('img/earth/water.png'), tCloud=tex('img/earth/clouds.jpg');
+  var earthM=new T.ShaderMaterial({
+    uniforms:{tDay:{value:tDay},tNight:{value:tNight},tWater:{value:tWater},sunDir:{value:SUN.clone()}},
+    vertexShader:'varying vec2 vUv; varying vec3 vN; varying vec3 vW; void main(){ vUv=uv; vN=normalize(mat3(modelMatrix)*normal); vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }',
+    fragmentShader:[
+      'uniform sampler2D tDay,tNight,tWater; uniform vec3 sunDir; varying vec2 vUv; varying vec3 vN; varying vec3 vW;',
+      'void main(){ vec3 n=normalize(vN); float ndl=dot(n,sunDir); float day=smoothstep(-.06,.20,ndl);',
+      ' vec3 dayC=texture2D(tDay,vUv).rgb; vec3 nightC=texture2D(tNight,vUv).rgb; float water=texture2D(tWater,vUv).r;',
+      ' vec3 Vv=normalize(cameraPosition-vW); vec3 H=normalize(sunDir+Vv);',
+      ' float spec=pow(max(dot(n,H),0.),140.)*water*1.6*day;',
+      ' vec3 col=dayC*(0.06+1.25*max(ndl,0.))*day + nightC*vec3(1.4,1.2,.9)*(1.-day)*1.3 + vec3(1.,.96,.88)*spec;',
+      ' float fr=pow(1.-max(dot(n,Vv),0.),3.5); col+=vec3(.30,.55,1.)*fr*(.55*day+.04);',
+      ' gl_FragColor=vec4(col,1.);',
+      ' #include <tonemapping_fragment>',
+      ' #include <colorspace_fragment>',
+      '}'].join('\n')});
+  mats.push(earthM);
+  var earth=new T.Mesh(G(new T.SphereGeometry(ER,160,120)),earthM); earth.position.copy(EC); scene.add(earth);
+  var cloudM=mat(0xffffff,{r:1,m:0,t:true,dw:false}); cloudM.alphaMap=tCloud; cloudM.opacity=.85;
+  var clouds=new T.Mesh(G(new T.SphereGeometry(ER*1.004,120,90)),cloudM); clouds.position.copy(EC); scene.add(clouds);
+  var atmM=new T.ShaderMaterial({uniforms:{sunDir:{value:SUN.clone()}},
+    vertexShader:'varying vec3 vN; varying vec3 vW; void main(){ vN=normalize(mat3(modelMatrix)*normal); vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }',
+    fragmentShader:'uniform vec3 sunDir; varying vec3 vN; varying vec3 vW; void main(){ vec3 n=normalize(vN); vec3 Vv=normalize(cameraPosition-vW); float f=1.-abs(dot(n,Vv)); float ndl=dot(n,sunDir); float day=smoothstep(-.35,.35,ndl); vec3 c=mix(vec3(.35,.6,1.),vec3(1.,.55,.3),smoothstep(.25,-.05,ndl)*.55); float a=pow(f,4.2)*day*1.1; gl_FragColor=vec4(c*a,a); }',
+    transparent:true,blending:T.AdditiveBlending,depthWrite:false,side:T.BackSide});
+  mats.push(atmM);
+  var atmo=new T.Mesh(G(new T.SphereGeometry(ER*1.035,120,90)),atmM); atmo.position.copy(EC); scene.add(atmo);
+
+  /* ---- textures for the hardware ---- */
+  var cellTex=canvasTex(512,512,function(x,w,h){ x.fillStyle='#18284c'; x.fillRect(0,0,w,h);
+    x.strokeStyle='rgba(150,180,230,.14)'; x.lineWidth=1;
+    for(var i=0;i<=w;i+=16){ x.beginPath(); x.moveTo(i+.5,0); x.lineTo(i+.5,h); x.stroke(); x.beginPath(); x.moveTo(0,i+.5); x.lineTo(w,i+.5); x.stroke(); }
+    x.strokeStyle='rgba(200,215,240,.30)'; x.lineWidth=2;
+    for(var j=0;j<=w;j+=128){ x.beginPath(); x.moveTo(j,0); x.lineTo(j,h); x.stroke(); x.beginPath(); x.moveTo(0,j); x.lineTo(w,j); x.stroke(); }
+  },{repeat:[125,75],srgb:true});
+  var M={
+    white:mat(0xf2f4f7,{r:.40,m:.12,env:1.0}), whiteEdge:mat(0xc9cfd7,{r:.5,m:.3}),
+    cell:mat(0xffffff,{r:.26,m:.22,env:2.6}), cellBack:mat(0x2a313a,{r:.75,m:.3}),
+    mast:mat(0xe9edf1,{r:.38,m:.4,env:1.3}), spar:mat(0xd5dae1,{r:.45,m:.3}),
+    rail:mat(0x15181c,{r:.55,m:.45,env:.8}), tie:mat(0x101316,{r:.6,m:.35}),
+    lid:mat(0xf4f6f8,{r:.30,m:.10,env:1.0}), lidLip:mat(0x0e1114,{r:.5,m:.4}), tier:mat(0xdfe3e8,{r:.35,m:.25,env:1.1}),
+    plate:mat(0xb7bec7,{r:.35,m:.8,env:1.4}), copper:mat(0xa06e4c,{r:.35,m:.9,env:1.3}),
+    pipe:mat(0x1b1f24,{r:.45,m:.6,env:1.0}), fitting:mat(0x2a2f36,{r:.5,m:.6}), av:mat(0x22272d,{r:.55,m:.6}),
+    gold:mat(0xcaa45c,{r:.3,m:.9,env:1.4}), led:lit(C.gpu,2.4), port:lit(C.cyan,2.6)
+  };
+  M.cell.map=cellTex;
+
+  /* ---------------------------------------------------------
+     one satellite. Wings 150 × 90 each, 20 m out from the hub on a
+     planar mast; radiator wall 18 wide × 140 (±70 on the sun axis)
+     beside the rack; the rack 11 m of rails on the sun face.
+     --------------------------------------------------------- */
+  var WL=150, WH=90, GAP=20, RW=18, RL=140, RY=2.9, HL=11;
+  function buildSat(detail){
+    var s=new T.Group();
+    /* the mast: two longerons 1.2 m apart in the wing plane, one zig-zag between, the full span */
+    var L=2*(GAP+WL)+2, ML=Math.floor(L/2.6);
+    s.add(cyl(.05,.05,L,M.mast,0,-.6,0,6).rotateZ(Math.PI/2)); s.add(cyl(.05,.05,L,M.mast,0,.6,0,6).rotateZ(Math.PI/2));
+    var zig=inst(CG(.03,.03,Math.hypot(2.6,1.2),5),M.mast,ML);
+    for(var i=0;i<ML;i++){ var x=-L/2+i*2.6+1.3; put(zig,x,0,0,0,0,Math.atan2(2.6,1.2)*(i%2?1:-1)); }
+    s.add(zig);
+    /* the wings: a blanket between an inner and an outer spar, cells to the sun, two seams */
+    [-1,1].forEach(function(sd){
+      var cx=sd*(GAP+WL/2);
+      var w=box(WL,WH,.05,M.cell,cx,0,.35); w.receiveShadow=true; s.add(w);
+      s.add(box(WL,WH,.04,M.cellBack,cx,0,.29));
+      s.add(box(WL,.14,.14,M.whiteEdge,cx,WH/6,.42)); s.add(box(WL,.14,.14,M.whiteEdge,cx,-WH/6,.42));
+      s.add(cyl(.10,.10,WH+2,M.spar,sd*GAP,0,.35,8)); s.add(cyl(.10,.10,WH+2,M.spar,sd*(GAP+WL),0,.35,8));
+    });
+    /* the radiator: a corrugated white wall beside the rack, in the plane that holds the sun */
+    s.add(box(RW,.36,RL,M.white,0,RY,0,true));
+    var ribs=inst(BG(.16,.16,RL),M.whiteEdge,Math.floor(RW/.45)*2);
+    for(var q=0;q<RW/.45;q++){ put(ribs,-RW/2+.22+q*.45,RY-.24,0); put(ribs,-RW/2+.22+q*.45,RY+.24,0); }
+    s.add(ribs);
+    s.add(box(RW+.4,.6,.6,M.whiteEdge,0,RY,RL/2)); s.add(box(RW+.4,.6,.6,M.whiteEdge,0,RY,-RL/2));
+    s.add(box(.6,.6,RL+.6,M.whiteEdge,-RW/2,RY,0)); s.add(box(.6,.6,RL+.6,M.whiteEdge,RW/2,RY,0));
+    s.add(box(.08,.08,RL*.92,M.tie,-RW*.12,RY-.4,0));   /* the dark seam down the face */
+    [-RW/2+1,RW/2-1].forEach(function(sx){ s.add(box(.4,RY-.6,.4,M.mast,sx,RY/2,-.4)); s.add(box(.4,RY-.6,.4,M.mast,sx,RY/2,.4)); });
+    /* the hub: the rack on the sun face of the mast */
+    var hub=new T.Group(); hub.position.set(0,0,.55); s.add(hub);
+    [-1.35,1.35].forEach(function(ry){ hub.add(box(HL,.10,.36,M.rail,0,ry,.55,true)); hub.add(box(HL,.30,.10,M.rail,0,ry,.55)); hub.add(box(HL,.10,.36,M.rail,0,ry,.85)); });
+    var tieN=Math.floor(HL/1.28), tie=inst(BG(.16,2.9,.03),M.tie,tieN), tieEnd=inst(BG(.36,.36,.035),M.tie,tieN*2);
+    for(var k=0;k<tieN;k++){ var tx=-HL/2+.36+k*1.28; put(tie,tx,0,1.62); put(tieEnd,tx,-1.3,1.62); put(tieEnd,tx,1.3,1.62); }
+    hub.add(tie); hub.add(tieEnd);
+    /* laser terminals at both ends, aimed along the orbit; star tracker; avionics; antenna */
+    [-1,1].forEach(function(sd){ var t=new T.Group(); t.position.set(sd*(HL/2+.9),0,.9); hub.add(t);
+      t.add(box(.6,.7,.6,M.av,0,0,0)); t.add(cyl(.22,.26,.4,M.av,0,0,.5,14));
+      var tel=cyl(.15,.15,.8,M.gold,0,sd*.6,.15,14); t.add(tel);
+      t.add(box(.06,.06,.06,lit(C.core,3),0,sd*1.02,.15)); });
+    hub.add(box(2.2,1.2,.10,M.av,HL/2-1.6,-2.3,.9)); hub.add(box(2.0,.12,.12,M.tie,HL/2-1.6,-2.95,.98));
+    hub.add(cyl(.30,.30,.5,M.av,HL/2-2.4,-2.3,1.2,16)); hub.add(cyl(.32,.32,.06,M.plate,HL/2-2.4,-2.3,1.48,16));
+    hub.add(cyl(.26,.30,.5,M.av,HL/2-.8,-2.3,1.2,16).rotateX(.5)); hub.add(box(.10,.10,.10,lit(C.amber,2),HL/2-.8,-2.5,1.5));
+    if(detail){
+      /* eight sleds on the rails: three white tiers on a black base, guide pins, two drawn out toward -Y */
+      var pull={2:1.5,5:2.4};
+      for(var i2=0;i2<8;i2++){ var sx=-HL/2+1.0+i2*1.28, dy=pull[i2]||0;
+        var sl=new T.Group(); sl.position.set(sx,-dy,1.0); hub.add(sl);
+        sl.add(box(1.16,2.2,.06,M.rail,0,0,-.03));
+        for(var b=0;b<3;b++){ var z=b*.16;
+          sl.add(box(1.16,2.16,.12,b<2?M.tier:M.lid,0,0,z+.06,true)); if(b<2) sl.add(box(1.10,2.10,.04,M.lidLip,0,0,z+.14)); }
+        sl.add(box(1.16,.06,.02,M.lidLip,0,-1.06,.36)); sl.add(box(1.16,.06,.02,M.lidLip,0,1.06,.36));
+        sl.add(box(.06,.06,.02,M.led,-.45,-1.09,.10)); sl.add(box(.06,.06,.02,M.led,-.35,-1.09,.10)); sl.add(box(.06,.06,.02,M.port,.35,-1.09,.10));
+        sl.add(cyl(.03,.03,.5,M.plate,-.4,1.35,.2,6).rotateX(Math.PI/2)); sl.add(cyl(.03,.03,.5,M.plate,.4,1.35,.2,6).rotateX(Math.PI/2));
+        if(dy){ sl.add(cyl(.03,.03,dy+.4,M.plate,-.3,1.1+(dy+.4)/2,.06,6).rotateX(Math.PI/2)); sl.add(cyl(.03,.03,dy+.4,M.plate,.3,1.1+(dy+.4)/2,.06,6).rotateX(Math.PI/2));
+          sl.add(box(1.0,.5,.02,M.copper,0,.2,.29)); sl.add(cyl(.05,.05,.5,M.plate,-.2,1.2,.15,8).rotateX(Math.PI/2)); sl.add(cyl(.05,.05,.5,M.plate,.2,1.2,.15,8).rotateX(Math.PI/2)); }
+      }
+      /* coolant: two dark mains along the rails with U-bends and accumulators, a branch to each sled, out to the wall */
+      hub.add(tube([[-HL/2-.5,-1.7,1.1],[-HL/2+2,-1.7,1.1],[-HL/2+3,-1.95,1.1],[-HL/2+4,-1.7,1.1],[HL/2-1,-1.7,1.1],[HL/2+.4,-1.75,.9]],.09,M.pipe,24));
+      hub.add(tube([[-HL/2-.5,1.75,1.1],[HL/2-4,1.75,1.1],[HL/2-3,1.98,1.1],[HL/2-2,1.75,1.1],[HL/2+.4,1.8,.9]],.09,M.pipe,24));
+      hub.add(cyl(.34,.34,1.0,M.fitting,-HL/2+1.2,-2.05,1.15,18).rotateZ(Math.PI/2)); hub.add(cyl(.34,.34,1.0,M.fitting,HL/2-1.2,2.1,1.15,18).rotateZ(Math.PI/2));
+      var br=inst(CG(.04,.04,.7,6),M.pipe,16);
+      for(var i3=0;i3<8;i3++){ var bx=-HL/2+1.0+i3*1.28; put(br,bx-.25,-1.45,1.1,Math.PI/2,0,0); put(br,bx+.25,1.5,1.1,Math.PI/2,0,0); }
+      hub.add(br);
+      hub.add(tube([[HL/2+.4,1.8,.9],[HL/2+1.0,2.2,.6],[HL/2-2,RY-.55,-.2],[-HL/2,RY-.55,-.6]],.09,M.pipe,20));
+      hub.add(tube([[HL/2+.4,-1.75,.9],[HL/2+1.4,-1.2,.2],[HL/2+1.6,2.0,-.9],[-HL/2,RY-.55,-1.4]],.09,M.pipe,20));
+    }else{
+      hub.add(box(HL-1,2.3,.5,M.lid,0,0,1.25)); }
+    return s;
+  }
+  var hero=buildSat(true); scene.add(hero);
+
+  /* ---- the string: neighbours 3 km ahead and behind, and forty more beyond, linked by laser ---- */
+  var SP=1500;
+  function onOrbit(theta){ return new T.Vector3(EC.x+Math.sin(theta)*OR, EC.y+Math.cos(theta)*OR, 0); }
+  var nb=[]; [-2,-1,1,2].forEach(function(k){ var th=k*SP/OR, n=buildSat(false); n.position.copy(onOrbit(th)); n.rotation.z=-th; scene.add(n); nb.push({o:n,k:k}); });
+  var far=[]; for(var k3=-14;k3<=14;k3++){ if(Math.abs(k3)<=2) continue; far.push(k3); }
+  var fw=inst(BG(WL,WH,.4),M.cellBack,far.length*2), fr=inst(BG(RW,.6,RL),M.white,far.length), fm=inst(BG(2*(GAP+WL),1.2,1.2),M.mast,far.length);
+  far.forEach(function(k){ var th=k*SP/OR, p=onOrbit(th);
+    put(fw,p.x+Math.cos(th)*(GAP+WL/2),p.y-Math.sin(th)*(GAP+WL/2),p.z,0,0,-th); put(fw,p.x-Math.cos(th)*(GAP+WL/2),p.y+Math.sin(th)*(GAP+WL/2),p.z,0,0,-th);
+    put(fr,p.x,p.y+RY,p.z,0,0,-th); put(fm,p.x,p.y,p.z,0,0,-th); });
+  scene.add(fw); scene.add(fr); scene.add(fm);
+  /* the links: one-pixel lines through vacuum, so they read at every distance */
+  var ends=[], chords=[];
+  for(var k4=-14;k4<14;k4++){ var a=onOrbit(k4*SP/OR), b=onOrbit((k4+1)*SP/OR);
+    var ta=k4*SP/OR, tb=(k4+1)*SP/OR;
+    a.add(new T.Vector3(Math.cos(ta)*(HL/2+1.9),-Math.sin(ta)*(HL/2+1.9),1.45)); b.add(new T.Vector3(-Math.cos(tb)*(HL/2+1.9),Math.sin(tb)*(HL/2+1.9),1.45));
+    ends.push(a.x,a.y,a.z,b.x,b.y,b.z); chords.push(new T.LineCurve3(a,b)); }
+  var lg=G(new T.BufferGeometry()); lg.setAttribute('position',new T.BufferAttribute(new Float32Array(ends),3));
+  var lm=new T.LineBasicMaterial({color:C.core,transparent:true,opacity:.55,blending:T.AdditiveBlending,depthWrite:false}); mats.push(lm);
+  scene.add(new T.LineSegments(lg,lm));
+  var NP=chords.length*2, pulses=inst(SG(1,8),lit(C.core,3),NP); scene.add(pulses);
+  var pulseT=[]; for(var i4=0;i4<NP;i4++){ put(pulses,0,-99999,0); pulseT.push({c:chords[i4>>1],t:Math.random(),d:i4%2?1:-1,v:.10+Math.random()*.08}); }
+
+  /* ---- the ring: a gigawatt of them on the terminator; markers exaggerated ---- */
+  var NR=8000, ring=inst(BG(12,3,3),lit(C.cyan,1.5),NR);
+  for(var r=0;r<NR;r++){ var ang=r/NR*Math.PI*2;
+    if(Math.abs(((ang+Math.PI)%(Math.PI*2))-Math.PI)<15*SP/OR){ put(ring,0,-99999,0); continue; }
+    var p=onOrbit(ang); put(ring,p.x,p.y,p.z,0,0,-ang); }
+  scene.add(ring);
+
+  /* ---- environment: black sky, the sun, earthshine below ---- */
+  var envTex=canvasTex(512,256,function(x,w,h){ x.fillStyle='#000'; x.fillRect(0,0,w,h);
+    var su=(Math.atan2(SUN.z,SUN.x)/(Math.PI*2)+.5)*w, sv=(.5-Math.asin(SUN.y)/Math.PI)*h;
+    var g2=x.createRadialGradient(su,sv,0,su,sv,w*.30); g2.addColorStop(0,'#fff8ec'); g2.addColorStop(.18,'rgba(255,240,215,.85)'); g2.addColorStop(1,'rgba(255,240,215,0)');
+    x.fillStyle=g2; x.fillRect(0,0,w,h);
+    var g3=x.createLinearGradient(0,h*.6,0,h); g3.addColorStop(0,'rgba(90,110,140,0)'); g3.addColorStop(1,'rgba(110,135,170,.45)'); x.fillStyle=g3; x.fillRect(0,h*.6,w,h*.4);
+  },{srgb:true});
+  envTex.mapping=T.EquirectangularReflectionMapping;
+
+  /* ---- framings: the video's angles, in its order. dir is where the camera sits, from the target ---- */
+  function F(id,n,era,t,w,h,dir,up,pin){ var d=V(dir).normalize();
+    return {id:id,n:n,era:era,t:V(t),w:w,h:h,th:Math.atan2(d.z,d.x),ph:Math.acos(d.y),up:up,pin:pin}; }
+  var SLED=-HL/2+1.0+5*1.28;
+  var WIDE=F('wide',null,-1,[0,0,0],190,110,[-.5,-.55,.7],ZUP,null);
+  var SPOTS=[
+    F('rack',  'One rack · ~125 kW',0,[0,-.6,1.2],7.5,4.2,[-.62,-.45,.65],ZUP,[0,-3.4,2.6,1]),
+    F('gpus',  'The GPUs',         0,[SLED,-2.2,1.2],3.0,1.7,[-.5,-.72,.48],ZUP,[SLED,-3.7,2.2,.5]),
+    F('sat',   'Compute',          1,[0,0,0],     120,95, [.8,.4,.45],   ZUP,null),
+    F('wings', 'Solar',            1,[0,0,0],     190,110,[-.5,-.55,.7], ZUP,[GAP+WL/2,0,3,1.4]),
+    F('radiator','Radiator',       1,[0,RY,0],    40,80,  [-.35,-.9,.28],ZUP,[0,RY+3,-40,1.4]),
+    F('sso',   null,               1,EC.toArray(),30000,27000,[1,.12,.3],YUP,null),
+    F('laser', null,               2,[0,0,0],     4200,2200,[.05,.4,.92],YUP,null),
+    F('string','Data center constellation',2,[0,-1500,0],24000,13000,[0,.5,.87],YUP,null),
+    F('gigawatt',null,             2,EC.toArray(),30000,27000,[0,.25,1], YUP,null)
+  ];
+  SPOTS[5].under='wings'; SPOTS[6].under='string'; SPOTS[8].under='string';
+
+  var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
+  var VIEWS=[byId.rack,byId.sat,byId.string];
+  var CHAPTERS=[[byId.rack,4],[byId.gpus,5],[byId.sat,4],[byId.wings,4.5],[byId.radiator,4.5],[byId.sso,5],[byId.laser,5],[byId.string,5],[byId.gigawatt,5]];
+
+  var tmp=new T.Vector3();
+  function tick(dt,t,cam){
+    earth.rotation.y+=dt*.003; clouds.rotation.y+=dt*.0036;
+    var ps=Math.max(.12,cam.position.length()*.004);
+    pulseT.forEach(function(p,i){ p.t=(p.t+dt*p.v*p.d+1)%1; p.c.getPoint(p.t,tmp);
+      dummy.position.copy(tmp); dummy.rotation.set(0,0,0); dummy.scale.setScalar(ps*(.8+.4*Math.sin(t*6+i))); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
+    pulses.instanceMatrix.needsUpdate=true;
+  }
+  var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.25,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,
+    groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,panelEra:2,
+    panel:'<div class="r"><b>~40</b><i>AI1 satellites per rocket</i></div>'+
+          '<div class="r"><b>~125 kW</b><i>per satellite</i></div>'+
+          '<div class="r"><b>~5 MW</b><i>per launch</i></div>'+
+          '<div class="r sum"><b>1 GW</b><i>in orbit</i><em>≈ 200 launches · ~8,000 satellites</em></div>'});
+  var pm=new T.PMREMGenerator(rig.renderer); pm.compileEquirectangularShader();
+  scene.environment=pm.fromEquirectangular(envTex).texture; pm.dispose();
+  rig.start();
+  return rig;
+}
+window.mountOrbit=mountOrbit;
 })();
 
 /* ============ THE 3D SCENE — loaded only when its topic opens ============ */
@@ -2203,7 +2457,7 @@ function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){
 function mountScene(el){
   if(!el)return; const my=++sceneTok;
   loadThree().then(()=>{ if(my!==sceneTok||!el.isConnected)return;
-    liveScene=window.mountEras(el);
+    liveScene=(el.dataset.scene==='orbit'?window.mountOrbit:window.mountEras)(el);
   }).catch(()=>{});
 }
 

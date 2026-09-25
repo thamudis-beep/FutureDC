@@ -170,6 +170,29 @@ arms on a line, humanoids, robotaxis, drones. A wireframe globe on a stem, a
 circular site with glowing pads, and a race-drone flythrough were all tried
 and rejected as cartoonish or unstable.
 
+**The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
+rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
+pins, chrome, dispose — a scene builds its world and hands the rig its stops).
+It is built to the user's reference video, not invented: a planar zig-zag
+mast the full span, two blanket wings between spars with cells to the sun, a
+wide corrugated radiator wall beside the rack in the plane that holds the sun
+so it stays in its own shade, the rack as white pull-out sleds of stacked
+tiers on two black rails with coolant mains and U-bends, laser terminals fore
+and aft. The sun lies exactly in the radiator's plane (dawn-dusk orbit) — tilt
+it and the wall shadows the whole rack. Rack shots hang the camera with Z up
+as the video does; orbit shots with Y up, Earth below; each framing carries
+its `up` and the crane blends it. The chapters are the storyline: one rack →
+the GPUs → compute → solar → radiator → sun-synchronous → laser links → the
+constellation → 1 GW in orbit; the bar shows only six chips (a chapter with
+no name lights the chip it sits `under`); a math panel (the user's
+figures: ~40 per rocket, ~125 kW, ~5 MW per launch, 1 GW ≈ 200 launches ·
+~8,000) shows for the constellation group. The Earth is NASA Blue Marble /
+Black Marble / water mask / clouds (`public/img/earth/`, see SOURCE.md) on a
+stage sphere of R 24 km with the string of satellites 1.5 km apart on the
+horizon; the satellite is over-scale against it on purpose. Never an
+equirectangular land-only texture, never a launch stack, never a spacing
+that wraps the orbit.
+
 The globe in that scene is real too: `public/img/earth.png` is Natural Earth
 110m land drawn equirectangular by `tools/earth-texture.js` and wrapped on a
 sphere, lit by the key light so it has a terminator. The site clusters on it

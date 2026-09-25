@@ -7,8 +7,8 @@ PowerPoint.
 bundler. It carries its own CSS, its own SVG diagram engine, its own canvas
 pixel field, its embedded map geometry, and one WebGL scene. The only things it
 loads from outside are Geist and IBM Plex Mono from Google Fonts, `public/img/`,
-and `public/vendor/three.min.js` — vendored, and fetched only when the one 3D
-topic is opened.
+and `public/vendor/three.min.js` — vendored, and fetched only when one of the
+two 3D topics is opened.
 
 ## Run
 
