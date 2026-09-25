@@ -180,10 +180,17 @@ tiers on two black rails with coolant mains and U-bends, laser terminals fore
 and aft. The sun lies exactly in the radiator's plane (dawn-dusk orbit) — tilt
 it and the wall shadows the whole rack. Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
-its `up` and the crane blends it. The chapters are the storyline: one rack →
-the GPUs → compute → solar → radiator → sun-synchronous → laser links → the
-constellation → 1 GW in orbit; the bar shows only six chips (a chapter with
-no name lights the chip it sits `under`); a math panel (the user's
+its `up` and the crane blends it. Three parts on the bar — Compute,
+Satellite, Constellation — and five chips: the rack, the GPUs · solar,
+radiator · constellation. The chapters are the storyline: the rack (a dolly
+along the rails) → the GPUs (the sleds travel in and out on their rails, as
+in the video) → the whole satellite → solar (a flyover down the wing) →
+radiator (a flyover up the wall) → sun-synchronous → laser links → the
+constellation → 1 GW in orbit. A chapter may glide from its framing to a
+second one over its hold (`CHAPTERS[i][2]`); a chapter with no name lights
+the chip it sits `under`. No pins in this scene — at rack scale they read as
+props. Moving the cursor never pauses the film: only a drag with the button
+down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the user's
 figures: ~40 per rocket, ~125 kW, ~5 MW per launch, 1 GW ≈ 200 launches ·
 ~8,000) shows for the constellation group. The Earth is NASA Blue Marble /
 Black Marble / water mask / clouds (`public/img/earth/`, see SOURCE.md) on a

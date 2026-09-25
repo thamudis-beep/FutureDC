@@ -258,17 +258,17 @@
   .e3d-chip::before{content:'';position:absolute;left:9px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--ec);opacity:.5}
   .e3d-chip.on{color:var(--ink);border-color:var(--ec)}
   .e3d-chip.on::before{opacity:1;box-shadow:0 0 8px var(--ec)}
-  .e3d-panel{position:absolute;right:16px;top:50%;transform:translate(12px,-50%);width:238px;padding:14px 16px 12px;
-    background:rgba(8,10,14,.74);border:1px solid rgba(255,255,255,.10);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  .e3d-panel{position:absolute;right:16px;top:50%;transform:translate(12px,-50%);width:274px;padding:6px 18px 8px;
+    background:rgba(8,10,14,.78);border:1px solid rgba(255,255,255,.10);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
     opacity:0;pointer-events:none;transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1)}
   .e3d-panel.show{opacity:1;transform:translate(0,-50%)}
-  .e3d-panel .r{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .e3d-panel .r{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08)}
   .e3d-panel .r:last-child{border-bottom:0}
-  .e3d-panel b{font-family:var(--sans);font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
-  .e3d-panel i{font-style:normal;font-size:10.5px;letter-spacing:.04em;color:var(--ink-soft)}
-  .e3d-panel em{font-style:normal;font-size:9.5px;letter-spacing:.02em;color:var(--future);margin-top:5px;white-space:nowrap}
-  .e3d-panel .sum{margin-top:4px;padding-top:12px;border-top:1px solid var(--future)}
-  .e3d-panel .sum b{color:var(--future);font-size:26px}
+  .e3d-panel b{font-family:var(--sans);font-size:26px;font-weight:700;letter-spacing:-.01em;color:var(--ink);line-height:1.05}
+  .e3d-panel i,.e3d-panel em{font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--ink-soft)}
+  .e3d-panel .sum{border-top:1px solid var(--future);margin-top:2px}
+  .e3d-panel .sum b,.e3d-panel .sum em{color:var(--future)}
+  .e3d-panel .sum em{margin-top:4px}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
   .e3d.in .e3d-enter button{pointer-events:none}
@@ -341,7 +341,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v75 · racks in space</div>
+<div class="ver">v76 · three parts</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1329,7 +1329,11 @@ function sceneRig(T,host,K,scene,cfg){
   function tourStep(dt){
     if(mv) return;
     tour.hold+=dt;
-    gTh+=dt*.018; gRad*=1-dt*.012; th=gTh; rad=gRad;
+    var gl=chapters[tour.i][2];
+    if(gl){ var f=Math.min(1,tour.hold/chapters[tour.i][1]), e=f*f*(3-2*f), a=cur, ra=fitRadius(a), rb=fitRadius(gl);
+      tgt.lerpVectors(a.t,gl.t,e); rad=ra+(rb-ra)*e; th=a.th+(unwrap(gl.th,a.th)-a.th)*e; ph=a.ph+(gl.ph-a.ph)*e;
+      up.copy(a.up||YUP).lerp(gl.up||YUP,e).normalize(); gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; }
+    else { gTh+=dt*.018; gRad*=1-dt*.012; th=gTh; rad=gRad; }
     if(tour.hold>=chapters[tour.i][1]){ tour.i=(tour.i+1)%chapters.length; tour.hold=0; flyTo(chapters[tour.i][0]); } }
 
   /* ---- pins: one per stop that has something to point at ---- */
@@ -1349,12 +1353,13 @@ function sceneRig(T,host,K,scene,cfg){
 
   var el=renderer.domElement;
   function down(e){drag=true;moved=0;px=e.clientX;py=e.clientY;el.style.cursor='grabbing';el.setPointerCapture&&el.setPointerCapture(e.pointerId);}
-  function move(e){ if(!drag) return;
+  function move(e){ if(!drag||!(e.buttons&1)) return;
     var dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
     if(moved>5){ if(tour.on) pauseTour(); mv=null; }
     gTh-=dx*.005; gPh=Math.max(.14,Math.min(cfg.maxPh||1.44,gPh-dy*.004)); idle=0;}
   function up(e){ if(drag&&moved<5) pick(e); drag=false; el.style.cursor='grab';}
-  function wheel(e){ e.preventDefault(); pauseTour(); mv=null; zoomed=true;
+  var wheelAcc=0;
+  function wheel(e){ e.preventDefault(); wheelAcc+=e.deltaY; if(Math.abs(wheelAcc)<40) return; wheelAcc=0; pauseTour(); mv=null; zoomed=true;
     gRad=Math.max(cfg.minR||6,Math.min((cfg.maxR||520)*1.1,gRad*(1+(e.deltaY>0?.12:-.12)))); idle=0;}
   var ray=new T.Raycaster(), ndc=new T.Vector2();
   function pick(e){
@@ -1364,7 +1369,8 @@ function sceneRig(T,host,K,scene,cfg){
     var hp=ray.intersectObjects(pinHits,false);
     if(hp.length){ goView(hp[0].object.userData.spot); return; }
     var hit=ray.intersectObjects(cfg.picks||[],false);
-    goView(hit.length&&hit[0].object.userData.view ? hit[0].object.userData.view : wide);}
+    if(hit.length&&hit[0].object.userData.view) goView(hit[0].object.userData.view);
+    else if(!tour.on) goView(wide);}
   el.addEventListener('pointerdown',down); el.addEventListener('pointermove',move);
   el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
   el.addEventListener('wheel',wheel,{passive:false});
@@ -2208,7 +2214,7 @@ function mountOrbit(host){
   var K=sceneKit(T), mats=K.mats, geos=K.geos, mat=K.mat, lit=K.lit, G=K.G, BG=K.BG, CG=K.CG, SG=K.SG,
       box=K.box, cyl=K.cyl, V=K.V, tube=K.tube, dummy=K.dummy, inst=K.inst, put=K.put, halo=K.halo, canvasTex=K.canvasTex;
   var C={ cyan:0x57c7dd, core:0xeaf2ff, gpu:0x86e07a, amber:0xe0a355 };
-  var GRP=[{n:'Rack',color:C.cyan},{n:'Satellite',color:C.cyan},{n:'Constellation',color:C.cyan}];
+  var GRP=[{n:'Compute',color:C.cyan},{n:'Satellite',color:C.cyan},{n:'Constellation',color:C.cyan}];
   var ZUP=new T.Vector3(0,0,1), YUP=new T.Vector3(0,1,0);
 
   var scene=new T.Scene(); scene.background=new T.Color(0x000000);
@@ -2314,7 +2320,7 @@ function mountOrbit(host){
     s.add(box(.08,.08,RL*.92,M.tie,-RW*.12,RY-.4,0));   /* the dark seam down the face */
     [-RW/2+1,RW/2-1].forEach(function(sx){ s.add(box(.4,RY-.6,.4,M.mast,sx,RY/2,-.4)); s.add(box(.4,RY-.6,.4,M.mast,sx,RY/2,.4)); });
     /* the hub: the rack on the sun face of the mast */
-    var hub=new T.Group(); hub.position.set(0,0,.55); s.add(hub);
+    var hub=new T.Group(); hub.position.set(0,0,.55); s.add(hub); hub.userData.sleds=[];
     [-1.35,1.35].forEach(function(ry){ hub.add(box(HL,.10,.36,M.rail,0,ry,.55,true)); hub.add(box(HL,.30,.10,M.rail,0,ry,.55)); hub.add(box(HL,.10,.36,M.rail,0,ry,.85)); });
     var tieN=Math.floor(HL/1.28), tie=inst(BG(.16,2.9,.03),M.tie,tieN), tieEnd=inst(BG(.36,.36,.035),M.tie,tieN*2);
     for(var k=0;k<tieN;k++){ var tx=-HL/2+.36+k*1.28; put(tie,tx,0,1.62); put(tieEnd,tx,-1.3,1.62); put(tieEnd,tx,1.3,1.62); }
@@ -2329,14 +2335,15 @@ function mountOrbit(host){
     hub.add(cyl(.26,.30,.5,M.av,HL/2-.8,-2.3,1.2,16).rotateX(.5)); hub.add(box(.10,.10,.10,lit(C.amber,2),HL/2-.8,-2.5,1.5));
     if(detail){
       /* eight sleds on the rails: three white tiers on a black base, guide pins, two drawn out toward -Y */
-      var pull={2:1.5,5:2.4};
+      var pull={2:1.5,5:2.4}, sleds=hub.userData.sleds=[];
       for(var i2=0;i2<8;i2++){ var sx=-HL/2+1.0+i2*1.28, dy=pull[i2]||0;
-        var sl=new T.Group(); sl.position.set(sx,-dy,1.0); hub.add(sl);
-        sl.add(box(1.16,2.2,.06,M.rail,0,0,-.03));
-        for(var b=0;b<3;b++){ var z=b*.16;
-          sl.add(box(1.16,2.16,.12,b<2?M.tier:M.lid,0,0,z+.06,true)); if(b<2) sl.add(box(1.10,2.10,.04,M.lidLip,0,0,z+.14)); }
-        sl.add(box(1.16,.06,.02,M.lidLip,0,-1.06,.36)); sl.add(box(1.16,.06,.02,M.lidLip,0,1.06,.36));
-        sl.add(box(.06,.06,.02,M.led,-.45,-1.09,.10)); sl.add(box(.06,.06,.02,M.led,-.35,-1.09,.10)); sl.add(box(.06,.06,.02,M.port,.35,-1.09,.10));
+        var sl=new T.Group(); sl.position.set(sx,-dy,1.0); hub.add(sl); sleds.push({g:sl,pull:dy,ph:i2*1.3});
+        sl.add(box(1.16,2.2,.06,M.rail,0,0,-.03));                                   /* black tray */
+        sl.add(box(1.16,2.16,.30,M.lid,0,0,.15,true));                                /* white shell */
+        sl.add(box(1.04,2.04,.07,M.lid,0,0,.335));                                    /* bevelled top */
+        sl.add(box(1.18,.12,.32,M.lidLip,0,-1.08,.16)); sl.add(box(1.18,.12,.32,M.lidLip,0,1.08,.16));   /* dark caps */
+        sl.add(box(1.24,.14,.05,M.rail,0,-.5,.395)); sl.add(box(.14,.46,.10,M.rail,-.62,-.5,.34)); sl.add(box(.14,.46,.10,M.rail,.62,-.5,.34));   /* the handle bar */
+        sl.add(box(.06,.05,.03,M.led,-.45,-1.15,.10)); sl.add(box(.06,.05,.03,M.led,-.35,-1.15,.10)); sl.add(box(.06,.05,.03,M.port,.35,-1.15,.10));
         sl.add(cyl(.03,.03,.5,M.plate,-.4,1.35,.2,6).rotateX(Math.PI/2)); sl.add(cyl(.03,.03,.5,M.plate,.4,1.35,.2,6).rotateX(Math.PI/2));
         if(dy){ sl.add(cyl(.03,.03,dy+.4,M.plate,-.3,1.1+(dy+.4)/2,.06,6).rotateX(Math.PI/2)); sl.add(cyl(.03,.03,dy+.4,M.plate,.3,1.1+(dy+.4)/2,.06,6).rotateX(Math.PI/2));
           sl.add(box(1.0,.5,.02,M.copper,0,.2,.29)); sl.add(cyl(.05,.05,.5,M.plate,-.2,1.2,.15,8).rotateX(Math.PI/2)); sl.add(cyl(.05,.05,.5,M.plate,.2,1.2,.15,8).rotateX(Math.PI/2)); }
@@ -2355,6 +2362,7 @@ function mountOrbit(host){
     return s;
   }
   var hero=buildSat(true); scene.add(hero);
+  var sleds=hero.children.filter(function(c){return c.userData.sleds;})[0].userData.sleds;
 
   /* ---- the string: neighbours 3 km ahead and behind, and forty more beyond, linked by laser ---- */
   var SP=1500;
@@ -2397,28 +2405,34 @@ function mountOrbit(host){
   /* ---- framings: the video's angles, in its order. dir is where the camera sits, from the target ---- */
   function F(id,n,era,t,w,h,dir,up,pin){ var d=V(dir).normalize();
     return {id:id,n:n,era:era,t:V(t),w:w,h:h,th:Math.atan2(d.z,d.x),ph:Math.acos(d.y),up:up,pin:pin}; }
-  var SLED=-HL/2+1.0+5*1.28;
+  var SLED=-HL/2+1.0+5*1.28, WX=GAP+WL/2;
   var WIDE=F('wide',null,-1,[0,0,0],190,110,[-.5,-.55,.7],ZUP,null);
   var SPOTS=[
-    F('rack',  'One rack · ~125 kW',0,[0,-.6,1.2],7.5,4.2,[-.62,-.45,.65],ZUP,[0,-3.4,2.6,1]),
-    F('gpus',  'The GPUs',         0,[SLED,-2.2,1.2],3.0,1.7,[-.5,-.72,.48],ZUP,[SLED,-3.7,2.2,.5]),
-    F('sat',   'Compute',          1,[0,0,0],     120,95, [.8,.4,.45],   ZUP,null),
-    F('wings', 'Solar',            1,[0,0,0],     190,110,[-.5,-.55,.7], ZUP,[GAP+WL/2,0,3,1.4]),
-    F('radiator','Radiator',       1,[0,RY,0],    40,80,  [-.35,-.9,.28],ZUP,[0,RY+3,-40,1.4]),
+    F('rack',  'The rack · ~125 kW',0,[-2.5,-.6,1.2],7.5,4.2,[-.62,-.45,.65],ZUP,null),
+    F('gpus',  'The GPUs',         0,[SLED+1.2,-2.2,1.2],3.0,1.7,[-.5,-.72,.48],ZUP,null),
+    F('sat',   null,               1,[0,0,0],     120,95, [.8,.4,.45],   ZUP,null),
+    F('wings', 'Solar',            1,[GAP+12,0,0],52,34,  [-.35,-.62,.7],ZUP,null),
+    F('radiator','Radiator',       1,[0,RY,-52],  30,24,  [-.42,-.85,.3],ZUP,null),
     F('sso',   null,               1,EC.toArray(),30000,27000,[1,.12,.3],YUP,null),
     F('laser', null,               2,[0,0,0],     4200,2200,[.05,.4,.92],YUP,null),
-    F('string','Data center constellation',2,[0,-1500,0],24000,13000,[0,.5,.87],YUP,null),
+    F('string','Constellation',    2,[0,-1500,0], 24000,13000,[0,.5,.87],YUP,null),
     F('gigawatt',null,             2,EC.toArray(),30000,27000,[0,.25,1], YUP,null)
   ];
-  SPOTS[5].under='wings'; SPOTS[6].under='string'; SPOTS[8].under='string';
-
+  SPOTS[2].under='wings'; SPOTS[5].under='radiator'; SPOTS[6].under='string'; SPOTS[8].under='string';
+  /* where each flyover ends */
+  var GL={rack:F('',null,0,[2.5,-.6,1.2],7.5,4.2,[-.62,-.45,.65],ZUP,null),
+          gpus:F('',null,0,[SLED-1.6,-2.2,1.2],3.0,1.7,[-.5,-.72,.48],ZUP,null),
+          wings:F('',null,1,[GAP+WL-14,0,0],52,34,[-.35,-.62,.7],ZUP,null),
+          radiator:F('',null,1,[0,RY,52],30,24,[-.42,-.85,.3],ZUP,null)};
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   var VIEWS=[byId.rack,byId.sat,byId.string];
-  var CHAPTERS=[[byId.rack,4],[byId.gpus,5],[byId.sat,4],[byId.wings,4.5],[byId.radiator,4.5],[byId.sso,5],[byId.laser,5],[byId.string,5],[byId.gigawatt,5]];
+  var CHAPTERS=[[byId.rack,6,GL.rack],[byId.gpus,6,GL.gpus],[byId.sat,4],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
+                [byId.sso,5],[byId.laser,5],[byId.string,5],[byId.gigawatt,5]];
 
   var tmp=new T.Vector3();
   function tick(dt,t,cam){
     earth.rotation.y+=dt*.003; clouds.rotation.y+=dt*.0036;
+    sleds.forEach(function(q){ q.g.position.y=-q.pull*(.55+.45*Math.sin(t*.32+q.ph)); });
     var ps=Math.max(.12,cam.position.length()*.004);
     pulseT.forEach(function(p,i){ p.t=(p.t+dt*p.v*p.d+1)%1; p.c.getPoint(p.t,tmp);
       dummy.position.copy(tmp); dummy.rotation.set(0,0,0); dummy.scale.setScalar(ps*(.8+.4*Math.sin(t*6+i))); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
