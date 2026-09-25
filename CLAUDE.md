@@ -123,7 +123,6 @@ Three views, hash-routed, in one file.
 
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
-
 ---
 
 ## Diagrams
