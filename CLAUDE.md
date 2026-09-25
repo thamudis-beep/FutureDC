@@ -181,18 +181,25 @@ and aft. The sun lies exactly in the radiator's plane (dawn-dusk orbit) — tilt
 it and the wall shadows the whole rack. Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
 its `up` and the crane blends it. Three parts on the bar — Compute,
-Satellite, Constellation — and five chips: the rack, the GPUs · solar,
-radiator · constellation. The chapters are the storyline: the rack (a dolly
+Satellite, Constellation — and four chips: the rack · solar, radiator ·
+constellation. The chapters are the storyline: the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → the whole satellite → solar (a flyover down the wing) →
 radiator (a flyover that ends looking along its edge, so the sheet reads
 thin) → sun-synchronous → laser links → the constellation → 1 GW in orbit. A
 chapter may glide from its framing to a second one over its hold
 (`CHAPTERS[i][2]`); a chapter with no name lights the chip it sits `under`.
+The look is the reference's: monochrome studio metal — graphite rails and
+ties, satin-steel casings (thick, chamfered nose, `lidShape` extruded to
+0.5 m), a warm-grey radiator wall with wide soft corrugation (half-sunk
+cylinders at 1.8 m pitch), near-black cells — under a neutral white key, two
+soft fills and a dark grey studio environment. No warm sun tint, no white
+plastic, no blue tint anywhere on the hardware.
 The rig calls `cfg.onChapter(framing)` as each chapter begins; the orbital
-scene uses it to dock a casing: a white lid slides in from outside along the
-rails and stays, one on the rack chapter and one on the GPU chapter, exactly
-as the video does it — never in-and-out, never oscillating. The GPU shot is
+scene uses it to dock the casings: three white lids slide in from outside
+along the rails together and stay, on the rack chapter, exactly as the video
+does it — never in-and-out, never oscillating. Compute is one chip, "The
+rack": the docking, then a dolly along the rails to the cold plates. The GPU shot is
 low along the rails with the silver cold plates (serpentine channel, brushed
 aluminium, `plateTex`) exposed beneath the lids; the lids are extruded from
 `lidShape`, a flat slab with a wedge leading edge, with dogbone tie bars and
@@ -200,8 +207,8 @@ bolts across every seam. Motion runs on the film's own accumulated `dt`, not
 the wall clock, so a slow renderer keeps camera and casings in step. No pins in this scene — at rack scale they read as
 props. Moving the cursor never pauses the film: only a drag with the button
 down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the user's
-figures: ~40 per rocket, ~125 kW, ~5 MW per launch, 1 GW ≈ 200 launches ·
-~8,000) shows for the constellation group. The Earth is NASA Blue Marble /
+figures: 40 per launch, 125 KW, 5 MW per launch, 1 GW = 200 launches ·
+8,000; KW is the user's spelling, kept for MW/GW consistency) shows for the constellation group. The Earth is NASA Blue Marble /
 Black Marble / water mask / clouds (`public/img/earth/`, see SOURCE.md) on a
 stage sphere of R 24 km with the string of satellites 1.5 km apart on the
 horizon; the satellite is over-scale against it on purpose. Never an
