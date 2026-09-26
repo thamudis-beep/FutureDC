@@ -341,7 +341,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v80 · AI1 to scale</div>
+<div class="ver">v86 · laser bursts</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2272,10 +2272,10 @@ function mountOrbit(host){
   var atmo=new T.Mesh(G(new T.SphereGeometry(ER*1.035,120,90)),atmM); atmo.position.copy(EC); scene.add(atmo);
 
   /* ---- textures for the hardware ---- */
-  var cellTex=canvasTex(512,512,function(x,w,h){ x.fillStyle='#1b2028'; x.fillRect(0,0,w,h);
-    x.strokeStyle='rgba(170,180,195,.12)'; x.lineWidth=1;
+  var cellTex=canvasTex(512,512,function(x,w,h){ x.fillStyle='#2b3a58'; x.fillRect(0,0,w,h);
+    x.strokeStyle='rgba(190,200,215,.22)'; x.lineWidth=1;
     for(var i=0;i<=w;i+=16){ x.beginPath(); x.moveTo(i+.5,0); x.lineTo(i+.5,h); x.stroke(); x.beginPath(); x.moveTo(0,i+.5); x.lineTo(w,i+.5); x.stroke(); }
-    x.strokeStyle='rgba(200,205,215,.22)'; x.lineWidth=2;
+    x.strokeStyle='rgba(210,215,225,.34)'; x.lineWidth=2;
     for(var j=0;j<=w;j+=128){ x.beginPath(); x.moveTo(j,0); x.lineTo(j,h); x.stroke(); x.beginPath(); x.moveTo(0,j); x.lineTo(w,j); x.stroke(); }
   },{repeat:[125,75],srgb:true});
   /* a cold plate: brushed aluminium with a serpentine channel and its bolts */
@@ -2295,15 +2295,20 @@ function mountOrbit(host){
   lidG.applyMatrix4(new T.Matrix4().set(0,0,1,-.56, 1,0,0,0, 0,1,0,0, 0,0,0,1));   /* length along y, thickness along z, width along x */
   var M={
     white:mat(0xa39f9a,{r:.46,m:.4,env:1.2}), whiteEdge:mat(0x7d7975,{r:.5,m:.45,env:1.0}),
-    cell:mat(0xffffff,{r:.22,m:.35,env:2.2}), cellBack:mat(0x1d2024,{r:.75,m:.3}),
+    cell:mat(0xffffff,{r:.30,m:.30,env:2.4}), cellBack:mat(0x1d2024,{r:.75,m:.3}),
     mast:mat(0x8b8f94,{r:.42,m:.7,env:1.3}), spar:mat(0x6d7176,{r:.45,m:.6}),
     rail:mat(0x1f2225,{r:.5,m:.65,env:1.0}), tie:mat(0x1a1c1f,{r:.5,m:.6,env:1.0}),
-    lid:mat(0xc9ccd0,{r:.26,m:.85,env:1.7}), lidLip:mat(0x0e1114,{r:.5,m:.4}), tier:mat(0xdfe3e8,{r:.35,m:.25,env:1.1}),
+    lid:mat(0xa9adb2,{r:.28,m:.9,env:1.9}), lidLip:mat(0x0e1114,{r:.5,m:.4}), tier:mat(0xdfe3e8,{r:.35,m:.25,env:1.1}),
     plate:mat(0xffffff,{r:.42,m:.75,env:1.4}), frame:mat(0x1a1e23,{r:.6,m:.5}), bolt:mat(0x2b2f34,{r:.45,m:.75}),
     pipe:mat(0x25282c,{r:.42,m:.7,env:1.2}), fitting:mat(0x2a2f36,{r:.5,m:.6}), av:mat(0x2b2f34,{r:.5,m:.65,env:1.0}),
     gold:mat(0xcaa45c,{r:.3,m:.9,env:1.4}), led:lit(C.gpu,2.4), port:lit(C.cyan,2.6)
   };
   M.cell.map=cellTex; M.plate.map=plateTex;
+  /* the radiator sheet: fine flow channels drawn across it, pitch 0.5 m over its 33 m */
+  var sheetTex=canvasTex(64,512,function(x,w,h){ x.fillStyle='#a8a49f'; x.fillRect(0,0,w,h);
+    for(var i=0;i<h;i+=8){ x.fillStyle='rgba(255,255,255,.07)'; x.fillRect(0,i,w,3); x.fillStyle='rgba(0,0,0,.09)'; x.fillRect(0,i+4,w,2); } },{repeat:[1,1],srgb:true});
+  sheetTex.wrapS=sheetTex.wrapT=T.RepeatWrapping; sheetTex.repeat.set(1,20/.4/64);
+  M.sheet=mat(0xffffff,{r:.5,m:.25,env:1.0}); M.sheet.map=sheetTex;
 
   /* ---------------------------------------------------------
      one satellite. Wings 150 × 90 each, 20 m out from the hub on a
@@ -2311,32 +2316,33 @@ function mountOrbit(host){
      beside the rack; the rack 11 m of rails on the sun face.
      --------------------------------------------------------- */
   /* AI1 to the published figures: 74 m wingspan, 30 m deployed height, 110 m² of radiator */
-  var WL=31, WH=18.5, GAP=6, RH=30, RD=3.7, ZC=-1.35, HL=11;
+  var WL=31, WH=18.5, GAP=6, RH=20, RD=5.5, ZC=0, HX=2.0, HL=11;
   function buildSat(detail){
     var s=new T.Group();
     /* the mast: two longerons 1.2 m apart in the wing plane, one zig-zag between, the full span */
-    var L=2*(GAP+WL)+2, ML=Math.floor(L/2.6);
-    s.add(cyl(.05,.05,L,M.mast,0,-.6,0,6).rotateZ(Math.PI/2)); s.add(cyl(.05,.05,L,M.mast,0,.6,0,6).rotateZ(Math.PI/2));
-    var zig=inst(CG(.03,.03,Math.hypot(2.6,1.2),5),M.mast,ML);
-    for(var i=0;i<ML;i++){ var x=-L/2+i*2.6+1.3; put(zig,x,0,0,0,0,Math.atan2(2.6,1.2)*(i%2?1:-1)); }
+    var L=2*(GAP+WL)+2, ML=Math.floor(L/2.6), HB=3.2;   /* the mast stops short of the hub on both sides */
+    [-1,1].forEach(function(sd){ var ln=L/2-HB, cx=sd*(HB+ln/2);
+      s.add(cyl(.06,.06,ln,M.mast,cx,-.6,.62,6).rotateZ(Math.PI/2)); s.add(cyl(.06,.06,ln,M.mast,cx,.6,.62,6).rotateZ(Math.PI/2)); });
+    var zig=inst(CG(.035,.035,Math.hypot(2.6,1.2),5),M.mast,ML);
+    for(var i=0;i<ML;i++){ var x=-L/2+i*2.6+1.3; if(Math.abs(x)<HB+1.3) continue; put(zig,x,0,.62,0,0,Math.atan2(2.6,1.2)*(i%2?1:-1)); }
     s.add(zig);
     /* the wings: a blanket between an inner and an outer spar, cells to the sun, two seams */
     [-1,1].forEach(function(sd){
       var cx=sd*(GAP+WL/2);
       var w=box(WL,WH,.05,M.cell,cx,0,.35); w.receiveShadow=true; s.add(w);
       s.add(box(WL,WH,.04,M.cellBack,cx,0,.29));
-      s.add(box(WL,.14,.14,M.whiteEdge,cx,WH/6,.42)); s.add(box(WL,.14,.14,M.whiteEdge,cx,-WH/6,.42));
+      s.add(box(WL,.16,.03,M.tie,cx,WH/6,.38)); s.add(box(WL,.16,.03,M.tie,cx,-WH/6,.38));
       s.add(cyl(.10,.10,WH+2,M.spar,sd*GAP,0,.35,8)); s.add(cyl(.10,.10,WH+2,M.spar,sd*(GAP+WL),0,.35,8));
     });
     /* the radiator: a corrugated white wall beside the rack, in the plane that holds the sun */
-    s.add(box(.4,RH,RD,M.white,0,0,ZC,true));
-    var nr=Math.floor(RH/.5), ribs=inst(CG(.09,.09,RD,8),M.white,nr*2);
-    for(var q=0;q<nr;q++){ var ry2=-RH/2+.25+q*.5; put(ribs,-.2,ry2,ZC,Math.PI/2,0,0); put(ribs,.2,ry2,ZC,Math.PI/2,0,0); }
-    s.add(ribs);
-    s.add(box(.6,.6,RD+.4,M.whiteEdge,0,RH/2,ZC)); s.add(box(.6,.6,RD+.4,M.whiteEdge,0,-RH/2,ZC));
-    s.add(box(.6,RH+.4,.6,M.whiteEdge,0,0,ZC+RD/2)); s.add(box(.6,RH+.4,.6,M.whiteEdge,0,0,ZC-RD/2));
+    var sheet=new T.Mesh(BG(.3,RH,RD),M.sheet); sheet.position.set(0,0,0); sheet.castShadow=sheet.receiveShadow=true; s.add(sheet);
+    s.add(cyl(.09,.09,RH+8,M.mast,.25,0,0,8));
+    s.add(box(.36,.28,RD+.2,M.whiteEdge,0,RH/2,0)); s.add(box(.36,.28,RD+.2,M.whiteEdge,0,-RH/2,0));
+    s.add(box(.36,RH+.2,.28,M.whiteEdge,0,0,RD/2)); s.add(box(.36,RH+.2,.28,M.whiteEdge,0,0,-RD/2));
     /* the hub: the rack on the sun face of the mast */
-    var hub=new T.Group(); hub.position.set(0,0,.55); s.add(hub); hub.userData.sleds=[];
+    var hub=new T.Group(); hub.position.set(HX,0,0); s.add(hub); hub.userData.sleds=[];
+    hub.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(new T.Vector3(0,0,-1),new T.Vector3(-1,0,0),new T.Vector3(0,1,0)));
+    hub.add(box(HL+.6,3.0,1.1,M.rail,0,0,-.05,true)); hub.add(box(HL+.7,.08,.08,M.tie,0,-1.52,.5)); hub.add(box(HL+.7,.08,.08,M.tie,0,1.52,.5));
     [-1.35,1.35].forEach(function(ry){ hub.add(box(HL+.6,.10,.40,M.rail,0,ry,.55,true)); hub.add(box(HL+.6,.34,.10,M.rail,0,ry,.55)); hub.add(box(HL+.6,.10,.40,M.rail,0,ry,1.8)); hub.add(box(HL+.6,.34,.10,M.rail,0,ry,1.8)); });
 
     /* laser terminals at both ends, aimed along the orbit; star tracker; avionics; antenna */
@@ -2376,8 +2382,8 @@ function mountOrbit(host){
       for(var i3=0;i3<8;i3++){ var bx=(i3<4?-1:1)*(.85+(i3<4?3-i3:i3-4)*1.28); put(br,bx-.25,-1.45,1.1,Math.PI/2,0,0); put(br,bx+.25,1.5,1.1,Math.PI/2,0,0);
         put(qd,bx-.25,-1.2,1.18); put(qd,bx+.25,1.2,1.18); put(qn,bx-.25,-1.32,1.18,Math.PI/2,0,0); put(qn,bx+.25,1.32,1.18,Math.PI/2,0,0); }
       hub.add(br); hub.add(qd); hub.add(qn);
-      hub.add(tube([[HL/2+.4,1.8,.9],[HL/2-1,2.4,.4],[.6,2.6,-.4],[.35,3.2,-1.4]],.09,M.pipe,16));
-      hub.add(tube([[HL/2+.4,-1.75,.9],[HL/2-1,-2.4,.4],[.6,-2.6,-.4],[.35,-3.2,-1.4]],.09,M.pipe,16));
+      hub.add(tube([[HL/2+.4,1.8,.9],[HL/2-1,1.85,1.3],[.6,1.85,2.6],[.35,HX-.15,3.6]],.09,M.pipe,16));
+      hub.add(tube([[HL/2+.4,-1.75,.9],[HL/2-1,-1.2,1.3],[.6,.4,-2.6],[-.35,HX-.15,-3.6]],.09,M.pipe,16));
     }else{
       hub.add(box(HL-1,2.3,.5,M.lid,0,0,1.81)); }
     return s;
@@ -2390,7 +2396,7 @@ function mountOrbit(host){
   function onOrbit(theta){ return new T.Vector3(EC.x+Math.sin(theta)*OR, EC.y+Math.cos(theta)*OR, 0); }
   var nb=[]; [-2,-1,1,2].forEach(function(k){ var th=k*SP/OR, n=buildSat(false); n.position.copy(onOrbit(th)); n.rotation.z=-th; scene.add(n); nb.push({o:n,k:k}); });
   var far=[]; for(var k3=-14;k3<=14;k3++){ if(Math.abs(k3)<=2) continue; far.push(k3); }
-  var fw=inst(BG(WL,WH,.4),M.cellBack,far.length*2), fr=inst(BG(.6,RH,RD),M.white,far.length), fm=inst(BG(2*(GAP+WL),1.2,1.2),M.mast,far.length);
+  var fw=inst(BG(WL,WH,.4),M.cellBack,far.length*2), fr=inst(BG(.4,RH,RD),M.white,far.length), fm=inst(BG(2*(GAP+WL),1.2,1.2),M.mast,far.length);
   far.forEach(function(k){ var th=k*SP/OR, p=onOrbit(th);
     put(fw,p.x+Math.cos(th)*(GAP+WL/2),p.y-Math.sin(th)*(GAP+WL/2),p.z,0,0,-th); put(fw,p.x-Math.cos(th)*(GAP+WL/2),p.y+Math.sin(th)*(GAP+WL/2),p.z,0,0,-th);
     put(fr,p.x,p.y,p.z+ZC,0,0,-th); put(fm,p.x,p.y,p.z,0,0,-th); });
@@ -2399,13 +2405,14 @@ function mountOrbit(host){
   var ends=[], chords=[];
   for(var k4=-14;k4<14;k4++){ var a=onOrbit(k4*SP/OR), b=onOrbit((k4+1)*SP/OR);
     var ta=k4*SP/OR, tb=(k4+1)*SP/OR;
-    a.add(new T.Vector3(Math.cos(ta)*(HL/2+1.9),-Math.sin(ta)*(HL/2+1.9),1.45)); b.add(new T.Vector3(-Math.cos(tb)*(HL/2+1.9),Math.sin(tb)*(HL/2+1.9),1.45));
+    a.add(new T.Vector3(Math.cos(ta)*HX,-Math.sin(ta)*HX,0)); b.add(new T.Vector3(Math.cos(tb)*HX,-Math.sin(tb)*HX,0));
     ends.push(a.x,a.y,a.z,b.x,b.y,b.z); chords.push(new T.LineCurve3(a,b)); }
   var lg=G(new T.BufferGeometry()); lg.setAttribute('position',new T.BufferAttribute(new Float32Array(ends),3));
-  var lm=new T.LineBasicMaterial({color:C.core,transparent:true,opacity:.55,blending:T.AdditiveBlending,depthWrite:false}); mats.push(lm);
+  var lm=new T.LineBasicMaterial({color:C.core,transparent:true,opacity:.07,blending:T.AdditiveBlending,depthWrite:false}); mats.push(lm);
   scene.add(new T.LineSegments(lg,lm));
-  var NP=chords.length*2, pulses=inst(SG(1,8),lit(C.core,3),NP); scene.add(pulses);
-  var pulseT=[]; for(var i4=0;i4<NP;i4++){ put(pulses,0,-99999,0); pulseT.push({c:chords[i4>>1],t:Math.random(),d:i4%2?1:-1,v:.10+Math.random()*.08}); }
+  /* traffic: a short burst on a link now and then, never a steady line */
+  var NP=chords.length, pulses=inst(SG(1,8),lit(C.core,2.4),NP); scene.add(pulses);
+  var pulseT=[]; for(var i4=0;i4<NP;i4++){ put(pulses,0,-99999,0); pulseT.push({c:chords[i4],t:Math.random(),d:i4%2?1:-1,v:.35+Math.random()*.25,ph:Math.random()*40,gap:6+Math.random()*9}); }
 
   /* ---- the ring: a gigawatt of them on the terminator; markers exaggerated ---- */
   var NR=8000, ring=inst(BG(12,3,3),lit(C.cyan,1.5),NR);
@@ -2417,8 +2424,8 @@ function mountOrbit(host){
   /* ---- environment: black sky, the sun, earthshine below ---- */
   var envTex=canvasTex(512,256,function(x,w,h){ x.fillStyle='#000'; x.fillRect(0,0,w,h);
     var su=(Math.atan2(SUN.z,SUN.x)/(Math.PI*2)+.5)*w, sv=(.5-Math.asin(SUN.y)/Math.PI)*h;
-    var gb=x.createLinearGradient(0,0,0,h); gb.addColorStop(0,'#5c6066'); gb.addColorStop(.5,'#2a2d31'); gb.addColorStop(1,'#0e0f11'); x.fillStyle=gb; x.fillRect(0,0,w,h);
-    var g2=x.createRadialGradient(su,sv,0,su,sv,w*.34); g2.addColorStop(0,'#ffffff'); g2.addColorStop(.12,'rgba(245,246,248,.9)'); g2.addColorStop(1,'rgba(245,246,248,0)');
+    var gb=x.createLinearGradient(0,0,0,h); gb.addColorStop(0,'#6a6e74'); gb.addColorStop(.42,'#3a3d42'); gb.addColorStop(.62,'#1c1e22'); gb.addColorStop(1,'#0a0b0d'); x.fillStyle=gb; x.fillRect(0,0,w,h);
+    var g2=x.createRadialGradient(su,sv,0,su,sv,w*.42); g2.addColorStop(0,'#ffffff'); g2.addColorStop(.10,'rgba(245,246,248,.92)'); g2.addColorStop(.5,'rgba(235,238,242,.25)'); g2.addColorStop(1,'rgba(245,246,248,0)');
     x.fillStyle=g2; x.fillRect(0,0,w,h);
   },{srgb:true});
   envTex.mapping=T.EquirectangularReflectionMapping;
@@ -2427,13 +2434,15 @@ function mountOrbit(host){
   function F(id,n,era,t,w,h,dir,up,pin){ var d=V(dir).normalize();
     return {id:id,n:n,era:era,t:V(t),w:w,h:h,th:Math.atan2(d.z,d.x),ph:Math.acos(d.y),up:up,pin:pin}; }
   var SLED=.85+1.28, WX=GAP+WL/2;
-  var WIDE=F('wide',null,-1,[0,0,0],46,26,[-.5,-.55,.7],ZUP,null);
+  function hw(l){ return [HX-l[1], l[2], -l[0]]; }   /* rack-local to world */
+  function hd(d){ return [-d[1], d[2], -d[0]]; }
+  var WIDE=F('wide',null,-1,[0,0,0],44,24,[.28,.26,.92],YUP,null);
   var SPOTS=[
-    F('rack',  'The rack',         0,[-2.4,-1.2,1.3],7.6,4.3,[-.6,-.55,.58],ZUP,null),
-    F('gpus',  null,               0,[SLED+1.4,-.4,1.3],3.6,2.0,[-.55,-.55,.63],ZUP,null),
-    F('sat',   null,               1,[0,0,0],     44,28,  [.8,.4,.45],   ZUP,null),
+    F('rack',  'The rack',         0,hw([-2.4,-1.2,1.3]),7.6,4.3,hd([-.6,-.55,.58]),YUP,null),
+    F('gpus',  null,               0,hw([SLED+1.4,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
+    F('sat',   null,               1,[0,0,0],     44,26,  [.25,.5,.83],  YUP,null),
     F('wings', 'Solar',            1,[GAP+8,0,0], 18,11,  [-.35,-.62,.7],ZUP,null),
-    F('radiator','Radiator',       1,[0,-8,ZC],   9,11,   [.9,-.3,.35],  ZUP,null),
+    F('radiator','Radiator',       1,[0,-3,0],    10,11,  [.9,-.25,.35], YUP,null),
     F('sso',   null,               1,EC.toArray(),30000,27000,[1,.12,.3],YUP,null),
     F('laser', null,               2,[0,0,0],     4200,2200,[.05,.4,.92],YUP,null),
     F('string','Constellation',    2,[0,-1500,0], 24000,13000,[0,.5,.87],YUP,null),
@@ -2441,10 +2450,10 @@ function mountOrbit(host){
   ];
   SPOTS[1].under='rack'; SPOTS[2].under='wings'; SPOTS[5].under='radiator'; SPOTS[6].under='string'; SPOTS[8].under='string';
   /* where each flyover ends */
-  var GL={rack:F('',null,0,[-1.2,-.9,1.3],6.6,3.8,[-.6,-.5,.62],ZUP,null),
-          gpus:F('',null,0,[SLED-1.2,-.4,1.3],3.6,2.0,[-.55,-.55,.63],ZUP,null),
+  var GL={rack:F('',null,0,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
+          gpus:F('',null,0,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
           wings:F('',null,1,[GAP+WL-6,-4,0],4.5,2.8,[-.45,-.55,.7],ZUP,null),
-          radiator:F('',null,1,[0,13.5,ZC],4.2,3.4,[.32,.92,.24],ZUP,null)};
+          radiator:F('',null,1,[0,9,0],5,4,[.38,.9,.2],ZUP,null)};
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   var VIEWS=[byId.rack,byId.sat,byId.string];
   var CHAPTERS=[[byId.rack,8,GL.rack],[byId.gpus,6,GL.gpus],[byId.sat,4],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
@@ -2456,9 +2465,11 @@ function mountOrbit(host){
     earth.rotation.y+=dt*.003; clouds.rotation.y+=dt*.0036;
     sceneT+=dt; t=sceneT;
     sleds.forEach(function(q){ var f=Math.max(0,Math.min(1,(t-q.t0)/q.dur)); f=f*f*(3-2*f); q.g.position.y=(t<q.t0)?-q.pull:-q.pull*(1-f); });
-    var ps=Math.max(.12,cam.position.length()*.004);
-    pulseT.forEach(function(p,i){ p.t=(p.t+dt*p.v*p.d+1)%1; p.c.getPoint(p.t,tmp);
-      dummy.position.copy(tmp); dummy.rotation.set(0,0,0); dummy.scale.setScalar(ps*(.8+.4*Math.sin(t*6+i))); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
+    var ps=Math.max(.10,cam.position.length()*.003);
+    pulseT.forEach(function(p,i){ var cyc=(t+p.ph)%p.gap, on=cyc<1.6;
+      if(on){ p.t=(p.t+dt*p.v*p.d+1)%1; p.c.getPoint(p.t,tmp); dummy.position.copy(tmp); dummy.scale.setScalar(ps*(1-Math.abs(cyc-.8)/.8*.6)); }
+      else { dummy.position.set(0,-99999,0); dummy.scale.setScalar(1); }
+      dummy.rotation.set(0,0,0); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
     pulses.instanceMatrix.needsUpdate=true;
   }
   var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,

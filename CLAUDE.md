@@ -172,16 +172,29 @@ and rejected as cartoonish or unstable.
 **The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
 rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
 pins, chrome, dispose — a scene builds its world and hands the rig its stops).
-It is built to the user's reference video and the published AI1 figures,
-not invented: 74 m wingspan (`WL` 31 either side of a 12 m hub), wings
-18.5 m wide in three panels, a 30 m × 3.7 m radiator plate (≈110 m²)
-standing THROUGH the hub, perpendicular to the mast, in the plane that holds
-the sun so it stays in its own shade, with four casings of compute on each
-side of it — never a wall alongside the rack, never parallel to the mast. A
-planar zig-zag mast the full span; the rack as satin-steel casings on two
-graphite rails with coolant mains and U-bends; laser terminals fore and aft.
-The sun lies exactly in the plate's plane (dawn-dusk orbit) — tilt it and the
-plate shadows the rack. Rack shots hang the camera with Z up
+It is built to the user's reference video and the published AI1 spec sheet,
+not invented. Axes: X along the mast, Y along the orbit, Z toward the sun.
+Geometry, settled after three wrong tries: two wings in the X–Y plane facing
+the sun (`WL` 31 × `WH` 18.5 each, three strips, 74 m tip to tip, mast on
+their sun face, stopped short of the hub); the radiator a single sheet
+`RH` 20 tall × `RD` 5.5 wide (the published 110 m²) standing in the Y–Z
+plane — long axis along the orbit, EDGE-ON TO THE SUN, so it is a thin
+blade from the sun side and a full face looking down the mast; a boom down
+its centre past both ends. The compute rack lies ON THE SHEET'S +X FACE:
+its rails run ALONG Z (the sun axis), across the sheet's short edge, wider
+than the sheet so casings hang past it on both sides; the casings' lids face
++Y (along the sheet's long axis) and the casings SLIDE OUT ALONG +X, away
+from the sheet's face, and dock back toward it — as the compute close-up
+shows, ribbed sheet behind, rails across, casings coming out toward the
+viewer. The hub group carries the basis (local X→−Z, Y→−X, Z→+Y) and its
+framings go through `hw()`/`hd()` with `YUP`. The three wrong tries: a wall
+beside the rack parallel to the mast; the sheet in the wing plane with the
+rack piercing it; the rack on the face but sliding along the sheet. The front-on reference shows no wings
+(they are edge-on) and the rack crossing the sheet face horizontally — that
+is the test. The rack is satin-steel casings on two graphite rails over a
+deep chassis, coolant mains with U-bends, laser terminals fore and aft.
+Wings are blue-grey cells with a broad specular band and two dark seams.
+Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
 its `up` and the crane blends it. Three parts on the bar — Compute,
 Satellite, Constellation — and four chips: the rack · solar, radiator ·
@@ -214,7 +227,10 @@ figures: 40 per launch, 125 KW, 5 MW per launch, 1 GW = 200 launches ·
 8,000; KW is the user's spelling, kept for MW/GW consistency) shows for the constellation group. The Earth is NASA Blue Marble /
 Black Marble / water mask / clouds (`public/img/earth/`, see SOURCE.md) on a
 stage sphere of R 24 km with the string of satellites 1.5 km apart on the
-horizon; the satellite is over-scale against it on purpose. Never an
+horizon; the satellite is over-scale against it on purpose. The laser links
+are one-pixel lines at 7% opacity with one short burst of traffic per link
+every 6–15 s — faint and intermittent, never a steady line that reads as a
+cable. Never an
 equirectangular land-only texture, never a launch stack, never a spacing
 that wraps the orbit.
 
