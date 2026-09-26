@@ -176,11 +176,13 @@ It is built to the user's reference video and the published AI1 spec sheet,
 not invented. Axes: X along the mast, Y along the orbit, Z toward the sun.
 Geometry, settled after three wrong tries: two wings in the X–Y plane facing
 the sun (`WL` 31 × `WH` 18.5 each, three strips, 74 m tip to tip, mast on
-their sun face, stopped short of the hub); the radiator a single sheet
-`RH` 20 tall × `RD` 5.5 wide (the published 110 m²) standing in the Y–Z
-plane — long axis along the orbit, EDGE-ON TO THE SUN, so it is a thin
+their sun face, stopped short of the hub); the radiator a single thin
+aluminium sheet, `RH` 28 tall × `RD` 4 wide (≈110 m², and taller than the
+wings as every reference shows), 6 cm thick, standing in the Y–Z plane — long axis along the orbit, EDGE-ON TO THE SUN, so it is a thin
 blade from the sun side and a full face looking down the mast; a boom down
-its centre past both ends. The compute rack lies ON THE SHEET'S +X FACE:
+its centre past both ends. There is a compute rack ON EACH FACE OF THE SHEET (+X and −X, mirrored,
+both docking together), and each is an OPEN FRAME — rails, ties, pipes and
+the cold plates, never a solid block beneath the trays. Each rack:
 its rails run ALONG Z (the sun axis), across the sheet's short edge, wider
 than the sheet so casings hang past it on both sides; the casings' lids face
 +Y (along the sheet's long axis) and the casings SLIDE OUT ALONG +X, away
@@ -202,15 +204,18 @@ constellation. The chapters are the storyline: the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → the whole satellite → solar (a flyover down the wing) →
 radiator (a flyover that ends looking along its edge, so the sheet reads
-thin) → sun-synchronous → laser links → the constellation → 1 GW in orbit. A
+thin) → laser links (the neighbours, close) → the constellation (the string
+on the horizon, held). The film never pulls out to the whole Earth: the
+point of the last chapters is the satellites working together, and a
+whole-orbit view then a zoom back in read as a mistake. A
 chapter may glide from its framing to a second one over its hold
 (`CHAPTERS[i][2]`); a chapter with no name lights the chip it sits `under`.
 The look is the reference's: monochrome studio metal — graphite rails and
 ties, satin-steel casings (thick, chamfered nose, `lidShape` extruded to
-0.5 m), a warm-grey radiator wall with wide soft corrugation (half-sunk
-cylinders at 1.8 m pitch), near-black cells — under a neutral white key, two
-soft fills and a dark grey studio environment. No warm sun tint, no white
-plastic, no blue tint anywhere on the hardware.
+0.5 m), the radiator a quiet light-grey sheet with fine horizontal flow
+lines (`sheetTex`) — under a neutral white key, two soft fills and a dark
+grey studio environment with one broad soft sun. No warm sun tint, no white
+plastic, no blue tint on the hardware; the blue-grey is the cells only.
 The rig calls `cfg.onChapter(framing)` as each chapter begins; the orbital
 scene uses it to dock the casings: three white lids slide in from outside
 along the rails together and stay, on the rack chapter, exactly as the video
@@ -226,8 +231,8 @@ down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the 
 figures: 40 per launch, 125 KW, 5 MW per launch, 1 GW = 200 launches ·
 8,000; KW is the user's spelling, kept for MW/GW consistency) shows for the constellation group. The Earth is NASA Blue Marble /
 Black Marble / water mask / clouds (`public/img/earth/`, see SOURCE.md) on a
-stage sphere of R 24 km with the string of satellites 1.5 km apart on the
-horizon; the satellite is over-scale against it on purpose. The laser links
+stage sphere of R 24 km with the string of satellites 520 m apart on the
+horizon (a stage spacing so the string reads as satellites, not dots); the satellite is over-scale against it on purpose. The laser links
 are one-pixel lines at 7% opacity with one short burst of traffic per link
 every 6–15 s — faint and intermittent, never a steady line that reads as a
 cable. Never an
