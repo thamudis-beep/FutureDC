@@ -177,10 +177,14 @@ not invented. Axes: X along the mast, Y along the orbit, Z toward the sun.
 Geometry, settled after three wrong tries: two wings in the X–Y plane facing
 the sun (`WL` 31 × `WH` 18.5 each, three strips, 74 m tip to tip, mast on
 their sun face, stopped short of the hub); the radiator a single thin
-aluminium sheet, `RH` 28 tall × `RD` 4 wide (≈110 m², and taller than the
-wings as every reference shows), 6 cm thick, standing in the Y–Z plane — long axis along the orbit, EDGE-ON TO THE SUN, so it is a thin
+aluminium sheet, `RH` 24 tall × `RD` 9 wide, 6 cm thick — taller than the
+wings and about 80% of the rack's length, the proportions the user read
+off the references (that is more area than the spec's 110 m²; the eye
+won), standing in the Y–Z plane — long axis along the orbit, EDGE-ON TO THE SUN, so it is a thin
 blade from the sun side and a full face looking down the mast; a boom down
-its centre past both ends. There is a compute rack ON EACH FACE OF THE SHEET (+X and −X, mirrored,
+its centre, flush with its ends. NOTHING STICKS OUT: no boom past the
+sheet, no spar past a wing edge, no mast past a wing tip — the user calls
+every one of them a stick. There is a compute rack ON EACH FACE OF THE SHEET (+X and −X, mirrored,
 both docking together), and each is an OPEN FRAME — rails, ties, pipes and
 the cold plates, never a solid block beneath the trays. Each rack:
 its rails run ALONG Z (the sun axis), across the sheet's short edge, wider

@@ -341,7 +341,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v88 · thin sheet</div>
+<div class="ver">v89 · nothing sticks out</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2307,7 +2307,7 @@ function mountOrbit(host){
   /* the radiator sheet: fine flow channels drawn across it, pitch 0.5 m over its 33 m */
   var sheetTex=canvasTex(64,512,function(x,w,h){ x.fillStyle='#a8a49f'; x.fillRect(0,0,w,h);
     for(var i=0;i<h;i+=8){ x.fillStyle='rgba(255,255,255,.07)'; x.fillRect(0,i,w,3); x.fillStyle='rgba(0,0,0,.09)'; x.fillRect(0,i+4,w,2); } },{repeat:[1,1],srgb:true});
-  sheetTex.wrapS=sheetTex.wrapT=T.RepeatWrapping; sheetTex.repeat.set(1,28/.4/64);
+  sheetTex.wrapS=sheetTex.wrapT=T.RepeatWrapping; sheetTex.repeat.set(1,24/.4/64);
   M.sheet=mat(0xffffff,{r:.5,m:.25,env:1.0,s:T.DoubleSide}); M.sheet.map=sheetTex;
 
   /* ---------------------------------------------------------
@@ -2316,11 +2316,11 @@ function mountOrbit(host){
      beside the rack; the rack 11 m of rails on the sun face.
      --------------------------------------------------------- */
   /* AI1 to the published figures: 74 m wingspan, 30 m deployed height, 110 m² of radiator */
-  var WL=31, WH=18.5, GAP=6, RH=28, RD=4, ZC=0, HX=2.0, HL=11;
+  var WL=31, WH=18.5, GAP=6, RH=24, RD=9, ZC=0, HX=2.0, HL=11;
   function buildSat(detail){
     var s=new T.Group();
     /* the mast: two longerons 1.2 m apart in the wing plane, one zig-zag between, the full span */
-    var L=2*(GAP+WL)+2, ML=Math.floor(L/2.6), HB=3.2;   /* the mast stops short of the hub on both sides */
+    var L=2*(GAP+WL), ML=Math.floor(L/2.6), HB=3.2;   /* the mast stops short of the hub on both sides */
     [-1,1].forEach(function(sd){ var ln=L/2-HB, cx=sd*(HB+ln/2);
       s.add(cyl(.06,.06,ln,M.mast,cx,-.6,.62,6).rotateZ(Math.PI/2)); s.add(cyl(.06,.06,ln,M.mast,cx,.6,.62,6).rotateZ(Math.PI/2)); });
     var zig=inst(CG(.035,.035,Math.hypot(2.6,1.2),5),M.mast,ML);
@@ -2332,11 +2332,11 @@ function mountOrbit(host){
       var w=box(WL,WH,.05,M.cell,cx,0,.35); w.receiveShadow=true; s.add(w);
       s.add(box(WL,WH,.04,M.cellBack,cx,0,.29));
       s.add(box(WL,.16,.03,M.tie,cx,WH/6,.38)); s.add(box(WL,.16,.03,M.tie,cx,-WH/6,.38));
-      s.add(cyl(.10,.10,WH+2,M.spar,sd*GAP,0,.35,8)); s.add(cyl(.10,.10,WH+2,M.spar,sd*(GAP+WL),0,.35,8));
+      s.add(cyl(.10,.10,WH,M.spar,sd*GAP,0,.35,8)); s.add(cyl(.10,.10,WH,M.spar,sd*(GAP+WL),0,.35,8));
     });
     /* the radiator: a corrugated white wall beside the rack, in the plane that holds the sun */
     var sheet=new T.Mesh(BG(.06,RH,RD),M.sheet); sheet.position.set(0,0,0); sheet.castShadow=sheet.receiveShadow=true; s.add(sheet);
-    s.add(cyl(.09,.09,RH+8,M.mast,.15,0,0,8));
+    s.add(cyl(.09,.09,RH-.3,M.mast,.15,0,0,8));
     s.add(box(.12,.16,RD+.1,M.whiteEdge,0,RH/2,0)); s.add(box(.12,.16,RD+.1,M.whiteEdge,0,-RH/2,0));
     s.add(box(.12,RH+.1,.16,M.whiteEdge,0,0,RD/2)); s.add(box(.12,RH+.1,.16,M.whiteEdge,0,0,-RD/2));
     /* the hub: a rack on each face of the sheet, an open frame — rails, ties, pipes, plates, nothing solid beneath */
@@ -2444,7 +2444,7 @@ function mountOrbit(host){
     F('gpus',  null,               0,hw([SLED+1.4,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
     F('sat',   null,               1,[0,0,0],     44,26,  [.25,.5,.83],  YUP,null),
     F('wings', 'Solar',            1,[GAP+8,0,0], 18,11,  [-.35,-.62,.7],ZUP,null),
-    F('radiator','Radiator',       1,[0,-4,0],    12,14,  [.9,-.25,.35], YUP,null),
+    F('radiator','Radiator',       1,[0,-3,0],    15,15,  [.9,-.25,.35], YUP,null),
     F('laser', null,               2,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
     F('string','Constellation',    2,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null)
   ];
@@ -2453,7 +2453,7 @@ function mountOrbit(host){
   var GL={rack:F('',null,0,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
           gpus:F('',null,0,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
           wings:F('',null,1,[GAP+WL-6,-4,0],4.5,2.8,[-.45,-.55,.7],ZUP,null),
-          radiator:F('',null,1,[0,13,0],5,4,[.38,.9,.2],ZUP,null)};
+          radiator:F('',null,1,[0,11,0],7,5,[.38,.9,.2],ZUP,null)};
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   var VIEWS=[byId.rack,byId.sat,byId.string];
   var CHAPTERS=[[byId.rack,8,GL.rack],[byId.gpus,6,GL.gpus],[byId.sat,4],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
