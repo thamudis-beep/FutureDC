@@ -164,9 +164,16 @@ long-haul conduit at z = −41 clears the world map. Each stage groups the
 parts a note can light under `userData.parts` (the colo's building and
 racks; the campus's grid, gas, bess, bld, hall, cool; the planet's fab,
 cities, orb, mono, smr, phys) and `NOTES` names them by stop. Figures on
-the cards are the user's (1 GW IT, ~1.2 GW facility, 34 × 35 MW, 120
-containers, ~140 kW / rack, ~440 racks · 62 MW per hall); the rest is a
-line of what the thing is. The rig for this scene runs a log depth buffer
+the cards are the user's (1 GW IT, ~1.2 GW facility, ~7,100 racks at
+~140 kW, 34 × 35 MW, 120 containers, ~440 racks · ~62 MW per hall); the
+rest is a line of what the thing is, kept general — no vendor SKU on the
+campus card ("keep more general"), no "gas is prime, grid is the tie".
+The campus stop carries `tags`, small dot-and-label marks in the scene
+(the rig projects them like dims), one on each building, the coolers, the
+gas turbines, the BESS and the substation, so the whole build reads from
+the one aerial. Gas turbines and the battery yard are separate stops with
+their own cards (BESS: load shaping, ramp and backup on the MV bus). The
+Today chips are 1 GW campus · Data hall · Gas turbines · BESS · Grid. The rig for this scene runs a log depth buffer
 with near .02 and `minR` .25 so the camera can stand inside a hall at
 model scale.
 
@@ -185,10 +192,15 @@ buildings 220 × 90 × 12 in two rows of two, each with its electrical pad
 on the west (transformers, switchgear, a local battery line) and its dry
 cooler yard 40 m east (closed loop, no plume, pipe rack over the road) ·
 admin and NOC at the south gate · a 24 m spine road with the MV duct bank
-under it. Building A is cut open: four halls of 448 racks (eight rows of
-seven groups of eight, 4.2 m pitch; 0.6 × 1.1 × 2.5 racks, dark grey, a
-blue manifold line at the rear), a support strip along the north wall
-with the CDUs, the leaf switches and the fibre tray. No NVLink is drawn;
+under it. Building A is cut open: four halls of 448 racks (eight rows of 56 at
+4.2 m pitch, fronts to the cold aisles, built with `rackField` in two
+groups turned ±90° so the kit's fronts face ±x; each rack 0.6 × 1.1 × 2.5
+with its trays, LEDs, the NVSwitch band and a manifold each side; over
+every row a fibre tray and a busway with a live strip, headers beneath;
+lamps across the hall; `shadow:false` on the racks and nine units a rack,
+because eighteen put the scene past 1 M triangles), a support strip along
+the north wall with the CDUs and their risers, the leaf switches and the
+fibre tray. "Simple blocks" for the racks were rejected. No NVLink is drawn;
 it never leaves the rack. Gas is the prime source and the grid the tie,
 so there are no gensets on the building face and no cooling towers. The
 film's campus chapter glides from the aerial to a low oblique over

@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v96 · in order</div>
+<div class="ver">v97 · the whole build</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1427,7 +1427,7 @@ function sceneRig(T,host,K,scene,cfg){
 
   /* ---- notes: for a stop that has one, the thing glows as the camera comes to it, and once the crane has
      settled a ring sits on it with a leader to a card — what it is, and its figures. DOM over the canvas ---- */
-  var notes=cfg.notes||{}, noteIds=Object.keys(notes), nShown=null, nAlpha=0, npv=new T.Vector3(), npv2=new T.Vector3(), nT=0, nDims=[];
+  var notes=cfg.notes||{}, noteIds=Object.keys(notes), nShown=null, nAlpha=0, npv=new T.Vector3(), npv2=new T.Vector3(), nT=0, nDims=[], nTags=[];
   var nSvg=ui.querySelector('.e3d-svg'), nCard=ui.querySelector('.e3d-note'), nDimG=nSvg&&nSvg.querySelector('.dims'),
       nLine=nSvg&&nSvg.querySelector(':scope>line'), nRing=nSvg&&nSvg.querySelector('.o'), nDot=nSvg&&nSvg.querySelector('.i');
   var SVGNS='http://www.w3.org/2000/svg';
@@ -1483,9 +1483,27 @@ function sceneRig(T,host,K,scene,cfg){
       ['l','t1','t2'].forEach(function(k){ var e=document.createElementNS(SVGNS,'line'); e.setAttribute('stroke',n.hex); e.setAttribute('stroke-width',k==='l'?'1':'1.2'); e.setAttribute('opacity',k==='l'?'.75':'.9'); g.appendChild(e); o[k]=e; });
       var bg=document.createElementNS(SVGNS,'rect'); bg.setAttribute('fill','rgba(8,10,14,.72)'); bg.setAttribute('rx','4'); g.appendChild(bg); o.bg=bg;
       var tx=document.createElementNS(SVGNS,'text'); tx.setAttribute('fill',n.hex); tx.setAttribute('text-anchor','middle'); tx.textContent=d.l; g.appendChild(tx); o.tx=tx;
-      nDimG.appendChild(g); nDims.push(o); }); }
+      nDimG.appendChild(g); nDims.push(o); });
+    /* tags: a dot on a thing and a short label beside it */
+    nTags=[];
+    (n.tags||[]).forEach(function(tg){ var g=document.createElementNS(SVGNS,'g'), o={g:g,at:V3(tg.at)};
+      var c=document.createElementNS(SVGNS,'circle'); c.setAttribute('r','2.6'); c.setAttribute('fill',n.hex); g.appendChild(c); o.c=c;
+      var bg=document.createElementNS(SVGNS,'rect'); bg.setAttribute('fill','rgba(8,10,14,.72)'); bg.setAttribute('rx','4'); g.appendChild(bg); o.bg=bg;
+      var tx=document.createElementNS(SVGNS,'text'); tx.setAttribute('fill','#e9ebf2'); tx.textContent=tg.l; g.appendChild(tx); o.tx=tx;
+      nDimG.appendChild(g); nTags.push(o); }); }
   function V3(p){ return p.isVector3?p:new T.Vector3(p[0],p[1],p[2]); }
   function dimsTick(w,h,ox,oy){
+    /* tags: project, then push any label that lands on an earlier one down below it */
+    var placed=[];
+    nTags.forEach(function(d){
+      npv.copy(d.at).project(camera);
+      if(npv.z>1||Math.abs(npv.x)>1||Math.abs(npv.y)>1){ d.g.style.opacity=0; return; }
+      var ax=(npv.x+1)/2*w, ay=(1-npv.y)/2*h; d.g.style.opacity=1;
+      d.c.setAttribute('cx',ax); d.c.setAttribute('cy',ay); d.tx.setAttribute('x',ax+9); d.tx.setAttribute('y',ay+4);
+      var bb=d.tx.getBBox(), bx=bb.x-5, by=bb.y-2, bw=bb.width+10, bh=bb.height+4, ly=ay;
+      for(var k=0;k<placed.length;k++){ var q=placed[k]; if(bx<q.x+q.w&&bx+bw>q.x&&by<q.y+q.h&&by+bh>q.y){ var dy=q.y+q.h+3-by; by+=dy; ly+=dy; k=-1; } }
+      d.tx.setAttribute('y',ly+4); d.bg.setAttribute('x',bx); d.bg.setAttribute('y',by); d.bg.setAttribute('width',bw); d.bg.setAttribute('height',bh);
+      placed.push({x:bx,y:by,w:bw,h:bh}); });
     nDims.forEach(function(d){
       npv.copy(d.a).project(camera); npv2.copy(d.b).project(camera);
       if(npv.z>1||npv2.z>1){ d.g.style.opacity=0; return; }
@@ -1677,7 +1695,7 @@ function mountEras(host){
     var bezelM=mat(o.bezel||0x2c333c,{r:.66,m:.5});
     var ledM=lit(accent, o.ledI||2.4);
 
-    var fr=inst(BG(w,h,d),frameM,n,true);
+    var fr=inst(BG(w,h,d),frameM,n,o.shadow!==false);
     var ra=inst(BG(.055,h*.92,.055),railM,n*4);
     var uh=(h*.90)/units, ub=uh*.72;
     var bz=inst(BG(w*.94,ub,.055),bezelM,n*units);
@@ -1989,19 +2007,27 @@ function mountEras(host){
       for(var b2=0;b2<10;b2++) u.add(B(2,2.4,1,white,x-12,z+8+b2*8,0));
       return u; }
     building(BX[0],BZ[0],true); building(BX[1],BZ[0],false); building(BX[0],BZ[1],false); building(BX[1],BZ[1],false);
-    /* inside A: four halls of 448 racks — eight rows along the depth, each seven groups of eight — CDUs and leaf switches on the support strip.
-       A rack is 0.6 wide, 1.1 deep, 2.5 tall, dark grey, a blue manifold line at the rear; network racks are the same shell, shorter, no manifold */
-    var rackF=inst(BG(1.1,2.5,.6),mat(0x262b32,{r:.7,m:.5}),448*4,true), rackP=inst(BG(.03,2.3,.56),part,448*4), rackM=inst(BG(.05,2.3,.05),lit(C.aqua,1.1),448*4);
-    var cdu=inst(BG(1.2,2.0,1.0),mat(0x2a313a,{r:.7,m:.5}),56*4), leaf=inst(BG(1.1,2.0,.6),mat(0x232a33,{r:.7,m:.5}),10*4), tray=inst(BG(48,.15,.5),steel,4);
-    for(var hh=0;hh<4;hh++){ var hx=BX[0]+1+hh*56, hz=BZ[0]+6;
+    /* inside A: four halls. Eight rows of 56 racks at 4.2 m pitch, fronts to the cold aisles (two groups, turned so the
+       rack kit's fronts face ±x); each rack 0.6 × 1.1 × 2.5 with its trays, LEDs, the NVSwitch band and a manifold each side.
+       Over every row a fibre tray and a busway with a live strip; headers under it; lamps across the hall; the support
+       strip on the north wall: CDUs with their risers, the leaf switches, the scale-out fibre tray. No NVLink: it never leaves the rack */
+    var RF=new T.Group(), RB=new T.Group(); RF.rotation.y=Math.PI/2; RB.rotation.y=-Math.PI/2; hallG.add(RF); hallG.add(RB);
+    var busM=mat(C.steel,{r:.5,m:.8}), trayI=inst(BG(.7,.12,34),steel,32), busI=inst(BG(.22,.22,34),busM,32), busLI=inst(BG(.06,.06,34),lit(C.forgeLit,1.6),32),
+        supI=inst(BG(.16,.16,34),sup,32), retI=inst(BG(.16,.16,34),ret,32), lampI=inst(BG(48,.08,.14),lit(0xcfe0f5,1.4),32),
+        cduB=inst(BG(1.2,2.0,1.0),mat(0x2a313a,{r:.7,m:.5}),56*4), cduL=inst(BG(1.1,.05,.05),lit(C.aqua,1.3),56*4), cduP=inst(CG(.06,.06,1.2,6),sup,56*4), tray=inst(BG(48,.15,.5),steel,4);
+    for(var hh=0;hh<4;hh++){ var hx=BX[0]+1+hh*56, hz=BZ[0]+6, zc=hz+30;
       hallG.add(B(50,.1,70,mat(0x1f242b,{r:.92,m:.2}),hx+25,hz+35,.4));
-      for(var r3=0;r3<8;r3++){ var rx=hx+9+r3*4.2, face=r3%2?1:-1;
-        for(var gp2=0;gp2<7;gp2++) for(var i3=0;i3<8;i3++){ var rz=hz+4+gp2*7.4+i3*.6+.3;
-          put(rackF,rx,1.65,-rz); put(rackP,rx+.56*face,1.6,-rz); put(rackM,rx-.5*face,1.6,-rz); } }
-      for(var c4=0;c4<56;c4++) put(cdu,hx+2+c4*.85,1.4,-(hz+67.5));
-      for(var l4=0;l4<10;l4++) put(leaf,hx+2+l4*.7,1.4,-(hz+65.5));
+      var grid=new T.GridHelper(70,35,0x3b444f,0x2a323c); grid.material.transparent=true; grid.material.opacity=.35; mats.push(grid.material);
+      grid.scale.x=50/70; grid.position.set(hx+25,.52,-(hz+35)); hallG.add(grid);
+      rackField(RF,{x:zc,z:hx+21.6,y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:9,band:[3,5],manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
+      rackField(RB,{x:-zc,z:-(hx+25.8),y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:9,band:[3,5],manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
+      for(var r3=0;r3<8;r3++){ var rx=hx+9+r3*4.2, face=r3%2?-1:1;
+        put(trayI,rx,3.4,-zc); put(busI,rx+face*.9,3.9,-zc); put(busLI,rx+face*.9,3.77,-zc); put(supI,rx-face*.7,.3,-zc); put(retI,rx-face*.7,.55,-zc); }
+      for(var l5=0;l5<8;l5++) put(lampI,hx+25,11.4,-(hz+8+l5*8));
+      for(var c4=0;c4<56;c4++){ var cx=hx+2+c4*.85; put(cduB,cx,1.45,-(hz+67.5)); put(cduL,cx,2.0,-(hz+66.95)); put(cduP,cx-.3,2.6,-(hz+67.5),Math.PI/2,0,0); }
+      rackField(hallG,{x:hx+6,z:-(hz+65.3),y:.45,cols:10,rows:1,w:.6,h:2.0,d:.6,gapX:.1,units:12,ports:10,portC:C.aqua,led:C.aqua,bezel:0x232a33});
       put(tray,hx+25,4.0,-(hz+66.5)); }
-    [rackF,rackP,rackM,cdu,leaf,tray].forEach(function(m){ hallG.add(m); });
+    [trayI,busI,busLI,supI,retI,lampI,cduB,cduL,cduP,tray].forEach(function(m){ hallG.add(m); });
 
     /* ---- cooler yards east of each building: dry coolers, 12 × 3 × 4, closed loop; a pipe rack over the road into the corridor ---- */
     var cool=new T.Group(); g.add(cool); P.cool=cool;
@@ -2250,9 +2276,10 @@ function mountEras(host){
   var SPOTS=[
     {id:'metroarea',n:'Metro area',          era:0, t:new T.Vector3(X0,7,2),       w:44, h:26, th:1.19, ph:.80,  pin:null},
     {id:'metro',  n:'3 kW CPU racks',        era:0, t:new T.Vector3(X0+1,9.5,4),   w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
-    {id:'campus', n:'GW-scale campus',       era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
-    eye('nvl','140 kW racks',1,W(AISLE,1.7,404),W(AISLE,1.6,470),pinAt(W(AISLE,3.2,430))),
-    {id:'onsite', n:'On-site power',         era:1, t:W(860,6,110),  w:42,  h:23, th:1.25, ph:.95,  pin:pinAt(W(619.5,16,70))},
+    {id:'campus', n:'1 GW campus',           era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
+    eye('nvl','Data hall',1,W(AISLE,1.7,404),W(AISLE,1.6,470),pinAt(W(AISLE,3.2,430))),
+    {id:'onsite', n:'Gas turbines',          era:1, t:W(860,6,110),  w:42,  h:23, th:1.25, ph:.95,  pin:pinAt(W(619.5,16,70))},
+    {id:'bess',   n:'BESS',                  era:1, t:W(80,3,250),   w:22,  h:12, th:1.05, ph:.95,  pin:pinAt(W(80,10,250))},
     {id:'grid',   n:'Grid',                  era:1, t:W(140,6,100),  w:30,  h:16, th:1.05, ph:.95,  pin:pinAt(W(40,38,160))},
     {id:'fabric', n:'Connected GW sites',    era:2, t:new T.Vector3(X2,0,-14),     w:80, h:34, th:1.50, ph:.60,  pin:[X2+36,7,-13,1]},
     {id:'mono',   n:'1 MW racks',            era:2, t:new T.Vector3(X2-50,3.6,27), w:22, h:12, th:1.12, ph:1.02, pin:[X2-33,10,33,1]},
@@ -2264,21 +2291,29 @@ function mountEras(host){
 
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   /* where the campus flyovers end: the spine road at eye height with the stacks behind; the dolly up the aisle; low along the turbine row */
-  var GL={campus:eye('',null,1,W(500,30,470),W(720,6,150)), nvl:eye('',null,1,W(AISLE,1.7,440),W(AISLE,1.6,476)), onsite:eye('',null,1,W(600,4,30),W(900,9,110))};
+  var GL={campus:eye('',null,1,W(500,30,470),W(720,6,150)), nvl:eye('',null,1,W(AISLE,1.7,440),W(AISLE,1.6,476)), onsite:eye('',null,1,W(600,4,30),W(900,9,110)),
+          bess:eye('',null,1,W(5,2.5,218.25),W(140,2,218.25))};
   /* the film: [framing, seconds to hold, glide]. Moves take 1.6 s within an era, up to 3 s across */
-  var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.campus,7,GL.campus],[byId.nvl,6,GL.nvl],[byId.onsite,5,GL.onsite],[byId.grid,3.5],
+  var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.campus,8,GL.campus],[byId.nvl,6,GL.nvl],[byId.onsite,5,GL.onsite],[byId.bess,5,GL.bess],[byId.grid,3.5],
                 [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4],[byId.cities,3.5],[byId.edge,5]];
   /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
   var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
   var NOTES={
     metroarea:{at:[X0,9,3],slot:'tr',glow:[P1.dc],title:'Metro colo',desc:'One windowless building in the city, two sealed floors.'},
     metro:{at:[X0-2,12.2,4.4],slot:'tl',glow:[P1.racks],title:'3 kW CPU racks',desc:'Eight servers and a top-of-rack switch; structured copper to the meet-me room.'},
-    campus:{at:W(700,14,450),slot:'tr',glow:[CG2],title:'1 GW campus',desc:'Four buildings, sixteen halls, liquid-cooled GB200 NVL72.',
-      rows:[['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2']],dims:[{a:W(0,.5,-12),b:W(1400,.5,-12),l:'1,400 m'},{a:W(-12,.5,0),b:W(-12,.5,900),l:'900 m'}]},
-    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'GB200 NVL72, liquid-cooled',rows:[['Provisioned','~140 kW / rack'],['Per hall','~440 racks · 62 MW']],
+    campus:{at:W(700,14,450),slot:'tr',glow:[CG2],title:'1 GW campus',desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
+      rows:[['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100 · ~140 kW']],
+      dims:[{a:W(0,.5,-12),b:W(1400,.5,-12),l:'1,400 m'},{a:W(-12,.5,0),b:W(-12,.5,900),l:'900 m'}],
+      tags:[{at:W(330,16,445),l:'Building A · 4 halls · ~1,760 racks'},{at:W(870,16,445),l:'Building B'},{at:W(330,16,665),l:'Building C'},{at:W(870,16,665),l:'Building D'},
+            {at:W(540,10,450),l:'Dry coolers · closed loop'},{at:W(860,18,110),l:'Gas turbines · 34 × 35 MW'},{at:W(80,10,250),l:'BESS · 120 containers'},
+            {at:W(140,16,100),l:'345 kV grid substation'}]},
+    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Data hall',desc:'Liquid-cooled GPU racks in rows, CDUs and leaf switches on the support strip.',
+      rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']],
       dims:[{a:W(AISLE-2.1+.56,.4,410.3),b:W(AISLE-2.1+.56,2.9,410.3),l:'2.5 m'}]},
-    onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas,P2.bess],title:'Gas island',desc:'Gas is the prime source; the grid is the tie.',
-      rows:[['Turbines','34 × 35 MW'],['Battery yard','120 containers']]},
+    onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas],title:'Gas turbines',desc:'Behind-the-meter generation onto the campus MV bus.',
+      rows:[['Turbines','34 × 35 MW']]},
+    bess:{at:W(80,10,250),slot:'tr',glow:[P2.bess],title:'Battery yard',desc:'Load shaping, ramp and backup on the MV bus.',
+      rows:[['Containers','120']]},
     grid:{at:W(40,38,160),slot:'tr',glow:[P2.grid],title:'345 kV substation',desc:'Two main transformers, 345 to 34.5 kV, onto the campus MV bus.'},
     fabric:{at:[X2+36,7,-13],slot:'tr',glow:[P3.fab],title:'Connected GW sites',desc:'GW sites across countries, one job running on the fabric between them.'},
     mono:{at:[X2-33,10,33],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'The hall cut open: racks at 1 MW.'},
@@ -2634,7 +2669,7 @@ function mountOrbit(host){
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var NOTES={
-    sat:{at:[HX,1.3,0],slot:'tr',glow:[hero],title:'AI1 satellite',desc:'Orbital satellite with localized compute.',
+    sat:{at:[HX,1.3,0],slot:'tr',glow:[hero],title:'AI satellite',desc:'Orbital satellite with localized compute.',
       dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'},{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
     rack:{at:[HX+.3,1.3,0],slot:'tr',glow:[HP.hubs[1]],title:'Compute',rows:[['Rack','NVIDIA Vera Rubin NVL72']]},
     wings:{at:[GAP+WL-6,0,.4],glow:[HP.wings],title:'High-efficiency solar arrays',
