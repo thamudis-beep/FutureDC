@@ -209,9 +209,23 @@ along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → the whole satellite → solar (a flyover down the wing) →
 radiator (a flyover that ends looking along its edge, so the sheet reads
 thin) → laser links (the neighbours, close) → the constellation (the string
-on the horizon, held). The film never pulls out to the whole Earth: the
-point of the last chapters is the satellites working together, and a
-whole-orbit view then a zoom back in read as a mistake. A
+on the horizon, held: a cluster of ten, boxed, pooling compute over ~10 Tb/s
+between them) → the orbital design, the one planet shot, last. That last
+chapter is the user's SpaceX reference: the whole Earth with the AI
+constellation's dawn-dusk sun-synchronous half as one dense near-polar band
+in cyan, its lower-inclination half as fainter cyan shells, and Starlink
+apart in grey, lower, at a spread of inclinations (`shells`: a circle
+tilted by inclination about X then swung by RAAN about the pole, Y; the
+hero's own plane is inclination 90°, RAAN 0, normal along the sun — a
+dawn-dusk plane riding the terminator, which is why the band crosses the
+pole where the hero sits). The inclinations and plane counts are
+illustrative geometry, not figures; the only figures on the card are the
+user's. The layer fades in for that chapter only (`orbA`), because every
+sun-synchronous plane crosses the pole and would crowd the hero's close-ups.
+The camera for it looks about 100° off the sun so the sun stays out of
+frame and the band reads narrow, edge-on. It is the one time the film pulls
+out to the planet; a whole-orbit view in the middle of the story then a
+zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold
 (`CHAPTERS[i][2]`); a chapter with no name lights the chip it sits `under`.
 The look is the reference's: monochrome studio metal — graphite rails and
@@ -234,23 +248,25 @@ props.
 Instead the scene annotates itself: `cfg.notes` maps a stop id to a note —
 `at` (the world point the ring sits on), `glow` (boxes `[x,y,z,w,h,d,rz]`
 around the thing), `slot` (which corner the card takes), `title`, `desc`
-and `rows`. `K.glow` draws the highlight natively — a fresnel shell over
+and `rows` (a row's third entry is a legend colour). `K.glow` draws the highlight natively — a fresnel shell over
 the volume plus its edges, both additive, cyan, breathing — and the rig
 fades it in as the crane comes to the stop and out as it leaves. Once the
 crane has settled, a ring sits on the thing with a leader to a card in its
 corner (DOM, like the rest of the chrome): what it is and its figures, the
-user's published AI1 sheet — the NVIDIA Vera Rubin NVL72 rack, 250 kW peak
+user's published AI1 sheet, kept short at the user's ask (no marketing
+sentences, no Bastrop line) — the NVIDIA Vera Rubin NVL72 rack, 250 kW peak
 / 175 kW average compute, 75 kW / ton; 210 kW solar at 250 W / m², 75 m
-wingspan, Bastrop TX; the 160 m² deployable liquid radiator, 30 m deployed
-height, active fluid cooling, redundant pumping loops, micrometeoroid
-shielding; the constellation (the four neighbours boxed) beaming home over
-lasers to Starlink. A chapter without a note of its own (the GPUs, the
+wingspan; the 160 m² deployable liquid radiator, 30 m deployed height,
+active fluid cooling, redundant pumping loops, micrometeoroid shielding;
+the cluster (~10 satellites, ~10 Tb/s between them, laser backhaul to
+Starlink); the orbital design (a two-colour legend). A chapter without a note of its own (the GPUs, the
 laser links) shows its `under` stop's. Cards are pinned to corners, never
 beside the ring, so they never cover the thing they annotate; the slot is
 chosen per stop by looking at the framing. The user asked for isoglow
 (isoglow.dev) for the highlight; the site was unreachable from the
-container and there is no npm package by that name, so the glow is built
-in, and takes no dependency. Moving the cursor never pauses the film: only a drag with the button
+container, as was the iso-glow skill tarball at iso-glow.vercel.app (403
+through the proxy), and there is no npm package by that name, so the glow is
+built in, and takes no dependency. Moving the cursor never pauses the film: only a drag with the button
 down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the user's
 figures: 40 per launch, 125 KW, 5 MW per launch, 1 GW = 200 launches ·
 8,000; KW is the user's spelling, kept for MW/GW consistency) shows for the constellation group. The Earth is NASA Blue Marble /

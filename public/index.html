@@ -278,6 +278,7 @@
   .e3d-note i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);line-height:1.35;align-self:baseline}
   .e3d-note em{font-style:normal;font-size:11.5px;color:var(--ink);line-height:1.35;text-align:right;align-self:baseline}
   .e3d-note i.w{grid-column:1/-1}
+  .e3d-note s{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px;text-decoration:none}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
   .e3d.in .e3d-enter button{pointer-events:none}
@@ -350,7 +351,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v90 · annotated</div>
+<div class="ver">v91 · orbits</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1429,7 +1430,8 @@ function sceneRig(T,host,K,scene,cfg){
   function esc(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   function fillNote(n){
     nCard.innerHTML='<b>'+esc(n.title)+'</b>'+(n.desc?'<p>'+esc(n.desc)+'</p>':'')+
-      (n.rows&&n.rows.length?'<div class="rows">'+n.rows.map(function(r){ return r[1]!=null?'<i>'+esc(r[0])+'</i><em>'+esc(r[1])+'</em>':'<i class="w">'+esc(r[0])+'</i>'; }).join('')+'</div>':'');
+      (n.rows&&n.rows.length?'<div class="rows">'+n.rows.map(function(r){ var d=r[2]?'<s style="background:'+r[2]+'"></s>':'';
+        return r[1]!=null?'<i>'+d+esc(r[0])+'</i><em>'+esc(r[1])+'</em>':'<i class="w">'+d+esc(r[0])+'</i>'; }).join('')+'</div>':'');
     nRing.setAttribute('stroke',n.hex); nDot.setAttribute('fill',n.hex); nLine.setAttribute('stroke',n.hex); }
   function notesTick(dt,t){
     if(!noteIds.length) return;
@@ -1529,7 +1531,7 @@ function sceneRig(T,host,K,scene,cfg){
     if(el.parentNode) el.parentNode.removeChild(el);
     if(ui.parentNode) ui.parentNode.removeChild(ui);
   }
-  return {renderer:renderer,camera:camera,start:start,dispose:dispose,view:function(v){goView(v||wide);}};
+  return {renderer:renderer,camera:camera,start:start,dispose:dispose,view:function(v){goView(typeof v==='string'?(byId[v]||wide):(v||wide));}};
 }
 
 /* ============================================================
@@ -2486,6 +2488,29 @@ function mountOrbit(host){
     var p=onOrbit(ang); put(ring,p.x,p.y,p.z,0,0,-ang); }
   scene.add(ring);
 
+  /* ---- the orbital design, seen from off the planet. A circle in the equatorial plane, tilted by inclination
+     about X, then swung by RAAN about the pole (Y). The hero's own plane is inclination 90°, RAAN 0 — its
+     normal is Z, the sun's direction: a dawn-dusk plane, riding the terminator. The AI constellation's
+     sun-synchronous half is a tight band of such planes; its other half sits in lower-inclination shells;
+     Starlink is apart, lower, at a spread of inclinations. All of it fades in for the last chapter only ---- */
+  function shells(spec,color,lineOp,ptOp,ptSize){
+    var g=new T.Group(), lp=[], pp=[], q=new T.Quaternion(), e=new T.Euler(), v=new T.Vector3();
+    spec.forEach(function(sh){ var r=ER+sh.alt, inc=sh.inc*Math.PI/180;
+      for(var p=0;p<sh.planes;p++){ var raan=sh.spread!=null?(sh.planes>1?sh.spread*(p/(sh.planes-1)-.5)*Math.PI/180:0):p/sh.planes*Math.PI*2;
+        e.set(inc,raan,0,'YXZ'); q.setFromEuler(e); var ph=p*2.399;
+        for(var i=0;i<180;i++){ for(var j=0;j<2;j++){ var u=(i+j)/180*Math.PI*2; v.set(r*Math.cos(u),0,r*Math.sin(u)).applyQuaternion(q).add(EC); lp.push(v.x,v.y,v.z); } }
+        for(var k=0;k<sh.per;k++){ var u2=k/sh.per*Math.PI*2+ph; v.set(r*Math.cos(u2),0,r*Math.sin(u2)).applyQuaternion(q).add(EC); pp.push(v.x,v.y,v.z); } } });
+    var lg=G(new T.BufferGeometry()); lg.setAttribute('position',new T.BufferAttribute(new Float32Array(lp),3));
+    var lm=new T.LineBasicMaterial({color:color,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false}); mats.push(lm);
+    var pg=G(new T.BufferGeometry()); pg.setAttribute('position',new T.BufferAttribute(new Float32Array(pp),3));
+    var pm=new T.PointsMaterial({color:color,size:ptSize||2,sizeAttenuation:false,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false}); mats.push(pm);
+    g.add(new T.LineSegments(lg,lm)); g.add(new T.Points(pg,pm)); g.visible=false; scene.add(g);
+    return {g:g,set:function(a){ g.visible=a>.01; lm.opacity=lineOp*a; pm.opacity=ptOp*a; }}; }
+  var SSOALT=ALT, LEOALT=2000;
+  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:40,spread:16,per:64},{inc:50,alt:SSOALT,planes:24,per:48}],C.cyan,.085,.95,2.2);
+  var orbSL=shells([{inc:53,alt:LEOALT,planes:72,per:22},{inc:43,alt:LEOALT,planes:36,per:20},{inc:70,alt:LEOALT,planes:36,per:20},{inc:97.6,alt:LEOALT,planes:10,per:24}],0xb4bcc8,.035,.42,1.6);
+  var orbA=0, curId='wide';
+
   /* ---- environment: black sky, the sun, earthshine below ---- */
   var envTex=canvasTex(512,256,function(x,w,h){ x.fillStyle='#000'; x.fillRect(0,0,w,h);
     var su=(Math.atan2(SUN.z,SUN.x)/(Math.PI*2)+.5)*w, sv=(.5-Math.asin(SUN.y)/Math.PI)*h;
@@ -2509,9 +2534,10 @@ function mountOrbit(host){
     F('wings', 'Solar',            1,[GAP+8,0,0], 18,11,  [-.35,-.62,.7],ZUP,null),
     F('radiator','Radiator',       1,[0,-3,0],    15,15,  [.9,-.25,.35], YUP,null),
     F('laser', null,               2,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
-    F('string','Constellation',    2,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null)
+    F('string','Constellation',    2,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null),
+    F('orbits',null,               2,[EC.x,EC.y,EC.z],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null)
   ];
-  SPOTS[1].under='rack'; SPOTS[2].under='wings'; SPOTS[5].under='string';
+  SPOTS[1].under='rack'; SPOTS[2].under='wings'; SPOTS[5].under='string'; SPOTS[7].under='string';
   /* where each flyover ends */
   var GL={rack:F('',null,0,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
           gpus:F('',null,0,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
@@ -2520,7 +2546,7 @@ function mountOrbit(host){
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   var VIEWS=[byId.rack,byId.sat,byId.string];
   var CHAPTERS=[[byId.rack,8,GL.rack],[byId.gpus,6,GL.gpus],[byId.sat,4],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
-                [byId.laser,5],[byId.string,7]];
+                [byId.laser,5],[byId.string,7],[byId.orbits,10]];
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var SATROWS=[['Deployed height','30 m / 98 ft'],['Wingspan','75 m / 246 ft'],['Compute payload','Up to 250 kW peak / 175 kW average'],['Vehicle efficiency','75 kW / ton']];
@@ -2531,18 +2557,21 @@ function mountOrbit(host){
     sat:{at:[HX,1.3,0],slot:'tr',glow:[wingBox(-1),wingBox(1),sheetBox,rackBox(1),rackBox(-1)],title:'AI1 satellite',
       desc:'Orbital satellite with localized compute that takes advantage of readily available power and cooling in space and beams back data via high-bandwidth lasers to the Starlink constellation.',
       rows:SATROWS},
-    wings:{at:[GAP+WL-6,0,.4],glow:[wingBox(-1),wingBox(1)],title:'Solar arrays',
-      desc:'High-efficiency solar arrays derived from the technology already powering thousands of Starlink satellites, the largest satellite constellation in history.',
-      rows:[['Solar array','210 kW'],['Solar power density','250 W / m²'],['Wingspan','75 m / 246 ft'],['SpaceX-manufactured solar technology from Bastrop, TX']]},
+    wings:{at:[GAP+WL-6,0,.4],glow:[wingBox(-1),wingBox(1)],title:'High-efficiency solar arrays',
+      rows:[['Solar array','210 kW'],['Solar power density','250 W / m²'],['Wingspan','75 m / 246 ft']]},
     radiator:{at:[.2,9,0],glow:[sheetBox],title:'Deployable liquid radiator',
-      desc:'Deployable liquid radiators reject heat into the vacuum of space, built upon SpaceX\'s extensive experience operating vehicles on-orbit.',
+      desc:'Deployable liquid radiators reject heat into the vacuum of space.',
       rows:[['Deployable liquid radiator','160 m²'],['Deployed height','30 m / 98 ft'],['Active fluid cooling'],['Redundant pumping loops'],['Integrated micrometeoroid shielding']]},
-    string:{at:nb[2].o.position,slot:'tl',glow:nb.map(function(q){ var p=q.o.position, th=q.k*SP/OR; return [p.x,p.y,p.z,2*(GAP+WL),RH,RD,-th]; }),
-      title:'Data center constellation',desc:'Each satellite beams its data back over high-bandwidth lasers to the Starlink constellation.'}
+    string:{at:nb[2].o.position,slot:'tl',glow:[-4,-3,-2,-1,0,1,2,3,4,5].map(function(k){ var th=k*SP/OR, p=onOrbit(th); return [p.x,p.y,p.z,2*(GAP+WL),RH,RD,-th]; }),
+      title:'Data center constellation',desc:'Satellites fly in tight formation, pooling their compute into one AI workload; each cluster links on into the wider constellation.',
+      rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links to Starlink']]},
+    orbits:{at:[0,0,0],slot:'tl',title:'Sun-synchronous orbits',
+      desc:'Half the fleet in dawn-dusk sun-synchronous orbits: always in sunlight, steady power. The rest in lower shells to load-balance. Starlink flies apart, built for coverage.',
+      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#57c7dd'],['Starlink','Mid-inclination shells, lower','#b4bcc8']]}
   };
 
   var tmp=new T.Vector3(), sceneT=0;
-  function onChapter(v){ if(RM) return; if(v.id==='rack') sleds.forEach(function(q,i){ q.t0=sceneT+1.8+i*.25; }); }
+  function onChapter(v){ curId=v.id; if(RM) return; if(v.id==='rack') sleds.forEach(function(q,i){ q.t0=sceneT+1.8+i*.25; }); }
   function tick(dt,t,cam){
     earth.rotation.y+=dt*.003; clouds.rotation.y+=dt*.0036;
     sceneT+=dt; t=sceneT;
@@ -2553,6 +2582,7 @@ function mountOrbit(host){
       else { dummy.position.set(0,-99999,0); dummy.scale.setScalar(1); }
       dummy.rotation.set(0,0,0); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
     pulses.instanceMatrix.needsUpdate=true;
+    var oa=curId==='orbits'?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbSL.set(orbA);
   }
   var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,
     groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelEra:2,notes:NOTES,
