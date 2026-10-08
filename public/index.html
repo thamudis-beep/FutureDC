@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v95 · campus</div>
+<div class="ver">v96 · in order</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1310,8 +1310,8 @@ function sceneKit(T){
 function sceneRig(T,host,K,scene,cfg){
   var RM=cfg.RM, disposed=false, raf=0;
   var renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance',logarithmicDepthBuffer:!!cfg.logDepth});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
-  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,cfg.dpr||1.75));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=cfg.softShadow===false?T.PCFShadowMap:T.PCFSoftShadowMap;
   renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=cfg.exposure||1.58;
   if(T.SRGBColorSpace) renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.domElement.style.display='block';
@@ -1529,7 +1529,7 @@ function sceneRig(T,host,K,scene,cfg){
     nLine.setAttribute('x1',ax+dx/dl*13); nLine.setAttribute('y1',ay+dy/dl*13); nLine.setAttribute('x2',lx); nLine.setAttribute('y2',ly);
     nSvg.style.opacity=nAlpha*.9; nRing.style.opacity=nDot.style.opacity=nLine.style.opacity=on?1:0; }
   function syncUI(){
-    if(cfg.panel) ui.querySelector('.e3d-panel').classList.toggle('show',tour.entered&&cur.era===cfg.panelEra);
+    if(cfg.panel) ui.querySelector('.e3d-panel').classList.toggle('show',tour.entered&&(cfg.panelFor?cfg.panelFor.indexOf(cur.id)>=0:cur.era===cfg.panelEra));
     ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
     var chipId=cur.n?cur.id:cur.under;
     ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===chipId); });
@@ -2356,7 +2356,7 @@ function mountOrbit(host){
   var K=sceneKit(T), mats=K.mats, geos=K.geos, mat=K.mat, lit=K.lit, G=K.G, BG=K.BG, CG=K.CG, SG=K.SG,
       box=K.box, cyl=K.cyl, V=K.V, tube=K.tube, dummy=K.dummy, inst=K.inst, put=K.put, halo=K.halo, canvasTex=K.canvasTex;
   var C={ cyan:0x57c7dd, core:0xeaf2ff, gpu:0x86e07a, amber:0xe0a355 };
-  var GRP=[{n:'Satellite',color:C.cyan},{n:'Compute',color:C.cyan},{n:'Constellation',color:C.cyan}];
+  var GRP=[{n:'Satellite',color:C.cyan},{n:'Constellation',color:C.cyan}];
   var ZUP=new T.Vector3(0,0,1), YUP=new T.Vector3(0,1,0);
 
   var scene=new T.Scene(); scene.background=new T.Color(0x000000);
@@ -2420,7 +2420,7 @@ function mountOrbit(host){
     for(var i=0;i<=w;i+=16){ x.beginPath(); x.moveTo(i+.5,0); x.lineTo(i+.5,h); x.stroke(); x.beginPath(); x.moveTo(0,i+.5); x.lineTo(w,i+.5); x.stroke(); }
     x.strokeStyle='rgba(210,215,225,.34)'; x.lineWidth=2;
     for(var j=0;j<=w;j+=128){ x.beginPath(); x.moveTo(j,0); x.lineTo(j,h); x.stroke(); x.beginPath(); x.moveTo(0,j); x.lineTo(w,j); x.stroke(); }
-  },{repeat:[125,75],srgb:true});
+  },{repeat:[125,75],srgb:true}); cellTex.anisotropy=2;
   /* a cold plate: brushed aluminium with a serpentine channel and its bolts */
   var plateTex=canvasTex(256,512,function(x,w,h){
     var g0=x.createLinearGradient(0,0,w,0); g0.addColorStop(0,'#aab1ba'); g0.addColorStop(.5,'#c9cfd6'); g0.addColorStop(1,'#a3aab3'); x.fillStyle=g0; x.fillRect(0,0,w,h);
@@ -2611,25 +2611,26 @@ function mountOrbit(host){
   var WIDE=F('wide',null,-1,[0,0,0],44,24,[.28,.26,.92],YUP,null);
   var SPOTS=[
     F('sat',   null,               0,[0,0,0],     44,26,  [.25,.5,.83],  YUP,null),
+    F('rack',  'Compute',          0,hw([-2.4,-1.2,1.3]),7.6,4.3,hd([-.6,-.55,.58]),YUP,null),
+    F('gpus',  null,               0,hw([SLED+1.4,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
     F('wings', 'Solar',            0,[GAP+8,0,0], 18,11,  [-.35,-.62,.7],ZUP,null),
     F('radiator','Radiator',       0,[0,-4,0],    18,18,  [.9,-.25,.35], YUP,null),
-    F('rack',  'The rack',         1,hw([-2.4,-1.2,1.3]),7.6,4.3,hd([-.6,-.55,.58]),YUP,null),
-    F('gpus',  null,               1,hw([SLED+1.4,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
-    F('laser', null,               2,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
-    F('string','Constellation',    2,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null),
-    F('orbits',null,               2,[EC.x,EC.y,EC.z],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null)
+    F('laser', null,               1,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
+    F('string','Constellation',    1,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null),
+    F('orbits',null,               1,[EC.x,EC.y,EC.z],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null),
+    F('gw',    null,               1,[EC.x-.21*ER,EC.y,EC.z-.55*ER],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null)
   ];
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
-  byId.gpus.under='rack'; byId.laser.under='string'; byId.orbits.under='string';
+  byId.gpus.under='rack'; byId.laser.under='string'; byId.orbits.under='string'; byId.gw.under='string';
   /* where each flyover ends */
   var GL={sat:F('',null,0,[0,0,0],30,18,[.45,.4,.8],YUP,null),
-          rack:F('',null,1,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
-          gpus:F('',null,1,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
+          rack:F('',null,0,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
+          gpus:F('',null,0,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
           wings:F('',null,0,[GAP+WL-6,-4,0],4.5,2.8,[-.45,-.55,.7],ZUP,null),
           radiator:F('',null,0,[0,14,0],7,5,[.38,.9,.2],ZUP,null)};
-  var VIEWS=[byId.sat,byId.rack,byId.string];
+  var VIEWS=[byId.sat,byId.string];
   var CHAPTERS=[[byId.sat,5,GL.sat],[byId.rack,8,GL.rack],[byId.gpus,6,GL.gpus],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
-                [byId.laser,5],[byId.string,7],[byId.orbits,10]];
+                [byId.laser,6],[byId.string,7],[byId.orbits,9],[byId.gw,10]];
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var NOTES={
@@ -2641,6 +2642,7 @@ function mountOrbit(host){
     radiator:{at:[.2,RH/2-3,0],glow:[HP.sheet],title:'Deployable liquid radiator',
       desc:'Deployable liquid radiators reject heat into the vacuum of space.',
       dims:[{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
+    laser:{at:onOrbit(.5*SP/OR),slot:'tl',title:'Laser connectivity',desc:'High-speed laser links interconnect satellites and beam AI results back to Earth.'},
     string:{at:nb[4].o.position,slot:'tl',glow:nb.map(function(q){ return q.o; }).concat([hero]),
       title:'Data center constellation',desc:'Satellites fly in tight formation, pooling their compute into one AI workload; each cluster links on into the wider constellation.',
       rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links to Starlink']]},
@@ -2661,11 +2663,11 @@ function mountOrbit(host){
       else { dummy.position.set(0,-99999,0); dummy.scale.setScalar(1); }
       dummy.rotation.set(0,0,0); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
     pulses.instanceMatrix.needsUpdate=true;
-    var oa=curId==='orbits'?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbAI2.set(orbA); orbSL.set(orbA);
+    var oa=(curId==='orbits'||curId==='gw')?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbAI2.set(orbA); orbSL.set(orbA);
     earthM.uniforms.dim.value=orbA*.9; atmM.uniforms.dim.value=orbA; cloudM.opacity=.85*(1-orbA*.9);
   }
-  var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,
-    groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelEra:2,notes:NOTES,bloom:{k:1.1,spread:1.7},
+  var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,dpr:1.5,softShadow:false,
+    groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelFor:['gw'],notes:NOTES,bloom:{k:1.1,spread:1.7},
     panel:'<div class="r"><b>40</b><i>AI satellites / launch</i></div>'+
           '<div class="r"><b>125 KW</b><i>/ satellite</i></div>'+
           '<div class="r"><b>5 MW</b><i>/ launch</i></div>'+

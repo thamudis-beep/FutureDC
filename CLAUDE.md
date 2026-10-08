@@ -242,17 +242,18 @@ deep chassis, coolant mains with U-bends, laser terminals fore and aft.
 Wings are blue-grey cells with a broad specular band and two dark seams.
 Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
-its `up` and the crane blends it. Three parts on the bar — Satellite,
-Compute, Constellation, in story order — and four chips: solar, radiator ·
-the rack · constellation. The whole-satellite stop has no callout; the user
-cut it. Play resumes from the stop you are on: a chip or era button sets
+its `up` and the crane blends it. Two parts on the bar — Satellite,
+Constellation — and four chips in story order: Compute · Solar · Radiator
+| Constellation. Never a chip order that doubles back on the film; the
+user called the old Solar, Radiator · The rack "going back and forth". Play resumes from the stop you are on: a chip or era button sets
 the film's chapter index, and play only restarts the chapter when the
 camera is somewhere outside the film. The chapters are the storyline, in the user's order: the whole satellite
 first (a slow push in) → the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → solar (a flyover down the wing) →
 radiator (a flyover that ends looking along its edge, so the sheet reads
-thin) → laser links (the neighbours, close) → the constellation (the string
+thin) → laser links (the neighbours, close, with the "Laser connectivity" callout:
+how they communicate) → the constellation (the string
 on the horizon, held: a cluster of ten, boxed, pooling compute over ~10 Tb/s
 between them) → the orbital design, the one planet shot, last. That last
 chapter is the user's SpaceX reference: the whole Earth with the AI
@@ -267,7 +268,13 @@ illustrative geometry, not figures; the only figures on the card are the
 user's. The layer fades in for that chapter only (`orbA`), because every
 sun-synchronous plane crosses the pole and would crowd the hero's close-ups.
 The camera for it looks about 100° off the sun so the sun stays out of
-frame and the band reads narrow, edge-on. The look is the reference's:
+frame and the band reads narrow, edge-on. After it, one more chapter,
+`gw`: the same planet shifted left so the math panel (40 · 125 KW · 5 MW
+· 1 GW) has the right of the frame — the maths is the last word, after
+the orbits, never beside the cluster; `panelFor` names the stops that show
+it. The solar close-up was reported slow on the user's device: the scene
+runs PCF (not soft) shadows, a 1.5 pixel-ratio cap and anisotropy 2 on
+the cell texture, because a full-screen shadowed wing was the cost. The look is the reference's:
 hairlines in one pale tone, the band densest and brightest, the lower AI
 shells faint, Starlink fainter and lower, points small; and the Earth
 goes dark for the chapter (`dim` uniforms on the Earth and atmosphere,
