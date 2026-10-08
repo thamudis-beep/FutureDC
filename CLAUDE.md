@@ -230,7 +230,27 @@ aluminium, `plateTex`) exposed beneath the lids; the lids are extruded from
 `lidShape`, a flat slab with a wedge leading edge, with dogbone tie bars and
 bolts across every seam. Motion runs on the film's own accumulated `dt`, not
 the wall clock, so a slow renderer keeps camera and casings in step. No pins in this scene — at rack scale they read as
-props. Moving the cursor never pauses the film: only a drag with the button
+props.
+Instead the scene annotates itself: `cfg.notes` maps a stop id to a note —
+`at` (the world point the ring sits on), `glow` (boxes `[x,y,z,w,h,d,rz]`
+around the thing), `slot` (which corner the card takes), `title`, `desc`
+and `rows`. `K.glow` draws the highlight natively — a fresnel shell over
+the volume plus its edges, both additive, cyan, breathing — and the rig
+fades it in as the crane comes to the stop and out as it leaves. Once the
+crane has settled, a ring sits on the thing with a leader to a card in its
+corner (DOM, like the rest of the chrome): what it is and its figures, the
+user's published AI1 sheet — the NVIDIA Vera Rubin NVL72 rack, 250 kW peak
+/ 175 kW average compute, 75 kW / ton; 210 kW solar at 250 W / m², 75 m
+wingspan, Bastrop TX; the 160 m² deployable liquid radiator, 30 m deployed
+height, active fluid cooling, redundant pumping loops, micrometeoroid
+shielding; the constellation (the four neighbours boxed) beaming home over
+lasers to Starlink. A chapter without a note of its own (the GPUs, the
+laser links) shows its `under` stop's. Cards are pinned to corners, never
+beside the ring, so they never cover the thing they annotate; the slot is
+chosen per stop by looking at the framing. The user asked for isoglow
+(isoglow.dev) for the highlight; the site was unreachable from the
+container and there is no npm package by that name, so the glow is built
+in, and takes no dependency. Moving the cursor never pauses the film: only a drag with the button
 down, a real wheel (40 px accumulated), a chip or a key does. A math panel (the user's
 figures: 40 per launch, 125 KW, 5 MW per launch, 1 GW = 200 launches ·
 8,000; KW is the user's spelling, kept for MW/GW consistency) shows for the constellation group. The Earth is NASA Blue Marble /
