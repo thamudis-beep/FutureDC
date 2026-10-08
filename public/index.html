@@ -279,6 +279,7 @@
   .e3d-note em{font-style:normal;font-size:11.5px;color:var(--ink);line-height:1.35;text-align:right;align-self:baseline}
   .e3d-note i.w{grid-column:1/-1}
   .e3d-note s{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px;text-decoration:none}
+  .e3d-svg text{font-family:var(--mono);font-size:11px;letter-spacing:.04em}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
   .e3d.in .e3d-enter button{pointer-events:none}
@@ -351,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v93 · lit</div>
+<div class="ver">v94 · flash</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1291,8 +1292,8 @@ function sceneKit(T){
       if(m.geometry.boundingSphere.radius>.25){ var k=m.geometry.uuid, eg=edgeCache[k]||(edgeCache[k]=G(new T.EdgesGeometry(m.geometry,24)));
         var e=new T.LineSegments(eg,lm); e.userData.proxy=1; e.layers.set(1); m.add(e); } });
     var a=0;
-    function main(){ lm.opacity=a*.9; fm.opacity=a*.02; lm.visible=fm.visible=a>.003; }
-    return {set:function(v){ a=v; main(); }, pass:function(b){ if(b){ lm.opacity=a*.8; fm.opacity=a*.012; } else main(); }, a:function(){ return a; }};
+    function main(){ lm.opacity=a*.7; fm.opacity=a*.014; lm.visible=fm.visible=a>.003; }
+    return {set:function(v){ a=v; main(); }, pass:function(b){ if(b){ lm.opacity=a*.6; fm.opacity=a*.008; } else main(); }, a:function(){ return a; }};
   }
   K.dummy=dummy; K.inst=inst; K.put=put; K.repeat=repeat; K.ladder=ladder; K.halo=halo; K.canvasTex=canvasTex; K.glow=glow;
   return K;
@@ -1352,9 +1353,11 @@ function sceneRig(T,host,K,scene,cfg){
     up.copy(mv.from.up).lerp(mv.to.up,e).normalize();
     gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph;
     if(mv.t>=1){ gRad=mv.to.r; gTh=mv.to.th; gPh=mv.to.ph; up.copy(mv.to.up); mv=null; } }
-  function goView(v){ if(tour.on) pauseTour(); flyTo(v); }
+  function goView(v){ if(tour.on) pauseTour(); flyTo(v);
+    for(var i=0;i<chapters.length;i++) if(chapters[i][0]===v){ tour.i=i; tour.hold=0; break; } }
   function pauseTour(){ if(!tour.on) return; tour.on=false; mv=null; gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; syncUI(); }
-  function startTour(){ tour.on=true; tour.hold=0; flyTo(chapters[tour.i][0]); syncUI(); }
+  /* play: from the stop you are on, or on from where you paused; only a stop outside the film restarts it */
+  function startTour(){ tour.on=true; if(cur!==chapters[tour.i][0]){ tour.hold=0; flyTo(chapters[tour.i][0]); } syncUI(); }
   function tourStep(dt){
     if(mv) return;
     tour.hold+=dt;
@@ -1418,14 +1421,19 @@ function sceneRig(T,host,K,scene,cfg){
         stops.filter(function(sp){return sp.era===e&&sp.n;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
     '<div class="e3d-enter"><button data-enter>Enter</button></div>'+
     (cfg.panel?'<div class="e3d-panel">'+cfg.panel+'</div>':'')+
-    (cfg.notes?'<svg class="e3d-svg"><line/><circle class="o" r="11" fill="none" stroke-width="1.5"/><circle class="i" r="2.2"/></svg><div class="e3d-note"></div>':'');
+    (cfg.notes?'<svg class="e3d-svg"><defs><filter id="e3dsoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+      '<g class="dims" filter="url(#e3dsoft)"></g><line/><circle class="o" r="11" fill="none" stroke-width="1.5"/><circle class="i" r="2.2"/></svg><div class="e3d-note"></div>':'');
   host.appendChild(ui);
 
   /* ---- notes: for a stop that has one, the thing glows as the camera comes to it, and once the crane has
      settled a ring sits on it with a leader to a card — what it is, and its figures. DOM over the canvas ---- */
-  var notes=cfg.notes||{}, noteIds=Object.keys(notes), nShown=null, nAlpha=0, npv=new T.Vector3();
-  var nSvg=ui.querySelector('.e3d-svg'), nCard=ui.querySelector('.e3d-note'),
-      nLine=nSvg&&nSvg.querySelector('line'), nRing=nSvg&&nSvg.querySelector('.o'), nDot=nSvg&&nSvg.querySelector('.i');
+  var notes=cfg.notes||{}, noteIds=Object.keys(notes), nShown=null, nAlpha=0, npv=new T.Vector3(), npv2=new T.Vector3(), nT=0, nDims=[];
+  var nSvg=ui.querySelector('.e3d-svg'), nCard=ui.querySelector('.e3d-note'), nDimG=nSvg&&nSvg.querySelector('.dims'),
+      nLine=nSvg&&nSvg.querySelector(':scope>line'), nRing=nSvg&&nSvg.querySelector('.o'), nDot=nSvg&&nSvg.querySelector('.i');
+  var SVGNS='http://www.w3.org/2000/svg';
+  function clipLine(x1,y1,x2,y2,w,h){ var t0=0,t1=1,dx=x2-x1,dy=y2-y1,p=[-dx,dx,-dy,dy],q=[x1,w-x1,y1,h-y1];
+    for(var i=0;i<4;i++){ if(p[i]===0){ if(q[i]<0) return null; } else { var r=q[i]/p[i]; if(p[i]<0){ if(r>t1) return null; if(r>t0) t0=r; } else { if(r<t0) return null; if(r<t1) t1=r; } } }
+    return [x1+dx*t0,y1+dy*t0,x1+dx*t1,y1+dy*t1,t0,t1]; }
   noteIds.forEach(function(id){ var n=notes[id], c=n.color||groups[byId[id].era].color;
     n.hex=hex(c); n.a=0; n.at=n.at.isVector3?n.at:new T.Vector3(n.at[0],n.at[1],n.at[2]);
     n.glow=K.glow(n.glow||[],c); });
@@ -1468,21 +1476,49 @@ function sceneRig(T,host,K,scene,cfg){
     nCard.innerHTML='<b>'+esc(n.title)+'</b>'+(n.desc?'<p>'+esc(n.desc)+'</p>':'')+
       (n.rows&&n.rows.length?'<div class="rows">'+n.rows.map(function(r){ var d=r[2]?'<s style="background:'+r[2]+'"></s>':'';
         return r[1]!=null?'<i>'+d+esc(r[0])+'</i><em>'+esc(r[1])+'</em>':'<i class="w">'+d+esc(r[0])+'</i>'; }).join('')+'</div>':'');
-    nRing.setAttribute('stroke',n.hex); nDot.setAttribute('fill',n.hex); nLine.setAttribute('stroke',n.hex); }
+    nRing.setAttribute('stroke',n.hex); nDot.setAttribute('fill',n.hex); nLine.setAttribute('stroke',n.hex);
+    /* dimension lines along the thing's edges: a line, a tick at each end, the figure at the visible middle */
+    nDimG.innerHTML=''; nDims=[];
+    (n.dims||[]).forEach(function(d){ var g=document.createElementNS(SVGNS,'g'), o={g:g,a:V3(d.a),b:V3(d.b),l:d.l};
+      ['l','t1','t2'].forEach(function(k){ var e=document.createElementNS(SVGNS,'line'); e.setAttribute('stroke',n.hex); e.setAttribute('stroke-width',k==='l'?'1':'1.2'); e.setAttribute('opacity',k==='l'?'.75':'.9'); g.appendChild(e); o[k]=e; });
+      var bg=document.createElementNS(SVGNS,'rect'); bg.setAttribute('fill','rgba(8,10,14,.72)'); bg.setAttribute('rx','4'); g.appendChild(bg); o.bg=bg;
+      var tx=document.createElementNS(SVGNS,'text'); tx.setAttribute('fill',n.hex); tx.setAttribute('text-anchor','middle'); tx.textContent=d.l; g.appendChild(tx); o.tx=tx;
+      nDimG.appendChild(g); nDims.push(o); }); }
+  function V3(p){ return p.isVector3?p:new T.Vector3(p[0],p[1],p[2]); }
+  function dimsTick(w,h,ox,oy){
+    nDims.forEach(function(d){
+      npv.copy(d.a).project(camera); npv2.copy(d.b).project(camera);
+      if(npv.z>1||npv2.z>1){ d.g.style.opacity=0; return; }
+      var ax=(npv.x+1)/2*w, ay=(1-npv.y)/2*h, bx=(npv2.x+1)/2*w, by=(1-npv2.y)/2*h, c=clipLine(ax,ay,bx,by,w,h);
+      if(!c){ d.g.style.opacity=0; return; }
+      d.g.style.opacity=1;
+      var dx=bx-ax, dy=by-ay, dl=Math.hypot(dx,dy)||1, nx=-dy/dl, ny=dx/dl;
+      d.l.setAttribute('x1',c[0]); d.l.setAttribute('y1',c[1]); d.l.setAttribute('x2',c[2]); d.l.setAttribute('y2',c[3]);
+      function tick(e,x,y,on){ e.style.opacity=on?1:0; e.setAttribute('x1',x+nx*5); e.setAttribute('y1',y+ny*5); e.setAttribute('x2',x-nx*5); e.setAttribute('y2',y-ny*5); }
+      tick(d.t1,ax,ay,c[4]===0); tick(d.t2,bx,by,c[5]===1);
+      /* the figure sits on the side of the line away from the thing */
+      var mx=(c[0]+c[2])/2, my=(c[1]+c[3])/2, side=((mx-ox)*nx+(my-oy)*ny)>=0?1:-1;
+      d.tx.setAttribute('x',mx+nx*18*side); d.tx.setAttribute('y',my+ny*18*side+4);
+      var bb=d.tx.getBBox(); d.bg.setAttribute('x',bb.x-6); d.bg.setAttribute('y',bb.y-3); d.bg.setAttribute('width',bb.width+12); d.bg.setAttribute('height',bb.height+6); }); }
   function notesTick(dt,t){
     if(!noteIds.length) return;
-    var live=tour.entered&&cur!==wide, curNote=live?(notes[cur.id]||notes[cur.under]||null):null;
-    glowing=false;
-    noteIds.forEach(function(id){ var n=notes[id], goal=n===curNote?1:0;
-      n.a=RM?goal:n.a+(goal-n.a)*(1-Math.pow(goal?.05:.004,dt));
-      n.glow.set(n.a*(RM?.9:.86+.14*Math.sin(t*2.1))); if(n.a>.01) glowing=true; });
-    var want=(curNote&&!mv)?curNote:null, goal=(want&&want===nShown)?1:0;
+    var live=tour.entered&&cur!==wide, curNote=live?(notes[cur.id]||null):null, settled=curNote&&!mv;
+    /* the glow is a flash: on quickly as the crane settles on the thing, held a moment, off again */
+    nT+=dt; glowing=false;
+    noteIds.forEach(function(id){ var n=notes[id];
+      if(n===curNote&&settled){ if(n.t0==null) n.t0=nT; } else n.t0=null;
+      var e=0; if(n.t0!=null){ var u=nT-n.t0; e=u<.35?u/.35:u<1.6?1:u<2.8?1-(u-1.6)/1.2:0; e=e*e*(3-2*e); }
+      if(RM) e=n.t0!=null?.5:0;
+      n.a=e; n.glow.set(e); if(e>.01) glowing=true; });
+    var want=settled?curNote:null, goal=(want&&want===nShown)?1:0;
     if(want!==nShown&&nAlpha<.04){ nShown=want; if(want) fillNote(want); goal=want?1:0; }
     nAlpha=RM?goal:nAlpha+(goal-nAlpha)*(1-Math.pow(goal?.02:.002,dt));
     if(!nShown||nAlpha<.01){ nCard.style.opacity=0; nSvg.style.opacity=0; return; }
     var w=el.clientWidth||900, h=el.clientHeight||500;
+    nDimG.style.opacity=nAlpha;
     npv.copy(nShown.at).project(camera);
     var on=npv.z<1&&Math.abs(npv.x)<1.2&&Math.abs(npv.y)<1.2, ax=(npv.x+1)/2*w, ay=(1-npv.y)/2*h;
+    dimsTick(w,h,ax,ay);
     /* the card sits in a corner (the note's slot), clear of the thing; the leader runs to its nearest edge */
     var cw=nCard.offsetWidth||300, ch=nCard.offsetHeight||120, slot=nShown.slot||'tl';
     var cx=slot[1]==='r'?w-cw-16:16, cy=slot[0]==='b'?h-ch-52:52;
@@ -1491,7 +1527,7 @@ function sceneRig(T,host,K,scene,cfg){
     if(dl<20) on=false;
     nRing.setAttribute('cx',ax); nRing.setAttribute('cy',ay); nDot.setAttribute('cx',ax); nDot.setAttribute('cy',ay);
     nLine.setAttribute('x1',ax+dx/dl*13); nLine.setAttribute('y1',ay+dy/dl*13); nLine.setAttribute('x2',lx); nLine.setAttribute('y2',ly);
-    nSvg.style.opacity=on?nAlpha*.9:0; }
+    nSvg.style.opacity=nAlpha*.9; nRing.style.opacity=nDot.style.opacity=nLine.style.opacity=on?1:0; }
   function syncUI(){
     if(cfg.panel) ui.querySelector('.e3d-panel').classList.toggle('show',tour.entered&&cur.era===cfg.panelEra);
     ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
@@ -2352,16 +2388,17 @@ function mountOrbit(host){
   function tex(u,srgb){ var t=TL.load(u); geos.push({dispose:function(){t.dispose();}}); if(srgb&&T.SRGBColorSpace) t.colorSpace=T.SRGBColorSpace; t.anisotropy=8; return t; }
   var tDay=tex('img/earth/day.jpg',true), tNight=tex('img/earth/night.jpg',true), tWater=tex('img/earth/water.png'), tCloud=tex('img/earth/clouds.jpg');
   var earthM=new T.ShaderMaterial({
-    uniforms:{tDay:{value:tDay},tNight:{value:tNight},tWater:{value:tWater},sunDir:{value:SUN.clone()}},
+    uniforms:{tDay:{value:tDay},tNight:{value:tNight},tWater:{value:tWater},sunDir:{value:SUN.clone()},dim:{value:0}},
     vertexShader:'varying vec2 vUv; varying vec3 vN; varying vec3 vW; void main(){ vUv=uv; vN=normalize(mat3(modelMatrix)*normal); vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }',
     fragmentShader:[
-      'uniform sampler2D tDay,tNight,tWater; uniform vec3 sunDir; varying vec2 vUv; varying vec3 vN; varying vec3 vW;',
+      'uniform sampler2D tDay,tNight,tWater; uniform vec3 sunDir; uniform float dim; varying vec2 vUv; varying vec3 vN; varying vec3 vW;',
       'void main(){ vec3 n=normalize(vN); float ndl=dot(n,sunDir); float day=smoothstep(-.06,.20,ndl);',
       ' vec3 dayC=texture2D(tDay,vUv).rgb; vec3 nightC=texture2D(tNight,vUv).rgb; float water=texture2D(tWater,vUv).r;',
       ' vec3 Vv=normalize(cameraPosition-vW); vec3 H=normalize(sunDir+Vv);',
       ' float spec=pow(max(dot(n,H),0.),140.)*water*1.6*day;',
       ' vec3 col=dayC*(0.06+1.25*max(ndl,0.))*day + nightC*vec3(1.4,1.2,.9)*(1.-day)*1.3 + vec3(1.,.96,.88)*spec;',
       ' float fr=pow(1.-max(dot(n,Vv),0.),3.5); col+=vec3(.30,.55,1.)*fr*(.55*day+.04);',
+      ' col=mix(col,vec3(.5,.56,.62)*(.025+.06*day)+vec3(.12,.11,.09)*nightC.r,dim);',
       ' gl_FragColor=vec4(col,1.);',
       ' #include <tonemapping_fragment>',
       ' #include <colorspace_fragment>',
@@ -2370,9 +2407,9 @@ function mountOrbit(host){
   var earth=new T.Mesh(G(new T.SphereGeometry(ER,160,120)),earthM); earth.position.copy(EC); scene.add(earth);
   var cloudM=mat(0xffffff,{r:1,m:0,t:true,dw:false}); cloudM.alphaMap=tCloud; cloudM.opacity=.85;
   var clouds=new T.Mesh(G(new T.SphereGeometry(ER*1.004,120,90)),cloudM); clouds.position.copy(EC); scene.add(clouds);
-  var atmM=new T.ShaderMaterial({uniforms:{sunDir:{value:SUN.clone()}},
+  var atmM=new T.ShaderMaterial({uniforms:{sunDir:{value:SUN.clone()},dim:{value:0}},
     vertexShader:'varying vec3 vN; varying vec3 vW; void main(){ vN=normalize(mat3(modelMatrix)*normal); vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }',
-    fragmentShader:'uniform vec3 sunDir; varying vec3 vN; varying vec3 vW; void main(){ vec3 n=normalize(vN); vec3 Vv=normalize(cameraPosition-vW); float f=1.-abs(dot(n,Vv)); float ndl=dot(n,sunDir); float day=smoothstep(-.35,.35,ndl); vec3 c=mix(vec3(.35,.6,1.),vec3(1.,.55,.3),smoothstep(.25,-.05,ndl)*.55); float a=pow(f,4.2)*day*1.1; gl_FragColor=vec4(c*a,a); }',
+    fragmentShader:'uniform vec3 sunDir; uniform float dim; varying vec3 vN; varying vec3 vW; void main(){ vec3 n=normalize(vN); vec3 Vv=normalize(cameraPosition-vW); float f=1.-abs(dot(n,Vv)); float ndl=dot(n,sunDir); float day=smoothstep(-.35,.35,ndl); vec3 c=mix(vec3(.35,.6,1.),vec3(1.,.55,.3),smoothstep(.25,-.05,ndl)*.55); float a=pow(f,4.2)*day*1.1*(1.-dim*.85); gl_FragColor=vec4(c*a,a); }',
     transparent:true,blending:T.AdditiveBlending,depthWrite:false,side:T.BackSide});
   mats.push(atmM);
   var atmo=new T.Mesh(G(new T.SphereGeometry(ER*1.035,120,90)),atmM); atmo.position.copy(EC); scene.add(atmo);
@@ -2413,7 +2450,7 @@ function mountOrbit(host){
   /* the radiator sheet: fine flow channels drawn across it, pitch 0.5 m over its 33 m */
   var sheetTex=canvasTex(64,512,function(x,w,h){ x.fillStyle='#a8a49f'; x.fillRect(0,0,w,h);
     for(var i=0;i<h;i+=8){ x.fillStyle='rgba(255,255,255,.07)'; x.fillRect(0,i,w,3); x.fillStyle='rgba(0,0,0,.09)'; x.fillRect(0,i+4,w,2); } },{repeat:[1,1],srgb:true});
-  sheetTex.wrapS=sheetTex.wrapT=T.RepeatWrapping; sheetTex.repeat.set(1,24/.4/64);
+  sheetTex.wrapS=sheetTex.wrapT=T.RepeatWrapping; sheetTex.repeat.set(1,30/.4/64);
   M.sheet=mat(0xffffff,{r:.5,m:.25,env:1.0,s:T.DoubleSide}); M.sheet.map=sheetTex;
 
   /* ---------------------------------------------------------
@@ -2422,7 +2459,7 @@ function mountOrbit(host){
      beside the rack; the rack 11 m of rails on the sun face.
      --------------------------------------------------------- */
   /* AI1 to the published figures: 74 m wingspan, 30 m deployed height, 110 m² of radiator */
-  var WL=31, WH=18.5, GAP=6, RH=24, RD=9, ZC=0, HX=2.0, HL=11;
+  var WL=31, WH=18.5, GAP=6, RH=30, RD=9, ZC=0, HX=2.0, HL=11;   /* RH is the published deployed height, 30 m, so the dimension line is true */
   function buildSat(detail){
     var s=new T.Group(), mg=new T.Group(), wg=new T.Group(), rg=new T.Group(); s.add(mg); s.add(wg); s.add(rg);
     s.userData.parts={mast:mg,wings:wg,sheet:rg,hubs:{}};
@@ -2550,8 +2587,10 @@ function mountOrbit(host){
     var ls=new T.LineSegments(lg,lm), ps=new T.Points(pg,pm); ls.layers.set(2); ps.layers.set(2); g.add(ls); g.add(ps); g.visible=false; scene.add(g);
     return {g:g,set:function(a){ g.visible=a>.01; lm.opacity=lineOp*a; pm.opacity=ptOp*a; }}; }
   var SSOALT=ALT, LEOALT=2000;
-  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:40,spread:16,per:64},{inc:50,alt:SSOALT,planes:24,per:48}],C.cyan,.085,.95,2.2);
-  var orbSL=shells([{inc:53,alt:LEOALT,planes:72,per:22},{inc:43,alt:LEOALT,planes:36,per:20},{inc:70,alt:LEOALT,planes:36,per:20},{inc:97.6,alt:LEOALT,planes:10,per:24}],0xb4bcc8,.035,.42,1.6);
+  /* hairlines, one pale tone: the sun-synchronous band densest and brightest, the lower AI shells faint, Starlink fainter and lower */
+  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:48,spread:14,per:60}],0xc9ecf4,.10,.55,1.4);
+  var orbAI2=shells([{inc:50,alt:SSOALT,planes:28,per:40}],0xc9ecf4,.045,.28,1.2);
+  var orbSL=shells([{inc:53,alt:LEOALT,planes:72,per:22},{inc:43,alt:LEOALT,planes:36,per:20},{inc:70,alt:LEOALT,planes:36,per:20},{inc:97.6,alt:LEOALT,planes:10,per:24}],0xa9b6c2,.03,.18,1.1);
   var orbA=0, curId='wide';
 
   /* ---- environment: black sky, the sun, earthshine below ---- */
@@ -2573,7 +2612,7 @@ function mountOrbit(host){
   var SPOTS=[
     F('sat',   null,               0,[0,0,0],     44,26,  [.25,.5,.83],  YUP,null),
     F('wings', 'Solar',            0,[GAP+8,0,0], 18,11,  [-.35,-.62,.7],ZUP,null),
-    F('radiator','Radiator',       0,[0,-3,0],    15,15,  [.9,-.25,.35], YUP,null),
+    F('radiator','Radiator',       0,[0,-4,0],    18,18,  [.9,-.25,.35], YUP,null),
     F('rack',  'The rack',         1,hw([-2.4,-1.2,1.3]),7.6,4.3,hd([-.6,-.55,.58]),YUP,null),
     F('gpus',  null,               1,hw([SLED+1.4,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
     F('laser', null,               2,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
@@ -2587,26 +2626,25 @@ function mountOrbit(host){
           rack:F('',null,1,hw([-1.2,-.9,1.3]),6.6,3.8,hd([-.6,-.5,.62]),YUP,null),
           gpus:F('',null,1,hw([SLED-1.2,-.4,1.3]),3.6,2.0,hd([-.55,-.55,.63]),YUP,null),
           wings:F('',null,0,[GAP+WL-6,-4,0],4.5,2.8,[-.45,-.55,.7],ZUP,null),
-          radiator:F('',null,0,[0,11,0],7,5,[.38,.9,.2],ZUP,null)};
+          radiator:F('',null,0,[0,14,0],7,5,[.38,.9,.2],ZUP,null)};
   var VIEWS=[byId.sat,byId.rack,byId.string];
   var CHAPTERS=[[byId.sat,5,GL.sat],[byId.rack,8,GL.rack],[byId.gpus,6,GL.gpus],[byId.wings,7,GL.wings],[byId.radiator,7,GL.radiator],
                 [byId.laser,5],[byId.string,7],[byId.orbits,10]];
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var NOTES={
-    rack:{at:[HX+.3,1.3,0],slot:'tr',glow:[HP.hubs[1]],title:'Compute',
-      rows:[['Rack','NVIDIA Vera Rubin NVL72'],['Compute payload','Up to 250 kW peak / 175 kW average'],['Vehicle efficiency','75 kW / ton']]},
+    rack:{at:[HX+.3,1.3,0],slot:'tr',glow:[HP.hubs[1]],title:'Compute',rows:[['Rack','NVIDIA Vera Rubin NVL72']]},
     wings:{at:[GAP+WL-6,0,.4],glow:[HP.wings],title:'High-efficiency solar arrays',
-      rows:[['Solar array','210 kW'],['Solar power density','250 W / m²'],['Wingspan','75 m / 246 ft']]},
-    radiator:{at:[.2,9,0],glow:[HP.sheet],title:'Deployable liquid radiator',
+      dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'}]},
+    radiator:{at:[.2,RH/2-3,0],glow:[HP.sheet],title:'Deployable liquid radiator',
       desc:'Deployable liquid radiators reject heat into the vacuum of space.',
-      rows:[['Deployable liquid radiator','160 m²'],['Deployed height','30 m / 98 ft'],['Active fluid cooling'],['Redundant pumping loops'],['Integrated micrometeoroid shielding']]},
+      dims:[{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
     string:{at:nb[4].o.position,slot:'tl',glow:nb.map(function(q){ return q.o; }).concat([hero]),
       title:'Data center constellation',desc:'Satellites fly in tight formation, pooling their compute into one AI workload; each cluster links on into the wider constellation.',
       rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links to Starlink']]},
     orbits:{at:[0,0,0],slot:'tl',title:'Sun-synchronous orbits',
       desc:'Half the fleet in dawn-dusk sun-synchronous orbits: always in sunlight, steady power. The rest in lower shells to load-balance. Starlink flies apart, built for coverage.',
-      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#57c7dd'],['Starlink','Mid-inclination shells, lower','#b4bcc8']]}
+      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#c9ecf4'],['Starlink','Mid-inclination shells, lower','#8d98a3']]}
   };
 
   var tmp=new T.Vector3(), sceneT=0;
@@ -2621,10 +2659,11 @@ function mountOrbit(host){
       else { dummy.position.set(0,-99999,0); dummy.scale.setScalar(1); }
       dummy.rotation.set(0,0,0); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
     pulses.instanceMatrix.needsUpdate=true;
-    var oa=curId==='orbits'?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbSL.set(orbA);
+    var oa=curId==='orbits'?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbAI2.set(orbA); orbSL.set(orbA);
+    earthM.uniforms.dim.value=orbA*.9; atmM.uniforms.dim.value=orbA; cloudM.opacity=.85*(1-orbA*.9);
   }
   var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,
-    groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelEra:2,notes:NOTES,bloom:{k:1.9,spread:1.7},
+    groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelEra:2,notes:NOTES,bloom:{k:1.1,spread:1.7},
     panel:'<div class="r"><b>40</b><i>AI satellites / launch</i></div>'+
           '<div class="r"><b>125 KW</b><i>/ satellite</i></div>'+
           '<div class="r"><b>5 MW</b><i>/ launch</i></div>'+

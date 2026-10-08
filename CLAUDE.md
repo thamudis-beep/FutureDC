@@ -205,7 +205,9 @@ as the video does; orbit shots with Y up, Earth below; each framing carries
 its `up` and the crane blends it. Three parts on the bar — Satellite,
 Compute, Constellation, in story order — and four chips: solar, radiator ·
 the rack · constellation. The whole-satellite stop has no callout; the user
-cut it. The chapters are the storyline, in the user's order: the whole satellite
+cut it. Play resumes from the stop you are on: a chip or era button sets
+the film's chapter index, and play only restarts the chapter when the
+camera is somewhere outside the film. The chapters are the storyline, in the user's order: the whole satellite
 first (a slow push in) → the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
 in the video) → solar (a flyover down the wing) →
@@ -225,7 +227,12 @@ illustrative geometry, not figures; the only figures on the card are the
 user's. The layer fades in for that chapter only (`orbA`), because every
 sun-synchronous plane crosses the pole and would crowd the hero's close-ups.
 The camera for it looks about 100° off the sun so the sun stays out of
-frame and the band reads narrow, edge-on. It is the one time the film pulls
+frame and the band reads narrow, edge-on. The look is the reference's:
+hairlines in one pale tone, the band densest and brightest, the lower AI
+shells faint, Starlink fainter and lower, points small; and the Earth
+goes dark for the chapter (`dim` uniforms on the Earth and atmosphere,
+clouds fading) so the lines carry the picture. Colour was cut on the
+user's ask — the first version in cyan and grey dots read as noise. It is the one time the film pulls
 out to the planet; a whole-orbit view in the middle of the story then a
 zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold
@@ -264,17 +271,26 @@ makes the halo. The fill must stay tiny (`.02` on screen, `.012` into the
 bloom): a fill of `.04` turned a sunlit wing into a flat cyan slab,
 measured, because the bloom of a large face adds back its whole mean.
 Sky objects (stars, sun sprites, orbit shells) sit on layer 2 so the
-black pass skips them. The rig fades a glow in as the crane comes to the
-stop and out as it leaves. Once the
+black pass skips them. The glow is a FLASH, not a state: as the crane
+settles on the thing it comes on in a third of a second, holds about a
+second, and is gone a second later (the user: "subtle, don't overdo it,
+a quick on and off"). The card and the dimension lines stay. A note is
+for its own stop only — no `under` fallback, or the constellation card
+showed twice (laser links, then the string). Once the
 crane has settled, a ring sits on the thing with a leader to a card in its
 corner (DOM, like the rest of the chrome): what it is and its figures, the
-user's published AI1 sheet, kept short at the user's ask (no marketing
-sentences, no Bastrop line) — the NVIDIA Vera Rubin NVL72 rack, 250 kW peak
-/ 175 kW average compute, 75 kW / ton; 210 kW solar at 250 W / m², 75 m
-wingspan; the 160 m² deployable liquid radiator, 30 m deployed height,
-active fluid cooling, redundant pumping loops, micrometeoroid shielding;
-the cluster (~10 satellites, ~10 Tb/s between them, laser backhaul to
-Starlink); the orbital design (a two-colour legend). A chapter without a note of its own (the GPUs, the
+user's published AI1 sheet, cut back twice at the user's ask: the compute
+card is one row (NVIDIA Vera Rubin NVL72); solar and radiator are a title
+and, for the radiator, one line; the specs (kW, m², W/m², kW/ton) are
+gone. The dimensions survive as DIMENSION LINES in the scene instead
+(`dims`: two world points and a figure — the rig projects them, clips the
+line to the panel, ticks the ends that are in view and sets the figure at
+the visible middle, on the side away from the thing): the 75 m · 246 ft
+wingspan along the wings' lower edge, the 30 m · 98 ft deployed height
+along the sheet's edge. `RH` is 30 for that reason: the sheet is the
+published deployed height, so the line is true. Then the cluster card
+(~10 satellites, ~10 Tb/s between them, laser backhaul to Starlink) and
+the orbital design (a two-tone legend). A chapter without a note of its own (the GPUs, the
 laser links) shows its `under` stop's. Cards are pinned to corners, never
 beside the ring, so they never cover the thing they annotate; the slot is
 chosen per stop by looking at the framing. The user asked for isoglow
