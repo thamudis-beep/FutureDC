@@ -155,12 +155,22 @@ reading: grey past, amber today, cyan future. It opens on the wide shot behind
 an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
 The camera moves between framings with one crane (`flyTo`: rise, cross,
 settle, smoothstep, no roll) and holds steady with the slowest drift; the
-stops are the storyline in order — the Cloud era's metro block, meet-me
-room, colo cage, regional campus, cold aisle and the fiber that ties them
-→ the 1 GW campus, its data hall, gas turbines, BESS and grid → the AGI
-frame: nuclear plant, 1 MW hall, long haul, inference edge, cabinets,
+stops are the storyline in order — the Cloud era: an aerial overview with
+the major parts tagged, the metro block, the regional campus (three stops,
+"limit how much time spending on this"; the meet-me room, the colo cage,
+the cold aisle and the fiber vault are still built but are no longer
+stops — "don't delete the inside from the graphics, just skip it for the
+scene") → the 1 GW campus as a grouped aerial sequence: the four buildings
+· the data halls of one · inside a hall · power (gas turbines and the
+grid substation together) · ESS batteries · cooling (each stop lights one
+group and tags it; "start more aerial, show the key ideas grouped") → the
+AGI frame: nuclear plant, 1 MW hall, long haul, inference edge, cabinets,
 physical AI, orbital — and the inspect chips and in-scene pins (`SPOTS`)
-are those same stops. Framings for the two rebuilt eras are written as
+are those same stops. Tags and cards stay lean: no dishes, cooling
+towers, curb vault, chillers or office ("TMI"); no dimension lines in
+this scene ("that was relevant for space, not this"); no "an hour out",
+no "onto the MV bus"; backup is "Backup power · diesel generators", the
+batteries are "ESS batteries", never "BESS" or "battery yard". Framings for the two rebuilt eras are written as
 `eye(id,name,era,camera,target)` — the camera and what it looks at, in
 world units — because the plan gives cameras, not orbits. Any drag,
 wheel, chip or key pauses; space resumes; keys 1 / 2 / 3 jump eras. All chrome
