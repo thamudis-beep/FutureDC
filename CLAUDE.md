@@ -361,8 +361,10 @@ Earth goes dark for the chapter (`dim` uniforms on the Earth and
 atmosphere, clouds fading) so the tracks carry the picture. The card
 is the v98 wording the user asked back for after a cut: half the fleet in
 dawn-dusk sun-synchronous orbits, always in sunlight, steady power; the
-rest in lower shells to load-balance; Starlink flies apart, built for
-coverage; a two-tone legend. It is the one time the film pulls
+rest in lower shells to load-balance; a two-tone legend. The "Starlink
+flies apart" sentence was cut. The band must stay the subject: brighter,
+denser and bluer than Starlink (`orbAI` at .62, `orbSL` at .16), because
+one pass with Starlink at .30 "took over the whole thing". It is the one time the film pulls
 out to the planet; a whole-orbit view in the middle of the story then a
 zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold
