@@ -335,9 +335,22 @@ frame and the band reads narrow, edge-on. After it, one more chapter,
 `gw`: the same planet shifted left so the math panel (40 · 125 KW · 5 MW
 · 1 GW) has the right of the frame — the maths is the last word, after
 the orbits, never beside the cluster; `panelFor` names the stops that show
-it. The solar close-up was reported slow on the user's device: the scene
-runs PCF (not soft) shadows, a 1.5 pixel-ratio cap and anisotropy 2 on
-the cell texture, because a full-screen shadowed wing was the cost. The look is the user's second
+it. The solar close-up was slow on the user's device (an Apple one, going
+by the screen recordings) while every other chapter was fine. The cause:
+the scene ran a logarithmic depth buffer, which in three r159 writes
+depth from the fragment shader, and that defeats early depth and the
+hidden-surface removal of tile GPUs — every overlapped pixel is shaded
+in full. The solar close-up is the one frame where stacked surfaces (the
+cell face, a dark back plate 8 cm behind it, the other wing, the sheet)
+fill the whole screen. So: NO LOG DEPTH in this scene. A plain 24-bit
+depth buffer with near .5 holds because the cloud sphere, 96 m over a
+24 km Earth, was folded into the Earth shader (`tCloud`, `cloudOff` for
+its drift) — nothing else sits within depth precision of anything at
+27 km. Each wing is one mesh (a material array: cells on the sun face,
+the dark back on the rest), no shadow receive on the cells. The scene
+also keeps PCF (not soft) shadows, a 1.5 pixel-ratio cap and anisotropy
+2 on the cell texture. Swiftshader cannot see this class of cost
+(it is vertex-bound here); reason from the GPU, then verify the look. The look is the user's second
 reference video (the SpaceX Starmind render): every orbit a DOTTED TRACK
 of points, no solid lines, the AI constellation one dense near-polar band
 of dawn-dusk planes in a pale blue-cyan, Starlink a fainter, lower lattice
