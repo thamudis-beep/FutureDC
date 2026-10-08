@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v98 · three eras</div>
+<div class="ver">v99 · cleanups</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1436,7 +1436,8 @@ function sceneRig(T,host,K,scene,cfg){
     return [x1+dx*t0,y1+dy*t0,x1+dx*t1,y1+dy*t1,t0,t1]; }
   noteIds.forEach(function(id){ var n=notes[id], c=n.color||cfg.noteColor||groups[byId[id].era].color;
     n.hex=hex(c); n.a=0; n.at=n.at.isVector3?n.at:new T.Vector3(n.at[0],n.at[1],n.at[2]);
-    n.glow=K.glow(n.glow||[],c); });
+    if(n.seq){ n.glows=(n.glow||[]).map(function(o){ return K.glow([o],c); }); n.glow={set:function(){},pass:function(b){ n.glows.forEach(function(g){ g.pass(b); }); }}; }
+    else n.glow=K.glow(n.glow||[],c); });
   var glowing=false;
 
   /* ---- bloom, selective: the scene's depth in black, the glow proxies over it, blurred small, added back ---- */
@@ -1525,7 +1526,9 @@ function sceneRig(T,host,K,scene,cfg){
     nT+=dt; glowing=false;
     noteIds.forEach(function(id){ var n=notes[id];
       if(n===curNote&&settled){ if(n.t0==null) n.t0=nT; } else n.t0=null;
-      var e=0; if(n.t0!=null){ var u=nT-n.t0; e=u<.35?u/.35:u<1.6?1:u<2.8?1-(u-1.6)/1.2:0; e=e*e*(3-2*e); }
+      function flash(u){ var e=u<0?0:u<.35?u/.35:u<1.6?1:u<2.8?1-(u-1.6)/1.2:0; return e*e*(3-2*e); }
+      if(n.seq){ var any=0; n.glows.forEach(function(g,i){ var ei=n.t0==null?0:RM?.5:flash(nT-n.t0-i*n.seq); g.set(ei); if(ei>any) any=ei; }); n.a=any; if(any>.01) glowing=true; return; }
+      var e=0; if(n.t0!=null){ e=flash(nT-n.t0); }
       if(RM) e=n.t0!=null?.5:0;
       n.a=e; n.glow.set(e); if(e>.01) glowing=true; });
     var want=settled?curNote:null, goal=(want&&want===nShown)?1:0;
@@ -2524,7 +2527,7 @@ function mountOrbit(host){
     rg.add(box(.12,RH+.1,.16,M.whiteEdge,0,0,RD/2)); rg.add(box(.12,RH+.1,.16,M.whiteEdge,0,0,-RD/2));
     /* the hub: a rack on each face of the sheet, an open frame — rails, ties, pipes, plates, nothing solid beneath */
     [1,-1].forEach(function(side){
-    var hub=new T.Group(); hub.position.set(side*HX,0,0); s.add(hub); hub.userData.sleds=[]; s.userData.parts.hubs[side]=hub;
+    var hub=new T.Group(); hub.position.set(side*HX,0,0); s.add(hub); hub.userData.sleds=[]; hub.userData.lids=[]; s.userData.parts.hubs[side]=hub;
     hub.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(new T.Vector3(0,0,-side),new T.Vector3(-side,0,0),new T.Vector3(0,1,0)));
     hub.add(box(HL+.7,.08,.08,M.tie,0,-1.52,.5)); hub.add(box(HL+.7,.08,.08,M.tie,0,1.52,.5));
     [-1.35,1.35].forEach(function(ry){ hub.add(box(HL+.6,.10,.40,M.rail,0,ry,.55,true)); hub.add(box(HL+.6,.34,.10,M.rail,0,ry,.55)); hub.add(box(HL+.6,.10,.40,M.rail,0,ry,1.8)); hub.add(box(HL+.6,.34,.10,M.rail,0,ry,1.8)); });
@@ -2547,7 +2550,7 @@ function mountOrbit(host){
         var st=new T.Group(); st.position.set(sx,0,1.0); hub.add(st);
         st.add(box(1.14,2.14,.04,M.frame,0,0,-.02)); st.add(box(.05,2.14,.5,M.frame,-.56,0,.23)); st.add(box(.05,2.14,.5,M.frame,.56,0,.23));
         for(var b=0;b<5;b++){ var pl=new T.Mesh(BG(1.04,2.34,.035),M.plate); pl.position.set(0,0,.05+b*.1); pl.castShadow=true; st.add(pl); }
-        var lid=new T.Group(); lid.position.set(sx,0,1.56); hub.add(lid); if(dy) sleds.push({g:lid,pull:dy,t0:-1e9,dur:3.2});
+        var lid=new T.Group(); lid.position.set(sx,0,1.56); hub.add(lid); hub.userData.lids.push(lid); if(dy) sleds.push({g:lid,pull:dy,t0:-1e9,dur:3.2});
         var lm=new T.Mesh(lidG,M.lid); lm.castShadow=lm.receiveShadow=true; lid.add(lm);
         lid.add(box(1.12,.05,.44,M.lidLip,0,1.08,.25));
         lid.add(box(.05,.04,.02,M.led,-.42,-1.0,.06)); lid.add(box(.05,.04,.02,M.led,-.33,-1.0,.06)); lid.add(box(.05,.04,.02,M.port,.36,-1.0,.06));
@@ -2612,24 +2615,22 @@ function mountOrbit(host){
      normal is Z, the sun's direction: a dawn-dusk plane, riding the terminator. The AI constellation's
      sun-synchronous half is a tight band of such planes; its other half sits in lower-inclination shells;
      Starlink is apart, lower, at a spread of inclinations. All of it fades in for the last chapter only ---- */
-  function shells(spec,color,lineOp,ptOp,ptSize){
-    var g=new T.Group(), lp=[], pp=[], q=new T.Quaternion(), e=new T.Euler(), v=new T.Vector3();
+  /* each orbit is a dotted track — points along the circle, no solid line — as the reference draws them; a plane is a
+     circle tilted by inclination about X then swung by RAAN about the pole; the satellites themselves are not separate marks */
+  function shells(spec,color,ptOp,ptSize){
+    var g=new T.Group(), pp=[], q=new T.Quaternion(), e=new T.Euler(), v=new T.Vector3();
     spec.forEach(function(sh){ var r=ER+sh.alt, inc=sh.inc*Math.PI/180;
       for(var p=0;p<sh.planes;p++){ var raan=sh.spread!=null?(sh.planes>1?sh.spread*(p/(sh.planes-1)-.5)*Math.PI/180:0):p/sh.planes*Math.PI*2;
         e.set(inc,raan,0,'YXZ'); q.setFromEuler(e); var ph=p*2.399;
-        for(var i=0;i<180;i++){ for(var j=0;j<2;j++){ var u=(i+j)/180*Math.PI*2; v.set(r*Math.cos(u),0,r*Math.sin(u)).applyQuaternion(q).add(EC); lp.push(v.x,v.y,v.z); } }
         for(var k=0;k<sh.per;k++){ var u2=k/sh.per*Math.PI*2+ph; v.set(r*Math.cos(u2),0,r*Math.sin(u2)).applyQuaternion(q).add(EC); pp.push(v.x,v.y,v.z); } } });
-    var lg=G(new T.BufferGeometry()); lg.setAttribute('position',new T.BufferAttribute(new Float32Array(lp),3));
-    var lm=new T.LineBasicMaterial({color:color,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false}); mats.push(lm);
     var pg=G(new T.BufferGeometry()); pg.setAttribute('position',new T.BufferAttribute(new Float32Array(pp),3));
     var pm=new T.PointsMaterial({color:color,size:ptSize||2,sizeAttenuation:false,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false}); mats.push(pm);
-    var ls=new T.LineSegments(lg,lm), ps=new T.Points(pg,pm); ls.layers.set(2); ps.layers.set(2); g.add(ls); g.add(ps); g.visible=false; scene.add(g);
-    return {g:g,set:function(a){ g.visible=a>.01; lm.opacity=lineOp*a; pm.opacity=ptOp*a; }}; }
-  var SSOALT=ALT, LEOALT=2000;
-  /* hairlines, one pale tone: the sun-synchronous band densest and brightest, the lower AI shells faint, Starlink fainter and lower */
-  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:48,spread:14,per:60}],0xc9ecf4,.10,.55,1.4);
-  var orbAI2=shells([{inc:50,alt:SSOALT,planes:28,per:40}],0xc9ecf4,.045,.28,1.2);
-  var orbSL=shells([{inc:53,alt:LEOALT,planes:72,per:22},{inc:43,alt:LEOALT,planes:36,per:20},{inc:70,alt:LEOALT,planes:36,per:20},{inc:97.6,alt:LEOALT,planes:10,per:24}],0xa9b6c2,.03,.18,1.1);
+    var ps=new T.Points(pg,pm); ps.layers.set(2); g.add(ps); g.visible=false; scene.add(g);
+    return {g:g,set:function(a){ g.visible=a>.01; pm.opacity=ptOp*a; }}; }
+  var SSOALT=ALT, LEOALT=1600;
+  /* the AI constellation: one dense band of dawn-dusk planes over the pole; Starlink: a lower lattice at a spread of inclinations */
+  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:90,spread:34,per:170}],0x8fd0e6,.26,1.1);
+  var orbSL=shells([{inc:53,alt:LEOALT,planes:40,per:110},{inc:43,alt:LEOALT-300,planes:24,per:100},{inc:70,alt:LEOALT+300,planes:16,per:100}],0x7f9db4,.10,1.0);
   var orbA=0, curId='wide';
 
   /* ---- environment: black sky, the sun, earthshine below ---- */
@@ -2656,8 +2657,8 @@ function mountOrbit(host){
     F('radiator','Radiator',       0,[0,-4,0],    18,18,  [.9,-.25,.35], YUP,null),
     F('laser', null,               1,[260,-6,0],  760,420,  [.55,.38,.74],YUP,null),
     F('string','Constellation',    1,[700,-40,0], 1900,1050,[.74,.30,.60],YUP,null),
-    F('orbits',null,               1,[EC.x,EC.y,EC.z],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null),
-    F('gw',    null,               1,[EC.x-.21*ER,EC.y,EC.z-.55*ER],2.9*ER,1.75*ER,[1,.28,-.38],YUP,null)
+    F('orbits',null,               1,[EC.x,EC.y,EC.z],2.9*ER,1.75*ER,[1,.18,-.22],YUP,null),
+    F('gw',    null,               1,[EC.x-.21*ER,EC.y,EC.z-.55*ER],2.9*ER,1.75*ER,[1,.18,-.22],YUP,null)
   ];
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   byId.gpus.under='rack'; byId.laser.under='string'; byId.orbits.under='string'; byId.gw.under='string';
@@ -2673,21 +2674,21 @@ function mountOrbit(host){
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var NOTES={
-    sat:{at:[HX,1.3,0],slot:'tr',glow:[hero],title:'AI satellite',desc:'Orbital satellite with localized compute.',
+    sat:{at:[HX,1.3,0],slot:'tr',glow:[hero],title:'AI satellite',
       dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'},{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
-    rack:{at:[HX+.3,1.3,0],slot:'tr',glow:[HP.hubs[1]],title:'Compute',rows:[['Rack','NVIDIA Vera Rubin NVL72']]},
+    rack:{at:[HX+.3,1.3,0],slot:'tr',glow:HP.hubs[1].userData.lids,seq:.22,title:'Compute',desc:'NVIDIA Vera Rubin NVL72.'},
     wings:{at:[GAP+WL-6,0,.4],glow:[HP.wings],title:'High-efficiency solar arrays',
       dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'}]},
     radiator:{at:[.2,RH/2-3,0],glow:[HP.sheet],title:'Deployable liquid radiator',
-      desc:'Deployable liquid radiators reject heat into the vacuum of space.',
+      desc:'Rejects heat into the vacuum of space.',
       dims:[{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
     laser:{at:onOrbit(.5*SP/OR),slot:'tl',title:'Laser connectivity',desc:'High-speed laser links interconnect satellites and beam AI results back to Earth.'},
     string:{at:nb[4].o.position,slot:'tl',glow:nb.map(function(q){ return q.o; }).concat([hero]),
       title:'Data center constellation',desc:'Satellites fly in tight formation, pooling their compute into one AI workload; each cluster links on into the wider constellation.',
-      rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links to Starlink']]},
-    orbits:{at:[0,0,0],slot:'tl',title:'Sun-synchronous orbits',
-      desc:'Half the fleet in dawn-dusk sun-synchronous orbits: always in sunlight, steady power. The rest in lower shells to load-balance. Starlink flies apart, built for coverage.',
-      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#c9ecf4'],['Starlink','Mid-inclination shells, lower','#8d98a3']]}
+      rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links']]},
+    orbits:{at:[0,0,0],slot:'tl',title:'Sun-synchronous orbit',
+      desc:'The AI constellation flies in dawn-dusk sun-synchronous orbit: always-on power, steady sunlight.',
+      rows:[['AI constellation','Sun-synchronous','#c9ecf4'],['Starlink','Separate, lower','#8d98a3']]}
   };
 
   var tmp=new T.Vector3(), sceneT=0;
@@ -2702,8 +2703,8 @@ function mountOrbit(host){
       else { dummy.position.set(0,-99999,0); dummy.scale.setScalar(1); }
       dummy.rotation.set(0,0,0); dummy.updateMatrix(); pulses.setMatrixAt(i,dummy.matrix); });
     pulses.instanceMatrix.needsUpdate=true;
-    var oa=(curId==='orbits'||curId==='gw')?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbAI2.set(orbA); orbSL.set(orbA);
-    earthM.uniforms.dim.value=orbA*.9; atmM.uniforms.dim.value=orbA; cloudM.opacity=.85*(1-orbA*.9);
+    var oa=(curId==='orbits'||curId==='gw')?1:0; orbA=RM?oa:orbA+(oa-orbA)*(1-Math.pow(oa?.03:.002,dt)); orbAI.set(orbA); orbSL.set(orbA);
+    earthM.uniforms.dim.value=orbA*.8; atmM.uniforms.dim.value=orbA; cloudM.opacity=.85*(1-orbA*.95);
   }
   var rig=sceneRig(T,host,K,scene,{RM:RM,near:.3,far:1e6,logDepth:true,exposure:1.22,minR:1.6,maxR:120000,liftScale:3,pinScale:.25,maxPh:3.0,dpr:1.5,softShadow:false,
     groups:GRP,wide:WIDE,views:VIEWS,stops:SPOTS,chapters:CHAPTERS,picks:[],tick:tick,onChapter:onChapter,panelFor:['gw'],notes:NOTES,noteColor:0xe0a355,bloom:{k:1.1,spread:1.7},

@@ -337,12 +337,16 @@ frame and the band reads narrow, edge-on. After it, one more chapter,
 the orbits, never beside the cluster; `panelFor` names the stops that show
 it. The solar close-up was reported slow on the user's device: the scene
 runs PCF (not soft) shadows, a 1.5 pixel-ratio cap and anisotropy 2 on
-the cell texture, because a full-screen shadowed wing was the cost. The look is the reference's:
-hairlines in one pale tone, the band densest and brightest, the lower AI
-shells faint, Starlink fainter and lower, points small; and the Earth
-goes dark for the chapter (`dim` uniforms on the Earth and atmosphere,
-clouds fading) so the lines carry the picture. Colour was cut on the
-user's ask — the first version in cyan and grey dots read as noise. It is the one time the film pulls
+the cell texture, because a full-screen shadowed wing was the cost. The look is the user's second
+reference video (the SpaceX Starmind render): every orbit a DOTTED TRACK
+of points, no solid lines, the AI constellation one dense near-polar band
+of dawn-dusk planes in a pale blue-cyan, Starlink a fainter, lower lattice
+at a spread of inclinations in a dim blue-grey, nothing else; and the
+Earth goes dark for the chapter (`dim` uniforms on the Earth and
+atmosphere, clouds fading) so the tracks carry the picture. The card
+says one thing: the AI constellation flies in dawn-dusk sun-synchronous
+orbit, always-on power, steady sunlight, with a two-tone legend; the
+lower AI shells and the load-balancing line were cut ("simplify"). It is the one time the film pulls
 out to the planet; a whole-orbit view in the middle of the story then a
 zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold
@@ -386,13 +390,18 @@ settles on the thing it comes on in a third of a second, holds about a
 second, and is gone a second later (the user: "subtle, don't overdo it,
 a quick on and off"). The card and the dimension lines stay. A note is
 for its own stop only — no `under` fallback, or the constellation card
-showed twice (laser links, then the string). Once the
+showed twice (laser links, then the string). A note may flash its
+objects IN SEQUENCE (`seq`: seconds between them, each object its own
+glow): the compute stop runs down the rack's eight casings one after
+another, because lighting the whole hub at once "looked like I found
+gold". Once the
 crane has settled, a ring sits on the thing with a leader to a card in its
 corner (DOM, like the rest of the chrome): what it is and its figures, the
-user's published AI1 sheet, cut back twice at the user's ask: the compute
-card is one row (NVIDIA Vera Rubin NVL72); solar and radiator are a title
-and, for the radiator, one line; the specs (kW, m², W/m², kW/ton) are
-gone. The dimensions survive as DIMENSION LINES in the scene instead
+user's published AI1 sheet, cut back three times at the user's ask: the
+satellite card is its title alone; compute is "NVIDIA Vera Rubin NVL72."
+with no "rack"; solar is a title; the radiator is "Rejects heat into the
+vacuum of space."; backhaul is "Laser links", never "to Starlink"; the
+specs (kW, m², W/m², kW/ton) are gone. The dimensions survive as DIMENSION LINES in the scene instead
 (`dims`: two world points and a figure — the rig projects them, clips the
 line to the panel, ticks the ends that are in view and sets the figure at
 the visible middle, on the side away from the thing): the 75 m · 246 ft
