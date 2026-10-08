@@ -123,6 +123,10 @@ Three views, hash-routed, in one file.
 
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
+
+Both 3D scenes annotate themselves the same way (see the orbital scene
+for the mechanism): a stop with a note flashes its part, then a ring, a
+leader and a corner card; dimension lines where a size is the point.
 ---
 
 ## Diagrams
@@ -156,7 +160,43 @@ wheel, chip or key pauses; space resumes; keys 1 / 2 / 3 jump eras. All chrome
 is DOM over the canvas, and every framing is {target, half-width, half-height,
 yaw, pitch} — the radius is derived from the panel's aspect, not baked in.
 The stage pedestals are 44×40, 92×66 and 150×76; the rail is 86 deep so the
-long-haul conduit at z = −41 clears the world map.
+long-haul conduit at z = −41 clears the world map. Each stage groups the
+parts a note can light under `userData.parts` (the colo's building and
+racks; the campus's grid, gas, bess, bld, hall, cool; the planet's fab,
+cities, orb, mono, smr, phys) and `NOTES` names them by stop. Figures on
+the cards are the user's (1 GW IT, ~1.2 GW facility, 34 × 35 MW, 120
+containers, ~140 kW / rack, ~440 racks · 62 MW per hall); the rest is a
+line of what the thing is. The rig for this scene runs a log depth buffer
+with near .02 and `minR` .25 so the camera can stand inside a hall at
+model scale.
+
+**The Today stage is a real 1 GW campus**, built to the user's site plan,
+not a diagram: metres, Y up, origin at the south-west corner of a
+1400 × 900 m equipment pad, north away from the viewer, on the 92 × 66
+pedestal at S = 92/1400 (`W(x,y,z)` maps campus metres to world; `AISLE`
+is the cold aisle the hall camera stands in). 345 kV substation
+(280 × 180, two main transformers, a bus on steel, eight breakers, the
+dead-end tower where the line lands) · gas island (520 × 220, 34
+aeroderivative packages in two rows of 17 at 28 m centres, each 16 × 4 × 4
+with a 12 m stack and an SCR box, a fire road round the rows, a control
+building, the metering skid and the fire-water tank) · battery yard
+(160 × 100, 120 white containers 6 × 2.5 × 2.8 in 4 m aisles) · four
+buildings 220 × 90 × 12 in two rows of two, each with its electrical pad
+on the west (transformers, switchgear, a local battery line) and its dry
+cooler yard 40 m east (closed loop, no plume, pipe rack over the road) ·
+admin and NOC at the south gate · a 24 m spine road with the MV duct bank
+under it. Building A is cut open: four halls of 448 racks (eight rows of
+seven groups of eight, 4.2 m pitch; 0.6 × 1.1 × 2.5 racks, dark grey, a
+blue manifold line at the rear), a support strip along the north wall
+with the CDUs, the leaf switches and the fibre tray. No NVLink is drawn;
+it never leaves the rack. Gas is the prime source and the grid the tie,
+so there are no gensets on the building face and no cooling towers. The
+film's campus chapter glides from the aerial to a low oblique over
+Building A's corner looking up the spine road to the stacks; at this
+model scale a 2 m eye on the road sees a plain, which was tried. The
+hall chapter is a dolly up a cold aisle; the power chapter a glide low
+along the turbine row. The old campus kit (combined-cycle trains, gensets,
+pylons, the eight-hall grid) is gone with it.
 
 The AGI stage is the planet, never a city block: the back of its pedestal is
 the world (Natural Earth, ±60° of latitude), with GW sites at real coordinates

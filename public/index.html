@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v94 · flash</div>
+<div class="ver">v95 · campus</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1442,7 +1442,7 @@ function sceneRig(T,host,K,scene,cfg){
   /* ---- bloom, selective: the scene's depth in black, the glow proxies over it, blurred small, added back ---- */
   var bloom=null;
   if(cfg.bloom){
-    var blackM=new T.MeshBasicMaterial({color:0x000000}); K.mats.push(blackM);
+    var blackM=new T.MeshBasicMaterial({color:0x000000,fog:false}); K.mats.push(blackM);
     var rtA=null, rtB=null, rtC=null, vsq='varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }';
     function mkRT(w,h){ var r=new T.WebGLRenderTarget(Math.max(2,w),Math.max(2,h)); r.texture.minFilter=T.LinearFilter; return r; }
     var blurM=new T.ShaderMaterial({uniforms:{t:{value:null},d:{value:new T.Vector2()}},vertexShader:vsq,
@@ -1731,45 +1731,6 @@ function mountEras(host){
     return pos;}
 
   /* ---------------------------------------------------------
-     nvlHall — the inside of an AI hall: NVL72 rows, leaf/spine,
-     overhead fibre to every rack, coolant headers, busway.
-     --------------------------------------------------------- */
-  function nvlHall(g,x0,z0,rows,cols){
-    var w=1.15,h=2.9,d=1.5, rowZ=3.2;
-    var pos=rackField(g,{x:x0,z:z0,cols:cols,rows:rows,w:w,h:h,d:d,gapX:.16,gapZ:rowZ,
-      units:27,band:[9,17],manifold:1,led:C.gpu,ledI:2.6,bezel:0x272e37});
-    var trayM=mat(C.steelL,{r:.5,m:.8});
-    var fiberM=mat(C.orange,{r:.5,m:.1,e:C.orange,ei:.55});
-    var pwrM=mat(0x0e1116,{r:.9,m:.2});
-    var span=(cols*(w+.16))/2+1.6;
-    var leafX=x0+span+1.4, spineX=x0+span+3.4;
-
-    for(var r=0;r<rows;r++){
-      var z=z0+(r-(rows-1)/2)*rowZ;
-      /* leaf + spine at the end of the row */
-      rackField(g,{x:leafX,z:z,cols:1,rows:1,w:1.0,h:2.9,d:1.2,units:14,ports:12,portC:C.aqua,led:C.aqua,bezel:0x232a33});
-      rackField(g,{x:spineX,z:z,cols:1,rows:1,w:1.0,h:2.9,d:1.2,units:14,ports:12,portC:C.hotCore,led:C.hotCore,bezel:0x232a33});
-      /* overhead tray the length of the row */
-      ladder(g,[x0-span,3.5,z-.7],[spineX+.8,3.5,z-.7],.7,trayM,1.3);
-      /* drop fibre to each rack in this row */
-      pos.filter(function(p){return p[3]===r;}).forEach(function(p){
-        g.add(tube([[p[0],3.42,z-.7],[p[0],3.05,z-.35],[p[0],2.62,p[2]+.28]],.035,fiberM,10));
-        g.add(tube([[p[0]+.3,3.42,z-.7],[p[0]+.3,3.0,z-.3],[p[0]+.3,2.30,p[2]+.28]],.045,pwrM,8));
-      });
-      /* leaf -> spine trunk arch */
-      g.add(tube([[leafX,3.0,z],[ (leafX+spineX)/2,4.2,z],[spineX,3.0,z]],.055,mat(C.aqua,{e:C.aqua,ei:.7,r:.5,m:.1}),14));
-      /* coolant headers under the row */
-      g.add(box(cols*(w+.16)+3.0,.16,.16,mat(0x2b4a66,{r:.4,m:.7}),x0+1.4,.30,z-d*.62));
-      g.add(box(cols*(w+.16)+3.0,.16,.16,mat(0x5a3340,{r:.4,m:.7}),x0+1.4,.30,z+d*.62));
-      /* busway with a live strip */
-      g.add(box(cols*(w+.16)+1.0,.22,.22,mat(C.steel,{r:.5,m:.8}),x0,3.95,z+.8));
-      g.add(box(cols*(w+.16)+1.0,.05,.05,lit(C.forgeLit,1.6),x0,3.83,z+.8));
-    }
-    /* row-to-row cross trunk into the spine column */
-    ladder(g,[spineX+.6,4.1,z0-(rows/2)*rowZ],[spineX+.6,4.1,z0+(rows/2)*rowZ],.6,trayM,1.4);
-    return {leafX:leafX,spineX:spineX};}
-
-  /* ---------------------------------------------------------
      hall shell — sealed hyperscale hall, or cut open
      --------------------------------------------------------- */
   function hallShell(g,x,z,len,wid,h,accent,o){
@@ -1812,35 +1773,7 @@ function mountEras(host){
 
   /* ---------------- power plant kit ---------------- */
   var stacks=[];   /* exhaust halos, animated */
-  /* a combined-cycle train: filter house, gas turbine, generator, HRSG with its stack,
-     steam turbine, and an air-cooled condenser deck behind it */
-  function ccgt(g,x,z){
-    var u=new T.Group(); u.position.set(x,0,z);
-    var encl=mat(0x2a313a,{r:.7,m:.55}), sk=SK(), hrsgM=mat(0x333b46,{r:.8,m:.35}), duct=mat(0x3c4652,{r:.6,m:.7});
-    u.add(box(3.0,4.0,3.4,mat(0x232931,{r:.8,m:.4}),-8.5,2.0,0,true));                 /* intake filter house */
-    for(var i=0;i<5;i++) u.add(box(.10,3.6,3.45,sk,-9.7+i*.6,2.0,0));
-    u.add(box(6.0,3.0,3.2,encl,-3.8,1.5,0,true));                                     /* gas turbine package */
-    u.add(box(5.8,.10,.10,lit(C.forgeLit,1.2),-3.8,3.05,1.62));
-    u.add(box(3.0,2.6,2.8,mat(0x30373f,{r:.6,m:.7}),.9,1.3,0,true));                  /* generator */
-    u.add(box(2.2,2.2,2.2,duct,3.2,2.4,0));                                           /* exhaust duct */
-    u.add(box(4.2,7.0,4.6,hrsgM,6.2,3.5,0,true));                                     /* HRSG */
-    for(var r=0;r<3;r++) u.add(box(4.3,.12,4.7,sk,6.2,1.2+r*2.3,0));
-    u.add(cyl(.95,1.1,8.0,sk,6.2,11.0,0,14));                                         /* stack */
-    var h=halo(C.forgeLit,4.2,.30); h.position.set(6.2,15.6,0); u.add(h); stacks.push(h);
-    u.add(tube([[6.2,7.1,1.6],[8.4,7.4,1.6],[10.4,3.2,1.2]],.18,sk,8));                /* steam to the ST */
-    u.add(box(4.0,2.6,3.0,mat(0x30373f,{r:.6,m:.7}),10.6,1.3,0,true));                /* steam turbine + generator */
-    u.add(box(3.8,.10,.10,lit(C.forgeLit,1.0),10.6,2.65,1.52));
-    u.add(box(12,1.0,3.6,mat(0x232a33,{r:.7,m:.5}),3.5,3.6,4.6,true));                /* air-cooled condenser deck */
-    for(var f=0;f<4;f++) u.add(cyl(1.15,1.15,.10,mat(0x4a525d,{r:.62,m:.6}),-1+f*3,4.16,4.6,16));
-    for(var l=0;l<4;l++) u.add(box(.18,3.1,.18,sk,-2.5+l*4,1.55,3.2+(l%2)*2.8));
-    g.add(u); return u;}
-
   var _sk=null; function SK(){ return _sk||(_sk=mat(C.steelL,{r:.5,m:.8})); }
-  function GENSET(){ return [
-    [BG(4.6,1.9,1.5),mat(0x272d35,{r:.78,m:.42}),0,.95,0,1],
-    [BG(1.6,.45,1.3),SK(),1.3,2.12,0,0],                              /* radiator */
-    [CG(.20,.20,1.5,8),SK(),-1.7,2.6,0,0],                            /* stack */
-    [BG(4.4,.06,.06),lit(C.forge,.9),0,1.55,.78,0]];}
   function BESS(accent){ return [
     [BG(4.4,1.7,1.4),mat(0x21262e,{r:.8,m:.4}),0,.85,0,1],
     [BG(1.0,.5,1.0),SK(),-1.5,1.95,0,0],                              /* HVAC */
@@ -1850,15 +1783,6 @@ function mountEras(host){
     for(var i=0;i<6;i++) p.push([BG(.14,1.9,2.3),fin,-1.2+i*.48,1.0,0,0]);     /* radiator fins */
     for(var b=0;b<3;b++) p.push([CG(.16,.22,1.5,8),bu,-.7+b*.7,2.75,0,0]);     /* bushings */
     return p;}
-
-  function pylon(g,x,z,h){
-    var u=new T.Group(); u.position.set(x,0,z);
-    var m=mat(C.steel,{r:.6,m:.8});
-    for(var l=0;l<4;l++) u.add(box(.16,h,.16,m,(l<2?-1:1)*.9,h/2,(l%2?1:-1)*.9));
-    for(var b=1;b<=3;b++){ var y=h*(b/3.4);
-      u.add(box(2.0,.12,.12,m,0,y,0)); u.add(box(.12,.12,2.0,m,0,y,0)); }
-    u.add(box(5.4,.14,.14,m,0,h*.94,0)); u.add(box(3.8,.14,.14,m,0,h*.78,0));
-    g.add(u); return u;}
 
   /* ---------------- city kit ---------------- */
   function cityBlock(g,x0,z0,w,d,windowsIM){
@@ -1911,6 +1835,7 @@ function mountEras(host){
     });
 
     /* --- the data center: two sealed floors, third cut open --- */
+    var dc=new T.Group(), rk=new T.Group(); g.add(dc); dc.add(rk); S1.userData.parts={dc:dc,racks:rk}; g=dc;
     var BX=0, BZ=3, BL=22, BW=14, FH=4;
     var skin=mat(0x333b46,{r:.84,m:.3}), seam=mat(0x1e242c,{r:.9,m:.25});
     g.add(box(BL,FH*2,BW,skin,BX,FH,BZ,true));
@@ -1935,7 +1860,7 @@ function mountEras(host){
 
     /* 4 rows x 8 racks: 8 servers + a ToR switch */
     var HY=FY+.30;
-    var racks=rackField(g,{x:BX-2,z:BZ+1.4,cols:8,rows:4,w:.9,h:2.6,d:1.1,gapX:.36,gapZ:2.5,
+    var racks=rackField(rk,{x:BX-2,z:BZ+1.4,cols:8,rows:4,w:.9,h:2.6,d:1.1,gapX:.36,gapZ:2.5,
       y:HY,units:9,ports:8,portC:C.aqua,led:C.coldLit,ledI:3.0,bezel:0x2a313a});
 
     /* CRAC units on the back wall */
@@ -1983,72 +1908,115 @@ function mountEras(host){
   scene.add(winIM);
 
   /* =========================================================
-     STAGE 2 · AI — a 1 GW campus. Sealed halls of liquid-cooled
-     NVL72, fibre on trays, turbines and batteries on site.
+     STAGE 2 · AI — a 1 GW campus, to the site plan. Metres, Y up,
+     origin at the south-west corner of the equipment pad, north
+     away from the viewer; the pad is 1400 × 900 m on a 92 × 59
+     pedestal (S = 92/1400). 1 GW IT, liquid-cooled GB200 NVL72;
+     four buildings of four halls; a 345 kV substation, a gas
+     island of 34 aeroderivative packages, a 120-container battery
+     yard; dry coolers, closed loop, no plume.
      ========================================================= */
-  var S2=pedestal(X1,92,66,C.forge);
+  var S2=pedestal(X1,92,66,C.forge), S=92/1400, CG2=new T.Group();
+  CG2.position.set(-46,.12,29.5); CG2.scale.setScalar(S); S2.add(CG2);
+  function W(xm,ym,zm){ return new T.Vector3(X1-46+xm*S,.12+ym*S,29.5-zm*S); }   /* campus metres → world */
+  var AISLE=220+1+9+4.2+2.1;   /* the cold aisle between rows one and two, where the hall camera stands */
   (function(){
-    var g=S2;
-    g.add(box(92,.10,66,mat(C.concrete,{r:.95,m:.12}),0,.05,0));
-    var road=mat(0x1a1e24,{r:.95,m:.08});
-    g.add(box(88,.06,5.0,road,0,.11,-17.5));    /* between the hall rows */
-    g.add(box(88,.06,5.0,road,0,.11,2.0));      /* halls to power yard */
-    g.add(box(5.0,.06,58,road,-44+3,.11,0));
+    var g=CG2, P={};
+    function B(w,h,d,m,x,z,y,cast){ return box(w,h,d,m,x,(y||0)+h/2,-z,cast); }   /* a box standing on the pad at campus (x,z) */
+    var gravel=mat(0x30363d,{r:.96,m:.1}), conc=mat(0x3a4149,{r:.94,m:.12}), road=mat(0x14171b,{r:.95,m:.08}), steel=SK(),
+        shellM=mat(0x454d58,{r:.86,m:.24}), roofM=mat(0x333a43,{r:.9,m:.2}), encl=mat(0x2a313a,{r:.7,m:.55}), dark=mat(0x1e232a,{r:.8,m:.4}),
+        white=mat(0xd3d8de,{r:.7,m:.2}), capM=mat(0x232a33,{r:.7,m:.5}), fanM=mat(0x4a525d,{r:.62,m:.6}), xfm=mat(0x2c333c,{r:.68,m:.6}),
+        bush=mat(0x6d5f4a,{r:.5,m:.3}), sup=mat(0x2b4a66,{r:.4,m:.7}), ret=mat(0x5a3340,{r:.4,m:.7}), part=mat(0x30363e,{r:.85,m:.3});
+    /* pads, roads, the fire road round the turbine rows */
+    g.add(B(280,.3,180,gravel,140,90)); g.add(B(520,.3,220,conc,860,110)); g.add(B(160,.3,100,gravel,80,250)); g.add(B(160,.3,100,conc,680,250));
+    g.add(B(24,.4,900,road,460,450)); g.add(B(24,.4,900,road,1000,450));
+    [362,582,850].forEach(function(z){ g.add(B(1400,.4,24,road,700,z)); });
+    [40,190].forEach(function(z){ g.add(B(560,.45,30,road,860,z)); }); [590,1130].forEach(function(x){ g.add(B(30,.45,180,road,x,115)); });
 
-    var hallX=[-33,-11,11,33], hallZ=[-25,-11], openC=1, openR=1;
-    for(var r=0;r<2;r++) for(var c=0;c<4;c++){
-      var open=(r===openR&&c===openC);
-      hallShell(g,hallX[c],hallZ[r],18,10,4.2,C.forge,{open:open,chillers:6});
-    }
-    nvlHall(g,hallX[openC]-3,hallZ[openR],3,9);
-
-    var op=new T.PointLight(0x9fe6a8,150,15,1.6); op.position.set(hallX[openC]-3,2.4,hallZ[openR]); S2.add(op);
-    var op2=new T.PointLight(0xffd9a0,90,14,1.6); op2.position.set(hallX[openC]+5,2.6,hallZ[openR]); S2.add(op2);
-
-    /* fibre: a tray down every hall, two east-west trunks, one north-south */
-    var trayM=mat(C.steelL,{r:.5,m:.8}), fibM=mat(C.orange,{r:.5,m:.1,e:C.orange,ei:.6});
-    for(var r2=0;r2<2;r2++){
-      ladder(g,[-44,5.6,hallZ[r2]-6.4],[42,5.6,hallZ[r2]-6.4],.8,trayM,2.0);
-      for(var c2=0;c2<4;c2++) ladder(g,[hallX[c2]-9,5.0,hallZ[r2]-6.4],[hallX[c2]-9,5.0,hallZ[r2]+5.6],.6,trayM,1.8);
-    }
-    ladder(g,[-38,6.2,-31.5],[-38,6.2,-4.0],.8,trayM,2.0);
-
-    /* meet-me / network building at the north-west corner */
-    g.add(box(9,5.0,7,mat(0x252b33,{r:.85,m:.3}),-38,2.5,-30,true));
-    g.add(box(8.6,.10,.10,lit(C.forge,1.2),-38,3.6,-26.55));
-    g.add(box(3.0,.6,2.4,mat(0x2a313a,{r:.8,m:.4}),-38,5.3,-30));
-    bundle(g,[[-38,6.1,-27],[-38,4.2,-31],[-38,1.2,-33],[-38,1.0,-41]],.13,fibM,5,.2);
-
-    /* --- power yard: three combined-cycle trains, gensets for backup, batteries --- */
-    [-26,-2,22].forEach(function(tx){ ccgt(g,tx,8); });
-    g.add(box(74,.5,.5,mat(0x3c4652,{r:.55,m:.75}),-2,1.1,15.4));            /* gas header */
-    [-26,-2,22].forEach(function(tx){ g.add(cyl(.22,.22,1.4,mat(0x3c4652,{r:.55,m:.75}),tx-8.5,1.9,15.4,8)); });
-
-    var gp=[]; for(var gs=0;gs<8;gs++) gp.push([-34+gs*8,19,0]); repeat(g,GENSET(),gp);
-    var bp=[]; for(var bs=0;bs<9;bs++){ bp.push([-36+bs*8,25.5,0]); bp.push([-36+bs*8,29.5,0]); }
-    repeat(g,BESS(C.forge),bp);
-
-    /* substation: six transformers on a bus, pylons, HV out over the boundary */
-    var xp=[]; for(var tr=0;tr<6;tr++) xp.push([38,2+tr*4.6,0]); repeat(g,XFMR(),xp);
-    g.add(box(.5,.5,26,mat(0x3c4652,{r:.55,m:.75}),38,4.6,13));
-    for(var bp=0;bp<6;bp++) g.add(cyl(.10,.10,1.9,mat(C.steelL,{r:.5,m:.85}),38,3.7,2+bp*4.6,8));
-    var py1=pylon(g,44,4,13), py2=pylon(g,44,22,13);
+    /* ---- the 345 kV substation: two main transformers, a bus on steel, a line of breakers, the dead-end tower ---- */
+    var sub=new T.Group(); g.add(sub); P.grid=sub;
+    [90,170].forEach(function(x){ sub.add(B(12,8,8,xfm,x,90,0,true));
+      for(var f=0;f<7;f++) sub.add(B(.6,7,9,steel,x-5.4+f*1.8,90,.5)); for(var b=0;b<3;b++) sub.add(cyl(.5,.7,5,bush,x-3+b*3,10.5,-90,10));
+      sub.add(B(5,4,5,steel,x+9,90,0)); });
+    for(var k=0;k<2;k++){ sub.add(B(200,.6,.6,steel,140,60+k*60,12)); for(var p=0;p<11;p++) sub.add(B(.8,12,.8,steel,40+p*20,60+k*60)); }
+    for(var br=0;br<8;br++){ var bx=50+br*24; sub.add(B(4,.4,4,steel,bx,140,3)); sub.add(cyl(1.2,1.2,5,encl,bx,5.9,-140,12).rotateZ(Math.PI/2));
+      for(var q=0;q<2;q++) sub.add(cyl(.4,.5,3,bush,bx-1.5+q*3,8.9,-140,8)); }
+    (function(x,z,h){ var u=new T.Group(); u.position.set(x,0,-z); sub.add(u);
+      for(var l=0;l<4;l++) u.add(box(.5,h,.5,steel,(l<2?-1:1)*3,h/2,(l%2?1:-1)*3));
+      for(var b=1;b<=5;b++){ var y=h*b/5.5; u.add(box(6.6,.35,.35,steel,0,y,3)); u.add(box(6.6,.35,.35,steel,0,y,-3)); u.add(box(.35,.35,6.6,steel,3,y,0)); u.add(box(.35,.35,6.6,steel,-3,y,0)); }
+      u.add(box(18,.5,.5,steel,0,h*.92,0)); u.add(box(13,.5,.5,steel,0,h*.76,0)); })(40,160,36);
     var hv=mat(0x424b57,{r:.7,m:.6});
-    for(var w2=-1;w2<=1;w2++){
-      g.add(tube([[44+w2*2.2,12.2,4],[44+w2*2.2,11.0,13],[44+w2*2.2,12.2,22]],.045,hv,12));
-      g.add(tube([[44+w2*2.2,12.2,22],[45+w2*2.2,10.6,30],[46+w2*2.2,9.0,38]],.045,hv,12));
-    }
-    /* MV feeds from the bus along the halls */
-    var mv=mat(0x2a323c,{r:.7,m:.5});
-    g.add(box(.34,.34,40,mv,34,1.4,-8)); g.add(box(70,.34,.34,mv,0,1.4,-6.2));
-    for(var c3=0;c3<4;c3++) g.add(box(.34,.34,7,mv,hallX[c3]+6,1.4,-9.5));
+    for(var w2=-1;w2<=1;w2++){ sub.add(tube([[40+w2*6,33,-160],[-30+w2*6,30,-165],[-120+w2*6,22,-170]],.25,hv,10));
+      sub.add(tube([[40+w2*6,33,-160],[90+w2*6,22,-125],[120+w2*6,13,-95]],.2,hv,10)); }
+    sub.add(B(16,4,8,encl,240,30,0,true));
 
-    /* closed-loop water */
-    for(var wt=0;wt<2;wt++){
-      g.add(cyl(3.6,3.6,6.0,mat(0x272e37,{r:.8,m:.4}),-40,3.0,6+wt*10,20));
-      g.add(cyl(3.7,3.7,.25,mat(C.steelL,{r:.5,m:.8}),-40,6.1,6+wt*10,20));
-    }
+    /* ---- the gas island: 34 aeroderivative packages in two rows, 28 m on centre, each with its stack and SCR; a control building ---- */
+    var gas=new T.Group(); g.add(gas); P.gas=gas;
+    var tb=[[BG(16,4,4),encl,0,2,0,1],[BG(3.5,3.5,3.5),mat(0x30373f,{r:.6,m:.7}),9.8,1.75,0,1],[BG(4,4,4),mat(0x333b46,{r:.8,m:.35}),-10.5,2,0,1],
+            [CG(1.0,1.1,12,12),steel,-10.5,10,0,0],[BG(2.8,2.8,2.8),dark,0,1.4,4.2,0],[BG(15.5,.12,.12),lit(C.forgeLit,1.2),0,3.6,2.05,0]];
+    var tAt=[]; for(var i=0;i<17;i++){ tAt.push([630+i*28,-70,0]); tAt.push([630+i*28,-150,0]); }
+    repeat(gas,tb,tAt);
+    tAt.forEach(function(p){ var h=halo(C.forgeLit,5,.25); h.position.set(p[0]-10.5,17.5,p[1]); h.layers.set(2); gas.add(h); stacks.push(h); });
+    gas.add(B(520,.8,.8,mat(0x3c4652,{r:.55,m:.75}),860,110,1.2));
+    gas.add(B(20,5,10,encl,1100,110,0,true)); gas.add(B(19.5,.12,.12,lit(C.forgeLit,1.0),1100,104.9,3.6));
+    /* fuel and water: the metering skid, the fire-water tank */
+    gas.add(B(18,3,8,encl,640,230,0,true)); gas.add(B(6,2.5,6,dark,660,250));
+    gas.add(cyl(14,14,12,mat(0x2b3139,{r:.8,m:.35}),720,6.3,-262,24)); gas.add(cyl(14.2,14.2,.4,steel,720,12.4,-262,24));
+
+    /* ---- the battery yard: 120 white containers in a grid, 4 m aisles, a PCS and step-up per row ---- */
+    var bess=new T.Group(); g.add(bess); P.bess=bess;
+    var bAt=[]; for(var r=0;r<10;r++) for(var c=0;c<12;c++) bAt.push([15+c*10,-(215+r*6.5),0]);
+    repeat(bess,[[BG(6,2.8,2.5),white,0,1.4,0,1],[BG(1.2,.5,1.2),fanM,-2,2.9,0,0],[BG(5.8,.1,.1),lit(C.forge,1.2),0,1.6,1.28,0]],bAt);
+    for(var r2=0;r2<10;r2++) bess.add(B(4,3,3,xfm,145,215+r2*6.5,0));
+
+    /* ---- four buildings, 220 × 90 × 12, four halls each, the electrical pad on the west; A is cut open ---- */
+    var BX=[220,760], BZ=[400,620], bld=new T.Group(), hallG=new T.Group(); g.add(bld); g.add(hallG); P.bld=bld; P.hall=hallG;
+    function building(x,z,open){
+      var u=new T.Group(); bld.add(u);
+      u.add(B(220,.4,90,mat(0x1c2027,{r:.9,m:.2}),x+110,z+45,0,true));
+      if(open){
+        u.add(B(220,12,.6,shellM,x+110,z+90,0,true)); u.add(B(220,12,.6,shellM,x+110,z,0,true)); u.add(B(.6,12,90,shellM,x,z+45,0,true)); u.add(B(.6,12,90,shellM,x+220,z+45,0,true));
+        for(var c=1;c<4;c++) u.add(B(.4,12,90,part,x+c*56-3,z+45));
+        u.add(B(220,10,.5,part,x+110,z+78));
+      } else {
+        u.add(B(220,12,90,shellM,x+110,z+45,0,true)); u.add(B(220,.5,90,roofM,x+110,z+45,12));
+        for(var p=0;p<3;p++) u.add(B(20,4,8,mat(0x2a313a,{r:.8,m:.4}),x+40+p*70,z+45,12.5,true));
+        u.add(B(216,.3,.3,lit(C.forge,1.1),x+110,z-.4,4)); u.add(B(216,.3,.3,lit(C.forge,1.1),x+110,z+90.4,4));
+      }
+      u.add(B(30,.3,90,gravel,x-16,z+45));
+      for(var t=0;t<4;t++){ u.add(B(6,5,4,xfm,x-20,z+12+t*20,0,true)); for(var f=0;f<4;f++) u.add(B(.4,4.5,4.4,steel,x-22.8+f*1.6,z+12+t*20,.3)); }
+      for(var s2=0;s2<3;s2++) u.add(B(3,3,12,encl,x-8,z+15+s2*28,0,true));
+      for(var b2=0;b2<10;b2++) u.add(B(2,2.4,1,white,x-12,z+8+b2*8,0));
+      return u; }
+    building(BX[0],BZ[0],true); building(BX[1],BZ[0],false); building(BX[0],BZ[1],false); building(BX[1],BZ[1],false);
+    /* inside A: four halls of 448 racks — eight rows along the depth, each seven groups of eight — CDUs and leaf switches on the support strip.
+       A rack is 0.6 wide, 1.1 deep, 2.5 tall, dark grey, a blue manifold line at the rear; network racks are the same shell, shorter, no manifold */
+    var rackF=inst(BG(1.1,2.5,.6),mat(0x262b32,{r:.7,m:.5}),448*4,true), rackP=inst(BG(.03,2.3,.56),part,448*4), rackM=inst(BG(.05,2.3,.05),lit(C.aqua,1.1),448*4);
+    var cdu=inst(BG(1.2,2.0,1.0),mat(0x2a313a,{r:.7,m:.5}),56*4), leaf=inst(BG(1.1,2.0,.6),mat(0x232a33,{r:.7,m:.5}),10*4), tray=inst(BG(48,.15,.5),steel,4);
+    for(var hh=0;hh<4;hh++){ var hx=BX[0]+1+hh*56, hz=BZ[0]+6;
+      hallG.add(B(50,.1,70,mat(0x1f242b,{r:.92,m:.2}),hx+25,hz+35,.4));
+      for(var r3=0;r3<8;r3++){ var rx=hx+9+r3*4.2, face=r3%2?1:-1;
+        for(var gp2=0;gp2<7;gp2++) for(var i3=0;i3<8;i3++){ var rz=hz+4+gp2*7.4+i3*.6+.3;
+          put(rackF,rx,1.65,-rz); put(rackP,rx+.56*face,1.6,-rz); put(rackM,rx-.5*face,1.6,-rz); } }
+      for(var c4=0;c4<56;c4++) put(cdu,hx+2+c4*.85,1.4,-(hz+67.5));
+      for(var l4=0;l4<10;l4++) put(leaf,hx+2+l4*.7,1.4,-(hz+65.5));
+      put(tray,hx+25,4.0,-(hz+66.5)); }
+    [rackF,rackP,rackM,cdu,leaf,tray].forEach(function(m){ hallG.add(m); });
+
+    /* ---- cooler yards east of each building: dry coolers, 12 × 3 × 4, closed loop; a pipe rack over the road into the corridor ---- */
+    var cool=new T.Group(); g.add(cool); P.cool=cool;
+    var cAt=[]; [[480,400],[1020,400],[480,620],[1020,620]].forEach(function(y){ for(var col=0;col<2;col++) for(var r=0;r<10;r++) cAt.push([y[0]+35+col*60,-(y[1]+6+r*8.6),0]); });
+    var cParts=[[BG(12,4,3),capM,0,2,0,1]]; for(var f2=0;f2<4;f2++) cParts.push([CG(1.3,1.3,.15,16),fanM,-4.5+f2*3,4.05,0,0]); cParts.push([BG(11.8,.1,.1),lit(C.forge,.8),0,1.2,1.52,0]);
+    repeat(cool,cParts,cAt);
+    [[440,480,445],[980,1020,445],[440,480,665],[980,1020,665]].forEach(function(pr){ var L=pr[1]-pr[0]+20, cx=(pr[0]+pr[1])/2;
+      cool.add(B(L,.8,.8,sup,cx,pr[2]-1.2,3.5)); cool.add(B(L,.8,.8,ret,cx,pr[2]+1.2,3.0)); for(var pp=0;pp<4;pp++) cool.add(B(.5,3.2,2.4,steel,pr[0]+pp*((pr[1]-pr[0])/3),pr[2])); });
+
+    /* admin and NOC at the south gate */
+    g.add(B(40,6,20,mat(0x252b33,{r:.85,m:.3}),500,20,0,true)); g.add(B(39,.3,.3,lit(C.forge,1.0),500,9.8,3.5));
+    S2.userData.parts=P;
   })();
+  /* the open building is lit from inside; the lights live in world units */
+  [[300,400,0xcfe0f5],[420,470,0xffd9a0]].forEach(function(l){ var pl=new T.PointLight(l[2],28,9,1.5); pl.position.copy(W(l[0],6,l[1])); scene.add(pl); });
 
   /* =========================================================
      STAGE 3 · AGI — the planet. The back of the pedestal is the
@@ -2092,12 +2060,13 @@ function mountEras(host){
     sxy.forEach(function(p){ put(pads,p[0],.14,p[1],-Math.PI/2,0,0); }); g.add(pads);
 
     /* ---- the fabric: arcs between sites, and one job's traffic on them ---- */
+    var fab=new T.Group(); S3.add(fab); g=fab;
     var arcM=mat(C.hot,{e:C.hot,ei:.6,r:.5,m:.1,t:true,o:.8});
     [[0,1],[0,2],[3,0],[4,1],[1,5],[5,6],[5,7],[6,7],[7,8],[8,9],[9,10],[10,11],[2,10],[9,11],[4,5],[3,10]].forEach(function(pr){
       var a=sxy[pr[0]], b=sxy[pr[1]], d=Math.hypot(b[0]-a[0],b[1]-a[1]);
       var c=new T.CatmullRomCurve3([new T.Vector3(a[0],.5,a[1]),new T.Vector3((a[0]+b[0])/2,2.5+d*.16,(a[1]+b[1])/2),new T.Vector3(b[0],.5,b[1])],false,'centripetal');
       g.add(new T.Mesh(G(new T.TubeGeometry(c,24,.07,5,false)),arcM)); links.push(c); });
-    var NL=64, pulses=inst(SG(.19,8),lit(C.hotCore,2.4),NL); g.add(pulses);
+    g=S3; var NL=64, pulses=inst(SG(.19,8),lit(C.hotCore,2.4),NL); g.add(pulses);
     for(var pi=0;pi<NL;pi++){ put(pulses,0,-5,0); anim.links.push({m:pulses,i:pi,c:links[pi%links.length],t:Math.random(),v:.09+Math.random()*.08,d:pi%2?1:-1}); }
 
     /* ---- inference at the edge: real cities ---- */
@@ -2107,9 +2076,10 @@ function mountEras(host){
       [28.6,77.2],[13,77.6],[23.8,90.4],[13.8,100.5],[-6.2,106.8],[14.6,121],[22.3,114.2],[31.2,121.5],[39.9,116.4],[37.6,127],
       [25,121.5],[-31.9,115.9],[-37.8,145],[-36.8,174.8],[45.5,-73.6],[33.7,-84.4],[47.6,-122.3],[39.7,-105],[50.1,8.7],[45.5,9.2],[55.7,12.6]];
     var edge=inst(BG(.34,.10,.34),lit(0xdfe8f5,1.5),CITIES.length);
-    CITIES.forEach(function(c){ var p=LL(c[0],c[1]); put(edge,p[0],.2,p[1]); }); g.add(edge);
+    CITIES.forEach(function(c){ var p=LL(c[0],c[1]); put(edge,p[0],.2,p[1]); }); var cityG=new T.Group(); cityG.add(edge); S3.add(cityG);
 
     /* ---- the orbital layer: three shells over the world, and compute in orbit ---- */
+    var orbG=new T.Group(); S3.add(orbG); g=orbG;
     var satM=mat(0x4a525d,{r:.5,m:.8}), panM=mat(0x1a2330,{r:.4,m:.6});
     for(var ring=0;ring<3;ring++){
       var n=22, bus=inst(BG(.5,.2,.36),satM,n), pan=inst(BG(1.5,.04,.5),panM,n);
@@ -2126,6 +2096,7 @@ function mountEras(host){
       sat.add(cyl(.6,.18,.6,mat(0xd6dfeb,{r:.4,m:.5}),0,-1.1,0,14));
       g.add(sat); anim.bigring=anim.bigring||[]; anim.bigring.push({o:sat,a:q2/4*Math.PI*2,rx:58,rz:24,y:32,v:.09});
     }
+    g=S3;
     [0,5,10].forEach(function(si,gi){
       var p=sxy[si], u3=new T.Group(); u3.position.set(p[0]+3.2,0,p[1]+1.2); g.add(u3);
       var yoke=new T.Group(); yoke.position.y=.6; u3.add(yoke);
@@ -2140,6 +2111,7 @@ function mountEras(host){
     g.add(box(.14,.10,24,seam,-25,.34,27)); g.add(box(.14,.10,24,seam,25,.34,27)); g.add(box(148,.10,.14,seam,0,.34,15));
 
     /* V1 · racks are 1 MW: the hall cut open */
+    var monoG=new T.Group(); S3.add(monoG); g=monoG;
     var HX=-50, HZ=27;
     hallShell(g,HX,HZ,30,12,7.6,C.hot,{open:true});
     var monM=mat(0x2b323c,{r:.6,m:.62}), monRail=mat(C.steelL,{r:.45,m:.85}), coreM=lit(C.hot,1.6);
@@ -2159,6 +2131,7 @@ function mountEras(host){
     var hl2=new T.PointLight(0xbfefff,120,22,1.6); hl2.position.set(HX,4.5,HZ+1); g.add(hl2);
 
     /* V2 · nuclear and SMRs: four modules, one turbine hall, batteries */
+    var smrG=new T.Group(); S3.add(smrG); g=smrG;
     var smrM=mat(0x3a4049,{r:.85,m:.2}), smrRing=lit(C.hot,1.0), fanM2=mat(0x4a525d,{r:.62,m:.6});
     [-12,-4,4,12].forEach(function(mx){
       var cont=cyl(2.6,2.75,5,smrM,mx,2.8,20.5,28); cont.castShadow=cont.receiveShadow=true; g.add(cont);
@@ -2175,6 +2148,7 @@ function mountEras(host){
     g.add(box(.5,.5,10,mat(0x3c4652,{r:.55,m:.75}),-19.5,4.9,29)); g.add(box(.5,.5,10,mat(0x3c4652,{r:.55,m:.75}),19.5,4.9,29));
 
     /* V3 · the physical world: a line of robot arms, humanoids, robotaxis, drones */
+    var phys=new T.Group(); S3.add(phys); g=phys;
     var cont=mat(0x2a2f36,{r:.8,m:.4}), cAt=[];
     for(var ci=0;ci<4;ci++) cAt.push([34+ci*3.4,17.6,0]);
     repeat(g,[[BG(2.8,1.4,1.5),cont,0,1.0,0,1],[BG(2.7,.06,.06),lit(C.hot,1.2),0,1.3,.78,0]],cAt);
@@ -2222,6 +2196,7 @@ function mountEras(host){
         var rd=cyl(.32,.32,.02,rotorM,q[0]*.72,.08,q[1]*.72,12); dr.add(rd); rot.push(rd); });
       dr.add(box(.06,.06,.06,lit(C.red,2.4),-.3,.1,0)); dr.add(box(.06,.06,.06,lit(0x86e07a,2.4),.3,.1,0));
       g.add(dr); anim.drones.push({o:dr,cx:dp[0],cz:dp[1],h:dp[2],r:5+di*2,a:di*1.6,v:(di%2?1:-1)*(.4+di*.05),rot:rot}); });
+    S3.userData.parts={fab:fab,cities:cityG,orb:orbG,mono:monoG,smr:smrG,phys:phys};
   })();
 
   /* =========================================================
@@ -2257,24 +2232,28 @@ function mountEras(host){
 
   /* pick targets, one per stage; each carries the framing a click flies to */
   var picks=[];
-  [[X0,44,40,26,10],[X1,92,66,26,10],[X2,150,76,86,40]].forEach(function(p){
+  [[X0,44,40,26,10],[X1,92,66,12,4],[X2,150,76,86,40]].forEach(function(p){
     var m=new T.Mesh(BG(p[1],p[3],p[2]),new T.MeshBasicMaterial({visible:false}));
     mats.push(m.material); m.position.set(p[0],p[4],0); scene.add(m); picks.push(m);});
 
+  /* a framing from an eye and a target: the radius the rig derives from w/h is the eye's distance */
+  function eye(id,n,era,cam,tgt,pin){ var d=cam.clone().sub(tgt), r=d.length(), h=r*Math.tan(21*Math.PI/180);
+    return {id:id,n:n,era:era,t:tgt,w:h*1.1,h:h,th:Math.atan2(d.z,d.x),ph:Math.acos(d.y/r),pin:pin||null}; }
+  function pinAt(v){ return [v.x,v.y,v.z,1]; }
   var ERAS=[
     {id:'wide', t:new T.Vector3(36,12,0),  w:206, h:60, th:1.47, ph:.93, era:-1},   /* the whole rail */
     {id:'cloud',t:new T.Vector3(X0,7,2),   w:44,  h:26, th:1.19, ph:.80, era:0},
-    {id:'ai',   t:new T.Vector3(X1-3,4,-9),w:58,  h:30, th:1.14, ph:.84, era:1},
+    {id:'ai',   t:W(700,4,430),           w:96,  h:40, th:1.02, ph:1.12, era:1},
     {id:'agi',  t:new T.Vector3(X2,6,-2),  w:84,  h:52, th:1.40, ph:.80, era:2}
   ];
   /* the stops. This is the storyline, in order; each is a chip, a pin and a chapter */
   var SPOTS=[
     {id:'metroarea',n:'Metro area',          era:0, t:new T.Vector3(X0,7,2),       w:44, h:26, th:1.19, ph:.80,  pin:null},
     {id:'metro',  n:'3 kW CPU racks',        era:0, t:new T.Vector3(X0+1,9.5,4),   w:20, h:11, th:1.08, ph:1.02, pin:[X0,14.6,3,1]},
-    {id:'nvl',    n:'150 kW racks',          era:1, t:new T.Vector3(X1-14,2.4,-11),w:15, h:8,  th:1.00, ph:1.06, pin:[X1-14,6.8,-11,1]},
-    {id:'campus', n:'GW-scale campus',       era:1, t:new T.Vector3(X1-3,4,-9),    w:58, h:30, th:1.14, ph:.84,  pin:null},
-    {id:'onsite', n:'On-site power',         era:1, t:new T.Vector3(X1-4,3,17),    w:44, h:22, th:1.42, ph:.96,  pin:[X1+4.2,18,8,1]},
-    {id:'grid',   n:'Grid',                  era:1, t:new T.Vector3(X1+38,2.5,13), w:22, h:12, th:1.12, ph:1.00, pin:[X1+38,8.6,13,1]},
+    {id:'campus', n:'GW-scale campus',       era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
+    eye('nvl','140 kW racks',1,W(AISLE,1.7,404),W(AISLE,1.6,470),pinAt(W(AISLE,3.2,430))),
+    {id:'onsite', n:'On-site power',         era:1, t:W(860,6,110),  w:42,  h:23, th:1.25, ph:.95,  pin:pinAt(W(619.5,16,70))},
+    {id:'grid',   n:'Grid',                  era:1, t:W(140,6,100),  w:30,  h:16, th:1.05, ph:.95,  pin:pinAt(W(40,38,160))},
     {id:'fabric', n:'Connected GW sites',    era:2, t:new T.Vector3(X2,0,-14),     w:80, h:34, th:1.50, ph:.60,  pin:[X2+36,7,-13,1]},
     {id:'mono',   n:'1 MW racks',            era:2, t:new T.Vector3(X2-50,3.6,27), w:22, h:12, th:1.12, ph:1.02, pin:[X2-33,10,33,1]},
     {id:'smr',    n:'Nuclear',               era:2, t:new T.Vector3(X2,3,27),      w:28, h:13, th:1.30, ph:1.00, pin:[X2+17,9,22,1]},
@@ -2284,9 +2263,30 @@ function mountEras(host){
   ];
 
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
-  /* the film: [framing, seconds to hold]. Moves take 1.6 s within an era, up to 3 s across */
-  var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.nvl,4.5],[byId.campus,3],[byId.onsite,4],[byId.grid,3.5],
+  /* where the campus flyovers end: the spine road at eye height with the stacks behind; the dolly up the aisle; low along the turbine row */
+  var GL={campus:eye('',null,1,W(500,30,470),W(720,6,150)), nvl:eye('',null,1,W(AISLE,1.7,440),W(AISLE,1.6,476)), onsite:eye('',null,1,W(600,4,30),W(900,9,110))};
+  /* the film: [framing, seconds to hold, glide]. Moves take 1.6 s within an era, up to 3 s across */
+  var CHAPTERS=[[ERAS[0],3],[byId.metroarea,3],[byId.metro,4.5],[byId.campus,7,GL.campus],[byId.nvl,6,GL.nvl],[byId.onsite,5,GL.onsite],[byId.grid,3.5],
                 [ERAS[3],3],[byId.fabric,5],[byId.mono,4],[byId.smr,4],[byId.orbit,4],[byId.cities,3.5],[byId.edge,5]];
+  /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
+  var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
+  var NOTES={
+    metroarea:{at:[X0,9,3],slot:'tr',glow:[P1.dc],title:'Metro colo',desc:'One windowless building in the city, two sealed floors.'},
+    metro:{at:[X0-2,12.2,4.4],slot:'tl',glow:[P1.racks],title:'3 kW CPU racks',desc:'Eight servers and a top-of-rack switch; structured copper to the meet-me room.'},
+    campus:{at:W(700,14,450),slot:'tr',glow:[CG2],title:'1 GW campus',desc:'Four buildings, sixteen halls, liquid-cooled GB200 NVL72.',
+      rows:[['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2']],dims:[{a:W(0,.5,-12),b:W(1400,.5,-12),l:'1,400 m'},{a:W(-12,.5,0),b:W(-12,.5,900),l:'900 m'}]},
+    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'GB200 NVL72, liquid-cooled',rows:[['Provisioned','~140 kW / rack'],['Per hall','~440 racks · 62 MW']],
+      dims:[{a:W(AISLE-2.1+.56,.4,410.3),b:W(AISLE-2.1+.56,2.9,410.3),l:'2.5 m'}]},
+    onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas,P2.bess],title:'Gas island',desc:'Gas is the prime source; the grid is the tie.',
+      rows:[['Turbines','34 × 35 MW'],['Battery yard','120 containers']]},
+    grid:{at:W(40,38,160),slot:'tr',glow:[P2.grid],title:'345 kV substation',desc:'Two main transformers, 345 to 34.5 kV, onto the campus MV bus.'},
+    fabric:{at:[X2+36,7,-13],slot:'tr',glow:[P3.fab],title:'Connected GW sites',desc:'GW sites across countries, one job running on the fabric between them.'},
+    mono:{at:[X2-33,10,33],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'The hall cut open: racks at 1 MW.'},
+    smr:{at:[X2+17,9,22],slot:'tr',glow:[P3.smr],title:'Nuclear',desc:'Four SMR modules on one turbine hall, with batteries.'},
+    orbit:{at:[X2-60,36,-13],slot:'tr',glow:[P3.orb],title:'Orbital',desc:'Compute in orbit, three shells over the world.'},
+    cities:{at:[X2,4.5,-34.5],slot:'tr',glow:[P3.cities],title:'Edge',desc:'Inference at the edge, in real cities.'},
+    edge:{at:[X2+66,8,22],slot:'tl',glow:[P3.phys],title:'Physical AI',desc:'Robot arms on a line, humanoids, robotaxis, drones.'}
+  };
 
   picks.forEach(function(m,i){ m.userData.view=ERAS[i+1]; });
 
@@ -2327,9 +2327,9 @@ function mountEras(host){
     }
     fl.m.instanceMatrix.needsUpdate=true; col.needsUpdate=true;
   }
-  var rig=sceneRig(T,host,K,scene,{RM:RM,far:1400,near:.3,exposure:1.58,
+  var rig=sceneRig(T,host,K,scene,{RM:RM,far:1400,near:.02,logDepth:true,minR:.25,maxPh:1.62,exposure:1.58,
     groups:[{n:'Cloud',sub:'2023',color:ERA[0]},{n:'Today',sub:'2026',color:ERA[1]},{n:'AGI',sub:'2031',color:ERA[2]}],
-    wide:ERAS[0],views:ERAS.slice(1),stops:SPOTS,chapters:CHAPTERS,picks:picks,tick:tick});
+    wide:ERAS[0],views:ERAS.slice(1),stops:SPOTS,chapters:CHAPTERS,picks:picks,tick:tick,notes:NOTES,bloom:{k:1.1,spread:1.7}});
   rig.start();
   return rig;
 }
@@ -2633,6 +2633,8 @@ function mountOrbit(host){
 
   /* the callouts: what each thing is, and its figures, as published for AI1 */
   var NOTES={
+    sat:{at:[HX,1.3,0],slot:'tr',glow:[hero],title:'AI1 satellite',desc:'Orbital satellite with localized compute.',
+      dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'},{a:[.3,-RH/2,RD/2+1.0],b:[.3,RH/2,RD/2+1.0],l:'30 m · 98 ft'}]},
     rack:{at:[HX+.3,1.3,0],slot:'tr',glow:[HP.hubs[1]],title:'Compute',rows:[['Rack','NVIDIA Vera Rubin NVL72']]},
     wings:{at:[GAP+WL-6,0,.4],glow:[HP.wings],title:'High-efficiency solar arrays',
       dims:[{a:[-(GAP+WL),-WH/2-1.2,.4],b:[GAP+WL,-WH/2-1.2,.4],l:'75 m · 246 ft'}]},
