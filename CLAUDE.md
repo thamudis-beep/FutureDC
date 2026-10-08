@@ -202,11 +202,13 @@ deep chassis, coolant mains with U-bends, laser terminals fore and aft.
 Wings are blue-grey cells with a broad specular band and two dark seams.
 Rack shots hang the camera with Z up
 as the video does; orbit shots with Y up, Earth below; each framing carries
-its `up` and the crane blends it. Three parts on the bar — Compute,
-Satellite, Constellation — and four chips: the rack · solar, radiator ·
-constellation. The chapters are the storyline: the rack (a dolly
+its `up` and the crane blends it. Three parts on the bar — Satellite,
+Compute, Constellation, in story order — and four chips: solar, radiator ·
+the rack · constellation. The whole-satellite stop has no callout; the user
+cut it. The chapters are the storyline, in the user's order: the whole satellite
+first (a slow push in) → the rack (a dolly
 along the rails) → the GPUs (the sleds travel in and out on their rails, as
-in the video) → the whole satellite → solar (a flyover down the wing) →
+in the video) → solar (a flyover down the wing) →
 radiator (a flyover that ends looking along its edge, so the sheet reads
 thin) → laser links (the neighbours, close) → the constellation (the string
 on the horizon, held: a cluster of ten, boxed, pooling compute over ~10 Tb/s
@@ -246,11 +248,24 @@ bolts across every seam. Motion runs on the film's own accumulated `dt`, not
 the wall clock, so a slow renderer keeps camera and casings in step. No pins in this scene — at rack scale they read as
 props.
 Instead the scene annotates itself: `cfg.notes` maps a stop id to a note —
-`at` (the world point the ring sits on), `glow` (boxes `[x,y,z,w,h,d,rz]`
-around the thing), `slot` (which corner the card takes), `title`, `desc`
-and `rows` (a row's third entry is a legend colour). `K.glow` draws the highlight natively — a fresnel shell over
-the volume plus its edges, both additive, cyan, breathing — and the rig
-fades it in as the crane comes to the stop and out as it leaves. Once the
+`at` (the world point the ring sits on), `glow` (the objects that light
+up: `buildSat` groups its parts as `userData.parts` — mast, wings, sheet,
+hubs by side — so a note can name one), `slot` (which corner the card
+takes), `title`, `desc` and `rows` (a row's third entry is a legend
+colour). The highlight is the iso-glow look the user pointed at: the thing
+ITSELF lights up — its edges as luminous lines, its body barely lifted, a
+soft bloom around it — never a box or shell around it (the fresnel box was
+tried and rejected). `K.glow` gives every mesh under the named objects a
+proxy child on layer 1 (edges as `EdgesGeometry` lines, body as an additive
+fill; instanced meshes get an instanced proxy sharing the matrices), and
+the rig's selective bloom (`cfg.bloom`, three core only: the scene's depth
+rendered black, the layer-1 proxies over it, blurred small, added back)
+makes the halo. The fill must stay tiny (`.02` on screen, `.012` into the
+bloom): a fill of `.04` turned a sunlit wing into a flat cyan slab,
+measured, because the bloom of a large face adds back its whole mean.
+Sky objects (stars, sun sprites, orbit shells) sit on layer 2 so the
+black pass skips them. The rig fades a glow in as the crane comes to the
+stop and out as it leaves. Once the
 crane has settled, a ring sits on the thing with a leader to a card in its
 corner (DOM, like the rest of the chrome): what it is and its figures, the
 user's published AI1 sheet, kept short at the user's ask (no marketing
