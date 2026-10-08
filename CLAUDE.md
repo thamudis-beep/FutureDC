@@ -126,7 +126,10 @@ Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 
 Both 3D scenes annotate themselves the same way (see the orbital scene
 for the mechanism): a stop with a note flashes its part, then a ring, a
-leader and a corner card; dimension lines where a size is the point.
+leader and a corner card; dimension lines where a size is the point. The
+glow is one amber in both scenes (`noteColor` 0xe0a355): the user liked
+the footprint's amber over the orbital scene's cyan and asked for the
+same in both.
 ---
 
 ## Diagrams
@@ -152,18 +155,22 @@ reading: grey past, amber today, cyan future. It opens on the wide shot behind
 an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
 The camera moves between framings with one crane (`flyTo`: rise, cross,
 settle, smoothstep, no roll) and holds steady with the slowest drift; the
-stops are the storyline in order — 3 kW CPU racks in a metro colo → the GW
-campus, the NVL72 hall, grid + on-site power → connected GW sites across
-countries, 1 MW racks, nuclear + SMRs, orbital + edge, physical AI — and the
-inspect chips and in-scene pins (`SPOTS`) are those same stops. Any drag,
+stops are the storyline in order — the Cloud era's metro block, meet-me
+room, colo cage, regional campus, cold aisle and the fiber that ties them
+→ the 1 GW campus, its data hall, gas turbines, BESS and grid → the AGI
+frame: nuclear plant, 1 MW hall, long haul, inference edge, cabinets,
+physical AI, orbital — and the inspect chips and in-scene pins (`SPOTS`)
+are those same stops. Framings for the two rebuilt eras are written as
+`eye(id,name,era,camera,target)` — the camera and what it looks at, in
+world units — because the plan gives cameras, not orbits. Any drag,
 wheel, chip or key pauses; space resumes; keys 1 / 2 / 3 jump eras. All chrome
 is DOM over the canvas, and every framing is {target, half-width, half-height,
 yaw, pitch} — the radius is derived from the panel's aspect, not baked in.
-The stage pedestals are 44×40, 92×66 and 150×76; the rail is 86 deep so the
+The stage pedestals are 60×40, 92×66 and 150×76; the rail is 86 deep so the
 long-haul conduit at z = −41 clears the world map. Each stage groups the
 parts a note can light under `userData.parts` (the colo's building and
 racks; the campus's grid, gas, bess, bld, hall, cool; the planet's fab,
-cities, orb, mono, smr, phys) and `NOTES` names them by stop. Figures on
+plant, mono, fab, cities, cab, phys, orb) and `NOTES` names them by stop. Figures on
 the cards are the user's (1 GW IT, ~1.2 GW facility, ~7,100 racks at
 ~140 kW, 34 × 35 MW, 120 containers, ~440 racks · ~62 MW per hall); the
 rest is a line of what the thing is, kept general — no vendor SKU on the
@@ -176,6 +183,31 @@ their own cards (BESS: load shaping, ramp and backup on the MV bus). The
 Today chips are 1 GW campus · Data hall · Gas turbines · BESS · Grid. The rig for this scene runs a log depth buffer
 with near .02 and `minR` .25 so the camera can stand inside a hall at
 model scale.
+
+**The Cloud stage is late cloud, 2012–2022, to the user's plan**, built
+quickly on purpose ("the cloud stuff needs to be quick"): two places tied
+by one fiber path, on a 1000 × 667 m lawn at SC = 60/1000 (`WC(x,y,z)`
+maps metres to world; the campus origin is `CP`). Place 1, the city
+block, 200 × 120 at the south-west: the street with manholes every 40 m
+and the curb vault; the carrier hotel 40 × 50 × 72, 18 floors of brick
+with punched windows, floor 7 cut open as the meet-me room (fiber panels
+down both long walls, four racks in the middle, trays and aqua bundles
+across the ceiling), two cooling towers, a generator and two dishes on
+the roof; the colo 60 × 40 × 16, windowless but the lobby, eight diesels
+in the rear yard, two chillers on the side pad, top floor cut open as
+chain-link cages of 8–20 racks with CRAC units at the ends. Place 2, the
+regional campus, 700 × 500 at (300,100): a 230 kV substation with one
+transformer and a dead-end tower, the fiber hut by the gate, twenty
+diesels idle on the south fence, four buildings 90 × 50 × 16 with cooling
+towers on a pad at the east end, the office knuckle on A, parking, an
+18 m spine road, trees on the fence; A is cut open with 30 rows of 20
+standard 42U racks (0.6 × 1.0 × 2.1, perforated doors, no manifold) and a
+CRAH gallery. The joint is one lit aqua duct with pulses: the hotel's
+vault, under the street, a splice, the fiber hut, out the back. Utility
+power only, diesel backup, air and towers: no gas island, no BESS, no
+liquid racks. The cards carry the plan's figures (18 floors · 20 MW shared;
+3 stories · 16 MW; 16-rack cages, 4–8 kW; 4 × 48 MW · 192 MW; ~24,000
+racks · 8 kW; 28 diesels), and the campus stop tags every yard.
 
 **The Today stage is a real 1 GW campus**, built to the user's site plan,
 not a diagram: metres, Y up, origin at the south-west corner of a
@@ -200,7 +232,14 @@ every row a fibre tray and a busway with a live strip, headers beneath;
 lamps across the hall; `shadow:false` on the racks and nine units a rack,
 because eighteen put the scene past 1 M triangles), a support strip along
 the north wall with the CDUs and their risers, the leaf switches and the
-fibre tray. "Simple blocks" for the racks were rejected. No NVLink is drawn;
+fibre tray. "Simple blocks" for the racks were rejected. The user has
+stood in these halls: "a shitton of fiber and plumbing", so hall A also
+carries three fiber trunks on every row tray, a cross tray from each row
+to the support strip, a drop to every rack in the near hall, a supply
+and return branch to every rack, and two thick mains along the support
+strip to the CDUs. `rackField` scales its rails, LEDs, ports and
+manifolds with the rack width (`kk`) and caps LEDs at a fifth of a unit,
+or a 0.6 m rack at arm's length wears 7 cm lamps. No NVLink is drawn;
 it never leaves the rack. Gas is the prime source and the grid the tie,
 so there are no gensets on the building face and no cooling towers. The
 film's campus chapter glides from the aerial to a low oblique over
@@ -210,16 +249,28 @@ hall chapter is a dolly up a cold aisle; the power chapter a glide low
 along the turbine row. The old campus kit (combined-cycle trains, gensets,
 pylons, the eight-hall grid) is gone with it.
 
-The AGI stage is the planet, never a city block: the back of its pedestal is
-the world (Natural Earth, ±60° of latitude), with GW sites at real coordinates
-across countries, the fabric between them carrying one job's traffic, an
-orbital layer over it and edge nodes at real cities; in front, three dioramas
-at full scale — the 1 MW hall cut open, four SMR modules on one turbine hall
-(nuclear is the user's call for the AGI era; the AI campus stays gas, turbines
-and batteries, no cooling towers), and the physical world it powers: robot
-arms on a line, humanoids, robotaxis, drones. A wireframe globe on a stem, a
-circular site with glowing pads, and a race-drone flythrough were all tried
-and rejected as cartoonish or unstable.
+The AGI stage is one frame, to the user's brief: few plants, many edges,
+cabinets at the machines, a thin string overhead. The camera stands over
+a port depot. Foreground, 1:1: two warehouses with eight cabinets on their
+walls, container stacks and a gantry, the truck yard with two trucks and
+five AGVs on their loops, a charging row with six vans, one humanoid, two
+drones; a hairline from every cabinet to the nearest machine and a live
+hairline from the lead truck to its nearest cabinet, and from the
+cabinets to the nearest inference building — the last hop. Midground,
+1:4: twelve inference buildings on one shell (40 × 30 × 10, cooler pads,
+utility only), hairlines between them and pulses back to the plant. Far,
+1:10, on the horizon: the nuclear training plant — six reactor modules,
+one landmark dome, low turbine halls, dry coolers, a 500 kV lattice, a
+small battery field, ten halls with the near one cut open as sixty
+immersion tubs at 1 MW on thick manifolds (`TUBS` is what glows, not the
+slab), one optical dish at the fence, and no stacks, no plume. Above:
+twenty craft on a ring — bus, one solar wing, a radiator larger than the
+bus — hairline laser to the neighbour and two downlinks, to the plant dish
+and one edge roof. Thick cyan on the long haul, hairline cyan on the last
+hop; nothing in the yard links to a reactor or a satellite. The world
+map, the real-coordinate sites, the SMR diorama and the three plinths are
+gone with it. Earlier rejects still stand: a wireframe globe on a stem, a
+circular site with glowing pads, a race-drone flythrough.
 
 **The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
 rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
