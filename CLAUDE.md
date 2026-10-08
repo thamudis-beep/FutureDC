@@ -353,13 +353,16 @@ also keeps PCF (not soft) shadows, a 1.5 pixel-ratio cap and anisotropy
 (it is vertex-bound here); reason from the GPU, then verify the look. The look is the user's second
 reference video (the SpaceX Starmind render): every orbit a DOTTED TRACK
 of points, no solid lines, the AI constellation one dense near-polar band
-of dawn-dusk planes in a pale blue-cyan, Starlink a fainter, lower lattice
-at a spread of inclinations in a dim blue-grey, nothing else; and the
+of dawn-dusk planes in a pale blue-cyan, Starlink a lower lattice at a
+spread of inclinations in a dim blue-grey, dense and plainly visible as
+the mid-latitude basket under the band (the user: "also do want to show
+the starlinks in the lower orbit, like in the video"), nothing else; and the
 Earth goes dark for the chapter (`dim` uniforms on the Earth and
 atmosphere, clouds fading) so the tracks carry the picture. The card
-says one thing: the AI constellation flies in dawn-dusk sun-synchronous
-orbit, always-on power, steady sunlight, with a two-tone legend; the
-lower AI shells and the load-balancing line were cut ("simplify"). It is the one time the film pulls
+is the v98 wording the user asked back for after a cut: half the fleet in
+dawn-dusk sun-synchronous orbits, always in sunlight, steady power; the
+rest in lower shells to load-balance; Starlink flies apart, built for
+coverage; a two-tone legend. It is the one time the film pulls
 out to the planet; a whole-orbit view in the middle of the story then a
 zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold
