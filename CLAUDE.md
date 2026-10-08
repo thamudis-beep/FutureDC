@@ -362,9 +362,14 @@ atmosphere, clouds fading) so the tracks carry the picture. The card
 is the v98 wording the user asked back for after a cut: half the fleet in
 dawn-dusk sun-synchronous orbits, always in sunlight, steady power; the
 rest in lower shells to load-balance; a two-tone legend. The "Starlink
-flies apart" sentence was cut. The band must stay the subject: brighter,
-denser and bluer than Starlink (`orbAI` at .62, `orbSL` at .16), because
-one pass with Starlink at .30 "took over the whole thing". It is the one time the film pulls
+flies apart" sentence was cut. Each plane is a DENSE pole-to-pole
+dotted line (hundreds of points per plane, a few dozen planes), never
+many sparse planes: sparse tracks packed across planes read as
+horizontal rows, and the user saw "horizontal lines along the sun-sync
+plane" where the video has vertical tracks. The balance is a dial the
+user has turned three times: the band at .70 must lead, Starlink at
+.44 must be plainly visible (.16 "can barely see it", .30 "took over
+the whole thing"). It is the one time the film pulls
 out to the planet; a whole-orbit view in the middle of the story then a
 zoom back in still reads as a mistake. A
 chapter may glide from its framing to a second one over its hold

@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v102 · band first</div>
+<div class="ver">v103 · tracks</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2628,8 +2628,9 @@ function mountOrbit(host){
     return {g:g,set:function(a){ g.visible=a>.01; pm.opacity=ptOp*a; }}; }
   var SSOALT=ALT, LEOALT=1600;
   /* the AI constellation: one dense band of dawn-dusk planes over the pole; Starlink: a lower lattice at a spread of inclinations */
-  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:110,spread:34,per:220}],0x9fe6ff,.62,1.5);
-  var orbSL=shells([{inc:53,alt:LEOALT,planes:72,per:200},{inc:43,alt:LEOALT-300,planes:36,per:180},{inc:70,alt:LEOALT+300,planes:24,per:160}],0x6f8ca3,.16,1.0);
+  /* each plane a dense pole-to-pole dotted line, planes spaced so they read apart — the video's vertical tracks, not rows */
+  var orbAI=shells([{inc:97.5,alt:SSOALT,planes:34,spread:34,per:900}],0x9fe6ff,.70,1.4);
+  var orbSL=shells([{inc:53,alt:LEOALT,planes:40,per:700},{inc:43,alt:LEOALT-300,planes:20,per:600},{inc:70,alt:LEOALT+300,planes:12,per:600}],0x86a8c2,.44,1.1);
   var orbA=0, curId='wide';
 
   /* ---- environment: black sky, the sun, earthshine below ---- */
@@ -2687,7 +2688,7 @@ function mountOrbit(host){
       rows:[['Cluster','~10 satellites'],['Between them','~10 Tb/s'],['Backhaul','Laser links']]},
     orbits:{at:[0,0,0],slot:'tl',title:'Sun-synchronous orbits',
       desc:'Half the fleet in dawn-dusk sun-synchronous orbits: always in sunlight, steady power. The rest in lower shells to load-balance.',
-      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#9fe6ff'],['Starlink','Mid-inclination shells, lower','#6f8ca3']]}
+      rows:[['AI constellation','Sun-synchronous, dawn-dusk','#9fe6ff'],['Starlink','Mid-inclination shells, lower','#86a8c2']]}
   };
 
   var tmp=new T.Vector3(), sceneT=0;
