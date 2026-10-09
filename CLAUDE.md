@@ -155,17 +155,36 @@ reading: grey past, amber today, cyan future. It opens on the wide shot behind
 an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
 The camera moves between framings with one crane (`flyTo`: rise, cross,
 settle, smoothstep, no roll) and holds steady with the slowest drift; the
-stops are the storyline in order — the Cloud era: an aerial overview with
-the major parts tagged, the metro block, the regional campus (three stops,
-"limit how much time spending on this"; the meet-me room, the colo cage,
-the cold aisle and the fiber vault are still built but are no longer
-stops — "don't delete the inside from the graphics, just skip it for the
-scene") → the 1 GW campus as a grouped aerial sequence: the four buildings
+stops are the storyline in order — the Cloud era, the appetizer, "how we
+built it until now", four beats: an aerial overview that lights only the
+three buildings (carrier hotel, colocation facility, regional cloud
+campus; glow held 4 s via `hold`; a card by category — downtown, out of
+town, tied by) → the metro data center → the regional cloud campus (the
+four buildings, the total, no per-building figures on the tags) → power
+(230 kV utility, diesel backup). No cooling towers, no fiber hut, no
+dishes on the cloud tags; the meet-me room, the colo cage, the cold aisle
+and the fiber vault are still built but are not stops — "don't delete the
+inside from the graphics, just skip it for the scene"; the 4–8 kW racks
+belong to the metro card, the campus racks are 8 kW → the 1 GW campus as a grouped aerial sequence: the four buildings
 · the data halls of one · inside a hall · power (gas turbines and the
 grid substation together) · ESS batteries · cooling (each stop lights one
 group and tags it; "start more aerial, show the key ideas grouped") → the
-AGI frame: nuclear plant, 1 MW hall, long haul, inference edge, cabinets,
-physical AI, orbital — and the inspect chips and in-scene pins (`SPOTS`)
+AGI frame, told as a story: an overview first ("what might this future
+look like": energy · training · inference · orbit · digital and physical
+AI, as card rows, with the plant, the edge, the depot and the string
+tagged) → nuclear plant → 1 MW racks (with ONE quick mention of the
+next-generation power architecture: 800 V DC through solid-state
+transformers, fewer conversions, less loss — the user's ask from the
+blueprint PDF and the NVIDIA 800 V HVDC post; "just a quick mention, don't
+go wild") → long haul → inference edge → physical AI (tagged: industrial
+robots on a loading line of three arms, AGVs, humanoids, autonomous trucks
+and vans, drones) → orbital, close to the string. The cabinets stop was
+cut ("weird, irrelevant"; the cabinets stay built). Never "thick cyan" or
+any colour name in a callout. The string's craft are the ORBITAL SCENE'S
+AI1 DESIGN reused at 1:8 (two wings of cells, the 30 m sheet across them,
+the rack of casings on its face; instanced parts, each craft's matrix
+composed per frame in the tick) — the bus-with-a-stub craft was "poorly
+done" — and the inspect chips and in-scene pins (`SPOTS`)
 are those same stops. Tags and cards stay lean: no dishes, cooling
 towers, curb vault, chillers or office ("TMI"); no dimension lines in
 this scene ("that was relevant for space, not this"); no "an hour out",
