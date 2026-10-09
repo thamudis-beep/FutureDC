@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v104 · footprint, grouped</div>
+<div class="ver">v105 · cloud, the appetizer</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1526,7 +1526,7 @@ function sceneRig(T,host,K,scene,cfg){
     nT+=dt; glowing=false;
     noteIds.forEach(function(id){ var n=notes[id];
       if(n===curNote&&settled){ if(n.t0==null) n.t0=nT; } else n.t0=null;
-      function flash(u){ var e=u<0?0:u<.35?u/.35:u<1.6?1:u<2.8?1-(u-1.6)/1.2:0; return e*e*(3-2*e); }
+      var H=n.hold||1.6; function flash(u){ var e=u<0?0:u<.35?u/.35:u<H?1:u<H+1.2?1-(u-H)/1.2:0; return e*e*(3-2*e); }
       if(n.seq){ var any=0; n.glows.forEach(function(g,i){ var ei=n.t0==null?0:RM?.5:flash(nT-n.t0-i*n.seq); g.set(ei); if(ei>any) any=ei; }); n.a=any; if(any>.01) glowing=true; return; }
       var e=0; if(n.t0!=null){ e=flash(nT-n.t0); }
       if(RM) e=n.t0!=null?.5:0;
@@ -2244,8 +2244,9 @@ function mountEras(host){
   /* the stops. This is the storyline, in order; each is a chip, a pin and a chapter */
   var SPOTS=[
     eye('cloudair','Overview',0,WC(430,560,-520),WC(480,0,330)),
-    eye('city','Metro block',0,WC(-50,95,-80),WC(100,12,70)),
-    eye('rcampus','Campus',0,WC(CP[0]+350,300,CP[1]-280),WC(CP[0]+350,0,CP[1]+250)),
+    eye('city','Metro data center',0,WC(-50,95,-80),WC(100,12,70)),
+    eye('rcampus','Cloud campus',0,WC(CP[0]+350,300,CP[1]-280),WC(CP[0]+350,0,CP[1]+250)),
+    eye('rpower','Power',0,WC(CP[0]+90,150,CP[1]-160),WC(CP[0]+200,0,CP[1]+80)),
     {id:'campus', n:'Campus',                era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
     eye('halls','Data halls',1,W(330,230,760),W(330,0,445)),
     eye('nvl','Inside a hall',1,W(AISLE,1.7,404),W(AISLE,1.6,470),pinAt(W(AISLE,3.2,430))),
@@ -2268,24 +2269,24 @@ function mountEras(host){
           city:eye('',null,0,WC(-20,60,-40),WC(100,10,70)), rcampus:eye('',null,0,WC(CP[0]+120,90,CP[1]+60),WC(CP[0]+350,5,CP[1]+300)),
           mono:eye('',null,2,V([X2-22.6,.40,-22.7]),V([X2-21.4,.30,-25.2])), cab:eye('',null,2,V([X2-30,3.2,24]),V([X2-39.6,1.3,27])), orbit:eye('',null,2,V([X2+10,4,48]),V([X2-6,26,-24]))};
   /* the film: [framing, seconds to hold, glide]. Moves take 1.6 s within an era, up to 3 s across */
-  var CHAPTERS=[[ERAS[0],3],[byId.cloudair,7],[byId.city,5,GL.city],[byId.rcampus,6,GL.rcampus],
+  var CHAPTERS=[[ERAS[0],3],[byId.cloudair,7],[byId.city,6,GL.city],[byId.rcampus,6],[byId.rpower,6],
                 [byId.campus,7],[byId.halls,6],[byId.nvl,6,GL.nvl],[byId.onsite,6,GL.onsite],[byId.bess,5,GL.bess],[byId.cool,5],
                 [ERAS[3],3],[byId.plant,5],[byId.mono,5,GL.mono],[byId.fabric,4],[byId.cities,5],[byId.cab,4,GL.cab],[byId.edge,5],[byId.orbit,5,GL.orbit]];
   /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
   var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
   var NOTES={
-    cloudair:{at:WC(500,2,330),slot:'tr',glow:[P1.city,P1.camp],title:'Cloud era',desc:'A downtown interconnection block and a regional campus, tied by fiber. Utility power, diesel backup, air cooling.',
-      rows:[['Racks','4–8 kW']],
-      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colo'},{at:WC(CP[0]+350,20,CP[1]+300),l:'Regional campus'},{at:WC(CP[0]+60,12,CP[1]+40),l:'230 kV substation'},
-            {at:WC(CP[0]+165,7,CP[1]+10),l:'Fiber hut'},{at:WC(CP[0]+350,5,CP[1]+120),l:'Backup power · diesel generators'}]},
-    city:{at:WC(30,74,45),slot:'tr',glow:[P1.hotel,P1.colo],title:'Metro interconnection block',desc:'A carrier hotel and a colo on utility power: diesel backup, air cooling.',
-      rows:[['Carrier hotel','18 floors · 20 MW shared'],['Colo','3 stories · 16 MW']],
-      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colo'},{at:WC(110,4,137),l:'Backup power · diesel generators'}]},
-    rcampus:{at:WC(CP[0]+350,30,CP[1]+250),slot:'tr',glow:[P1.camp],title:'Regional campus',desc:'Four buildings on one 230 kV feed: air cooling, diesel backup.',
-      rows:[['IT','4 × 48 MW · 192 MW'],['Racks','~24,000 · 8 kW'],['Backup power','28 diesel generators']],
-      tags:[{at:WC(CP[0]+60,12,CP[1]+40),l:'230 kV substation'},{at:WC(CP[0]+350,5,CP[1]+120),l:'Backup power · diesel generators'},
-            {at:WC(CP[0]+105,18,CP[1]+225),l:'Building A · 48 MW · 3 halls'},{at:WC(CP[0]+445,18,CP[1]+225),l:'Building B'},{at:WC(CP[0]+105,18,CP[1]+405),l:'Building C'},{at:WC(CP[0]+445,18,CP[1]+405),l:'Building D'},
-            {at:WC(CP[0]+160,13,CP[1]+225),l:'Cooling towers'}]},
+    cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',desc:'How we built it until now.',
+      rows:[['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus'],['Tied by','Fiber']],
+      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+350,20,CP[1]+300),l:'Regional cloud campus'}]},
+    city:{at:WC(30,74,45),slot:'tr',hold:4,glow:[P1.hotel,P1.colo],title:'Metro data center',
+      rows:[['Carrier hotel','18 floors · 20 MW shared'],['Colocation','3 stories · 16 MW'],['Racks','4–8 kW']],
+      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'}]},
+    rcampus:{at:WC(CP[0]+350,30,CP[1]+250),slot:'tr',hold:4,glow:[P1.bld],title:'Regional cloud campus',
+      rows:[['Buildings','4 × 48 MW'],['Total','192 MW'],['Racks','~24,000 · 8 kW']],
+      tags:[{at:WC(CP[0]+105,18,CP[1]+225),l:'Building A'},{at:WC(CP[0]+445,18,CP[1]+225),l:'Building B'},{at:WC(CP[0]+105,18,CP[1]+405),l:'Building C'},{at:WC(CP[0]+445,18,CP[1]+405),l:'Building D'}]},
+    rpower:{at:WC(CP[0]+60,12,CP[1]+40),slot:'tr',hold:4,glow:[P1.sub,P1.diesels],title:'Power',
+      rows:[['Utility','230 kV substation'],['Backup','Diesel generators']],
+      tags:[{at:WC(CP[0]+60,12,CP[1]+40),l:'230 kV substation'},{at:WC(CP[0]+350,5,CP[1]+120),l:'Backup power · diesel generators'}]},
     campus:{at:W(700,14,450),slot:'tr',glow:[P2.bld],title:'1 GW campus',desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100 · ~140 kW']],
       tags:[{at:W(330,16,445),l:'Building A · 250 MW'},{at:W(870,16,445),l:'Building B · 250 MW'},{at:W(330,16,665),l:'Building C · 250 MW'},{at:W(870,16,665),l:'Building D · 250 MW'}]},
