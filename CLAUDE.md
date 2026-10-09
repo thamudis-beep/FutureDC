@@ -124,6 +124,16 @@ Three views, hash-routed, in one file.
 Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
 **Applications** (3).
 
+The user's three rules for the footprint film, stated after a long
+round of cuts: SIMPLE · ONE IDEA AT A TIME · NO DUMB WORDING. Every stop
+lights one thing and says one thing; no narration ("how we built it
+until now" was cut as "dummy language"), no "the clients", no colour
+names, no "tied by fiber". The orbital scene is the standard: "pristine".
+The film opens AND closes on the wide shot with the thesis card
+(`wide` note, `noRing`): one row per era in one format — campus · power ·
+rack power — and every era overview card leads with the same row, rack
+power (8 kW · ~140 kW · 1 MW), so the eye measures the change.
+
 Both 3D scenes annotate themselves the same way (see the orbital scene
 for the mechanism): a stop with a note flashes its part, then a ring, a
 leader and a corner card; dimension lines where a size is the point. The
@@ -155,8 +165,8 @@ reading: grey past, amber today, cyan future. It opens on the wide shot behind
 an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
 The camera moves between framings with one crane (`flyTo`: rise, cross,
 settle, smoothstep, no roll) and holds steady with the slowest drift; the
-stops are the storyline in order — the Cloud era, the appetizer, "how we
-built it until now", four beats: an aerial overview that lights only the
+stops are the storyline in order — the Cloud era, the appetizer, four
+beats: an aerial overview that lights only the
 three buildings (carrier hotel, colocation facility, regional cloud
 campus; glow held 4 s via `hold`; a card by category — downtown, out of
 town, tied by) → the metro data center → the regional cloud campus (the
@@ -166,19 +176,32 @@ dishes on the cloud tags; the meet-me room, the colo cage, the cold aisle
 and the fiber vault are still built but are not stops — "don't delete the
 inside from the graphics, just skip it for the scene"; the 4–8 kW racks
 belong to the metro card, the campus racks are 8 kW → the 1 GW campus as a grouped aerial sequence: the four buildings
-· the data halls of one · inside a hall · power (gas turbines and the
-grid substation together) · ESS batteries · cooling (each stop lights one
-group and tags it; "start more aerial, show the key ideas grouped") → the
+· the data halls of one · inside a hall (hall A's racks at full
+fidelity, 18 units with the NVSwitch band, the dolly stopping 14 m short
+of the support strip — ending at the wall read as "a blank grey block") ·
+power (gas turbines and the grid substation together) · ESS batteries
+(on the MV bus beside the substation, where the plan put it: the usual
+place for a campus battery with a behind-the-meter plant) — the cooling
+stop was cut (each stop lights one group and tags it; "start more
+aerial, show the key ideas grouped") → the
 AGI frame, told as a story: an overview first ("what might this future
 look like": energy · training · inference · orbit · digital and physical
 AI, as card rows, with the plant, the edge, the depot and the string
-tagged) → nuclear plant → 1 MW racks (with ONE quick mention of the
-next-generation power architecture: 800 V DC through solid-state
+tagged) → nuclear plant (tags: the reactor modules and the containment only;
+the optical dish is gone, the dry coolers, lattice, batteries and halls
+are untagged — "one idea at a time") → 1 MW racks (six rows of
+next-generation racks, Rubin Ultra / Feynman, built with `rackField` in
+the near hall at plant scale, the camera standing in the cold aisle at
+1.7 m — the immersion tubs were "not showing racks at all"; with ONE
+quick mention of the next-generation power architecture: 800 V DC through solid-state
 transformers, fewer conversions, less loss — the user's ask from the
 blueprint PDF and the NVIDIA 800 V HVDC post; "just a quick mention, don't
-go wild") → long haul → inference edge → physical AI (tagged: industrial
-robots on a loading line of three arms, AGVs, humanoids, autonomous trucks
-and vans, drones) → orbital, close to the string. The cabinets stop was
+go wild") → inference edge (the long-haul stop was cut) → physical AI
+(tagged: industrial robots on a loading line of three arms, AGVs,
+humanoids, autonomous trucks and vans, drones) → orbital: three shells
+of AI1 craft over the stage, no laser lines, no downlinks, shot wide
+from above — the single ring with visible links was "ridiculous"; the
+original many-shells layer was better. The cabinets stop was
 cut ("weird, irrelevant"; the cabinets stay built). Never "thick cyan" or
 any colour name in a callout. The string's craft are the ORBITAL SCENE'S
 AI1 DESIGN reused at 1:8 (two wings of cells, the 30 m sheet across them,
@@ -215,7 +238,9 @@ model scale.
 
 **The Cloud stage is late cloud, 2012–2022, to the user's plan**, built
 quickly on purpose ("the cloud stuff needs to be quick"): two places tied
-by one fiber path, on a 1000 × 667 m lawn at SC = 60/1000 (`WC(x,y,z)`
+by one fiber path (a lit duct, no travelling pulses — the user: "dots
+travelling? remove it"), with a ring of lit office towers around the
+block so the metro reads as a city, on a 1000 × 667 m lawn at SC = 60/1000 (`WC(x,y,z)`
 maps metres to world; the campus origin is `CP`). Place 1, the city
 block, 200 × 120 at the south-west: the street with manholes every 40 m
 and the curb vault; the carrier hotel 40 × 50 × 72, 18 floors of brick
@@ -227,7 +252,11 @@ in the rear yard, two chillers on the side pad, top floor cut open as
 chain-link cages of 8–20 racks with CRAC units at the ends. Place 2, the
 regional campus, 700 × 500 at (300,100): a 230 kV substation with one
 transformer and a dead-end tower, the fiber hut by the gate, twenty
-diesels idle on the south fence, four buildings 90 × 50 × 16 with cooling
+diesels idle on the south fence, four buildings 90 × 50 × 16 at (180,200)
+(330,200) (180,300) (330,300) — 60 m apart, tightened from the plan's
+250 m at the user's ask ("seems a bit big") — each closed one with wall
+seams, a louvre band, rooftop units, a penthouse and dock doors so it is
+a warehouse data center, not a shoe box, with cooling
 towers on a pad at the east end, the office knuckle on A, parking, an
 18 m spine road, trees on the fence; A is cut open with 30 rows of 20
 standard 42U racks (0.6 × 1.0 × 2.1, perforated doors, no manifold) and a

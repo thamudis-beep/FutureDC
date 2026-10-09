@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v106 · agi, the story</div>
+<div class="ver">v108 · simpler story</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1521,7 +1521,7 @@ function sceneRig(T,host,K,scene,cfg){
       var bb=d.tx.getBBox(); d.bg.setAttribute('x',bb.x-6); d.bg.setAttribute('y',bb.y-3); d.bg.setAttribute('width',bb.width+12); d.bg.setAttribute('height',bb.height+6); }); }
   function notesTick(dt,t){
     if(!noteIds.length) return;
-    var live=tour.entered&&cur!==wide, curNote=live?(notes[cur.id]||null):null, settled=curNote&&!mv;
+    var live=tour.entered, curNote=live?(notes[cur.id]||null):null, settled=curNote&&!mv;
     /* the glow is a flash: on quickly as the crane settles on the thing, held a moment, off again */
     nT+=dt; glowing=false;
     noteIds.forEach(function(id){ var n=notes[id];
@@ -1548,7 +1548,7 @@ function sceneRig(T,host,K,scene,cfg){
     if(dl<20) on=false;
     nRing.setAttribute('cx',ax); nRing.setAttribute('cy',ay); nDot.setAttribute('cx',ax); nDot.setAttribute('cy',ay);
     nLine.setAttribute('x1',ax+dx/dl*13); nLine.setAttribute('y1',ay+dy/dl*13); nLine.setAttribute('x2',lx); nLine.setAttribute('y2',ly);
-    nSvg.style.opacity=nAlpha*.9; nRing.style.opacity=nDot.style.opacity=nLine.style.opacity=on?1:0; }
+    nSvg.style.opacity=nAlpha*.9; nRing.style.opacity=nDot.style.opacity=nLine.style.opacity=(on&&!nShown.noRing)?1:0; }
   function syncUI(){
     if(cfg.panel) ui.querySelector('.e3d-panel').classList.toggle('show',tour.entered&&(cfg.panelFor?cfg.panelFor.indexOf(cur.id)>=0:cur.era===cfg.panelEra));
     ui.querySelectorAll('.e3d-era').forEach(function(b){ b.classList.toggle('on',+b.dataset.era===cur.era); });
@@ -1817,7 +1817,7 @@ function mountEras(host){
   var S1=pedestal(X0,60,40,C.cold), SC=60/1000, CC=new T.Group();
   CC.position.set(-30,.12,20); CC.scale.setScalar(SC); S1.add(CC);
   function WC(xm,ym,zm){ return new T.Vector3(X0-30+xm*SC,.12+ym*SC,20-zm*SC); }
-  var CP=[300,100], HFL=4, MMR=7*HFL+.6, CTOP=11.1, AISLE0=CP[0]+93.2;
+  var CP=[300,100], HFL=4, MMR=7*HFL+.6, CTOP=11.1, AISLE0=CP[0]+213.2;
   (function(){
     var g=CC, P={};
     function B(w,h,d,m,x,z,y,cast){ return box(w,h,d,m,x,(y||0)+h/2,-z,cast); }
@@ -1884,11 +1884,21 @@ function mountEras(host){
     [96,104,112,120].forEach(function(cz){ colo.add(B(1.1,2.9,2.0,crac,KX+2,cz,CTOP,true)); colo.add(B(1.1,2.9,2.0,crac,KX+KW-2,cz,CTOP,true)); });
     [95,103,111,119,127].forEach(function(cz){ colo.add(B(56,.08,.16,lamp,KX+KW/2,cz,CTOP+4.6)); });
 
+    /* the city around the block: office towers with lit windows on three sides, streets between them */
+    var twrM=[mat(0x2b323c,{r:.88,m:.28}),mat(0x1e2833,{r:.35,m:.6}),mat(0x3a3f47,{r:.85,m:.3})], winI=inst(BG(1.6,2.0,.2),lit(0x6fa8dc,.9),2600), wn=0;
+    [[-70,10,28,44,52],[-70,60,30,36,36],[-70,110,26,40,70],[-70,160,30,30,44],[-20,170,34,28,58],[30,175,28,30,30],[90,170,36,32,76],[150,172,30,30,40],[220,10,28,40,62],[220,60,30,34,34],[220,110,26,38,48],[220,160,30,30,66],
+     [-20,-60,34,30,40],[40,-62,30,30,56],[110,-60,36,30,32],[170,-62,28,30,48]].forEach(function(tw,ti){
+      var w=tw[2], d=tw[3], h=tw[4], x=tw[0]+w/2, z=tw[1]+d/2; city.add(B(w,h,d,twrM[ti%3],x,z,0,true)); city.add(B(w*.9,1.2,d*.9,part,x,z,h));
+      var fl=Math.floor(h/4);
+      for(var f=1;f<fl;f++) for(var k=0;k<Math.floor(w/5);k++){ if((f*7+k*3+ti)%3===0||wn>=2590) continue;
+        put(winI,x-w/2+3+k*5,f*4+1.5,-(z-d/2-.1)); put(winI,x-w/2+3+k*5,f*4+1.5,-(z+d/2+.1)); wn+=2; } });
+    city.add(winI); city.add(B(320,.5,16,asph,100,-20)); city.add(B(16,.5,260,asph,-12,70)); city.add(B(16,.5,260,asph,212,70));
+
     /* ---- place 2: the regional campus, 700 × 500, an hour out: a 230 kV substation, the fiber hut, a diesel row on the south fence,
        four buildings of 48 MW with towers on a pad at the east end, an office knuckle on A, parking, a spine road, trees on the fence ---- */
     var camp=new T.Group(); g.add(camp); P.camp=camp;
     function CB(w,h,d,m,x,z,y,cast){ return B(w,h,d,m,CP[0]+x,CP[1]+z,y,cast); }
-    camp.add(CB(18,.5,500,asph,279,250)); camp.add(CB(700,.5,18,asph,350,309)); camp.add(CB(140,.5,48,asph,110,154));
+    camp.add(CB(18,.5,500,asph,300,250)); camp.add(CB(700,.5,18,asph,350,285)); camp.add(CB(140,.5,48,asph,110,154));
     var stripes=inst(BG(.3,.05,5),lineM,26); for(var sp=0;sp<24;sp++) put(stripes,CP[0]+44+sp*5.5,.6,-(CP[1]+150)); camp.add(stripes);
     var sub=new T.Group(); camp.add(sub); P.sub=sub;
     sub.add(CB(120,.4,80,gravel,60,40)); sub.add(CB(10,8,8,xfm,40,40,0,true)); for(var fn=0;fn<6;fn++) sub.add(CB(.5,7,9,steel,36+fn*1.6,40,.5));
@@ -1914,13 +1924,19 @@ function mountEras(host){
         for(var k=0;k<8;k++) u.add(B(1.1,2.9,2.0,crac,X+86,Z+5+k*5.7,CTOP,true));
         for(var l=0;l<6;l++) u.add(B(80,.08,.16,lamp,X+45,Z+6+l*7.6,15.5));
         u.add(B(6,10.9,50,part,X+3,Z+25)); u.add(B(6,10.9,50,part,X+87,Z+25));
-      } else { u.add(B(90,16,50,shellM,X+45,Z+25,0,true)); u.add(B(90,.5,50,mat(0x333a43,{r:.9,m:.2}),X+45,Z+25,16)); u.add(B(6,16.3,50,part,X+3,Z+25)); u.add(B(6,16.3,50,part,X+87,Z+25)); }
+      } else { u.add(B(90,16,50,shellM,X+45,Z+25,0,true)); u.add(B(90,.5,50,mat(0x333a43,{r:.9,m:.2}),X+45,Z+25,16)); u.add(B(6,16.3,50,part,X+3,Z+25)); u.add(B(6,16.3,50,part,X+87,Z+25));
+        /* a warehouse data center, not a shoe box: wall seams, a louvre band on the long faces, rooftop units in rows, a penthouse, dock doors */
+        for(var sm=1;sm<9;sm++){ u.add(B(.3,15.5,.3,part,X+sm*10,Z-.2)); u.add(B(.3,15.5,.3,part,X+sm*10,Z+50.2)); }
+        u.add(B(88,1.2,.3,part,X+45,Z-.3,11)); u.add(B(88,1.2,.3,part,X+45,Z+50.3,11));
+        for(var ru=0;ru<4;ru++) for(var rv=0;rv<2;rv++){ u.add(B(5,2.2,4,capM,X+14+ru*20,Z+12+rv*26,16.5,true)); u.add(cyl(1.6,1.6,.2,fanM,X+14+ru*20,18.8,-(Z+12+rv*26),16)); }
+        u.add(B(14,3.5,10,mat(0x2a313a,{r:.8,m:.4}),X+70,Z+25,16.5,true));
+        for(var dk=0;dk<3;dk++) u.add(B(4,4.2,.4,mat(0x14181e,{r:.9,m:.2}),X+30+dk*8,Z-.3)); u.add(B(28,.4,3,part,X+38,Z-1.6,4.4)); }
       u.add(B(88,.3,.3,lit(C.cold,.9),X+45,Z-.2,4));
       u.add(B(20,.3,50,gravel,X+100,Z+25));
       [[X+95,Z+9],[X+105,Z+9],[X+95,Z+41],[X+105,Z+41]].forEach(function(t){ u.add(B(8,10,8,capM,t[0],t[1],0,true)); u.add(cyl(3,3,.3,fanM,t[0],10.2,-t[1],20)); });
       if(office){ u.add(B(40,8,16,glass,X+20,Z-8,0,true)); u.add(B(40,.4,16,part,X+20,Z-8,8)); }
       return u; }
-    bld(60,200,true,true); bld(400,200); bld(60,380); bld(400,380);
+    bld(180,200,true,true); bld(330,200); bld(180,300); bld(330,300);
     var tree=inst(CG(0,3,8,6),treeM,110), trunk=inst(CG(.3,.4,3,5),trunkM,110);
     for(var tx=0;tx<=700;tx+=25){ [-8,508].forEach(function(tz){ put(tree,CP[0]+tx,6,-(CP[1]+tz)); put(trunk,CP[0]+tx,1.5,-(CP[1]+tz)); }); }
     for(var tz2=25;tz2<500;tz2+=25){ [-8,708].forEach(function(tx2){ put(tree,CP[0]+tx2,6,-(CP[1]+tz2)); put(trunk,CP[0]+tx2,1.5,-(CP[1]+tz2)); }); }
@@ -1930,8 +1946,6 @@ function mountEras(host){
     var dp=[[30,.4,10],[30,.4,-4],[222,.4,-4],[222,.4,110],[CP[0]+150,.4,CP[1]+10],[CP[0]+165,.4,CP[1]+20],[CP[0]+165,.4,660]];
     for(var q=0;q<dp.length-1;q++) fiber.add(tube([[dp[q][0],dp[q][1],-dp[q][2]],[dp[q+1][0],dp[q+1][1],-dp[q+1][2]]],.9,duct,2,6));
     fiber.add(B(4,1.5,3,encl,222,110)); [36,76].forEach(function(z){ fiber.add(cyl(1.0,1.0,.3,steel,222,.75,-z,12)); });
-    var fc=new T.CatmullRomCurve3(dp.map(function(p){ return WC(p[0],p[1]+.8,p[2]); }),false,'centripetal');
-    for(var pu=0;pu<6;pu++){ var pm=new T.Mesh(SG(.12,8),lit(C.aqua,2.6)); scene.add(pm); anim.pulses.push({c:fc,t:pu/6,v:.04,m:pm}); }
     S1.userData.parts=P;
   })();
   [[WC(30,MMR+3.2,45),0xcfe0f5],[WC(110,CTOP+4.2,110),0xcfe0f5],[WC(CP[0]+105,CTOP+4.2,CP[1]+225),0xcfe0f5]].forEach(function(l){ var pl=new T.PointLight(l[1],1.2,6,1.5); pl.position.copy(l[0]); scene.add(pl); });
@@ -2011,6 +2025,9 @@ function mountEras(host){
         u.add(B(220,12,90,shellM,x+110,z+45,0,true)); u.add(B(220,.5,90,roofM,x+110,z+45,12));
         for(var p=0;p<3;p++) u.add(B(20,4,8,mat(0x2a313a,{r:.8,m:.4}),x+40+p*70,z+45,12.5,true));
         u.add(B(216,.3,.3,lit(C.forge,1.1),x+110,z-.4,4)); u.add(B(216,.3,.3,lit(C.forge,1.1),x+110,z+90.4,4));
+        for(var sm=1;sm<11;sm++){ u.add(B(.4,11.5,.4,part,x+sm*20,z-.2)); u.add(B(.4,11.5,.4,part,x+sm*20,z+90.2)); }
+        for(var ru=0;ru<8;ru++) for(var rv=0;rv<3;rv++){ u.add(B(5,2.2,4,capM,x+18+ru*26,z+16+rv*29,12.5,true)); u.add(cyl(1.6,1.6,.2,fanM,x+18+ru*26,14.8,-(z+16+rv*29),16)); }
+        for(var dk=0;dk<4;dk++) u.add(B(4,4.2,.4,mat(0x14181e,{r:.9,m:.2}),x+150+dk*9,z-.3)); u.add(B(36,.4,3,part,x+163,z-1.6,4.4));
       }
       u.add(B(30,.3,90,gravel,x-16,z+45));
       for(var t=0;t<4;t++){ u.add(B(6,5,4,xfm,x-20,z+12+t*20,0,true)); for(var f=0;f<4;f++) u.add(B(.4,4.5,4.4,steel,x-22.8+f*1.6,z+12+t*20,.3)); }
@@ -2035,8 +2052,9 @@ function mountEras(host){
       hallG.add(B(50,.1,70,mat(0x1f242b,{r:.92,m:.2}),hx+25,hz+35,.4));
       var grid=new T.GridHelper(70,35,0x3b444f,0x2a323c); grid.material.transparent=true; grid.material.opacity=.35; mats.push(grid.material);
       grid.scale.x=50/70; grid.position.set(hx+25,.52,-(hz+35)); hallG.add(grid);
-      rackField(RF,{x:zc,z:hx+21.6,y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:9,band:[3,5],manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
-      rackField(RB,{x:-zc,z:-(hx+25.8),y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:9,band:[3,5],manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
+      var un=hh===0?18:9, bd=hh===0?[7,11]:[3,5];
+      rackField(RF,{x:zc,z:hx+21.6,y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:un,band:bd,manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
+      rackField(RB,{x:-zc,z:-(hx+25.8),y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:un,band:bd,manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
       for(var r3=0;r3<8;r3++){ var rx=hx+9+r3*4.2, face=r3%2?-1:1;
         put(trayI,rx,3.4,-zc); put(busI,rx+face*.9,3.9,-zc); put(busLI,rx+face*.9,3.77,-zc); put(supI,rx-face*.7,.3,-zc); put(retI,rx-face*.7,.55,-zc);
         [-.15,0,.15].forEach(function(o){ put(fibI,rx+o,3.52,-zc); });
@@ -2107,15 +2125,13 @@ function mountEras(host){
       PB(NH,100,.6,35,part,hx,hz); PB(NH,100,12,.6,hallM,hx,hz-17.5,0,true); PB(NH,.6,12,35,hallM,hx-50,hz,0,true);
       [[hx+49.7,hz-17.2],[hx+49.7,hz+17.2],[hx-49.7,hz+17.2]].forEach(function(p){ PB(NH,.8,12,.8,hallM,p[0],p[1]); });
       PB(NH,100,.5,.5,part,hx,hz+17.5,11.7); PB(NH,.5,.5,35,part,hx+49.8,hz,11.7);
-      PB(NH,30,4,30,tubM,hx-33,hz,0,true); PB(NH,30,4,30,tubM,hx+33,hz,0,true);
-      var tub=[[BG(2.2,1.0,1.2),tubM,0,.5,0,1],[BG(2.3,.08,1.3),lidM,0,1.04,0,0],[BG(2.2,.06,.06),lit(C.hot,1.4),0,1.1,.66,0]], tAt=[];
-      for(var c=0;c<6;c++){ for(var r=0;r<10;r++) tAt.push([hx-8+c*3.2,hz-13+r*2.8,0]);
-        NH.add(box(.5,.5,28,supM,hx-8+c*3.2-.9,1.3,hz-.4)); NH.add(box(.5,.5,28,retM,hx-8+c*3.2+.9,1.3,hz-.4)); }
-      repeat(TUBS,tub,tAt);
+      /* six rows of next-generation racks at 1 MW each, fronts to the cold aisles, manifolds on both flanks, a busway over every row */
+      var NF=new T.Group(), NB=new T.Group(); NF.rotation.y=0; NB.rotation.y=Math.PI; TUBS.add(NF); TUBS.add(NB);
+      for(var rr=0;rr<6;rr++){ var rz=hz-12+rr*4.8, o={x:hx,z:rz,cols:14,rows:1,w:1.2,h:2.6,d:1.4,gapX:.3,units:18,band:[7,11],manifold:1,led:C.hot,ledI:2.4,bezel:0x272e37,shadow:false};
+        if(rr%2===0){ o.x=hx; o.z=rz; rackField(NF,o); } else { o.x=-hx; o.z=-rz; rackField(NB,o); }
+        NH.add(box(22,.3,.3,mat(C.steel,{r:.5,m:.8}),hx,4.1,rz)); NH.add(box(22,.06,.06,lit(C.hot,1.4),hx,3.95,rz)); }
       NH.add(box(20,.9,.9,supM,hx,1.6,hz-15.2)); NH.add(box(20,.9,.9,retM,hx,1.6,hz+14.4));
       PB(NH,96,.3,.5,lit(0xbfefff,1.2),hx,hz,11.2); }
-    var dy=new T.Group(); dy.position.set(0,0,98); PL.add(dy); dy.add(cyl(2,2.5,12,steel,0,6,0,8));
-    var yoke=new T.Group(); yoke.position.y=12; dy.add(yoke); var dish=new T.Mesh(G(new T.SphereGeometry(9,16,8,0,Math.PI*2,0,Math.PI/2.6)),dishM); dish.rotation.x=-Math.PI/3; yoke.add(dish); anim.dishes.push({y:yoke,p:0});
     var FAB=new T.Group(); g.add(FAB); P.fab=FAB;
     FAB.add(tube([[-6,.6,-36.5],[-40,.6,-37.2],[-75,.6,-37.6]],.35,thick,8)); FAB.add(tube([[-6,.6,-36.5],[40,.6,-37.2],[75,.6,-37.6]],.35,thick,8));
     FAB.add(tube([[-6,.6,-17],[-4,.6,-14.5],[0,.6,-12.5]],.25,thick,6));
@@ -2196,18 +2212,16 @@ function mountEras(host){
     /* ---- the string: twenty AI1 craft on a ring over the stage — the orbital scene's design at 1:8: two wings of cells
        74 m tip to tip, the thin radiator sheet 30 m tall standing across them, the rack of casings on the sheet's face —
        laser to the neighbour, two downlinks. Parts are instanced; each craft's matrix is composed per frame ---- */
-    var N=20, SK8=1/8, cellM=mat(0x2b3a58,{r:.3,m:.3,env:1.2}), sheetM=mat(0xa8a49f,{r:.5,m:.25,s:T.DoubleSide}), railM=mat(0x1f2225,{r:.5,m:.65}),
+    var SK8=1/8, cellM=mat(0x2b3a58,{r:.3,m:.3,env:1.2}), sheetM=mat(0xa8a49f,{r:.5,m:.25,s:T.DoubleSide}), railM=mat(0x1f2225,{r:.5,m:.65}),
         lidM=mat(0xa9adb2,{r:.28,m:.9}), mastM=mat(0x8b8f94,{r:.42,m:.7});
     var PARTS=[[BG(31,18.5,.1),cellM,[-21.5,0,.3]],[BG(31,18.5,.1),cellM,[21.5,0,.3]],[BG(74,.4,.4),mastM,[0,0,.6]],
                [BG(.06,30,9),sheetM,[0,0,0]],[BG(.2,30,.2),mastM,[.15,0,0]]];
     [1,-1].forEach(function(sd){ [-1.35,1.35].forEach(function(rz){ PARTS.push([BG(.4,.4,11.6),railM,[sd*2.0,rz,0]]); });
       for(var c=0;c<8;c++){ var cz=(c<4?-1:1)*(.85+(c<4?3-c:c-4)*1.28); PARTS.push([BG(.5,2.2,1.12),lidM,[sd*2.6,0,cz]]); } });
+    var RINGS=[{rx:70,rz:28,y:32,tilt:0,ph:0,v:.045},{rx:60,rz:24,y:40,tilt:.22,ph:1.1,v:-.052},{rx:50,rz:20,y:48,tilt:-.22,ph:2.3,v:.06}], N=RINGS.length*20;
     var ORB=new T.Group(); g.add(ORB); P.orb=ORB; var pim=[];
     PARTS.forEach(function(pt){ var im=inst(pt[0],pt[1],N); for(var k=0;k<N;k++) put(im,0,-9,0); ORB.add(im); pim.push(im); });
-    var olg=G(new T.BufferGeometry()); olg.setAttribute('position',new T.BufferAttribute(new Float32Array(N*6),3)); var olines=new T.LineSegments(olg,hair); g.add(olines);
-    var dlg=G(new T.BufferGeometry()); dlg.setAttribute('position',new T.BufferAttribute(new Float32Array(12),3)); var dlines=new T.LineSegments(dlg,hair); g.add(dlines);
-    anim.orb={parts:pim,locals:PARTS.map(function(pt){ return new T.Matrix4().makeTranslation(pt[2][0],pt[2][1],pt[2][2]); }),sk:SK8,n:N,rx:70,rz:28,y:32,cx:0,cz:-4,ph:0,v:.045,
-      lines:olines,down:dlines,dish:new T.Vector3(-6,1.6,-17.2),roof:new T.Vector3(-14,2.75,8)};
+    anim.orb={parts:pim,locals:PARTS.map(function(pt){ return new T.Matrix4().makeTranslation(pt[2][0],pt[2][1],pt[2][2]); }),sk:SK8,rings:RINGS,per:20,cx:0,cz:-4};
     S3.userData.parts=P;
   })();
 
@@ -2262,77 +2276,74 @@ function mountEras(host){
   var SPOTS=[
     eye('cloudair','Overview',0,WC(430,560,-520),WC(480,0,330)),
     eye('city','Metro data center',0,WC(-50,95,-80),WC(100,12,70)),
-    eye('rcampus','Cloud campus',0,WC(CP[0]+350,300,CP[1]-280),WC(CP[0]+350,0,CP[1]+250)),
+    eye('rcampus','Cloud campus',0,WC(CP[0]+300,230,CP[1]-150),WC(CP[0]+300,0,CP[1]+270)),
     eye('rpower','Power',0,WC(CP[0]+90,150,CP[1]-160),WC(CP[0]+200,0,CP[1]+80)),
     {id:'campus', n:'Campus',                era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
     eye('halls','Data halls',1,W(330,230,760),W(330,0,445)),
-    eye('nvl','Inside a hall',1,W(AISLE,1.7,404),W(AISLE,1.6,470),pinAt(W(AISLE,3.2,430))),
+    eye('nvl','Inside a hall',1,W(AISLE,1.7,408),W(AISLE,1.5,450),pinAt(W(AISLE,3.2,430))),
     {id:'onsite', n:'Power',                 era:1, t:W(560,6,110),  w:88,  h:40, th:1.25, ph:1.05, pin:pinAt(W(619.5,16,70))},
     {id:'bess',   n:'ESS batteries',         era:1, t:W(80,3,250),   w:22,  h:12, th:1.05, ph:.95,  pin:pinAt(W(80,10,250))},
-    eye('cool','Cooling',1,W(760,470,-220),W(760,0,540)),
     eye('agiair','Overview',2,V([X2+16,24,70]),V([X2+8,3,-8])),
     eye('plant','Nuclear plant',2,V([X2-34,20,8]),V([X2+12,2,-28])),
-    eye('mono','1 MW hall',2,V([X2-23.2,.42,-22.5]),V([X2-21.6,.30,-25.0])),
-    eye('fabric','Long haul',2,V([X2+34,20,-4]),V([X2-10,1,-34])),
+    eye('mono','1 MW racks',2,V([X2-23.7,.17,-24.0]),V([X2-21.0,.15,-24.0])),
     eye('cities','Inference edge',2,V([X2+24,14,30]),V([X2,1.5,-2])),
     eye('edge','Physical AI',2,V([X2-18,9,52]),V([X2-30,1,24])),
-    eye('orbit','Orbital',2,V([X2+50,38,22]),V([X2+68,32,-2]))
+    eye('orbit','Orbital',2,V([X2+40,96,96]),V([X2,38,-6]))
   ];
 
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   /* where the campus flyovers end: the spine road at eye height with the stacks behind; the dolly up the aisle; low along the turbine row */
-  var GL={nvl:eye('',null,1,W(AISLE,1.7,440),W(AISLE,1.6,476)), onsite:eye('',null,1,W(600,4,30),W(900,9,110)),
+  var GL={nvl:eye('',null,1,W(AISLE,1.7,430),W(AISLE,1.5,462)), onsite:eye('',null,1,W(600,4,30),W(900,9,110)),
           bess:eye('',null,1,W(5,2.5,218.25),W(140,2,218.25)),
           city:eye('',null,0,WC(-20,60,-40),WC(100,10,70)), rcampus:eye('',null,0,WC(CP[0]+120,90,CP[1]+60),WC(CP[0]+350,5,CP[1]+300)),
-          mono:eye('',null,2,V([X2-22.6,.40,-22.7]),V([X2-21.4,.30,-25.2])), orbit:eye('',null,2,V([X2+58,36,10]),V([X2+70,32,-6]))};
+          mono:eye('',null,2,V([X2-22.7,.17,-24.0]),V([X2-20.0,.15,-24.0])), orbit:eye('',null,2,V([X2+30,84,88]),V([X2,38,-6]))};
   /* the film: [framing, seconds to hold, glide]. Moves take 1.6 s within an era, up to 3 s across */
-  var CHAPTERS=[[ERAS[0],3],[byId.cloudair,7],[byId.city,6,GL.city],[byId.rcampus,6],[byId.rpower,6],
-                [byId.campus,7],[byId.halls,6],[byId.nvl,6,GL.nvl],[byId.onsite,6,GL.onsite],[byId.bess,5,GL.bess],[byId.cool,5],
-                [byId.agiair,8],[byId.plant,6],[byId.mono,6,GL.mono],[byId.fabric,4],[byId.cities,5],[byId.edge,7],[byId.orbit,7,GL.orbit]];
+  var CHAPTERS=[[ERAS[0],8],[byId.cloudair,7],[byId.city,6,GL.city],[byId.rcampus,6],[byId.rpower,6],
+                [byId.campus,7],[byId.halls,6],[byId.nvl,6,GL.nvl],[byId.onsite,6,GL.onsite],[byId.bess,5,GL.bess],
+                [byId.agiair,8],[byId.plant,6],[byId.mono,6,GL.mono],[byId.cities,5],[byId.edge,7],[byId.orbit,7,GL.orbit],[ERAS[0],10]];
   /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
   var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
   var NOTES={
-    cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',desc:'How we built it until now.',
-      rows:[['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus'],['Tied by','Fiber']],
-      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+350,20,CP[1]+300),l:'Regional cloud campus'}]},
+    wide:{at:[36,2,0],slot:'tr',noRing:true,glow:[],title:'The physical footprint',desc:'From shared buildings on the grid, to gigawatt campuses that make their own power, to nuclear plants with compute everywhere else.',
+      rows:[['Cloud','192 MW campus · grid · 8 kW racks'],['Today','1 GW campus · grid + gas · 140 kW racks'],['AGI','5–10 GW plant · nuclear · 1 MW racks']]},
+    cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',
+      rows:[['Rack power','8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
+      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+300,20,CP[1]+275),l:'Regional cloud campus'}]},
     city:{at:WC(30,74,45),slot:'tr',hold:4,glow:[P1.hotel,P1.colo],title:'Metro data center',
       rows:[['Carrier hotel','18 floors · 20 MW shared'],['Colocation','3 stories · 16 MW'],['Racks','4–8 kW']],
       tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'}]},
     rcampus:{at:WC(CP[0]+350,30,CP[1]+250),slot:'tr',hold:4,glow:[P1.bld],title:'Regional cloud campus',
       rows:[['Buildings','4 × 48 MW'],['Total','192 MW'],['Racks','~24,000 · 8 kW']],
-      tags:[{at:WC(CP[0]+105,18,CP[1]+225),l:'Building A'},{at:WC(CP[0]+445,18,CP[1]+225),l:'Building B'},{at:WC(CP[0]+105,18,CP[1]+405),l:'Building C'},{at:WC(CP[0]+445,18,CP[1]+405),l:'Building D'}]},
+      tags:[{at:WC(CP[0]+225,18,CP[1]+225),l:'Building A'},{at:WC(CP[0]+375,18,CP[1]+225),l:'Building B'},{at:WC(CP[0]+225,18,CP[1]+325),l:'Building C'},{at:WC(CP[0]+375,18,CP[1]+325),l:'Building D'}]},
     rpower:{at:WC(CP[0]+60,12,CP[1]+40),slot:'tr',hold:4,glow:[P1.sub,P1.diesels],title:'Power',
       rows:[['Utility','230 kV substation'],['Backup','Diesel generators']],
       tags:[{at:WC(CP[0]+60,12,CP[1]+40),l:'230 kV substation'},{at:WC(CP[0]+350,5,CP[1]+120),l:'Backup power · diesel generators'}]},
     campus:{at:W(700,14,450),slot:'tr',glow:[P2.bld],title:'1 GW campus',desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
-      rows:[['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100 · ~140 kW']],
+      rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:W(330,16,445),l:'Building A · 250 MW'},{at:W(870,16,445),l:'Building B · 250 MW'},{at:W(330,16,665),l:'Building C · 250 MW'},{at:W(870,16,665),l:'Building D · 250 MW'}]},
     halls:{at:W(330,14,445),slot:'tr',glow:[P2.hall],title:'Data halls',desc:'Four halls per building, liquid-cooled GPU racks in rows.',
       rows:[['Per hall','~440 racks · ~62 MW'],['Per building','4 halls · 250 MW']],
       tags:[{at:W(246,13,441),l:'Hall 1'},{at:W(302,13,441),l:'Hall 2'},{at:W(358,13,441),l:'Hall 3'},{at:W(414,13,441),l:'Hall 4'}]},
-    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Inside a hall',desc:'Liquid-cooled GPU racks in rows, CDUs and leaf switches on the support strip.',
+    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Inside a hall',desc:'GB200 NVL72 racks, liquid-cooled, in rows. CDUs and leaf switches on the support strip.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
     onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas,P2.grid],title:'Power',desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],
       tags:[{at:W(860,18,110),l:'Gas turbines · 34 × 35 MW'},{at:W(140,16,100),l:'345 kV grid substation'}]},
     bess:{at:W(80,10,250),slot:'tr',glow:[P2.bess],title:'ESS batteries',desc:'Load shaping, ramp and backup.',
       rows:[['Containers','120']]},
-    cool:{at:W(540,10,450),slot:'tr',glow:[P2.cool],title:'Cooling',desc:'Dry coolers in a closed loop beside every building: no cooling towers, no plume.',
-      tags:[{at:W(540,10,450),l:'Dry coolers · A'},{at:W(1080,10,450),l:'Dry coolers · B'},{at:W(540,10,670),l:'Dry coolers · C'},{at:W(1080,10,670),l:'Dry coolers · D'}]},
     agiair:{at:[X2,6,-2],slot:'tl',hold:4,glow:[P3.plant,P3.cities,P3.phys,P3.orb],title:'AGI era',desc:'What the future might look like.',
-      rows:[['Energy','Abundant, clean: nuclear'],['Training','Massive plants, 5–10 GW'],['Inference','Compute at the edge, everywhere'],['Orbit','Compute in space'],['AI','Digital and physical']],
+      rows:[['Rack power','1 MW'],['Energy','Abundant, clean: nuclear'],['Training','Massive plants, 5–10 GW'],['Inference','Compute at the edge, everywhere'],['Orbit','Compute in space'],['AI','Digital and physical']],
       tags:[{at:[X2+50,9,-29],l:'Nuclear training plant'},{at:[X2-14,3,8],l:'Inference edge'},{at:[X2-30,4,24],l:'Physical AI'},{at:[X2-10,34,-18],l:'Orbital compute'}]},
     plant:{at:[X2+50,9,-29],slot:'tr',glow:[P3.plant],title:'Nuclear training plant',desc:'Six reactor modules, ten halls, no stacks, no plume: one of six to ten on the coasts and the big grids.',
       rows:[['Per plant','5–10 GW']],
-      tags:[{at:[X2+30,3.4,-31.5],l:'Reactor modules × 6'},{at:[X2+50,7,-29],l:'Containment'},{at:[X2+7,1.7,-23.5],l:'Turbine halls'},{at:[X2+7,1.0,-19],l:'Dry coolers'},{at:[X2+59,6,-34.5],l:'500 kV'},{at:[X2+30,.6,-21],l:'Batteries'},{at:[X2-50,1.4,-31.5],l:'1 MW halls × 10'},{at:[X2-6,1.6,-17.2],l:'Optical dish'}]},
-    mono:{at:[X2-21.6,.55,-25.2],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'Immersion tubs at 1 MW each on thick manifolds. Fed at 800 V DC through solid-state transformers: fewer conversions, less loss.',
-      rows:[['Tubs in frame','60'],['Power','800 V DC · solid-state transformers']]},
-    fabric:{at:[X2-40,.8,-37.2],slot:'tr',glow:[P3.fab],title:'Long-haul fiber',desc:'Plant to plant, plant to edge, plant to orbit. The plants talk to each other.'},
+      tags:[{at:[X2+30,3.4,-31.5],l:'Reactor modules × 6'},{at:[X2+50,7,-29],l:'Containment'}]},
+    mono:{at:[X2-21.8,.27,-24.24],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers: fewer conversions, less loss.',
+      rows:[['Per rack','1 MW'],['Power','800 V DC · solid-state transformers']]},
     cities:{at:[X2-14,2.9,8],slot:'tr',glow:[P3.cities],title:'Inference edge',desc:'Hundreds of inference buildings in the metros, on the old colo belt. They link to each other and back to the plant.',
       rows:[['Per building','10–50 MW'],['Racks','20–60 kW']],tags:[{at:[X2+14,2.9,-1],l:'Utility power · cooler pad'},{at:[X2-6,.9,-13],l:'Back to the plant'}]},
-    edge:{at:[X2-30,1.6,24],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'The clients: robots, humanoids, autonomous vehicles, drones, served from the edge.',
+    edge:{at:[X2-30,1.6,24],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
       tags:[{at:[X2-57,3.2,15.4],l:'Industrial robots'},{at:[X2-8,4.0,29.8],l:'AGVs'},{at:[X2,2.2,33.2],l:'Humanoids'},{at:[X2+32,2.4,24.5],l:'Autonomous trucks'},{at:[X2-14,2.6,35],l:'Autonomous vans'},{at:[X2-30,7.5,22],l:'Drones'}]},
-    orbit:{at:[X2+70,32,-6],slot:'tl',glow:[P3.orb],title:'Orbital compute',desc:'AI satellites, laser to the neighbour: a mesh between the plants and a spare path.',rows:[['Downlinks','plant dish · one edge roof']]}
+    orbit:{at:[X2+70,32,-4],slot:'tl',glow:[P3.orb],title:'Orbital compute',desc:'AI satellites in sun-synchronous shells: always in sunlight.'}
   };
 
   picks.forEach(function(m,i){ m.userData.view=ERAS[i+1]; });
@@ -2347,16 +2358,12 @@ function mountEras(host){
         s.bus.setMatrixAt(i,dummy.matrix); s.pan.setMatrixAt(i,dummy.matrix); }
       s.bus.instanceMatrix.needsUpdate=true; s.pan.instanceMatrix.needsUpdate=true; });
     if(anim.bigring) anim.bigring.forEach(function(b){ b.a+=dt*b.v; b.o.position.set(Math.cos(b.a)*b.rx, b.y+Math.sin(b.a*2)*2, -13+Math.sin(b.a)*b.rz); b.o.rotation.y=-b.a; });
-    if(anim.orb){ var o=anim.orb, pa=o.lines.geometry.attributes.position, pts=[], cm=new T.Matrix4(), pm2=new T.Matrix4(); o.ph+=dt*o.v;
-      for(var oi=0;oi<o.n;oi++){ var a=o.ph+oi/o.n*Math.PI*2, px=o.cx+Math.cos(a)*o.rx, pz=o.cz+Math.sin(a)*o.rz, py=o.y+Math.sin(a*2)*1.5;
-        /* the craft's X (its wing span) lies along the ring's tangent, its sheet stands up, the rack faces outward */
-        dummy.position.set(px,py,pz); dummy.rotation.set(0,-a,0); dummy.scale.setScalar(o.sk); dummy.updateMatrix(); cm.copy(dummy.matrix);
-        for(var pk=0;pk<o.parts.length;pk++){ pm2.multiplyMatrices(cm,o.locals[pk]); o.parts[pk].setMatrixAt(oi,pm2); }
-        pts.push(new T.Vector3(px,py,pz)); }
-      for(var oj=0;oj<o.n;oj++){ var A=pts[oj], Bq=pts[(oj+1)%o.n]; pa.setXYZ(oj*2,A.x,A.y,A.z); pa.setXYZ(oj*2+1,Bq.x,Bq.y,Bq.z); }
-      pa.needsUpdate=true; o.parts.forEach(function(im){ im.instanceMatrix.needsUpdate=true; });
-      var dpa=o.down.geometry.attributes.position; [o.dish,o.roof].forEach(function(tg,k){ var bi=0,bd=1e9; pts.forEach(function(p,i){ var d=p.distanceToSquared(tg); if(d<bd){bd=d;bi=i;} });
-        dpa.setXYZ(k*2,pts[bi].x,pts[bi].y,pts[bi].z); dpa.setXYZ(k*2+1,tg.x,tg.y,tg.z); }); dpa.needsUpdate=true; }
+    if(anim.orb){ var o=anim.orb, cm=new T.Matrix4(), pm2=new T.Matrix4();
+      o.rings.forEach(function(rg,ri){ rg.ph+=dt*rg.v;
+        for(var k=0;k<o.per;k++){ var oi=ri*o.per+k, a=rg.ph+k/o.per*Math.PI*2, x=Math.cos(a)*rg.rx, z=Math.sin(a)*rg.rz;
+          dummy.position.set(o.cx+x, rg.y+z*Math.sin(rg.tilt), o.cz+z*Math.cos(rg.tilt)); dummy.rotation.set(0,-a,0); dummy.scale.setScalar(o.sk); dummy.updateMatrix(); cm.copy(dummy.matrix);
+          for(var pk=0;pk<o.parts.length;pk++){ pm2.multiplyMatrices(cm,o.locals[pk]); o.parts[pk].setMatrixAt(oi,pm2); } } });
+      o.parts.forEach(function(im){ im.instanceMatrix.needsUpdate=true; }); }
     if(anim.tline&&anim.tline.line){ var tl=anim.tline, tp=tl.o.position, best=tl.cabs[0], bd2=1e9; tl.cabs.forEach(function(c){ var d=c.distanceToSquared(tp); if(d<bd2){bd2=d;best=c;} });
       var ta=tl.line.geometry.attributes.position; ta.setXYZ(0,tp.x,tp.y+1.4,tp.z); ta.setXYZ(1,best.x,best.y,best.z); ta.needsUpdate=true; }
     anim.dishes.forEach(function(d){ d.y.rotation.y=Math.sin(t*.22+d.p)*1.1; d.y.rotation.z=Math.sin(t*.15+d.p)*.14;});
