@@ -352,7 +352,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v108 · simpler story</div>
+<div class="ver">v109 · building, block, halls</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2030,6 +2030,11 @@ function mountEras(host){
         for(var dk=0;dk<4;dk++) u.add(B(4,4.2,.4,mat(0x14181e,{r:.9,m:.2}),x+150+dk*9,z-.3)); u.add(B(36,.4,3,part,x+163,z-1.6,4.4));
       }
       u.add(B(30,.3,90,gravel,x-16,z+45));
+      /* the hierarchy from the air: four hall bays outlined on the roof (or the floor, when the building is open) and the power block pad outlined beside it */
+      var oy=open?.6:12.7, ol=lit(C.forge,.7);
+      for(var hb=0;hb<4;hb++){ var bx=x+1+hb*56+25, bz=z+6+35;
+        u.add(B(50,.25,.4,ol,bx,bz-35,oy)); u.add(B(50,.25,.4,ol,bx,bz+35,oy)); u.add(B(.4,.25,70,ol,bx-25,bz,oy)); u.add(B(.4,.25,70,ol,bx+25,bz,oy)); }
+      u.add(B(30,.25,.4,ol,x-16,z,.4)); u.add(B(30,.25,.4,ol,x-16,z+90,.4)); u.add(B(.4,.25,90,ol,x-31,z+45,.4)); u.add(B(.4,.25,90,ol,x-1,z+45,.4));
       for(var t=0;t<4;t++){ u.add(B(6,5,4,xfm,x-20,z+12+t*20,0,true)); for(var f=0;f<4;f++) u.add(B(.4,4.5,4.4,steel,x-22.8+f*1.6,z+12+t*20,.3)); }
       for(var s2=0;s2<3;s2++) u.add(B(3,3,12,encl,x-8,z+15+s2*28,0,true));
       for(var b2=0;b2<10;b2++) u.add(B(2,2.4,1,white,x-12,z+8+b2*8,0));
@@ -2279,7 +2284,7 @@ function mountEras(host){
     eye('rcampus','Cloud campus',0,WC(CP[0]+300,230,CP[1]-150),WC(CP[0]+300,0,CP[1]+270)),
     eye('rpower','Power',0,WC(CP[0]+90,150,CP[1]-160),WC(CP[0]+200,0,CP[1]+80)),
     {id:'campus', n:'Campus',                era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
-    eye('halls','Data halls',1,W(330,230,760),W(330,0,445)),
+    eye('halls','Data halls',1,W(300,250,780),W(310,0,450)),
     eye('nvl','Inside a hall',1,W(AISLE,1.7,408),W(AISLE,1.5,450),pinAt(W(AISLE,3.2,430))),
     {id:'onsite', n:'Power',                 era:1, t:W(560,6,110),  w:88,  h:40, th:1.25, ph:1.05, pin:pinAt(W(619.5,16,70))},
     {id:'bess',   n:'ESS batteries',         era:1, t:W(80,3,250),   w:22,  h:12, th:1.05, ph:.95,  pin:pinAt(W(80,10,250))},
@@ -2321,9 +2326,9 @@ function mountEras(host){
     campus:{at:W(700,14,450),slot:'tr',glow:[P2.bld],title:'1 GW campus',desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:W(330,16,445),l:'Building A · 250 MW'},{at:W(870,16,445),l:'Building B · 250 MW'},{at:W(330,16,665),l:'Building C · 250 MW'},{at:W(870,16,665),l:'Building D · 250 MW'}]},
-    halls:{at:W(330,14,445),slot:'tr',glow:[P2.hall],title:'Data halls',desc:'Four halls per building, liquid-cooled GPU racks in rows.',
-      rows:[['Per hall','~440 racks · ~62 MW'],['Per building','4 halls · 250 MW']],
-      tags:[{at:W(246,13,441),l:'Hall 1'},{at:W(302,13,441),l:'Hall 2'},{at:W(358,13,441),l:'Hall 3'},{at:W(414,13,441),l:'Hall 4'}]},
+    halls:{at:W(330,14,445),slot:'tr',glow:[P2.hall],title:'One building',
+      rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
+      tags:[{at:W(204,8,445),l:'Power block'},{at:W(246,13,441),l:'Hall 1'},{at:W(302,13,441),l:'Hall 2'},{at:W(358,13,441),l:'Hall 3'},{at:W(414,13,441),l:'Hall 4'}]},
     nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Inside a hall',desc:'GB200 NVL72 racks, liquid-cooled, in rows. CDUs and leaf switches on the support strip.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
     onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas,P2.grid],title:'Power',desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
