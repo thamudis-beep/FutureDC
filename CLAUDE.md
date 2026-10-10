@@ -129,10 +129,15 @@ round of cuts: SIMPLE · ONE IDEA AT A TIME · NO DUMB WORDING. Every stop
 lights one thing and says one thing; no narration ("how we built it
 until now" was cut as "dummy language"), no "the clients", no colour
 names, no "tied by fiber". The orbital scene is the standard: "pristine".
-The film opens AND closes on the wide shot with the thesis card
-(`wide` note, `noRing`): one row per era in one format — campus · power ·
-rack power — and every era overview card leads with the same row, rack
-power (8 kW · ~140 kW · 1 MW), so the eye measures the change.
+The film opens AND closes on the wide shot with the thesis as THREE
+CARDS, one floating over each era's own pedestal in its era colour
+(`wide` note with `cards`: each has a world anchor, a title and rows;
+the rig projects each to the screen and `translate(-50%,-100%)` hangs it
+above its stage) — one card on the far right "was weird". Each card has
+the same three rows in the same format — campus · power · rack — and
+every era overview card leads with rack power (8 kW · ~140 kW · 1 MW),
+so the eye measures the change. The Data halls flyover comes in from
+the front so the halls read 1 → 4; from behind they read 4 → 1.
 
 Both 3D scenes annotate themselves the same way (see the orbital scene
 for the mechanism): a stop with a note flashes its part, then a ring, a
