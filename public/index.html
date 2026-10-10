@@ -357,7 +357,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v114 · agi, left to right</div>
+<div class="ver">v115 · cloud overview only · hall aisle · depot vehicles</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1291,7 +1291,15 @@ function sceneKit(T){
     var fm=new T.MeshBasicMaterial({color:color,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide}); mats.push(fm);
     var sel=[]; objects.forEach(function(o){ o.traverse(function(m){ if(m.isMesh&&!m.userData.proxy) sel.push(m); }); });
     sel.forEach(function(m){
-      if(m.isInstancedMesh){ var p=new T.InstancedMesh(m.geometry,fm,m.count); p.instanceMatrix=m.instanceMatrix; p.userData.proxy=1; p.layers.set(1); m.add(p); return; }
+      if(m.isInstancedMesh){ var p=new T.InstancedMesh(m.geometry,fm,m.count); p.instanceMatrix=m.instanceMatrix; p.userData.proxy=1; p.layers.set(1); m.add(p);
+        if(!m.geometry.boundingSphere) m.geometry.computeBoundingSphere();
+        if(m.geometry.boundingSphere.radius>.25&&!m.userData.dyn){ var k0=m.geometry.uuid, eg0=edgeCache[k0]||(edgeCache[k0]=G(new T.EdgesGeometry(m.geometry,24))), nv=eg0.attributes.position.count;
+          if(m.count<=160){ var k1=m.uuid+'_e', eg1=edgeCache[k1];
+            if(!eg1){ var src=eg0.attributes.position.array, out=new Float32Array(nv*3*m.count), M4=new T.Matrix4(), vv=new T.Vector3();
+              for(var ii=0;ii<m.count;ii++){ m.getMatrixAt(ii,M4); for(var jj=0;jj<nv;jj++){ vv.set(src[jj*3],src[jj*3+1],src[jj*3+2]).applyMatrix4(M4); var oi=(ii*nv+jj)*3; out[oi]=vv.x; out[oi+1]=vv.y; out[oi+2]=vv.z; } }
+              eg1=edgeCache[k1]=G(new T.BufferGeometry()); eg1.setAttribute('position',new T.BufferAttribute(out,3)); }
+            var e1=new T.LineSegments(eg1,lm); e1.userData.proxy=1; e1.layers.set(1); m.add(e1); } }
+        return; }
       var f=new T.Mesh(m.geometry,fm); f.userData.proxy=1; f.layers.set(1); m.add(f);
       if(!m.geometry.boundingSphere) m.geometry.computeBoundingSphere();
       if(m.geometry.boundingSphere.radius>.25){ var k=m.geometry.uuid, eg=edgeCache[k]||(edgeCache[k]=G(new T.EdgesGeometry(m.geometry,24)));
@@ -1979,7 +1987,7 @@ function mountEras(host){
   var S2=pedestal(X1,92,66,C.forge), S=92/1400, CG2=new T.Group();
   CG2.position.set(-46,.12,29.5); CG2.scale.setScalar(S); S2.add(CG2);
   function W(xm,ym,zm){ return new T.Vector3(X1-46+xm*S,.12+ym*S,29.5-zm*S); }   /* campus metres → world */
-  var AISLE=220+1+9+4.2+2.1;   /* the cold aisle between rows one and two, where the hall camera stands */
+  var AISLE=220+1+9+2.1;   /* the cold aisle between rows one and two (their fronts face it), where the hall camera stands */
   (function(){
     var g=CG2, P={};
     function B(w,h,d,m,x,z,y,cast){ return box(w,h,d,m,x,(y||0)+h/2,-z,cast); }   /* a box standing on the pad at campus (x,z) */
@@ -2207,20 +2215,49 @@ function mountEras(host){
     for(var tk=0;tk<2;tk++){ var truckM=mat(0x3a4048,{r:.6,m:.6}), u5=new T.Group();
       u5.add(box(1.5,1.5,1.3,truckM,2.4,.35,0)); u5.add(box(.06,.30,1.0,lit(0xf2f6ff,2.0),3.16,.35,0));
       u5.add(box(4.4,.3,1.3,truckM,-.4,-.2,0)); u5.add(box(4.2,1.4,1.3,cont,-.4,.65,0)); u5.add(box(4.1,.06,.06,lit(C.hot,1.2),-.4,.95,.67));
-      for(var wh=0;wh<3;wh++) for(var ws=-1;ws<=1;ws+=2) u5.add(cyl(.26,.26,.16,wheel,2.4-wh*1.9,-.3,ws*.6,10).rotateZ(Math.PI/2));
+      for(var wh=0;wh<3;wh++) for(var ws=-1;ws<=1;ws+=2) u5.add(cyl(.26,.26,.16,wheel,2.4-wh*1.9,-.3,ws*.6,10).rotateX(Math.PI/2));
       MACH.add(u5); anim.cabs.push({o:u5,c:lane,t:tk*.5,d:1,v:.03}); }
     for(var ag=0;ag<4;ag++){ var av=new T.Group(); av.add(box(1.0,.35,.7,mat(0x2b323b,{r:.4,m:.75}),0,.2,0)); av.add(box(.9,.05,.05,lit(C.hot,1.8),0,.4,.36)); av.add(box(.9,.05,.05,lit(C.hot,1.8),0,.4,-.36));
       MACH.add(av); anim.cabs.push({o:av,c:agvLane,t:ag/4,d:-1,v:.05}); }
-    var carM=mat(0x4a4133,{r:.35,m:.75});
-    for(var vi=0;vi<4;vi++){ var vx=53+vi*5.2, v=new T.Group(); v.position.set(vx,0,31); v.rotation.y=Math.PI/2; MACH.add(v);
-      v.add(box(2.1,.48,.98,carM,0,.5,0)); v.add(box(1.35,.38,.9,canopy,-.05,.93,0)); v.add(box(.08,.08,.74,lit(0xf2f6ff,2.2),1.04,.5,0)); v.add(box(.07,.07,.66,lit(C.red,1.8),-1.04,.5,0));
-      [[.66,.48],[-.66,.48],[.66,-.48],[-.66,-.48]].forEach(function(w){ v.add(cyl(.22,.22,.14,wheel,w[0],.22,w[1],10).rotateZ(Math.PI/2)); });
-      YD.add(box(.25,1.4,.25,encl,vx+1.4,.7,32.8)); YD.add(box(.1,.1,.1,lit(C.hot,2.0),vx+1.4,1.45,32.8)); }
-    var skinM=mat(0xb8c0cc,{r:.5,m:.5}), jointM=mat(0x2a3038,{r:.6,m:.5}), hb=new T.Group();
-    hb.add(box(.42,.6,.24,skinM,0,1.0,0)); hb.add(box(.22,.24,.22,skinM,0,1.45,0)); hb.add(box(.16,.05,.04,lit(C.hot,2.0),0,1.47,.12));
-    var legs=[],arms=[]; [-1,1].forEach(function(sd){ var l=new T.Group(); l.position.set(sd*.11,.72,0); l.add(box(.14,.7,.14,jointM,0,-.35,0)); hb.add(l); legs.push(l);
-      var a=new T.Group(); a.position.set(sd*.28,1.26,0); a.add(box(.10,.55,.10,jointM,0,-.28,0)); hb.add(a); arms.push(a); });
-    MACH.add(hb); anim.bots.push({o:hb,legs:legs,arms:arms,x0:51,x1:71,y:.1,z:26.5,t:.3,d:1,v:.04,ph:1});
+    /* the charging row: sedans and robotaxi vans, each body an extruded side profile with rounded edges — Model 3 and Zeekr RT proportions */
+    function prof(pts,w,bev){ var sh=new T.Shape(); pts.forEach(function(p,i){ if(i) sh.lineTo(p[0],p[1]); else sh.moveTo(p[0],p[1]); }); sh.closePath();
+      var gg=G(new T.ExtrudeGeometry(sh,{depth:w-2*bev,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:3,curveSegments:6})); gg.translate(0,0,-(w-2*bev)/2); return gg; }
+    var sedanG=prof([[2.3,.36],[2.26,.58],[2.1,.74],[1.0,.9],[.9,.96],[-1.55,1.0],[-1.7,1.03],[-2.25,.97],[-2.3,.6],[-2.3,.36],[-1.95,.25],[1.95,.25]],1.78,.07),
+        cabinG=prof([[.92,.95],[.1,1.40],[-.7,1.43],[-1.58,1.12],[-1.6,.99]],1.66,.05),
+        vanG=prof([[2.4,.38],[2.38,.8],[2.2,1.05],[1.75,1.15],[1.15,1.72],[.6,1.84],[-2.15,1.86],[-2.4,1.72],[-2.4,.38],[-2.05,.26],[2.05,.26]],1.9,.08);
+    var pearl=mat(0xe4e7ea,{r:.32,m:.3}), slate=mat(0x3b4654,{r:.32,m:.6}), cherry=mat(0x8a2626,{r:.36,m:.5}), rimM=mat(0x9aa0a8,{r:.4,m:.8}), podM=mat(0x1b2026,{r:.4,m:.6});
+    function wheelAt(v,x,z,r){ v.add(cyl(r,r,.22,wheel,x,r,z,14).rotateX(Math.PI/2)); v.add(cyl(r*.6,r*.6,.24,rimM,x,r,z,12).rotateX(Math.PI/2)); }
+    function sedan(bodyM){ var v=new T.Group(); var b=new T.Mesh(sedanG,bodyM); b.castShadow=true; v.add(b); v.add(new T.Mesh(cabinG,canopy));
+      [[1.45,.82],[-1.45,.82],[1.45,-.82],[-1.45,-.82]].forEach(function(w){ wheelAt(v,w[0],w[1],.33); });
+      [-.55,.55].forEach(function(z){ v.add(box(.06,.07,.5,lit(0xf2f6ff,2.2),2.27,.72,z)); }); v.add(box(.05,.06,1.5,lit(C.red,1.8),-2.29,.96,0)); return v; }
+    function van(){ var v=new T.Group(); var b=new T.Mesh(vanG,pearl); b.castShadow=true; v.add(b);
+      v.add(box(3.9,.5,1.93,canopy,-.3,1.42,0)); v.add(box(.84,.06,1.72,canopy,1.46,1.46,0).rotateZ(.76));
+      v.add(cyl(.28,.3,.2,podM,.9,1.96,0,14)); v.add(cyl(.12,.12,.14,podM,.9,2.12,0,12));
+      [[1.95,1.0],[1.95,-1.0],[-2.05,1.0],[-2.05,-1.0]].forEach(function(p){ v.add(box(.16,.22,.14,podM,p[0],1.0,p[1])); });
+      [[1.55,.86],[-1.55,.86],[1.55,-.86],[-1.55,-.86]].forEach(function(w){ wheelAt(v,w[0],w[1],.36); });
+      [-.6,.6].forEach(function(z){ v.add(box(.06,.14,.45,lit(0xf2f6ff,2.2),2.37,.82,z)); v.add(box(.05,.3,.06,lit(C.red,1.8),-2.39,1.3,z*1.45)); }); return v; }
+    [sedan(pearl),van(),sedan(slate),van(),sedan(cherry)].forEach(function(v,vi){ var vx=52+vi*3.4; v.position.set(vx,.1,31); v.rotation.y=Math.PI/2; MACH.add(v);
+      YD.add(box(.25,1.4,.25,encl,vx+1.1,.8,34.2)); YD.add(box(.1,.1,.1,lit(C.hot,2.0),vx+1.1,1.55,34.2)); });
+    /* humanoids: white panels over dark joints, a tapered torso, a dark visor, capsule limbs on ball joints; they walk the yard */
+    var skinM=mat(0xdfe3e8,{r:.45,m:.35}), jointM=mat(0x2a3038,{r:.6,m:.5}), visorM=mat(0x0d1117,{r:.15,m:.8});
+    function CAP(r,l){ return G(new T.CapsuleGeometry(r,l,4,10)); }
+    function humanoid(){ var hb=new T.Group();
+      hb.add(box(.3,.17,.19,jointM,0,.96,0)); var torso=cyl(.19,.14,.46,skinM,0,1.27,0,16); torso.scale.z=.65; hb.add(torso);
+      hb.add(box(.26,.2,.06,skinM,0,1.36,-.11)); hb.add(cyl(.05,.06,.08,jointM,0,1.54,0,10));
+      var head=new T.Mesh(SG(.11,16),skinM); head.position.set(0,1.68,0); head.scale.set(1,1.12,1); hb.add(head);
+      hb.add(box(.17,.09,.04,visorM,0,1.69,-.1)); hb.add(box(.1,.012,.01,lit(C.hot,1.6),0,1.69,-.12));
+      var legs=[],arms=[]; [-1,1].forEach(function(sd){
+        hb.add(new T.Mesh(SG(.075,12),jointM)).position.set(sd*.11,.9,0);
+        var l=new T.Group(); l.position.set(sd*.11,.9,0); hb.add(l); legs.push(l);
+        l.add(new T.Mesh(CAP(.07,.3),skinM)).position.set(0,-.22,0); l.add(new T.Mesh(SG(.07,12),jointM)).position.set(0,-.44,0);
+        l.add(new T.Mesh(CAP(.055,.3),skinM)).position.set(0,-.66,0); l.add(box(.11,.06,.27,jointM,0,-.87,-.04));
+        hb.add(new T.Mesh(SG(.075,12),jointM)).position.set(sd*.24,1.46,0);
+        var a=new T.Group(); a.position.set(sd*.24,1.46,0); hb.add(a); arms.push(a);
+        a.add(new T.Mesh(CAP(.05,.22),skinM)).position.set(0,-.16,0); a.add(new T.Mesh(SG(.055,12),jointM)).position.set(0,-.32,0);
+        a.add(new T.Mesh(CAP(.045,.2),skinM)).position.set(0,-.47,0); a.add(box(.07,.12,.05,jointM,0,-.64,0)); });
+      hb.scale.setScalar(.96); hb.traverse(function(m){ if(m.isMesh) m.castShadow=true; }); return {o:hb,legs:legs,arms:arms}; }
+    [[51,71,26.5,.3,1,1],[70,54,23.5,.6,1,2.6]].forEach(function(w){ var h=humanoid(); MACH.add(h.o);
+      anim.bots.push({o:h.o,legs:h.legs,arms:h.arms,x0:w[0],x1:w[1],y:.1,z:w[2],t:w[3],d:w[4],v:.04,ph:w[5]}); });
     var droneM=mat(0x1f242b,{r:.6,m:.6}), rotorM=mat(0x0f1318,{r:.4,m:.3,t:true,o:.55});
     [[55,2,7],[67,14,9]].forEach(function(dp,di){ var dr=new T.Group(), rot=[];
       dr.add(box(.6,.14,.6,droneM,0,0,0));
@@ -2240,7 +2277,7 @@ function mountEras(host){
       for(var c=0;c<8;c++){ var cz=(c<4?-1:1)*(.85+(c<4?3-c:c-4)*1.28); PARTS.push([BG(.5,2.2,1.12),lidM,[sd*2.6,0,cz]]); } });
     var RINGS=[{rx:38,rz:22,y:26,tilt:0,ph:0,v:.045},{rx:32,rz:18,y:32,tilt:.22,ph:1.1,v:-.052},{rx:26,rz:14,y:38,tilt:-.22,ph:2.3,v:.06}], N=RINGS.length*16;
     var ORB=new T.Group(); g.add(ORB); P.orb=ORB; var pim=[];
-    PARTS.forEach(function(pt){ var im=inst(pt[0],pt[1],N); for(var k=0;k<N;k++) put(im,0,-9,0); ORB.add(im); pim.push(im); });
+    PARTS.forEach(function(pt){ var im=inst(pt[0],pt[1],N); im.userData.dyn=1; for(var k=0;k<N;k++) put(im,0,-9,0); ORB.add(im); pim.push(im); });
     anim.orb={parts:pim,locals:PARTS.map(function(pt){ return new T.Matrix4().makeTranslation(pt[2][0],pt[2][1],pt[2][2]); }),sk:SK8,rings:RINGS,per:16,cx:MX,cz:MZ};
     P.sitePos=sitePos;
     S3.userData.parts=P;
@@ -2296,31 +2333,27 @@ function mountEras(host){
   /* the stops. This is the storyline, in order; each is a chip, a pin and a chapter */
   var SPOTS=[
     eye('cloudair','Overview',0,WC(430,560,-520),WC(480,0,330)),
-    eye('city','Metro data center',0,WC(-50,95,-80),WC(100,12,70)),
-    eye('rcampus','Cloud campus',0,WC(CP[0]+300,230,CP[1]-150),WC(CP[0]+300,0,CP[1]+270)),
-    eye('rpower','Power',0,WC(CP[0]+90,150,CP[1]-160),WC(CP[0]+200,0,CP[1]+80)),
     {id:'campus', n:'Campus',                era:1, t:W(700,4,430),  w:96,  h:40, th:1.02, ph:1.12, pin:null},
     eye('halls','Data halls',1,W(330,240,120),W(320,0,440)),
     eye('nvl','Inside a hall',1,W(AISLE,1.7,408),W(AISLE,1.5,450),pinAt(W(AISLE,3.2,430))),
     {id:'onsite', n:'Power',                 era:1, t:W(560,6,110),  w:88,  h:40, th:1.25, ph:1.05, pin:pinAt(W(619.5,16,70))},
     {id:'bess',   n:'ESS batteries',         era:1, t:W(80,3,250),   w:22,  h:12, th:1.05, ph:.95,  pin:pinAt(W(80,10,250))},
     eye('agiair','Overview',2,V([X2+8,72,112]),V([X2,0,-2])),
-    eye('cities','Global inference',2,V([X2+12,58,28]),V([X2+12,0,0])),
+    eye('cities','Inference edge',2,V([X2+12,58,28]),V([X2+12,0,0])),
     eye('orbit','Orbital',2,V([X2+14,56,76]),V([X2+12,22,-4])),
     eye('site','Training campus',2,V([X2+34,12,26]),V([X2+24.8,.5,9.9])),
     eye('plant','Nuclear power',2,V([X2-76,9,-2]),V([X2-50,2,-15.5])),
     eye('mono','1 MW racks',2,V([X2-52.7,.28,12.87]),V([X2-50.3,.26,12.87])),
-    eye('edge','Physical AI',2,V([X2+84,14,42]),V([X2+61,1,8]))
+    eye('edge','Physical AI',2,V([X2+92,19,52]),V([X2+61,1,6]))
   ];
 
   var byId={}; SPOTS.forEach(function(s){byId[s.id]=s;});
   /* where the campus flyovers end: the spine road at eye height with the stacks behind; the dolly up the aisle; low along the turbine row */
   var GL={nvl:eye('',null,1,W(AISLE,1.7,430),W(AISLE,1.5,462)), onsite:eye('',null,1,W(600,4,30),W(900,9,110)),
           bess:eye('',null,1,W(5,2.5,218.25),W(140,2,218.25)),
-          city:eye('',null,0,WC(-20,60,-40),WC(100,10,70)), rcampus:eye('',null,0,WC(CP[0]+120,90,CP[1]+60),WC(CP[0]+350,5,CP[1]+300)),
           mono:eye('',null,2,V([X2-51.9,.28,12.87]),V([X2-49.5,.26,12.87])), site:eye('',null,2,V([X2-50,44,60]),V([X2-50,0,0]))};
   /* the film: [framing, seconds to hold, glide]. Moves take 1.6 s within an era, up to 3 s across */
-  var CHAPTERS=[[ERAS[0],8],[byId.cloudair,7],[byId.city,6,GL.city],[byId.rcampus,6],[byId.rpower,6],
+  var CHAPTERS=[[ERAS[0],8],[byId.cloudair,9],
                 [byId.campus,7],[byId.halls,6],[byId.nvl,6,GL.nvl],[byId.onsite,6,GL.onsite],[byId.bess,5,GL.bess],
                 [byId.agiair,8],[byId.cities,6],[byId.orbit,6],[byId.site,8,GL.site],[byId.plant,5],[byId.mono,6,GL.mono],[byId.edge,7],[ERAS[0],10]];
   /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
@@ -2333,15 +2366,6 @@ function mountEras(host){
     cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',
       rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
       tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+300,20,CP[1]+275),l:'Regional cloud campus'}]},
-    city:{at:WC(30,74,45),slot:'tr',hold:4,glow:[P1.hotel,P1.colo],title:'Metro data center',
-      rows:[['Carrier hotel','18 floors · 20 MW shared'],['Colocation','3 stories · 16 MW'],['Racks','4–8 kW']],
-      tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'}]},
-    rcampus:{at:WC(CP[0]+350,30,CP[1]+250),slot:'tr',hold:4,glow:[P1.bld],title:'Regional cloud campus',
-      rows:[['Buildings','4 × 48 MW'],['Total','192 MW'],['Racks','~24,000 · 8 kW']],
-      tags:[{at:WC(CP[0]+225,18,CP[1]+225),l:'Building A'},{at:WC(CP[0]+375,18,CP[1]+225),l:'Building B'},{at:WC(CP[0]+225,18,CP[1]+325),l:'Building C'},{at:WC(CP[0]+375,18,CP[1]+325),l:'Building D'}]},
-    rpower:{at:WC(CP[0]+60,12,CP[1]+40),slot:'tr',hold:4,glow:[P1.sub,P1.diesels],title:'Power',
-      rows:[['Utility','230 kV substation'],['Backup','Diesel generators']],
-      tags:[{at:WC(CP[0]+60,12,CP[1]+40),l:'230 kV substation'},{at:WC(CP[0]+350,5,CP[1]+120),l:'Backup power · diesel generators'}]},
     campus:{at:W(700,14,450),slot:'tr',glow:[P2.bld],title:'1 GW campus',desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:W(330,16,445),l:'Building A · 250 MW'},{at:W(870,16,445),l:'Building B · 250 MW'},{at:W(330,16,665),l:'Building C · 250 MW'},{at:W(870,16,665),l:'Building D · 250 MW'}]},
@@ -2356,15 +2380,14 @@ function mountEras(host){
     bess:{at:W(80,10,250),slot:'tr',glow:[P2.bess],title:'ESS batteries',desc:'Load shaping, ramp and backup.',
       rows:[['Containers','120']]},
     agiair:{at:[X2,6,-2],slot:'tl',hold:4,glow:[P3.plant,P3.cities,P3.phys,P3.orb],title:'AGI era',
-      rows:[['Massive training campuses'],['Nuclear power'],['Global inference at the edge'],['Orbital compute'],['Physical AI']],
-      tags:[{at:[X2-50,8,-14],l:'Training campus'},{at:[X2+12,3,-6],l:'Global inference'},{at:[X2+12,30,-8],l:'Orbital compute'},{at:[X2+61,8,-20],l:'Physical AI'}]},
-    cities:{at:[X2+12+US.metros[2][1],1.2,US.metros[2][2]],slot:'tr',hold:4,glow:[P3.cities],title:'Global inference',desc:'Inference buildings in every metro, connected.',
+      tags:[{at:[X2-50,8,-14],l:'5–10 GW training campus'},{at:[X2+12,3,-6],l:'Inference edge'},{at:[X2+12,30,-8],l:'Orbital compute'},{at:[X2+61,8,-20],l:'Physical AI'}]},
+    cities:{at:[X2+12+US.metros[2][1],1.2,US.metros[2][2]],slot:'tr',hold:4,glow:[P3.cities],title:'Inference edge',desc:'Inference buildings in every metro, connected.',
       rows:[['Per building','10–50 MW'],['Racks','20–60 kW']],
       tags:US.metros.filter(function(m,i){ return i<9; }).map(function(m){ return {at:[X2+12+m[1],1.2,m[2]],l:m[0]}; })},
     orbit:{at:[X2+12+38,26,0],slot:'tl',glow:[P3.orb],title:'Orbital compute'},
-    site:{at:P3.sitePos.toArray(),slot:'tr',hold:4,glow:[P3.site,P3.plant],title:'Training campus',rows:[['Per campus','5–10 GW'],['Power','Nuclear']],
+    site:{at:P3.sitePos.toArray(),slot:'tr',hold:4,glow:[P3.site,P3.plant],title:'Training campus',rows:[['5–10 GW'],['Power','Nuclear']],
       tags:[{at:P3.sitePos.toArray(),l:'West Texas'}]},
-    plant:{at:[X2-50-180/12,2.8,12-310/12],slot:'tr',glow:[P3.react],title:'Nuclear power',rows:[['Per campus','5–10 GW']]},
+    plant:{at:[X2-50-180/12,2.8,12-310/12],slot:'tr',glow:[P3.react],title:'Nuclear power',rows:[['5–10 GW']]},
     mono:{at:[X2-50.3,.36,12.87],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers.',
       rows:[['Per rack','1 MW'],['Power','800 V DC · solid-state transformers']]},
     edge:{at:[X2+61,1.6,26.5],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',

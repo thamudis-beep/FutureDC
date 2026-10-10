@@ -170,13 +170,14 @@ reading: grey past, amber today, cyan future. It opens on the wide shot behind
 an "Enter" pill. Entering plays a film: `CHAPTERS`, each a framing and a hold.
 The camera moves between framings with one crane (`flyTo`: rise, cross,
 settle, smoothstep, no roll) and holds steady with the slowest drift; the
-stops are the storyline in order — the Cloud era, the appetizer, four
-beats: an aerial overview that lights only the
-three buildings (carrier hotel, colocation facility, regional cloud
-campus; glow held 4 s via `hold`; a card by category — downtown, out of
-town, tied by) → the metro data center → the regional cloud campus (the
-four buildings, the total, no per-building figures on the tags) → power
-(230 kV utility, diesel backup). No cooling towers, no fiber hut, no
+stops are the storyline in order — the Cloud era, the appetizer, ONE
+beat (v115: "the overview is sufficient... don't need the double click
+into metro data center and campus... also power"): an aerial overview
+that lights only the three buildings (carrier hotel, colocation
+facility, regional cloud campus; glow held 4 s via `hold`; a card by
+category — downtown, out of town; rack power 4–8 kW). The metro data
+center, the campus and the power stops were cut from the film and the
+chip bar; the places are still built. No cooling towers, no fiber hut, no
 dishes on the cloud tags; the meet-me room, the colo cage, the cold aisle
 and the fiber vault are still built but are not stops — "don't delete the
 inside from the graphics, just skip it for the scene"; rack power is
@@ -315,8 +316,10 @@ so there are no gensets on the building face and no cooling towers. The
 film's campus chapter glides from the aerial to a low oblique over
 Building A's corner looking up the spine road to the stacks; at this
 model scale a 2 m eye on the road sees a plain, which was tried. The
-hall chapter is a dolly up a cold aisle; the power chapter a glide low
-along the turbine row. The old campus kit (combined-cycle trains, gensets,
+hall chapter is a dolly up a cold aisle — `AISLE` = 220+1+9+2.1, the gap
+between rows one and two whose FRONTS face it; one pitch further on is
+the hot aisle and the dolly saw plain rack backs: "navigating through an
+empty hall" (v115); the power chapter a glide low along the turbine row. The old campus kit (combined-cycle trains, gensets,
 pylons, the eight-hall grid) is gone with it.
 
 **The AGI stage reads LEFT TO RIGHT** (v114, the user's rethink: "isn't
@@ -336,19 +339,28 @@ every metro, nearest-two hairlines between metros with pulses
 (`anim.links`), and the `SITE` marker where the campus sits; ABOVE the
 map, three rings of the orbital scene's AI1 craft (`RINGS`, per 16);
 RIGHT, the physical-AI port depot at x ≈ 61, 1:1. The story is the
-stops in order: Overview (the three regions, tagged Training campus ·
-Global inference · Orbital compute · Physical AI; rows energy ·
-training · inference · orbit · physical AI) → Global inference (the map
-from above, nine metros tagged, "Inference buildings in every metro,
-connected.", 10–50 MW buildings, 20–60 kW racks) → Orbital (title only,
-the rings over the map) → Training campus (the West Texas marker, then
-a glide to the diorama aerial; Per campus 5–10 GW · Power Nuclear) →
-Nuclear power (the reactors; "six reactor modules is too big of a
-guess", so the card says only Per campus 5–10 GW) → 1 MW racks (Rubin
-Ultra / Feynman at 1 MW, liquid-cooled, 800 V DC through solid-state
+stops in order: Overview (title only — the rows were "repetitive with
+the annotations"; the three regions tagged 5–10 GW training campus ·
+Inference edge · Orbital compute · Physical AI) → Inference edge (never
+"Global": "u.s. map, not global"; the map from above, nine metros
+tagged, "Inference buildings in every metro, connected.", 10–50 MW
+buildings, 20–60 kW racks) → Orbital (title only, the rings over the
+map) → Training campus (the West Texas marker, then a glide to the
+diorama aerial; 5–10 GW · Power Nuclear — never "Per campus", "clunky")
+→ Nuclear power (the reactors; "six reactor modules is too big of a
+guess", so the card says only 5–10 GW) → 1 MW racks (Rubin Ultra /
+Feynman at 1 MW, liquid-cooled, 800 V DC through solid-state
 transformers — one quick mention) → Physical AI (a wide oblique over
 the depot: industrial robots, AGVs, humanoids, autonomous trucks,
-autonomous cars — "cars not vans" — drones, all tagged). Regenerate the
+autonomous cars, drones, all tagged). The depot's machines are
+REALISTIC, not boxes (v115, "the humanoids and AV shapes are
+ridiculous"): the charging row is three sedans and two robotaxi vans,
+each body an `ExtrudeGeometry` of a side profile with bevelled edges
+(`prof`), Model 3 and Zeekr RT proportions — the van wears the roof
+lidar dome and corner pods — and the two humanoids are Optimus-like:
+white panels over dark ball joints, a tapered torso, a dark visor,
+capsule limbs, walking the yard (`anim.bots`, legs and arms swing about
+x, the face on local −z). Regenerate the
 map data with `d3-geo` + `topojson-client` from us-atlas if the metros or
 the projection change; never hand-draw the states. The rig's `minR` is
 .08 for this scene so the camera can stand in the 1:12 hall. No long-haul
@@ -488,7 +500,14 @@ proxy child on layer 1 (edges as `EdgesGeometry` lines, body as an additive
 fill; instanced meshes get an instanced proxy sharing the matrices), and
 the rig's selective bloom (`cfg.bloom`, three core only: the scene's depth
 rendered black, the layer-1 proxies over it, blurred small, added back)
-makes the halo. The fill must stay tiny (`.02` on screen, `.012` into the
+makes the halo. Instanced meshes get the edge lines too, baked per
+instance into one `BufferGeometry` (only for meshes of at most 160
+instances — a yard, a turbine row — never a rack field, whose thousands
+of lit rails at arm's length whited out the hall; skipped for tiny
+geometry and for `userData.dyn` meshes whose matrices move every frame —
+the orbit craft): without them a yard of 120
+instanced containers lit only its ten loose transformer boxes ("the ESS
+batteries is only glowing a portion"). The fill must stay tiny (`.02` on screen, `.012` into the
 bloom): a fill of `.04` turned a sunlit wing into a flat cyan slab,
 measured, because the bloom of a large face adds back its whole mean.
 Sky objects (stars, sun sprites, orbit shells) sit on layer 2 so the
