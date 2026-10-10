@@ -328,9 +328,21 @@ the back-to-front frame (plant on the horizon, edges midground, depot
 foreground) was "organized strangely" and its opening "a mess". Now, on
 the 150 × 76 pedestal: LEFT, a 1:12 diorama of the training campus and
 its nuclear plant (`PL` at (−50,.1,12): `P.react` the reactor modules and
-dome, `P.mono` = `RACKS`, the near hall cut open with six rows of 1 MW
-racks built with `rackField`, the camera standing in the aisle at
-1.7 m); CENTRE, a real map of the contiguous United States (`US`, embedded
+dome, `P.mono` = `RACKS`, the near hall cut open with six rows of forty
+1 MW racks built with `rackField`, the camera standing in the aisle at
+1.7 m). The halls are BUILDINGS, not shoeboxes (v116, "just shoeboxes
+w/ 0 detail"): each closed hall has a roof slab, pilasters every 10 m,
+two rows of rooftop units with fans, a penthouse, dock doors and a
+canopy, an electrical pad behind it with four transformers and a
+switchgear house, a dry-cooler row between the hall rows, roads with
+lamp posts, and the turbine halls their step-up transformers — all
+`repeat`ed, one draw call per part. The near hall carries what a 1 MW
+hall is full of ("0 cabling, 0 water cooling systems" was the
+complaint): a busway and live strip over every row, a fibre tray with
+three trunks and a drop to every rack, supply and return headers beside
+every row with a branch to every rack, cross trays to the east wall,
+and there fourteen CDUs with risers, two thick mains and the scale-out
+tray; CENTRE, a real map of the contiguous United States (`US`, embedded
 before `mountEras`: us-atlas states-10m through a d3-geo Albers fit to a
 60 × 36 box, rings thinned to ~56 points, 18 metros, the campus site at
 West Texas [12.8, 9.9]) laid flat as `MAPG` at (12,.12,0) — land as
@@ -367,6 +379,20 @@ the projection change; never hand-draw the states. The rig's `minR` is
 line, no cabinets, no "thick cyan", no world map, no SMR count on a card.
 Earlier rejects still stand: a wireframe globe on a stem, a circular site
 with glowing pads, a race-drone flythrough, the back-to-front frame.
+
+**Rendering on any computer** (v116, "frozen in my work laptop
+chrome"): the rig keeps three safeguards. The eras scene's shadow map
+is rendered ONCE (`staticShadow`: `shadowMap.autoUpdate=false`), so
+nothing that moves — vehicles, walkers, craft — may cast a shadow, or
+it leaves a stale one. A slow frame average (over 45 frames, after the
+first two seconds, worse than ~18 fps) steps the quality down a tier at
+a time: pixel ratio 1 → 0.75 and no bloom → shadows off. A browser
+drawing without a GPU (`WEBGL_debug_renderer_info` says SwiftShader,
+llvmpipe or software) gets a line under the Enter pill saying so and
+pointing at chrome://settings/system; the probes run on SwiftShader, so
+that notice appears in every headless screenshot and the tiers never
+step down there (gated on `soft`), which keeps the screenshots true to
+the real look. The eras scene caps the pixel ratio at 1.5.
 
 **The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
 rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
@@ -502,10 +528,15 @@ the rig's selective bloom (`cfg.bloom`, three core only: the scene's depth
 rendered black, the layer-1 proxies over it, blurred small, added back)
 makes the halo. Instanced meshes get the edge lines too, baked per
 instance into one `BufferGeometry` (only for meshes of at most 160
-instances — a yard, a turbine row — never a rack field, whose thousands
-of lit rails at arm's length whited out the hall; skipped for tiny
-geometry and for `userData.dyn` meshes whose matrices move every frame —
-the orbit craft): without them a yard of 120
+instances — a yard, a turbine row — and never a rack field: `rackField`
+marks every mesh it makes `userData.noEdge`, because a field is built
+of 40- and 160-instance meshes that pass the count cap, and thousands
+of lit rails at arm's length whited out the 1 MW hall; also skipped for
+tiny geometry and for `userData.dyn` meshes whose matrices move every
+frame — the orbit craft). Under SwiftShader the flash runs on film
+time at a twentieth of wall time, so a probe screenshot a few seconds
+after settling is still mid-flash; judge a glow's steady state by
+hiding the `userData.proxy` objects in-page, not by waiting: without them a yard of 120
 instanced containers lit only its ten loose transformer boxes ("the ESS
 batteries is only glowing a portion"). The fill must stay tiny (`.02` on screen, `.012` into the
 bloom): a fill of `.04` turned a sunlit wing into a flat cyan slab,

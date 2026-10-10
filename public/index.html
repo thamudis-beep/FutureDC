@@ -287,6 +287,9 @@
   .e3d-note.multi .c i.w{text-transform:none;letter-spacing:0;font-size:11.5px;color:var(--ink)}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
+  .e3d-enter{flex-direction:column;gap:12px}
+  .e3d-gpu{display:none;margin:0;max-width:440px;text-align:center;font:12px/1.5 var(--mono);color:var(--dim)}
+  .e3d.nogpu .e3d-gpu{display:block}
   .e3d.in .e3d-enter button{pointer-events:none}
   .e3d-enter button{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.01em;color:var(--ink);
     padding:12px 22px;background:rgba(8,10,14,.66);border-color:rgba(255,255,255,.16);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 18px 50px rgba(0,0,0,.5)}
@@ -357,7 +360,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v115 · cloud overview only · hall aisle · depot vehicles</div>
+<div class="ver">v116 · agi campus detail</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1293,7 +1296,7 @@ function sceneKit(T){
     sel.forEach(function(m){
       if(m.isInstancedMesh){ var p=new T.InstancedMesh(m.geometry,fm,m.count); p.instanceMatrix=m.instanceMatrix; p.userData.proxy=1; p.layers.set(1); m.add(p);
         if(!m.geometry.boundingSphere) m.geometry.computeBoundingSphere();
-        if(m.geometry.boundingSphere.radius>.25&&!m.userData.dyn){ var k0=m.geometry.uuid, eg0=edgeCache[k0]||(edgeCache[k0]=G(new T.EdgesGeometry(m.geometry,24))), nv=eg0.attributes.position.count;
+        if(m.geometry.boundingSphere.radius>.25&&!m.userData.dyn&&!m.userData.noEdge){ var k0=m.geometry.uuid, eg0=edgeCache[k0]||(edgeCache[k0]=G(new T.EdgesGeometry(m.geometry,24))), nv=eg0.attributes.position.count;
           if(m.count<=160){ var k1=m.uuid+'_e', eg1=edgeCache[k1];
             if(!eg1){ var src=eg0.attributes.position.array, out=new Float32Array(nv*3*m.count), M4=new T.Matrix4(), vv=new T.Vector3();
               for(var ii=0;ii<m.count;ii++){ m.getMatrixAt(ii,M4); for(var jj=0;jj<nv;jj++){ vv.set(src[jj*3],src[jj*3+1],src[jj*3+2]).applyMatrix4(M4); var oi=(ii*nv+jj)*3; out[oi]=vv.x; out[oi+1]=vv.y; out[oi+2]=vv.z; } }
@@ -1325,6 +1328,18 @@ function sceneRig(T,host,K,scene,cfg){
   var renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance',logarithmicDepthBuffer:!!cfg.logDepth});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,cfg.dpr||1.75));
   renderer.shadowMap.enabled=true; renderer.shadowMap.type=cfg.softShadow===false?T.PCFShadowMap:T.PCFSoftShadowMap;
+  /* a static world needs its shadow map once, not every frame: the moving things (vehicles, walkers, craft) cast none */
+  if(cfg.staticShadow){ renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true; }
+  /* no GPU behind this browser (SwiftShader, llvmpipe): say so under the Enter pill rather than freeze silently */
+  var soft=false; try{ var gl0=renderer.getContext(), dbg=gl0.getExtension('WEBGL_debug_renderer_info'), rn=dbg?String(gl0.getParameter(dbg.UNMASKED_RENDERER_WEBGL)):'';
+    soft=/swiftshader|llvmpipe|softpipe|software/i.test(rn); }catch(e){}
+  /* adaptive quality: a slow frame average steps the renderer down — pixel ratio, then bloom, then shadows — so a laptop keeps moving */
+  var tier=0, ft=0, fn=0;
+  function stepDown(){ tier++;
+    if(tier===1){ renderer.setPixelRatio(1); resize(); }
+    else if(tier===2){ renderer.setPixelRatio(.75); resize(); glowOff=true; }
+    else if(tier===3){ scene.traverse(function(o){ if(o.isLight&&o.castShadow) o.castShadow=false; }); renderer.shadowMap.enabled=false; scene.traverse(function(o){ if(o.material){ var ms=[].concat(o.material); ms.forEach(function(m){ m.needsUpdate=true; }); } }); } }
+  var glowOff=false;
   renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=cfg.exposure||1.58;
   if(T.SRGBColorSpace) renderer.outputColorSpace=T.SRGBColorSpace;
   renderer.domElement.style.display='block';
@@ -1333,6 +1348,7 @@ function sceneRig(T,host,K,scene,cfg){
   host.appendChild(renderer.domElement);
   var camera=new T.PerspectiveCamera(cfg.fov||42,1,cfg.near||.3,cfg.far||1400);
   camera.layers.enable(1); camera.layers.enable(2);   /* 1: the glow proxies · 2: sky, kept out of the bloom's depth pass */
+  if(soft) host.classList.add('nogpu');
 
   var stops=cfg.stops, wide=cfg.wide, views=cfg.views, groups=cfg.groups, chapters=cfg.chapters;
   var byId={}; stops.forEach(function(s){byId[s.id]=s;});
@@ -1432,7 +1448,7 @@ function sceneRig(T,host,K,scene,cfg){
     '<div class="e3d-chips">'+groups.map(function(gp,e){
       return '<div class="e3d-grp" style="--ec:'+hex(gp.color)+'"><div class="e3d-row">'+
         stops.filter(function(sp){return sp.era===e&&sp.n;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
-    '<div class="e3d-enter"><button data-enter>Enter</button></div>'+
+    '<div class="e3d-enter"><button data-enter>Enter</button><p class="e3d-gpu">This browser is drawing without a GPU. Turn on hardware acceleration (chrome://settings/system) for the 3D scene.</p></div>'+
     (cfg.panel?'<div class="e3d-panel">'+cfg.panel+'</div>':'')+
     (cfg.notes?'<svg class="e3d-svg"><defs><filter id="e3dsoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
       '<g class="dims" filter="url(#e3dsoft)"></g><line/><circle class="o" r="11" fill="none" stroke-width="1.5"/><circle class="i" r="2.2"/></svg><div class="e3d-note"></div>':'');
@@ -1618,7 +1634,8 @@ function sceneRig(T,host,K,scene,cfg){
   function frame(){
     if(disposed) return;
     raf=requestAnimationFrame(frame);
-    var dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
+    var raw=clock.getDelta(), dt=Math.min(raw,.05), t=clock.elapsedTime;
+    if(!soft&&!RM&&tier<3&&t>2){ ft+=raw; fn++; if(fn>=45){ if(ft/fn>.055) stepDown(); ft=0; fn=0; } }
     if(mv) stepMove(dt);
     else if(tour.on&&!RM) tourStep(dt);
     else{
@@ -1628,7 +1645,7 @@ function sceneRig(T,host,K,scene,cfg){
     }
     place();
     cfg.tick(RM?0:dt,t,camera); pinsTick(t); notesTick(dt,t);
-    var bl=bloom&&glowing;
+    var bl=bloom&&glowing&&!glowOff;
     if(bl){ noteIds.forEach(function(id){ notes[id].glow.pass(true); }); bloom.render(); noteIds.forEach(function(id){ notes[id].glow.pass(false); }); }
     renderer.render(scene,camera);
     if(bl) bloom.composite();
@@ -1715,6 +1732,7 @@ function mountEras(host){
      returns world positions so callers can drop fibre and power.
      --------------------------------------------------------- */
   function rackField(g,o){
+    function inst(){ var m=K.inst.apply(null,arguments); m.userData.noEdge=1; return m; }   /* a rack field never gets glow edge lines: thousands of lit rails at arm's length white out a hall */
     var cols=o.cols, rows=o.rows, w=o.w, h=o.h, d=o.d,
         gapX=o.gapX!=null?o.gapX:.18, gapZ=o.gapZ!=null?o.gapZ:(d*2.2),
         units=o.units||9, accent=o.led||C.aqua, n=cols*rows;
@@ -2151,18 +2169,53 @@ function mountEras(host){
     var bAt=[]; for(var bs=0;bs<16;bs++) bAt.push([100+(bs%8)*16,-170+Math.floor(bs/8)*8,0]);
     repeat(PL,[[BG(12,3,3),encl,0,1.5,0,1],[BG(11.8,.1,.1),lit(C.hot,1.0),0,2.2,1.55,0]],bAt);
     var NH=new T.Group(), RACKS=new T.Group(); PL.add(NH); NH.add(RACKS); P.mono=RACKS;
+    var roof3=mat(0x333a43,{r:.9,m:.2}), gravel3=mat(0x30363d,{r:.96,m:.1}), road3=mat(0x14171b,{r:.95,m:.08}), xfm3=mat(0x2c333c,{r:.68,m:.6}), dock3=mat(0x14181e,{r:.9,m:.2}), closed=[];
     for(var hr=0;hr<2;hr++) for(var hi=0;hi<5;hi++){ var hx=-220+hi*110, hz=hr?20:-60, near=(hr===1&&hi===2);
-      if(!near){ PB(PL,100,12,35,hallM,hx,hz,0,true); PB(PL,98,.4,.4,lit(C.hot,1.0),hx,hz+17.7,4); continue; }
+      if(!near){ PB(PL,100,12,35,hallM,hx,hz,0,true); PB(PL,100,.5,35,roof3,hx,hz,12); PB(PL,98,.4,.4,lit(C.hot,1.0),hx,hz+17.7,4); PB(PL,98,.4,.4,lit(C.hot,1.0),hx,hz-17.7,4);
+        PB(PL,14,3,10,capM,hx+38,hz,12.5,true); PB(PL,30,.4,2.5,part,hx-20,hz+18.8,4.4); closed.push([hx,hz]); continue; }
       /* the near hall, cut open: six rows of next-generation racks at 1 MW each, fronts to the cold aisles, manifolds on both flanks, a busway over every row */
       PB(NH,100,.6,35,part,hx,hz); PB(NH,100,12,.6,hallM,hx,hz-17.5,0,true); PB(NH,.6,12,35,hallM,hx-50,hz,0,true);
       [[hx+49.7,hz-17.2],[hx+49.7,hz+17.2],[hx-49.7,hz+17.2]].forEach(function(p){ PB(NH,.8,12,.8,hallM,p[0],p[1]); });
       PB(NH,100,.5,.5,part,hx,hz+17.5,11.7); PB(NH,.5,.5,35,part,hx+49.8,hz,11.7);
       var NF=new T.Group(), NB=new T.Group(); NB.rotation.y=Math.PI; RACKS.add(NF); RACKS.add(NB);
-      for(var rr=0;rr<6;rr++){ var rz=hz-12+rr*4.8, o={cols:14,rows:1,w:1.2,h:2.6,d:1.4,gapX:.3,units:18,band:[7,11],manifold:1,led:C.hot,ledI:2.4,bezel:0x272e37,shadow:false};
+      var fib3=mat(C.orange,{r:.5,m:.1,e:C.orange,ei:.5}), bus3=mat(C.steel,{r:.5,m:.8}), drops=[], brs=[];
+      for(var rr=0;rr<6;rr++){ var rz=hz-12+rr*4.8, face=rr%2?-1:1, o={cols:40,rows:1,w:1.2,h:2.6,d:1.4,gapX:.3,units:18,band:[7,11],manifold:1,led:C.hot,ledI:2.4,bezel:0x272e37,shadow:false};
         if(rr%2===0){ o.x=hx; o.z=rz; rackField(NF,o); } else { o.x=-hx; o.z=-rz; rackField(NB,o); }
-        NH.add(box(22,.3,.3,mat(C.steel,{r:.5,m:.8}),hx,4.1,rz)); NH.add(box(22,.06,.06,lit(C.hot,1.4),hx,3.95,rz)); }
-      NH.add(box(20,.9,.9,supM,hx,1.6,hz-15.2)); NH.add(box(20,.9,.9,retM,hx,1.6,hz+14.4));
+        /* over the row: the busway with its live strip, the fibre tray with three trunks; beside it the supply and return headers */
+        NH.add(box(60,.3,.3,bus3,hx,4.1,rz+face*.5)); NH.add(box(60,.06,.06,lit(C.hot,1.4),hx,3.95,rz+face*.5));
+        NH.add(box(60,.12,.7,steel,hx,3.4,rz)); [-.18,0,.18].forEach(function(oz){ NH.add(box(60,.06,.06,fib3,hx,3.52,rz+oz)); });
+        NH.add(box(60,.2,.2,supM,hx,.35,rz-face*.95)); NH.add(box(60,.2,.2,retM,hx,.62,rz-face*.95));
+        /* the cross tray from the row's end to the support strip, with its two fibres */
+        NH.add(box(16,.1,.6,steel,hx+38,3.62,rz)); NH.add(box(16,.05,.05,fib3,hx+38,3.7,rz-.1)); NH.add(box(16,.05,.05,fib3,hx+38,3.7,rz+.1));
+        for(var c3=0;c3<40;c3++){ var rx3=hx+(c3-19.5)*1.5; drops.push([rx3,rz+face*.75,0]); brs.push([rx3,rz-face*.7,0]); } }
+      repeat(NH,[[BG(.035,.9,.035),fib3,0,3.0,0,0]],drops);
+      repeat(NH,[[BG(.08,.08,.6),supM,0,.4,0,0],[BG(.08,.08,.6),retM,.16,.62,0,0]],brs);
+      /* the support strip on the east wall: the CDUs with their risers and lit strips, two thick mains, the scale-out fibre tray */
+      var cdus=[]; for(var k6=0;k6<14;k6++) cdus.push([hx+47,hz-16.2+k6*2.5,0]);
+      repeat(NH,[[BG(1.4,2.2,1.2),encl,0,1.1,0,0],[BG(1.3,.06,.06),lit(C.aqua,1.3),-.1,1.7,-.62,0],[BG(.14,1.4,.14),supM,.3,2.9,0,0],[BG(.14,1.4,.14),retM,-.3,2.9,0,0]],cdus);
+      NH.add(cyl(.35,.35,34,supM,hx+45.5,.5,hz,10).rotateX(Math.PI/2)); NH.add(cyl(.35,.35,34,retM,hx+45.5,1.15,hz,10).rotateX(Math.PI/2));
+      NH.add(box(.7,.15,34,steel,hx+45.5,4.0,hz)); NH.add(box(.06,.06,34,fib3,hx+45.4,4.1,hz)); NH.add(box(.06,.06,34,fib3,hx+45.6,4.1,hz));
       PB(NH,96,.3,.5,lit(0xbfefff,1.2),hx,hz,11.2); }
+    /* what makes a hall a building and a row of halls a campus: wall seams, rooftop plant, dock doors, an electrical pad with its
+       transformers and switchgear behind every hall, a dry cooler row between the rows, the roads, the step-up yard at the turbine halls */
+    var pil=[],rtu=[],dock=[],xf=[],sw=[],cool3=[],pad3=[];
+    closed.forEach(function(h){ var hx=h[0], hz=h[1], sg=hz>0?1:-1;
+      for(var k=0;k<=10;k++){ pil.push([hx-50+k*10,hz-17.6,0]); pil.push([hx-50+k*10,hz+17.6,0]); }
+      for(var k2=0;k2<6;k2++){ rtu.push([hx-40+k2*16,hz-9,0]); rtu.push([hx-40+k2*16,hz+9,0]); }
+      for(var k3=0;k3<4;k3++) dock.push([hx-32+k3*7,hz+17.7,0]);
+      pad3.push([hx,hz+sg*27,0]); for(var k4=0;k4<4;k4++) xf.push([hx-36+k4*24,hz+sg*30,0]); sw.push([hx+38,hz+sg*24,0]);
+      for(var k5=0;k5<8;k5++) cool3.push([hx-42+k5*12,hz-sg*22,0]); });
+    [-150,30].forEach(function(tx){ for(var k=0;k<=8;k++){ pil.push([tx-80+k*20,-240.6,0]); pil.push([tx-80+k*20,-199.4,0]); }
+      for(var k2=0;k2<5;k2++) rtu.push([tx-60+k2*30,-220,0]); for(var k3=0;k3<3;k3++) xf.push([tx-30+k3*30,-186,0]); });
+    repeat(PL,[[BG(.6,11.6,.6),part,0,5.8,0,0]],pil);
+    repeat(PL,[[BG(6,2.5,5),capM,0,13.75,0,1],[CG(1.8,1.8,.2,14),fanM,0,15.1,0,0]],rtu);
+    repeat(PL,[[BG(4,4.2,.4),dock3,0,2.1,0,0]],dock);
+    repeat(PL,[[BG(96,.3,16),gravel3,0,.15,0,0],[BG(94,.25,.25),lit(C.hot,.9),0,2.4,0,0]],pad3);
+    repeat(PL,[[BG(4,3.6,3),xfm3,0,1.8,0,1],[BG(.5,1.6,.5),steel,-1.2,4.4,0,0],[BG(.5,1.6,.5),steel,1.2,4.4,0,0]],xf);
+    repeat(PL,[[BG(18,3.5,5),encl,0,1.75,0,1],[BG(17.6,.12,.12),lit(C.hot,1.2),0,2.6,2.6,0]],sw);
+    repeat(PL,[[BG(9,3.2,3),capM,0,1.6,0,1],[CG(1.3,1.3,.15,14),fanM,-2.6,3.3,0,0],[CG(1.3,1.3,.15,14),fanM,2.6,3.3,0,0],[BG(8.8,.1,.1),lit(C.forge,.8),0,1.0,1.52,0]],cool3);
+    PB(PL,580,.15,12,road3,0,-20); PB(PL,580,.15,14,road3,0,65); PB(PL,580,.15,14,road3,0,-118); PB(PL,14,.15,200,road3,-275,-30); PB(PL,14,.15,200,road3,275,-30);
+    for(var lp3=0;lp3<12;lp3++){ PB(PL,.5,9,.5,steel,-264+lp3*48,-27); PL.add(box(.8,.3,.8,lit(0xffe2b8,1.6),-264+lp3*48,9,-27)); }
     var hl3=new T.PointLight(0xbfefff,.9,8,1.5); hl3.position.set(-50,1.2,13.7); g.add(hl3);
 
     /* ---- MIDDLE: the connected country. The lower 48 on the pad, a cluster of inference buildings at every metro, hairlines
@@ -2227,10 +2280,10 @@ function mountEras(host){
         vanG=prof([[2.4,.38],[2.38,.8],[2.2,1.05],[1.75,1.15],[1.15,1.72],[.6,1.84],[-2.15,1.86],[-2.4,1.72],[-2.4,.38],[-2.05,.26],[2.05,.26]],1.9,.08);
     var pearl=mat(0xe4e7ea,{r:.32,m:.3}), slate=mat(0x3b4654,{r:.32,m:.6}), cherry=mat(0x8a2626,{r:.36,m:.5}), rimM=mat(0x9aa0a8,{r:.4,m:.8}), podM=mat(0x1b2026,{r:.4,m:.6});
     function wheelAt(v,x,z,r){ v.add(cyl(r,r,.22,wheel,x,r,z,14).rotateX(Math.PI/2)); v.add(cyl(r*.6,r*.6,.24,rimM,x,r,z,12).rotateX(Math.PI/2)); }
-    function sedan(bodyM){ var v=new T.Group(); var b=new T.Mesh(sedanG,bodyM); b.castShadow=true; v.add(b); v.add(new T.Mesh(cabinG,canopy));
+    function sedan(bodyM){ var v=new T.Group(); var b=new T.Mesh(sedanG,bodyM); v.add(b); v.add(new T.Mesh(cabinG,canopy));
       [[1.45,.82],[-1.45,.82],[1.45,-.82],[-1.45,-.82]].forEach(function(w){ wheelAt(v,w[0],w[1],.33); });
       [-.55,.55].forEach(function(z){ v.add(box(.06,.07,.5,lit(0xf2f6ff,2.2),2.27,.72,z)); }); v.add(box(.05,.06,1.5,lit(C.red,1.8),-2.29,.96,0)); return v; }
-    function van(){ var v=new T.Group(); var b=new T.Mesh(vanG,pearl); b.castShadow=true; v.add(b);
+    function van(){ var v=new T.Group(); var b=new T.Mesh(vanG,pearl); v.add(b);
       v.add(box(3.9,.5,1.93,canopy,-.3,1.42,0)); v.add(box(.84,.06,1.72,canopy,1.46,1.46,0).rotateZ(.76));
       v.add(cyl(.28,.3,.2,podM,.9,1.96,0,14)); v.add(cyl(.12,.12,.14,podM,.9,2.12,0,12));
       [[1.95,1.0],[1.95,-1.0],[-2.05,1.0],[-2.05,-1.0]].forEach(function(p){ v.add(box(.16,.22,.14,podM,p[0],1.0,p[1])); });
@@ -2255,7 +2308,7 @@ function mountEras(host){
         var a=new T.Group(); a.position.set(sd*.24,1.46,0); hb.add(a); arms.push(a);
         a.add(new T.Mesh(CAP(.05,.22),skinM)).position.set(0,-.16,0); a.add(new T.Mesh(SG(.055,12),jointM)).position.set(0,-.32,0);
         a.add(new T.Mesh(CAP(.045,.2),skinM)).position.set(0,-.47,0); a.add(box(.07,.12,.05,jointM,0,-.64,0)); });
-      hb.scale.setScalar(.96); hb.traverse(function(m){ if(m.isMesh) m.castShadow=true; }); return {o:hb,legs:legs,arms:arms}; }
+      hb.scale.setScalar(.96); return {o:hb,legs:legs,arms:arms}; }
     [[51,71,26.5,.3,1,1],[70,54,23.5,.6,1,2.6]].forEach(function(w){ var h=humanoid(); MACH.add(h.o);
       anim.bots.push({o:h.o,legs:h.legs,arms:h.arms,x0:w[0],x1:w[1],y:.1,z:w[2],t:w[3],d:w[4],v:.04,ph:w[5]}); });
     var droneM=mat(0x1f242b,{r:.6,m:.6}), rotorM=mat(0x0f1318,{r:.4,m:.3,t:true,o:.55});
@@ -2441,7 +2494,7 @@ function mountEras(host){
     }
     fl.m.instanceMatrix.needsUpdate=true; col.needsUpdate=true;
   }
-  var rig=sceneRig(T,host,K,scene,{RM:RM,far:1400,near:.02,logDepth:true,minR:.08,maxPh:1.62,exposure:1.58,
+  var rig=sceneRig(T,host,K,scene,{RM:RM,far:1400,near:.02,logDepth:true,minR:.08,maxPh:1.62,exposure:1.58,dpr:1.5,staticShadow:true,
     groups:[{n:'Cloud',sub:'2023',color:ERA[0]},{n:'Today',sub:'2026',color:ERA[1]},{n:'AGI',sub:'2031',color:ERA[2]}],
     wide:ERAS[0],views:ERAS.slice(1),stops:SPOTS,chapters:CHAPTERS,picks:picks,tick:tick,notes:NOTES,noteColor:0xe0a355,bloom:{k:1.1,spread:1.7}});
   rig.start();
