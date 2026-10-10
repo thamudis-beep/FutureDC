@@ -356,7 +356,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v110 · three cards</div>
+<div class="ver">v111 · less</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2304,7 +2304,7 @@ function mountEras(host){
     eye('plant','Nuclear plant',2,V([X2-34,20,8]),V([X2+12,2,-28])),
     eye('mono','1 MW racks',2,V([X2-23.7,.17,-24.0]),V([X2-21.0,.15,-24.0])),
     eye('cities','Inference edge',2,V([X2+24,14,30]),V([X2,1.5,-2])),
-    eye('edge','Physical AI',2,V([X2-18,9,52]),V([X2-30,1,24])),
+    eye('edge','Physical AI',2,V([X2+24,13,64]),V([X2-14,1,27])),
     eye('orbit','Orbital',2,V([X2+40,96,96]),V([X2,38,-6]))
   ];
 
@@ -2322,11 +2322,11 @@ function mountEras(host){
   var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
   var NOTES={
     wide:{at:[36,2,0],noRing:true,glow:[],title:'The physical footprint',
-      cards:[{at:[X0,14,-20],color:'#8b93a6',title:'Cloud',rows:[['Campus','192 MW'],['Power','Grid'],['Rack','8 kW']]},
+      cards:[{at:[X0,14,-20],color:'#8b93a6',title:'Cloud',rows:[['Campus','192 MW'],['Power','Grid'],['Rack','4–8 kW']]},
              {at:[X1,18,-33],color:'#e0a355',title:'Today',rows:[['Campus','1 GW'],['Power','Grid + gas'],['Rack','~140 kW']]},
              {at:[X2,24,-38],color:'#57c7dd',title:'AGI',rows:[['Plant','5–10 GW'],['Power','Nuclear'],['Rack','1 MW']]}]},
     cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',
-      rows:[['Rack power','8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
+      rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
       tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+300,20,CP[1]+275),l:'Regional cloud campus'}]},
     city:{at:WC(30,74,45),slot:'tr',hold:4,glow:[P1.hotel,P1.colo],title:'Metro data center',
       rows:[['Carrier hotel','18 floors · 20 MW shared'],['Colocation','3 stories · 16 MW'],['Racks','4–8 kW']],
@@ -2353,16 +2353,15 @@ function mountEras(host){
     agiair:{at:[X2,6,-2],slot:'tl',hold:4,glow:[P3.plant,P3.cities,P3.phys,P3.orb],title:'AGI era',desc:'What the future might look like.',
       rows:[['Rack power','1 MW'],['Energy','Abundant, clean: nuclear'],['Training','Massive plants, 5–10 GW'],['Inference','Compute at the edge, everywhere'],['Orbit','Compute in space'],['AI','Digital and physical']],
       tags:[{at:[X2+50,9,-29],l:'Nuclear training plant'},{at:[X2-14,3,8],l:'Inference edge'},{at:[X2-30,4,24],l:'Physical AI'},{at:[X2-10,34,-18],l:'Orbital compute'}]},
-    plant:{at:[X2+50,9,-29],slot:'tr',glow:[P3.plant],title:'Nuclear training plant',desc:'Six reactor modules, ten halls, no stacks, no plume: one of six to ten on the coasts and the big grids.',
-      rows:[['Per plant','5–10 GW']],
-      tags:[{at:[X2+30,3.4,-31.5],l:'Reactor modules × 6'},{at:[X2+50,7,-29],l:'Containment'}]},
-    mono:{at:[X2-21.8,.27,-24.24],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers: fewer conversions, less loss.',
+    plant:{at:[X2+50,9,-29],slot:'tr',glow:[P3.plant],title:'Nuclear training plant',rows:[['Power','Nuclear'],['Per plant','5–10 GW']],
+      tags:[{at:[X2+50,7,-29],l:'Nuclear power'}]},
+    mono:{at:[X2-21.8,.27,-24.24],slot:'tr',glow:[P3.mono],title:'1 MW racks',desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers.',
       rows:[['Per rack','1 MW'],['Power','800 V DC · solid-state transformers']]},
-    cities:{at:[X2-14,2.9,8],slot:'tr',glow:[P3.cities],title:'Inference edge',desc:'Hundreds of inference buildings in the metros, on the old colo belt. They link to each other and back to the plant.',
-      rows:[['Per building','10–50 MW'],['Racks','20–60 kW']],tags:[{at:[X2+14,2.9,-1],l:'Utility power · cooler pad'},{at:[X2-6,.9,-13],l:'Back to the plant'}]},
-    edge:{at:[X2-30,1.6,24],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
+    cities:{at:[X2-14,2.9,8],slot:'tr',glow:[P3.cities],title:'Inference edge',desc:'Hundreds of inference buildings in the metros.',
+      rows:[['Per building','10–50 MW'],['Racks','20–60 kW']]},
+    edge:{at:[X2,1.6,33.2],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
       tags:[{at:[X2-57,3.2,15.4],l:'Industrial robots'},{at:[X2-8,4.0,29.8],l:'AGVs'},{at:[X2,2.2,33.2],l:'Humanoids'},{at:[X2+32,2.4,24.5],l:'Autonomous trucks'},{at:[X2-14,2.6,35],l:'Autonomous vans'},{at:[X2-30,7.5,22],l:'Drones'}]},
-    orbit:{at:[X2+70,32,-4],slot:'tl',glow:[P3.orb],title:'Orbital compute',desc:'AI satellites in sun-synchronous shells: always in sunlight.'}
+    orbit:{at:[X2+70,32,-4],slot:'tl',glow:[P3.orb],title:'Orbital compute'}
   };
 
   picks.forEach(function(m,i){ m.userData.view=ERAS[i+1]; });

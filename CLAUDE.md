@@ -179,8 +179,10 @@ four buildings, the total, no per-building figures on the tags) → power
 (230 kV utility, diesel backup). No cooling towers, no fiber hut, no
 dishes on the cloud tags; the meet-me room, the colo cage, the cold aisle
 and the fiber vault are still built but are not stops — "don't delete the
-inside from the graphics, just skip it for the scene"; the 4–8 kW racks
-belong to the metro card, the campus racks are 8 kW → the 1 GW campus as a grouped aerial sequence: the four buildings
+inside from the graphics, just skip it for the scene"; rack power is
+the plan's 4–8 kW for the hotel and colo and 8 kW for the campus, so the
+Cloud overview and thesis cards say the range, 4–8 kW, and the campus
+card says 8 kW → the 1 GW campus as a grouped aerial sequence: the four buildings
 · the data halls of one · inside a hall (hall A's racks at full
 fidelity, 18 units with the NVSwitch band, the dolly stopping 14 m short
 of the support strip — ending at the wall read as "a blank grey block") ·
@@ -192,18 +194,23 @@ aerial, show the key ideas grouped") → the
 AGI frame, told as a story: an overview first ("what might this future
 look like": energy · training · inference · orbit · digital and physical
 AI, as card rows, with the plant, the edge, the depot and the string
-tagged) → nuclear plant (tags: the reactor modules and the containment only;
-the optical dish is gone, the dry coolers, lattice, batteries and halls
-are untagged — "one idea at a time") → 1 MW racks (six rows of
+tagged) → nuclear plant (the card says only "Power · Nuclear" and the per-plant
+GW; one tag, "Nuclear power" — "six reactor modules is too big of a
+guess, could be SMRs, we have no idea"; the dish is gone, the dry
+coolers, lattice, batteries and halls are untagged — "one idea at a
+time") → 1 MW racks (six rows of
 next-generation racks, Rubin Ultra / Feynman, built with `rackField` in
 the near hall at plant scale, the camera standing in the cold aisle at
 1.7 m — the immersion tubs were "not showing racks at all"; with ONE
 quick mention of the next-generation power architecture: 800 V DC through solid-state
-transformers, fewer conversions, less loss — the user's ask from the
+transformers — "fewer conversions, less loss" was cut — the user's ask from the
 blueprint PDF and the NVIDIA 800 V HVDC post; "just a quick mention, don't
-go wild") → inference edge (the long-haul stop was cut) → physical AI
-(tagged: industrial robots on a loading line of three arms, AGVs,
-humanoids, autonomous trucks and vans, drones) → orbital: three shells
+go wild") → inference edge ("Hundreds of inference buildings in the
+metros." — "old colo belt" and "back to the plant" cut; the long-haul
+stop was cut) → physical AI (a wide oblique over the whole depot so the
+arms, vans, AGVs, humanoid, trucks and drones are all in frame and
+tagged — the close shot showed "only a truck") → orbital (title only):
+three shells
 of AI1 craft over the stage, no laser lines, no downlinks, shot wide
 from above — the single ring with visible links was "ridiculous"; the
 original many-shells layer was better. The cabinets stop was
