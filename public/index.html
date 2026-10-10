@@ -283,7 +283,8 @@
   .e3d-note.multi{width:auto;padding:0;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
   .e3d-note.multi .c{position:absolute;width:220px;padding:10px 12px 9px;background:rgba(8,10,14,.80);border:1px solid rgba(255,255,255,.12);border-radius:10px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transform:translate(-50%,-100%)}
   .e3d-note.multi .c b{font-size:13px;padding-bottom:4px;border-bottom:1px solid var(--ec,rgba(255,255,255,.1));margin-bottom:6px}
-  .e3d-note.multi .c .rows{margin-top:0;padding-top:0;border-top:0;gap:4px 10px}
+  .e3d-note.multi .c .rows{margin-top:0;padding-top:0;border-top:0;gap:5px 10px;grid-template-columns:1fr}
+  .e3d-note.multi .c i.w{text-transform:none;letter-spacing:0;font-size:11.5px;color:var(--ink)}
   .e3d-enter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
   .e3d.in .e3d-enter{opacity:0;pointer-events:none}
   .e3d.in .e3d-enter button{pointer-events:none}
@@ -356,7 +357,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v111 · less</div>
+<div class="ver">v113 · halls, cars</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -2069,7 +2070,7 @@ function mountEras(host){
       hallG.add(B(50,.1,70,mat(0x1f242b,{r:.92,m:.2}),hx+25,hz+35,.4));
       var grid=new T.GridHelper(70,35,0x3b444f,0x2a323c); grid.material.transparent=true; grid.material.opacity=.35; mats.push(grid.material);
       grid.scale.x=50/70; grid.position.set(hx+25,.52,-(hz+35)); hallG.add(grid);
-      var un=hh===0?18:9, bd=hh===0?[7,11]:[3,5];
+      var un=18, bd=[7,11];
       rackField(RF,{x:zc,z:hx+21.6,y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:un,band:bd,manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
       rackField(RB,{x:-zc,z:-(hx+25.8),y:.45,cols:56,rows:4,w:.6,h:2.5,d:1.1,gapX:0,gapZ:8.4,units:un,band:bd,manifold:1,led:C.gpu,ledI:2.2,bezel:0x272e37,shadow:false});
       for(var r3=0;r3<8;r3++){ var rx=hx+9+r3*4.2, face=r3%2?-1:1;
@@ -2184,7 +2185,7 @@ function mountEras(host){
     [[-24,12.2],[-16,12.2],[-24,16.5],[-16,16.5]].forEach(function(l){ YD.add(box(1,10,1,steel,l[0],5,l[1])); }); YD.add(box(30,1,1.2,steel,-14,10.2,14.3)); YD.add(box(1.2,1,6,steel,-20,10.2,14.3));
     var vanM=mat(0x4a4133,{r:.35,m:.75});
     for(var vi=0;vi<6;vi++){ var vx=-14+vi*5.6, v=new T.Group(); v.position.set(vx,0,35); v.rotation.y=Math.PI/2; MACH.add(v);
-      v.add(box(2.2,1.0,1.1,vanM,0,.75,0)); v.add(box(1.6,.5,1.0,canopy,-.1,1.45,0)); [[.7,.5],[-.7,.5],[.7,-.5],[-.7,-.5]].forEach(function(w){ v.add(cyl(.22,.22,.14,wheel,w[0],.22,w[1],10).rotateZ(Math.PI/2)); });
+      v.add(box(2.1,.48,.98,vanM,0,.5,0)); v.add(box(1.35,.38,.9,canopy,-.05,.93,0)); v.add(box(.08,.08,.74,lit(0xf2f6ff,2.2),1.04,.5,0)); v.add(box(.07,.07,.66,lit(C.red,1.8),-1.04,.5,0)); [[.7,.5],[-.7,.5],[.7,-.5],[-.7,-.5]].forEach(function(w){ v.add(cyl(.22,.22,.14,wheel,w[0],.22,w[1],10).rotateZ(Math.PI/2)); });
       YD.add(box(.25,1.4,.25,encl,vx+1.4,.7,36.8)); YD.add(box(.1,.1,.1,lit(C.hot,2.0),vx+1.4,1.45,36.8)); }
     function oval(rx,rz,cx,cz){ var pts=[]; for(var i=0;i<16;i++){ var a=i/16*Math.PI*2; pts.push(new T.Vector3(cx+Math.cos(a)*rx,.72,cz+Math.sin(a)*rz)); }
       return new T.CatmullRomCurve3(pts,true,'catmullrom',.5); }
@@ -2321,10 +2322,10 @@ function mountEras(host){
   /* the callouts: what each stop is, in a line; the campus figures are the site plan's; dimension lines give the scale */
   var P1=S1.userData.parts, P2=S2.userData.parts, P3=S3.userData.parts;
   var NOTES={
-    wide:{at:[36,2,0],noRing:true,glow:[],title:'The physical footprint',
-      cards:[{at:[X0,14,-20],color:'#8b93a6',title:'Cloud',rows:[['Campus','192 MW'],['Power','Grid'],['Rack','4–8 kW']]},
-             {at:[X1,18,-33],color:'#e0a355',title:'Today',rows:[['Campus','1 GW'],['Power','Grid + gas'],['Rack','~140 kW']]},
-             {at:[X2,24,-38],color:'#57c7dd',title:'AGI',rows:[['Plant','5–10 GW'],['Power','Nuclear'],['Rack','1 MW']]}]},
+    wide:{at:[36,2,0],noRing:true,hold:6,glow:[P1.hotel,P1.colo,P1.bld,P2.bld,P2.gas,P2.grid,P3.plant,P3.cities,P3.orb],title:'The physical footprint',
+      cards:[{at:[X0,14,-20],color:'#8b93a6',title:'Cloud era',rows:[['Metro data center'],['Regional cloud campus'],['Grid power'],['4–8 kW rack density']]},
+             {at:[X1,18,-33],color:'#e0a355',title:'Today',rows:[['1 GW campus'],['BTM and grid power'],['~140 kW rack density']]},
+             {at:[X2,24,-38],color:'#57c7dd',title:'AGI',rows:[['5–10 GW campuses + edge'],['Nuclear and orbital compute'],['1 MW rack density']]}]},
     cloudair:{at:WC(500,2,330),slot:'tr',hold:4,glow:[P1.hotel,P1.colo,P1.bld],title:'Cloud era',
       rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
       tags:[{at:WC(30,74,45),l:'Carrier hotel'},{at:WC(110,18,110),l:'Colocation facility'},{at:WC(CP[0]+300,20,CP[1]+275),l:'Regional cloud campus'}]},
@@ -2343,7 +2344,7 @@ function mountEras(host){
     halls:{at:W(330,14,445),slot:'tr',glow:[P2.hall],title:'One building',
       rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
       tags:[{at:W(204,8,445),l:'Power block'},{at:W(246,13,441),l:'Hall 1'},{at:W(302,13,441),l:'Hall 2'},{at:W(358,13,441),l:'Hall 3'},{at:W(414,13,441),l:'Hall 4'}]},
-    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Inside a hall',desc:'GB200 NVL72 racks, liquid-cooled, in rows. CDUs and leaf switches on the support strip.',
+    nvl:{at:W(AISLE,2.6,452),slot:'tr',glow:[P2.hall],title:'Inside a hall',desc:'GB200 NVL72 racks, liquid-cooled, in rows. Networking and cooling at the end of the hall.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
     onsite:{at:W(860,14,110),slot:'tl',glow:[P2.gas,P2.grid],title:'Power',desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],
@@ -2360,7 +2361,7 @@ function mountEras(host){
     cities:{at:[X2-14,2.9,8],slot:'tr',glow:[P3.cities],title:'Inference edge',desc:'Hundreds of inference buildings in the metros.',
       rows:[['Per building','10–50 MW'],['Racks','20–60 kW']]},
     edge:{at:[X2,1.6,33.2],slot:'tr',hold:4,glow:[P3.phys],title:'Physical AI',desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
-      tags:[{at:[X2-57,3.2,15.4],l:'Industrial robots'},{at:[X2-8,4.0,29.8],l:'AGVs'},{at:[X2,2.2,33.2],l:'Humanoids'},{at:[X2+32,2.4,24.5],l:'Autonomous trucks'},{at:[X2-14,2.6,35],l:'Autonomous vans'},{at:[X2-30,7.5,22],l:'Drones'}]},
+      tags:[{at:[X2-57,3.2,15.4],l:'Industrial robots'},{at:[X2-8,4.0,29.8],l:'AGVs'},{at:[X2,2.2,33.2],l:'Humanoids'},{at:[X2+32,2.4,24.5],l:'Autonomous trucks'},{at:[X2-14,1.8,35],l:'Autonomous cars'},{at:[X2-30,7.5,22],l:'Drones'}]},
     orbit:{at:[X2+70,32,-4],slot:'tl',glow:[P3.orb],title:'Orbital compute'}
   };
 
