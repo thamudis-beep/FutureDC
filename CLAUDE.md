@@ -319,28 +319,42 @@ hall chapter is a dolly up a cold aisle; the power chapter a glide low
 along the turbine row. The old campus kit (combined-cycle trains, gensets,
 pylons, the eight-hall grid) is gone with it.
 
-The AGI stage is one frame, to the user's brief: few plants, many edges,
-cabinets at the machines, a thin string overhead. The camera stands over
-a port depot. Foreground, 1:1: two warehouses with eight cabinets on their
-walls, container stacks and a gantry, the truck yard with two trucks and
-five AGVs on their loops, a charging row with six vans, one humanoid, two
-drones; a hairline from every cabinet to the nearest machine and a live
-hairline from the lead truck to its nearest cabinet, and from the
-cabinets to the nearest inference building — the last hop. Midground,
-1:4: twelve inference buildings on one shell (40 × 30 × 10, cooler pads,
-utility only), hairlines between them and pulses back to the plant. Far,
-1:10, on the horizon: the nuclear training plant — six reactor modules,
-one landmark dome, low turbine halls, dry coolers, a 500 kV lattice, a
-small battery field, ten halls with the near one cut open as sixty
-immersion tubs at 1 MW on thick manifolds (`TUBS` is what glows, not the
-slab), one optical dish at the fence, and no stacks, no plume. Above:
-twenty craft on a ring — bus, one solar wing, a radiator larger than the
-bus — hairline laser to the neighbour and two downlinks, to the plant dish
-and one edge roof. Thick cyan on the long haul, hairline cyan on the last
-hop; nothing in the yard links to a reactor or a satellite. The world
-map, the real-coordinate sites, the SMR diorama and the three plinths are
-gone with it. Earlier rejects still stand: a wireframe globe on a stem, a
-circular site with glowing pads, a race-drone flythrough.
+**The AGI stage reads LEFT TO RIGHT** (v114, the user's rethink: "isn't
+it better to separate them more horizontally so you go left to right"):
+the back-to-front frame (plant on the horizon, edges midground, depot
+foreground) was "organized strangely" and its opening "a mess". Now, on
+the 150 × 76 pedestal: LEFT, a 1:12 diorama of the training campus and
+its nuclear plant (`PL` at (−50,.1,12): `P.react` the reactor modules and
+dome, `P.mono` = `RACKS`, the near hall cut open with six rows of 1 MW
+racks built with `rackField`, the camera standing in the aisle at
+1.7 m); CENTRE, a real map of the contiguous United States (`US`, embedded
+before `mountEras`: us-atlas states-10m through a d3-geo Albers fit to a
+60 × 36 box, rings thinned to ~56 points, 18 metros, the campus site at
+West Texas [12.8, 9.9]) laid flat as `MAPG` at (12,.12,0) — land as
+ShapeGeometry fills with edge lines, a cluster of inference buildings on
+every metro, nearest-two hairlines between metros with pulses
+(`anim.links`), and the `SITE` marker where the campus sits; ABOVE the
+map, three rings of the orbital scene's AI1 craft (`RINGS`, per 16);
+RIGHT, the physical-AI port depot at x ≈ 61, 1:1. The story is the
+stops in order: Overview (the three regions, tagged Training campus ·
+Global inference · Orbital compute · Physical AI; rows energy ·
+training · inference · orbit · physical AI) → Global inference (the map
+from above, nine metros tagged, "Inference buildings in every metro,
+connected.", 10–50 MW buildings, 20–60 kW racks) → Orbital (title only,
+the rings over the map) → Training campus (the West Texas marker, then
+a glide to the diorama aerial; Per campus 5–10 GW · Power Nuclear) →
+Nuclear power (the reactors; "six reactor modules is too big of a
+guess", so the card says only Per campus 5–10 GW) → 1 MW racks (Rubin
+Ultra / Feynman at 1 MW, liquid-cooled, 800 V DC through solid-state
+transformers — one quick mention) → Physical AI (a wide oblique over
+the depot: industrial robots, AGVs, humanoids, autonomous trucks,
+autonomous cars — "cars not vans" — drones, all tagged). Regenerate the
+map data with `d3-geo` + `topojson-client` from us-atlas if the metros or
+the projection change; never hand-draw the states. The rig's `minR` is
+.08 for this scene so the camera can stand in the 1:12 hall. No long-haul
+line, no cabinets, no "thick cyan", no world map, no SMR count on a card.
+Earlier rejects still stand: a wireframe globe on a stem, a circular site
+with glowing pads, a race-drone flythrough, the back-to-front frame.
 
 **The orbital scene** (`mountOrbit`, Data Center topic 05) shares the kit and
 rig with the first (`sceneKit`, `sceneRig`: renderer, film camera, chapters,
