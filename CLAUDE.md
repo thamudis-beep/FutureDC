@@ -326,8 +326,10 @@ pylons, the eight-hall grid) is gone with it.
 it better to separate them more horizontally so you go left to right"):
 the back-to-front frame (plant on the horizon, edges midground, depot
 foreground) was "organized strangely" and its opening "a mess". Now, on
-the 150 × 76 pedestal: LEFT, a 1:12 diorama of the training campus and
-its nuclear plant (`PL` at (−50,.1,12): `P.react` the reactor modules and
+the 190 × 76 pedestal (widened from 150 in v117 so the world map fits
+between the campus and the depot; the rail is 410 long on x = 55 for
+it): LEFT, a 1:12 diorama of the training campus and
+its nuclear plant (`PL` at (−65,.1,12): `P.react` the reactor modules and
 dome, `P.mono` = `RACKS`, the near hall cut open with six rows of forty
 1 MW racks built with `rackField`, the camera standing in the aisle at
 1.7 m). The halls are BUILDINGS, not shoeboxes (v116, "just shoeboxes
@@ -342,21 +344,29 @@ complaint): a busway and live strip over every row, a fibre tray with
 three trunks and a drop to every rack, supply and return headers beside
 every row with a branch to every rack, cross trays to the east wall,
 and there fourteen CDUs with risers, two thick mains and the scale-out
-tray; CENTRE, a real map of the contiguous United States (`US`, embedded
-before `mountEras`: us-atlas states-10m through a d3-geo Albers fit to a
-60 × 36 box, rings thinned to ~56 points, 18 metros, the campus site at
-West Texas [12.8, 9.9]) laid flat as `MAPG` at (12,.12,0) — land as
-ShapeGeometry fills with edge lines, a cluster of inference buildings on
-every metro, nearest-two hairlines between metros with pulses
-(`anim.links`), and the `SITE` marker where the campus sits; ABOVE the
-map, three rings of the orbital scene's AI1 craft (`RINGS`, per 16);
-RIGHT, the physical-AI port depot at x ≈ 61, 1:1. The story is the
+tray; CENTRE, THE WORLD (v117: the user showed a photo of the v98 world map
+and said it "was better done than the US map we have now", so the US
+map, its embedded us-atlas data and its hairlines are gone): Natural
+Earth land from `img/earth.png` (±60° of latitude, `tools/earth-texture.js`)
+on a 100 × 33⅓ plane as `MAPG` at (12,0,0), `LL(lat,lon)` mapping
+degrees to the plane; twelve hubs at real coordinates (`SITES`: West
+Texas, N. Virginia, Phoenix, Alberta, São Paulo, Dublin, Oslo, Abu
+Dhabi, Mumbai, Singapore, Tokyo, Sydney — four halls and two battery
+blocks each, a lit ring pad under each, instanced with `repeat`), arcs
+between hubs as thin tubes rising with their length (`FAB`, `P.fab`)
+with pulses riding them (`anim.links`), fifty real cities as small
+inference lights (`CITIES`), and the `SITE` disc under West Texas where
+the training campus is; `P.hubs` carries the hub names and world
+anchors for the tags. ABOVE the map, three rings of the orbital
+scene's AI1 craft (`RINGS`, per 16); RIGHT, the physical-AI port depot
+(`YD`, shifted to x ≈ 78 by `YD.position.x`), 1:1. The story is the
 stops in order: Overview (title only — the rows were "repetitive with
 the annotations"; the three regions tagged 5–10 GW training campus ·
-Inference edge · Orbital compute · Physical AI) → Inference edge (never
-"Global": "u.s. map, not global"; the map from above, nine metros
-tagged, "Inference buildings in every metro, connected.", 10–50 MW
-buildings, 20–60 kW racks) → Orbital (title only, the rings over the
+Global inference · Orbital compute · Physical AI) → Global inference
+(the name is right again now the map is the world — on the US map it
+was "Inference edge", "u.s. map, not global"; the map from above, nine
+hubs tagged by name, "Inference buildings in every metro, connected.",
+10–50 MW buildings, 20–60 kW racks — illustrative bands) → Orbital (title only, the rings over the
 map) → Training campus (the West Texas marker, then a glide to the
 diorama aerial; 5–10 GW · Power Nuclear — never "Per campus", "clunky")
 → Nuclear power (the reactors; "six reactor modules is too big of a
@@ -373,8 +383,8 @@ lidar dome and corner pods — and the two humanoids are Optimus-like:
 white panels over dark ball joints, a tapered torso, a dark visor,
 capsule limbs, walking the yard (`anim.bots`, legs and arms swing about
 x, the face on local −z). Regenerate the
-map data with `d3-geo` + `topojson-client` from us-atlas if the metros or
-the projection change; never hand-draw the states. The rig's `minR` is
+earth texture with `tools/earth-texture.js` if the land or the latitude
+band changes; never hand-paint continents. The rig's `minR` is
 .08 for this scene so the camera can stand in the 1:12 hall. No long-haul
 line, no cabinets, no "thick cyan", no world map, no SMR count on a card.
 Earlier rejects still stand: a wireframe globe on a stem, a circular site
@@ -591,7 +601,7 @@ The globe in that scene is real too: `public/img/earth.png` is Natural Earth
 sphere, lit by the key light so it has a terminator. The site clusters on it
 are real lat/lon. Regenerate with the script; never hand-paint continents.
 
-The world map is real: `world-atlas` 110m TopoJSON, Natural Earth projection,
+The SVG world map is real: `world-atlas` 110m TopoJSON, Natural Earth projection,
 Antarctica dropped, fitted to the viewBox and rounded to integers, generated
 offline and embedded as `MAP` + `HUBS`. Regenerate with `d3-geo` +
 `topojson-client` if the projection or the plotted hubs change; do not hand-draw
