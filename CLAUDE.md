@@ -9,10 +9,12 @@ framework, no bundler — Vercel serves `public/` as a static directory. Nothing
 else in the repo ships. If a change does not land in that file, in
 `public/img/`, or in `public/vendor/`, it does not reach production.
 
-`public/vendor/three.min.js` is the one vendored dependency — three r159, UMD,
-loaded lazily by the single 3D topic and by nothing else. It is vendored rather
-than pulled from a CDN so the page stays self-contained and renders offline.
-Do not add a second copy, and do not reach for a bundler on its account.
+`public/vendor/three.min.js` is one of two vendored dependencies — three r159,
+UMD, loaded lazily by the 3D topics and by nothing else; the other is
+`public/vendor/iso-kit.js`, the Anatomy skill's drawing kit, loaded lazily by
+the Anatomy tab alone. Both are vendored rather than pulled from a CDN so the
+page stays self-contained and renders offline. Do not add a second copy of
+either, and do not reach for a bundler on their account.
 
 ---
 
@@ -121,8 +123,8 @@ Three views, hash-routed, in one file.
   animate; never animate a grid track and the element's internal layout at once
   or it drifts the wrong way first.
 
-Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (7) ·
-**Applications** (3).
+Layers: **Power** (6 topics) · **Compute** (7) · **Data Center** (8, the
+last one the Anatomy tab) · **Applications** (3).
 
 The user's three rules for the footprint film, stated after a long
 round of cuts: SIMPLE · ONE IDEA AT A TIME · NO DUMB WORDING. Every stop
@@ -389,6 +391,64 @@ band changes; never hand-paint continents. The rig's `minR` is
 line, no cabinets, no "thick cyan", no world map, no SMR count on a card.
 Earlier rejects still stand: a wireframe globe on a stem, a circular site
 with glowing pads, a race-drone flythrough, the back-to-front frame.
+
+**The Anatomy tab** (`mountAnatomy`, Data Center topic 08, `#stack/dc/7`,
+v118) is the footprint again, drawn as an instrument on paper instead
+of the 3D film: the user asked for "an alternative version... a new
+tab... current remains as is / unchanged", in the look of a reference
+frame (an isometric paper diagram: white cubes with faint face shading,
+graphite lines, tiled belts, boxed mono tags with a stem to the roof,
+one pastel accent) and of the Anatomy skill he attached
+(github.com/wheresryan22/anatomy) and iso-glow. THE 3D SCENES ARE NOT
+TOUCHED BY IT: the topic is appended last so every existing route keeps
+its index, and the only shared code is `mountScene`, which routes
+`scene:'anatomy'` to `loadIsoKit()` + `mountAnatomy` the way the others
+go through `loadThree()`. The kit is vendored once as
+`public/vendor/iso-kit.js` (the skill's `kit/iso-kit.mjs` with its
+exports gathered on `window.ISO`; MIT, licence beside it), its
+stylesheet (`kit/iso.css`) and the tab's own `.ana-*` rules are in the
+page's `<style>`, and nothing else of the skill ships. The skill's own
+rules that apply here: every part is a solid painted back to front
+(`figure()` sorts items by `depthOf` of their centre, the base plate
+first, floors at a large negative bias, tags last); four-tone shading
+from the kit, never a wireframe; base plate on a halo with a groove and
+corner screws; structure `mid`, the subject `hi`, floors `lo`; every
+line ends on something (a tag's stem lands on a roof point with a dot,
+a tower's line on a plate-edge anchor); light theme, paper
+`--anatomy-card`. The two departures from the skill are the user's:
+boxed tags in the drawing (the reference frame has them) and the
+iso-glow — the lit subject's edges go amber (`--anatomy-lit`) with a
+soft `drop-shadow` bloom on its `[data-part]` groups, a stronger flash
+on arrival (`ana-flash`, 1.8 s) and an echo on hover. The skill sizes
+this request as an Epic (three eras, thirteen figures); it was built as
+thirteen Figure-grade drawings (60–760 solids each) on a shared parts
+vocabulary — `hall` (louvre band, pilasters, rooftop units, penthouse,
+dock doors), `pad` (gravel, finned transformers, switchgear), `coolers`,
+`lattice` (with the incoming line), `turbine`, `reactor` (drum, seams,
+a stepped dome), `containers`, `racks` (unit lines, pulsing LEDs),
+`road`, `lamps`, `car`, `truck`, `humanoid`, `drone`, `arm`,
+`trainingCampus`, `world` (the embedded `MAP.land` laid on the plate
+top by `topMatrix`, hubs at real lat/lon through a Natural Earth 1 fit
+to the embedded `HUBS` — `FIT`, about 4 px off — arcs as screen-space
+quadratics with the kit's flowing dash, fifty cities as pulsing dots)
+and `orrery` (ring rails on posts over the world, craft rebuilt each
+frame in the loop). The stops are the film's, in the film's order,
+with the film's figures and wording on the corners: Cloud overview ·
+Today campus, one building, inside a hall (fourteen racks of every row,
+said so), power, ESS · AGI overview, global inference, orbital,
+training campus, nuclear power, the 1 MW rack (an exploded anatomy:
+frame, eighteen trays, the NVSwitch band, manifolds with a stub to every
+tray, the 800 V DC busbar, CDU ports), physical AI. Chrome is the
+film's own classes restyled for paper (`.ana .e3d-*`), two chip rows
+(`.ana-brk` breaks before the AGI group — one row overflowed), the
+corners of the skill's card (title top right, hint bottom left, the
+rows bottom right; hover names the part there), play/pause with holds,
+keys 1/2/3, arrows, space. Probes: `scratchpad/ana/dev.html` mounts
+the tab alone (`shot.js` shoots every stop in seconds — no WebGL, so
+no SwiftShader wait) and `scratchpad/anapage.js` shoots it inside the
+page and checks dispose. What a 4× sweep would still add: the explode
+on hover for the rack, true domes (`kit/lathe.mjs`), wheels as turned
+parts, and the skill's line-end and depth audits.
 
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map

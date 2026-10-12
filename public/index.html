@@ -313,6 +313,154 @@
     .boxes{grid-template-columns:1fr 1fr}
     .topnav a{padding:7px 9px}
   }
+  /* ---- the Anatomy kit's stylesheet (vendor/iso-kit.LICENSE, MIT) ---- */
+.iso{
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-lit-top:#262626;--anatomy-lit-shade:#1d1d1d;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-halo:#050505;--anatomy-halo-opacity:.9;--anatomy-dot:#e6e6e6;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff0a,inset 0 0 0 1px #ffffff06,0 0 0 1px #00000026,0 1px 1px -.5px #00000014,0 3px 3px -1.5px #00000014,0 6px 6px -3px #00000014,0 12px 12px -6px #00000014;
+}
+.iso[data-theme="light"]{
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-lit-top:#ffffff;--anatomy-lit-shade:#eeeeeb;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-halo:#8a8a80;--anatomy-halo-opacity:.32;--anatomy-dot:#3a3a3e;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff,0 0 0 1px #0000000f,0 1px 1px -.5px #0000000a,0 3px 3px -1.5px #0000000a,0 6px 6px -3px #0000000a,0 12px 12px -6px #0000000a;
+}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg path,.iso-svg circle{vector-effect:non-scaling-stroke}
+.iso-fill{fill:var(--anatomy-paper);stroke:none}
+.iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.iso-shade,.iso-top{stroke:none}
+.iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.iso-top{fill:var(--anatomy-top)}
+.iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.iso-solid[data-seamless]>.iso-shade,.iso-solid[data-seamless]>.iso-top{stroke-width:.4;stroke-linejoin:round}
+.iso-solid[data-seamless]>.iso-shade[data-shade="0"]{stroke:var(--anatomy-shade-0)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--anatomy-shade-1)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="2"]{stroke:var(--anatomy-shade-2)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--anatomy-shade-3)}
+.iso-solid[data-seamless]>.iso-top{stroke:var(--anatomy-top)}
+.iso-solid[data-seamless][data-lit]>.iso-top{stroke:var(--anatomy-lit-top)}
+.iso-solid[data-seamless][data-lit]>.iso-shade{stroke:var(--anatomy-lit-shade)}
+.iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.iso-line[data-tone="blue"]{stroke:var(--anatomy-blue)}
+.iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.iso-line[data-dashed]{stroke-dasharray:3 3}
+.iso-line[data-flow]{stroke-dasharray:2 6}
+.iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.iso-wire[data-tone="hi"] .iso-wire-end{stroke:var(--anatomy-hi)}
+.iso-wire[data-tone="mid"] .iso-wire-end{stroke:var(--anatomy-mid)}
+.iso-wire[data-tone="faint"] .iso-wire-end{stroke:var(--anatomy-faint)}
+.iso-wire[data-tone="lit"] .iso-wire-end{stroke:var(--anatomy-lit)}
+.iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.iso-dots[data-tone="hi"] circle{opacity:.85}
+.iso-dots[data-tone="mid"] circle{opacity:.45}
+.iso-dots[data-tone="lo"] circle{opacity:.22}
+.iso-dots[data-tone="faint"] circle{opacity:.12}
+.iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}
+.tb-body{fill:var(--anatomy-shade-2);stroke:none}
+.tb-shine{fill:var(--anatomy-top);stroke:none}
+.tb-shade{fill:var(--anatomy-shade-0);stroke:none}
+.tb-ring{fill:none;stroke:var(--anatomy-lo);stroke-width:.45;stroke-linecap:butt;stroke-linejoin:round}
+.tb-ring[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.tb-ring[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.tb-ring[data-tone="hi"]{stroke:var(--anatomy-hi)}
+@keyframes iso-flow{to{stroke-dashoffset:-32}}
+@keyframes iso-pulse{0%,100%{opacity:.18}12%{opacity:1}40%{opacity:.18}}
+.iso-line[data-flow]{animation:iso-flow 1600ms linear infinite}
+.iso-dots circle[data-pulse]{animation:iso-pulse 1600ms steps(1,end) infinite;animation-delay:var(--pulse-at,0ms)}
+.iso-figure{margin:32px 0 36px}
+.iso-plate{position:relative;padding:52px 24px;border-radius:0;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid);--anatomy-paper:var(--anatomy-card)}
+.iso-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.iso-plate-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.iso-plate-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.iso-plate-corner[data-corner="title"]{top:0;right:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="hint"]{bottom:0;left:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums}
+.iso-plate .iso-svg{margin:0 auto}
+.iso-legend{display:grid;gap:8px;margin-top:12px;color:var(--anatomy-muted);font-size:13px;line-height:1.55}
+.iso-keys{display:flex;flex-wrap:wrap;gap:6px 18px}
+.iso-key{display:inline-flex;align-items:center;gap:7px}
+.iso-swatch{width:16px;height:10px;flex:none;overflow:visible}
+.iso-swatch path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.iso-swatch[data-mark="raised"] path,.iso-swatch[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.iso-swatch[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.iso-swatch[data-mark="dim"] path{stroke:var(--anatomy-lo)}
+.iso-swatch[data-mark="dotted"] path{stroke-dasharray:.01 3;stroke-width:1.4}
+.iso-swatch[data-mark="dashed"] path{stroke-dasharray:3 2.5}
+.iso-swatch[data-mark="red"] path{stroke:var(--anatomy-red)}
+.iso-swatch[data-mark="green"] path{stroke:var(--anatomy-green)}
+.iso-swatch[data-mark="blue"] path{stroke:var(--anatomy-blue)}
+.iso-swatch-crease{stroke:var(--anatomy-lo)!important}
+@media (max-width:560px){.iso-plate{padding:48px 12px 70px}.iso-plate-corner[data-corner="hint"]{bottom:18px}}
+@media (prefers-reduced-motion:reduce){.iso-line[data-flow],.iso-dots circle[data-pulse]{animation:none}}
+
+  /* ---- the anatomy tab: a paper plate inside the dark panel ---- */
+  .ana{position:absolute;inset:0;font-family:var(--mono)}
+  .ana-plate{position:absolute;inset:0;background:var(--anatomy-card);--anatomy-lit:#b8741f;--anatomy-glow:#e0a355;overflow:hidden}
+  .ana-stage{position:absolute;left:14px;right:14px;top:44px;bottom:92px}
+  .ana-stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transition:opacity .42s ease,transform .42s ease}
+  .ana-stage svg.out{opacity:0;transform:translateY(-6px)}
+  .ana-stage svg.in{animation:ana-in .5s ease both}
+  @keyframes ana-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ana-corner{position:absolute;font:10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--anatomy-muted);white-space:nowrap;pointer-events:none;max-width:60%;overflow:hidden;text-overflow:ellipsis}
+  .ana-fig{left:0;right:0;top:52px;text-align:center;color:var(--anatomy-text);text-transform:none;letter-spacing:.06em;display:none}
+  .ana-title{right:18px;top:18px;color:var(--anatomy-strong);font-weight:600}
+  .ana-hint{left:18px;bottom:76px;font-size:10px;max-width:30%}
+  .ana-read{right:18px;bottom:76px;color:var(--anatomy-text);text-transform:none;letter-spacing:.03em;font-size:11px;max-width:64%;text-align:right}
+  .ana-tag path{stroke:var(--anatomy-mid);stroke-width:.7;fill:none}
+  .ana-tag circle{fill:var(--anatomy-dot)}
+  .ana-tag rect{fill:var(--anatomy-paper);stroke:var(--anatomy-mid);stroke-width:.7}
+  .ana-tag text{font:10.5px var(--anatomy-mono);letter-spacing:.03em;fill:var(--anatomy-strong)}
+  .ana-land{fill:var(--anatomy-shade-1);stroke:var(--anatomy-mid);stroke-width:.4;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+  /* iso-glow: the lit part's edges go amber, a soft bloom round it; a flash on arrival, a hover echoes it */
+  .ana [data-part].glow{filter:drop-shadow(0 0 1.2px rgba(224,163,85,.75)) drop-shadow(0 0 5px rgba(224,163,85,.3))}
+  .ana [data-part].flash{animation:ana-flash 1.8s ease both}
+  @keyframes ana-flash{0%{filter:none}18%{filter:drop-shadow(0 0 2px rgba(224,163,85,1)) drop-shadow(0 0 12px rgba(224,163,85,.7))}60%{filter:drop-shadow(0 0 2px rgba(224,163,85,1)) drop-shadow(0 0 12px rgba(224,163,85,.55))}100%{filter:drop-shadow(0 0 1.2px rgba(224,163,85,.75)) drop-shadow(0 0 5px rgba(224,163,85,.3))}}
+  .ana [data-part].hover .iso-edge{stroke:var(--anatomy-lit)}
+  .ana [data-part].hover{filter:drop-shadow(0 0 1.5px rgba(184,116,31,.8)) drop-shadow(0 0 6px rgba(224,163,85,.35))}
+  .ana [data-part]{cursor:crosshair}
+  /* the chrome on paper */
+  .ana .e3d button{background:rgba(251,251,250,.9);color:var(--anatomy-text);border-color:rgba(24,24,26,.18);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .ana .e3d button:hover{color:var(--anatomy-strong);border-color:rgba(24,24,26,.4)}
+  .ana .e3d-era.on,.ana .e3d-chip.on{color:var(--anatomy-strong);background:#fff;border-color:var(--ec)}
+  .ana .e3d-grp+.e3d-grp{border-left-color:rgba(24,24,26,.16)}
+  .ana .e3d-play.on{color:var(--anatomy-strong)}
+  .ana .e3d-chips{bottom:12px;flex-wrap:wrap;gap:8px 10px}
+  .ana-brk{flex-basis:100%;height:0}
+  .viz.scene.ana-host::after{display:none}
+  .viz.scene.ana-host{cursor:default}
+  .ana .e3d-chip{padding:4px 9px 4px 18px;font-size:10px;white-space:nowrap}
+  .ana .e3d-grp+.e3d-grp{padding-left:10px}
+  .ana .e3d-row{flex-wrap:nowrap}
+  @media (prefers-reduced-motion:reduce){.ana-stage svg.in{animation:none}.ana [data-part].flash{animation:none}}
+
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
     /* animations carry the resting state — restore it when motion is off */
     .in,.fin,.grow,.rise,.riseb,.draw,.dr,.strike,.box,.hcard{opacity:1!important;transform:none!important;stroke-dashoffset:0!important}}
@@ -360,7 +508,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v117 · the world map is back</div>
+<div class="ver">v118 · anatomy tab</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -407,7 +555,7 @@ G.buildings=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rec
 G.chart=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><path d="M4 21h18" stroke="'+c+'" stroke-width="1.3"/><rect class="riseb" x="6" y="14" width="3.4" height="7" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.22s" x="11.3" y="9" width="3.4" height="12" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/><rect class="riseb" style="animation-delay:.44s" x="16.6" y="5" width="3.4" height="16" fill="'+c+'" fill-opacity=".45" stroke="'+c+'" stroke-width="1"/></svg>';
 G.modules=c=>'<svg viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="4" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="bob" x="8.5" y="4.5" width="8" height="8" rx="1" stroke="'+c+'" stroke-width="1.3" fill="'+c+'" fill-opacity=".18"/></svg>';
 G.sat=c=>'<svg class="gi" viewBox="0 0 26 26" width="26" height="26" fill="none"><rect x="10" y="10" width="6" height="6" rx="1" stroke="'+c+'" stroke-width="1.3"/><rect class="pulse" x="2" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><rect class="pulse" style="animation-delay:.5s" x="18" y="10.5" width="6" height="5" rx="1" stroke="'+c+'" stroke-width="1.1"/><path d="M13 10V6" stroke="'+c+'" stroke-width="1.2"/><path class="beat" d="M11 6.2a2.2 2.2 0 0 1 4 0" stroke="'+c+'" stroke-width="1.2"/></svg>';
-const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','chart','lock','memory','memory','mesh'],dc:['modules','buildings','chart','lock','sat','reactor','globe'],apps:['globe','modules','reactor']};
+const TICON={power:['chart','steps','reactor','mesh','sst','globe'],compute:['chip','modules','chart','lock','memory','memory','mesh'],dc:['modules','buildings','chart','lock','sat','reactor','globe','buildings'],apps:['globe','modules','reactor']};
 function topicIcon(id,i,c){const nm=(TICON[id]||[])[i];return (nm&&G[nm])?G[nm](c):G.chip(c);}
 
 /* real Natural Earth geometry, Natural Earth projection, fitted to the 1000x460 viewBox */
@@ -1126,6 +1274,7 @@ const LAYERS=[
    {scene:'orbit',n:'Data centers in space',d:'Free power, passive cooling, no permits — at the cost of launch mass.'},
    {viz:'orbital',n:'Space economics',d:'Terrestrial cost curves bend up; orbital ones bend down.'},
    {viz:'geodc',n:'Geography, regulation & labor',d:'Where it is legal, and who is actually available to build it.'},
+   {scene:'anatomy',n:'Physical footprint · Anatomy',d:'The same footprint drawn as an instrument on paper: isometric parts, one lit subject, the film\'s stops.'},
   ]},
  {id:'apps',name:'APPLICATIONS',title:'Applications',accent:'#ab7cf1',eyebrow:'LAYER 04 · THE WORK ON TOP',
   subs:[
@@ -2871,10 +3020,475 @@ function loadThree(){
 }
 let liveScene=null,sceneTok=0;
 function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){}liveScene=null;}}
+/* ============================================================
+   THE ANATOMY — the physical footprint drawn as an instrument on
+   paper: isometric solids from the Anatomy kit (vendor/iso-kit.js),
+   painted back to front, one lit subject per stop, boxed tags on
+   the roofs, a card with corners, and a calm tour through the same
+   stops as the film. Nothing here touches the 3D scenes.
+   ============================================================ */
+window.mountAnatomy=function(host){
+  var k=window.ISO, RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
+  var W=1000, H=348, PI=Math.PI;
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function f1(v){ return (Math.round(v*10)/10).toString(); }
+  var PL=function(x,y,w,d,r){ return {x:x,y:y,w:w,d:d,r:r==null?Math.min(.8,w/6,d/6):r}; };
+
+  /* ---------- a figure: a projection, a depth-sorted item list, tags, live groups ---------- */
+  function figure(pts,o){ o=o||{};
+    var P=k.fitProjection(pts,W,H,{pad:o.pad||26,azimuth:o.az||45,elevation:o.el||30,headroom:o.head||0});
+    var items=[], tags=[], live=[];
+    var c={P:P,items:items,tags:tags,live:live,
+      at:function(p){ return k.iso(p,P); },
+      add:function(svg,at,o2){ o2=o2||{}; items.push({key:k.depthOf(at,P)+(o2.bias||0),svg:svg,part:o2.part}); },
+      box:function(plan,z,h,tone,o2){ o2=o2||{}; var paths=k.slabOf(plan,z,h,P,o2.steps||3,o2.bevel||0);
+        c.add(k.solidSvg(paths,{tone:tone||'mid',crease:o2.crease||'faint',inner:o2.inner||''}),[plan.x+plan.w/2,plan.y+plan.d/2,z+h/2],o2); },
+      cyl:function(cx,cy,r,z,h,tone,o2){ o2=o2||{}; var paths=k.cylinder(cx,cy,r,z,h,P,o2.steps||20,o2.bevel||0);
+        c.add(k.solidSvg(paths,{tone:tone||'mid',crease:o2.crease||'faint',inner:o2.inner||''}),[cx,cy,z+h/2],o2); },
+      dome:function(cx,cy,r,z,tone,o2){ o2=o2||{}; var hs=[.26,.2,.14,.08], rs=[.96,.84,.64,.36], zz=z;
+        for(var i=0;i<4;i++){ c.cyl(cx,cy,r*rs[i],zz,r*hs[i],tone,{steps:24,crease:'none',part:o2.part,bias:(o2.bias||0)+i*.01}); zz+=r*hs[i]; } },
+      flat:function(plan,z,tone,o2){ o2=o2||{}; var paths=k.slabOf(plan,z,.01,P,o2.steps||3);
+        c.add(k.solidSvg(paths,{tone:tone||'lo',flat:true,crease:'none'}),[plan.x+plan.w/2,plan.y+plan.d/2,z],{bias:o2.bias==null?-5e4:o2.bias,part:o2.part}); },
+      line:function(d,tone,at,o2){ o2=o2||{}; c.add(k.lineSvg(d,{tone:tone||'lo',dotted:o2.dotted,dashed:o2.dashed,flow:o2.flow,free:o2.free}),at,o2); },
+      dots:function(pts3,o2){ o2=o2||{}; var at=pts3[0]||[0,0,0]; c.add(k.dotsSvg(pts3.map(function(p){ return k.iso(p,P); }),{size:o2.size||.5,tone:o2.tone||'mid',pulse:o2.pulse}),at,o2); },
+      base:function(plan,z,h,o2){ o2=o2||{};
+        items.push({key:-1e9,svg:'<path class="iso-halo" d="'+k.haloOf(plan,z,h,P)+'"/>'});
+        items.push({key:-1e9+1,svg:k.solidSvg(k.slabOf(plan,z,h,P,8,o2.bevel==null?1.2:o2.bevel),{tone:'lo',crease:'faint'})});
+        if(o2.groove!==false) items.push({key:-1e9+2,svg:k.lineSvg(k.planOutline(k.insetPlan(plan,o2.inset||4),z+h,P),{tone:'faint'})});
+        if(o2.screws!==false){ var sc=k.corners(plan,o2.inset?o2.inset*1.6:6);
+          items.push({key:-1e9+3,svg:k.lineSvg(sc.map(function(p){ return k.ring(p[0],p[1],1.4,z+h,P,14); }).join(''),{tone:'lo'})+k.dotsSvg(sc.map(function(p){ return k.iso([p[0],p[1],z+h],P); }),{size:.5})}); } },
+      tag:function(text,p3,o2){ tags.push({text:text,p:k.iso(p3,P),o:o2||{}}); },
+      render:function(){ items.sort(function(a,b){ return a.key-b.key; });
+        var body=items.map(function(it){ return it.part?'<g data-part="'+it.part+'">'+it.svg+'</g>':it.svg; }).join('');
+        body+=live.map(function(l){ return '<g class="ana-live" data-live="'+l.id+'"></g>'; }).join('');
+        body+=tags.map(function(t){ var w=t.text.length*6.3+12, h=15, x=t.p[0], y=t.p[1], up=t.o.up||18, dx=t.o.dx||0, bx=x+dx-w/2, by=y-up-h;
+          if(t.o.left) bx=x+dx-w+4; if(t.o.right) bx=x+dx-4;
+          return '<g class="ana-tag"><path d="M'+f1(x)+' '+f1(y)+'L'+f1(x+dx)+' '+f1(y-up)+'"/><circle cx="'+f1(x)+'" cy="'+f1(y)+'" r="1.5"/><rect x="'+f1(bx)+'" y="'+f1(by)+'" width="'+f1(w)+'" height="'+h+'" rx="2"/><text x="'+f1(bx+6)+'" y="'+f1(by+10.6)+'">'+esc(t.text)+'</text></g>'; }).join('');
+        return body; } };
+    return c; }
+
+  /* ---------- parts vocabulary ---------- */
+  /* a data hall: a warehouse box with a louvre band, pilasters, rooftop plant, a penthouse and dock doors on its near face */
+  function hall(c,x,y,w,d,h,o){ o=o||{}; var P=c.P, plan=PL(x,y,w,d,Math.min(.6,h*.1)), tone=o.tone||'mid';
+    var band=k.lineSvg(k.sideSeam(plan,h*.32,P,3),{tone:'faint'});
+    c.box(plan,0,h,tone,{bevel:h*.06,inner:band,part:o.part,bias:o.bias});
+    var n=Math.max(2,Math.round(w/(o.pitch||8))), lines='';
+    for(var i=1;i<n;i++){ var px=x+i*(w/n); lines+=k.rise([px,y+d],0,h,P); }
+    var m=Math.max(1,Math.round(d/(o.pitch||8))); for(var j=1;j<m;j++){ lines+=k.rise([x+w,y+j*(d/m)],0,h,P); }
+    c.line(lines,'faint',[x+w/2,y+d,h/2],{bias:.02,part:o.part});
+    if(o.rtu){ var cols=o.rtu[0], rows=o.rtu[1], uw=Math.min(w/cols*.45,h*.5), ud=Math.min(d/rows*.45,h*.5);
+      for(var r=0;r<rows;r++) for(var q=0;q<cols;q++){ var ux=x+(q+.5)*(w/cols)-uw/2, uy=y+(r+.5)*(d/rows)-ud/2;
+        c.box(PL(ux,uy,uw,ud,.2),h,h*.18,'mid',{steps:2,part:o.part,bias:.03}); c.line(k.ring(ux+uw/2,uy+ud/2,Math.min(uw,ud)*.3,h+h*.18,P,12),'lo',[ux+uw/2,uy+ud/2,h+h*.18],{bias:.04,part:o.part}); } }
+    if(o.pent){ c.box(PL(x+w*.78,y+d*.3,w*.14,d*.4,.3),h,h*.25,'mid',{steps:2,part:o.part,bias:.03}); }
+    if(o.docks){ var dn=o.docks, dw=Math.min(w/(dn*2.2),h*.4), dh=h*.36, ds='';
+      for(var q2=0;q2<dn;q2++){ var dx=x+w*.14+q2*dw*2; ds+=k.rise([dx,y+d],0,dh,P)+k.rise([dx+dw,y+d],0,dh,P)+k.segment([dx,y+d,dh],[dx+dw,y+d,dh],P); }
+      c.line(ds,'lo',[x+w*.3,y+d,dh/2],{bias:.03,part:o.part}); }
+    return plan; }
+  /* an electrical pad beside a building: gravel, transformers with fins, a switchgear house */
+  function pad(c,x,y,w,d,n,o){ o=o||{}; var P=c.P, s=o.s||1;
+    c.flat(PL(x,y,w,d,.4),0,'lo',{bias:-4e4,part:o.part});
+    var step=w/(n+1.2), tw=Math.min(step*.55,3.2*s), td=Math.min(d*.5,2.4*s), th=2.4*s;
+    for(var i=0;i<n;i++){ var tx=x+step*(i+.6)-tw/2, ty=y+d*.5-td/2;
+      c.box(PL(tx,ty,tw,td,.2),0,th,'mid',{steps:2,part:o.part});
+      var fins=''; for(var f=1;f<4;f++) fins+=k.rise([tx+tw*f/4,ty+td],0,th*.8,P); c.line(fins,'faint',[tx+tw/2,ty+td,th/2],{bias:.02,part:o.part});
+      c.cyl(tx+tw*.3,ty+td*.5,tw*.08,th,th*.4,'mid',{steps:8,part:o.part,bias:.03}); c.cyl(tx+tw*.7,ty+td*.5,tw*.08,th,th*.4,'mid',{steps:8,part:o.part,bias:.03}); }
+    if(o.house!==false) c.box(PL(x+w-step*1.0,y+d*.15,step*.8,d*.7,.3),0,th*.9,'mid',{steps:2,part:o.part}); }
+  /* dry coolers: a box with two fan rings on top */
+  function coolers(c,x,y,n,pitch,w,d,h,o){ o=o||{}; var P=c.P;
+    for(var i=0;i<n;i++){ var cx=x+i*pitch; c.box(PL(cx,y,w,d,.2),0,h,'mid',{steps:2,part:o.part});
+      c.line(k.ring(cx+w*.3,y+d/2,Math.min(w,d)*.22,h,P,14)+k.ring(cx+w*.7,y+d/2,Math.min(w,d)*.22,h,P,14),'lo',[cx+w/2,y+d/2,h],{bias:.02,part:o.part}); } }
+  /* a lattice tower: four posts, cross bars, a top beam; the line lands on a plate-edge anchor when given */
+  function lattice(c,cx,cy,s,h,o){ o=o||{}; var P=c.P, ps=[[-1,-1],[1,-1],[-1,1],[1,1]];
+    ps.forEach(function(p){ c.cyl(cx+p[0]*s,cy+p[1]*s,s*.12,0,h,'mid',{steps:8,crease:'none',part:o.part}); });
+    var bars=''; for(var i=1;i<=3;i++){ var z=h*i/3.3; bars+=k.onTop([[cx-s,cy-s],[cx+s,cy-s],[cx+s,cy+s],[cx-s,cy+s]],z,P,true); }
+    c.line(bars,'lo',[cx,cy,h/2],{bias:.02,part:o.part});
+    c.box(PL(cx-s*1.6,cy-s*.18,s*3.2,s*.36,.1),h,s*.3,'mid',{steps:2,part:o.part,bias:.03});
+    if(o.lineTo){ var L3=[o.lineTo[0],o.lineTo[1],0]; c.line(k.segment([cx,cy,h+s*.3],L3,P),'lo',[(cx+L3[0])/2,(cy+L3[1])/2,h],{bias:1e4}); c.dots([L3],{size:.7,bias:1e4}); } }
+  /* a gas turbine package: the enclosure, the SCR box and the stack */
+  function turbine(c,x,y,s,o){ o=o||{}; c.box(PL(x,y,16*s,4*s,.3*s),0,4*s,'mid',{steps:2,part:o.part,inner:k.lineSvg(k.sideSeam(PL(x,y,16*s,4*s,.3*s),2*s,c.P,2),{tone:'faint'})});
+    c.box(PL(x+11*s,y-.2*s,4*s,4.4*s,.3*s),0,5.2*s,'mid',{steps:2,part:o.part,bias:.02});
+    c.cyl(x+13*s,y+2*s,.9*s,5.2*s,6.8*s,'mid',{steps:12,crease:'none',part:o.part,bias:.04}); c.line(k.sideArc(x+13*s,y+2*s,.9*s,9*s,c.P,10),'faint',[x+13*s,y+2*s,9*s],{bias:.05,part:o.part}); }
+  /* a reactor module: a drum on a pad, seams, a dome */
+  function reactor(c,cx,cy,r,h,o){ o=o||{}; c.cyl(cx,cy,r*1.15,0,r*.14,'lo',{steps:28,part:o.part});
+    c.cyl(cx,cy,r,r*.14,h,'hi',{steps:28,crease:'lo',part:o.part,inner:k.lineSvg(k.sideArc(cx,cy,r,r*.14+h*.38,c.P,20)+k.sideArc(cx,cy,r,r*.14+h*.72,c.P,20),{tone:'faint'})});
+    c.dome(cx,cy,r,r*.14+h,'hi',{part:o.part,bias:.05}); }
+  /* a container row: n boxes along x with a fan box on top */
+  function containers(c,x,y,cols,rows,px,py,w,d,h,o){ o=o||{};
+    for(var r=0;r<rows;r++) for(var q=0;q<cols;q++){ var bx=x+q*px, by=y+r*py; c.box(PL(bx,by,w,d,.1),0,h,'hi',{steps:2,crease:'lo',part:o.part});
+      c.box(PL(bx+w*.1,by+d*.2,w*.25,d*.6,.05),h,h*.22,'mid',{steps:2,part:o.part,bias:.02}); } }
+  /* a rack row seen from the aisle: one slab per rack with unit lines and two LEDs */
+  function racks(c,x,y,n,w,d,h,units,o){ o=o||{}; var P=c.P, lines='', leds=[];
+    for(var i=0;i<n;i++){ var rx=x+i*w; c.box(PL(rx,y,w*.96,d,.05),0,h,o.tone||'hi',{steps:2,crease:'lo',part:o.part,bias:o.bias});
+      var face=o.face||1, fy=face>0?y+d:y; if(face>0){ for(var u=1;u<units;u++) lines+=k.segment([rx,fy,h*u/units],[rx+w*.96,fy,h*u/units],P); leds.push([rx+w*.3,fy,h*.5],[rx+w*.6,fy,h*.5]); } }
+    if(lines) c.line(lines,'faint',[x+n*w/2,y+d,h/2],{bias:(o.bias||0)+.02,part:o.part});
+    if(leds.length) c.dots(leds,{size:.35,tone:'hi',pulse:true,bias:(o.bias||0)+.03,part:o.part}); }
+  /* a road or lane: a flat strip with a centre line */
+  function road(c,x,y,w,d,o){ o=o||{}; c.flat(PL(x,y,w,d,.2),0.02,'lo',{bias:-4.5e4}); if(o.line!==false){ var P=c.P, dl=w>d?k.lineOnTop([x+1,y+d/2],[x+w-1,y+d/2],.03,P):k.lineOnTop([x+w/2,y+1],[x+w/2,y+d-1],.03,P); c.line(dl,'faint',[x+w/2,y+d/2,.03],{bias:-4.4e4,dashed:true}); } }
+  function lamps(c,pts,h){ pts.forEach(function(p){ c.cyl(p[0],p[1],h*.03,0,h,'mid',{steps:6,crease:'none'}); c.box(PL(p[0]-h*.06,p[1]-h*.06,h*.12,h*.12,.02),h,h*.04,'hi',{steps:2,bias:.02}); }); }
+  /* a vehicle: body, cabin, four block wheels */
+  function car(c,x,y,L,Wd,o){ o=o||{}; var hb=o.h||Wd*.5; c.box(PL(x,y,L,Wd,Wd*.12),Wd*.18,hb,o.tone||'hi',{steps:2,part:o.part,crease:'lo'});
+    c.box(PL(x+L*.28,y+Wd*.08,L*.42,Wd*.84,Wd*.12),Wd*.18+hb,hb*.7,'mid',{steps:2,part:o.part,bias:.02});
+    [[.18,0],[.78,0],[.18,1],[.78,1]].forEach(function(w){ c.box(PL(x+L*w[0]-Wd*.12,y+w[1]*Wd-Wd*.06,Wd*.24,Wd*.12,.02),0,Wd*.3,'lo',{steps:2,part:o.part,bias:.01}); }); }
+  function truck(c,x,y,s,o){ o=o||{}; c.box(PL(x,y,2.2*s,2.4*s,.2*s),.5*s,2.4*s,'hi',{steps:2,part:o.part,crease:'lo'}); c.box(PL(x+2.4*s,y,8*s,2.4*s,.1*s),.9*s,2.6*s,'mid',{steps:2,part:o.part,bias:.02});
+    for(var i=0;i<3;i++) [0,1].forEach(function(sd){ c.box(PL(x+(1+i*3.6)*s,y+sd*2.4*s-.15*s,.8*s,.3*s,.02),0,.8*s,'lo',{steps:2,part:o.part,bias:.01}); }); }
+  function humanoid(c,x,y,s,o){ o=o||{}; c.cyl(x-.12*s,y,.1*s,0,.85*s,'mid',{steps:8,crease:'none',part:o.part}); c.cyl(x+.12*s,y,.1*s,0,.85*s,'mid',{steps:8,crease:'none',part:o.part,bias:.01});
+    c.box(PL(x-.22*s,y-.12*s,.44*s,.24*s,.05*s),.85*s,.16*s,'mid',{steps:2,part:o.part,bias:.02}); c.cyl(x,y,.21*s,1.0*s,.6*s,'hi',{steps:12,part:o.part,bias:.03});
+    c.cyl(x,y,.12*s,1.63*s,.26*s,'hi',{steps:10,part:o.part,bias:.04}); }
+  function drone(c,x,y,s,o){ o=o||{}; var P=c.P; c.flat(PL(x-1.2*s,y-1.2*s,2.4*s,2.4*s,.3*s),.02,'lo',{bias:-4e4}); c.line(k.ring(x,y,.9*s,.03,P,24),'faint',[x,y,0],{bias:-3.9e4});
+    c.box(PL(x-.3*s,y-.3*s,.6*s,.6*s,.1*s),.25*s,.16*s,'hi',{steps:2,part:o.part});
+    [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(q){ c.box(PL(Math.min(x,x+q[0]*.7*s),y+q[1]*.35*s-.03*s,.7*s,.06*s,.01),.3*s,.05*s,'mid',{steps:1,part:o.part,bias:.01});
+      c.line(k.ring(x+q[0]*.7*s,y+q[1]*.35*s,.32*s,.38*s,P,14),'lo',[x+q[0]*.7*s,y+q[1]*.35*s,.38*s],{bias:.02,part:o.part}); }); }
+  function arm(c,x,y,s,o){ o=o||{}; c.cyl(x,y,.55*s,0,.5*s,'mid',{steps:14,part:o.part}); c.cyl(x,y,.3*s,.5*s,1.9*s,'hi',{steps:10,crease:'none',part:o.part,bias:.01});
+    c.box(PL(x-.16*s,y-.16*s,1.8*s,.32*s,.08*s),2.4*s,.3*s,'hi',{steps:2,part:o.part,bias:.02}); c.cyl(x+1.6*s,y,.14*s,1.5*s,.9*s,'mid',{steps:8,crease:'none',part:o.part,bias:.03});
+    c.box(PL(x+1.42*s,y-.2*s,.36*s,.4*s,.05*s),1.3*s,.2*s,'mid',{steps:2,part:o.part,bias:.04}); }
+
+  /* ---------- the world: Natural Earth land on a plate, hubs at real coordinates, arcs between them ---------- */
+  var NE=function(lon,lat){ var l=lon*PI/180, p=lat*PI/180, p2=p*p, p4=p2*p2;
+    return [l*(0.8707-0.131979*p2+p4*(-0.013791+p4*(0.003971*p2-0.001529*p4))), p*(1.007226+p2*(0.015085+p4*(-0.044475+0.028874*p2-0.005916*p4)))]; };
+  var HUBLL={'N. Virginia':[39.04,-77.49],'ERCOT · Texas':[32.4,-99.7],'Santa Clara':[37.35,-121.95],'Dublin':[53.35,-6.26],'Frankfurt':[50.11,8.68],'Riyadh':[24.71,46.68],'Inner Mongolia':[40.82,111.65],'Singapore':[1.35,103.82]};
+  var FIT=(function(){ var rows=[]; ((typeof HUBS!=='undefined'&&HUBS)||[]).forEach(function(h){ var ll=HUBLL[h.n]; if(!ll) return; var q=NE(ll[1],ll[0]); rows.push([q[0],q[1],h.x,h.y]); });
+    if(rows.length<3) return {k:150,tx:500,ty:230};
+    var n=rows.length,a=0,b=0,cc=0,d=0; rows.forEach(function(r){ a+=r[0]*r[0]; b+=r[0]; cc+=r[0]*r[2]; d+=r[2]; });
+    var kk=(n*cc-b*d)/(n*a-b*b), tx=(d-kk*b)/n, ty=0; rows.forEach(function(r){ ty+=r[3]+kk*r[1]; }); ty/=n;
+    var err=0; rows.forEach(function(r){ err=Math.max(err,Math.hypot(kk*r[0]+tx-r[2],-kk*r[1]+ty-r[3])); });
+    return {k:kk,tx:tx,ty:ty,err:err}; })();
+  function mapXY(lat,lon){ var q=NE(lon,lat); return [FIT.k*q[0]+FIT.tx,-FIT.k*q[1]+FIT.ty]; }
+  var SITES=[['West Texas',32.4,-99.7],['N. Virginia',39.0,-77.5],['Phoenix',33.4,-112.1],['Alberta',53.5,-113.5],['São Paulo',-23.5,-46.6],['Dublin',53.3,-6.2],['Oslo',59.9,10.7],['Abu Dhabi',24.5,54.4],['Mumbai',19.1,72.9],['Singapore',1.5,103.8],['Tokyo',35.7,139.7],['Sydney',-33.9,151.2]];
+  var ARCS=[[0,1],[0,2],[3,0],[4,1],[1,5],[5,6],[5,7],[6,7],[7,8],[8,9],[9,10],[10,11],[2,10],[9,11],[4,5],[3,10]];
+  var CITIES=[[40.7,-74],[34.05,-118.2],[41.9,-87.6],[29.8,-95.4],[25.8,-80.2],[43.7,-79.4],[49.3,-123.1],[19.4,-99.1],[4.7,-74.1],[-12,-77],[-33.4,-70.6],[-34.6,-58.4],[-22.9,-43.2],[51.5,-0.1],[48.9,2.3],[40.4,-3.7],[52.5,13.4],[41.9,12.5],[59.3,18.1],[52.2,21],[41,29],[55.8,37.6],[30,31.2],[6.5,3.4],[-1.3,36.8],[-26.2,28],[24.7,46.7],[35.7,51.4],[24.9,67],[28.6,77.2],[13,77.6],[23.8,90.4],[13.8,100.5],[-6.2,106.8],[14.6,121],[22.3,114.2],[31.2,121.5],[39.9,116.4],[37.6,127],[25,121.5],[-31.9,115.9],[-37.8,145],[-36.8,174.8],[45.5,-73.6],[33.7,-84.4],[47.6,-122.3],[39.7,-105],[50.1,8.7],[45.5,9.2],[55.7,12.6]];
+  /* the plate: the map's 1000 × 460 box laid on the top face, scaled to `w`; returns world (x,y) for a map point */
+  function world(c,ox,oy,w,z,o){ o=o||{}; var P=c.P, s=w/1000, d=460*s, plan=PL(ox,oy,w,d,.6);
+    c.box(plan,0,z,'lo',{steps:6,bevel:.8,bias:-6e4}); c.line(k.planOutline(k.insetPlan(plan,1.2),z,P,6),'faint',[ox+w/2,oy+d/2,z],{bias:-5.9e4});
+    var m=k.topMatrix([ox,oy],z+.02,P,'x');
+    c.add('<g transform="'+m+' scale('+s.toFixed(5)+')"><path class="ana-land" d="'+(typeof MAP!=='undefined'&&MAP?MAP.land:'')+'"/></g>',[ox+w/2,oy+d/2,z],{bias:-5.8e4,part:o.part});
+    var W2=function(xy){ return [ox+xy[0]*s,oy+xy[1]*s]; };
+    var hubs=SITES.map(function(st){ return W2(mapXY(st[1],st[2])); });
+    if(o.cities!==false){ var pts=CITIES.map(function(cc){ var p=W2(mapXY(cc[0],cc[1])); return [p[0],p[1],z+.05]; }); c.dots(pts,{size:Math.max(.6,s*7),tone:'hi',pulse:true,bias:-5.7e4}); }
+    var hs=o.hub||s*14;
+    hubs.forEach(function(h,i){ var px=h[0], py=h[1];
+      c.line(k.ring(px,py,hs*2.2,z+.06,P,28),'mid',[px,py,z],{bias:-5.6e4,part:o.part});
+      [[-1,-.6],[0,-.6],[-1,.4],[0,.4]].forEach(function(q){ c.box(PL(px+q[0]*hs*1.1,py+q[1]*hs,hs,hs*.6,hs*.08),z,hs*.45,'hi',{steps:2,crease:'lo',part:o.part}); });
+      c.box(PL(px-hs*2.0,py-hs*.6,hs*.55,hs*1.0,hs*.05),z,hs*.3,'mid',{steps:2,part:o.part});
+      if(o.site&&i===0){ c.line(k.ring(px,py,hs*3.0,z+.06,P,36),'hi',[px,py,z],{bias:-5.55e4,part:'site'}); c.tag(o.site,[px,py,z+hs*.5],{up:24}); } });
+    ARCS.forEach(function(pr){ var a=hubs[pr[0]], b=hubs[pr[1]], A=k.iso([a[0],a[1],z],P), B=k.iso([b[0],b[1],z],P), dl=Math.hypot(B[0]-A[0],B[1]-A[1]);
+      var cx=(A[0]+B[0])/2, cy=(A[1]+B[1])/2-dl*.38; var d='M'+f1(A[0])+' '+f1(A[1])+'Q'+f1(cx)+' '+f1(cy)+' '+f1(B[0])+' '+f1(B[1]);
+      c.line(d,'hi',[(a[0]+b[0])/2,(a[1]+b[1])/2,z+dl*.2],{bias:4e4,flow:!RM,part:o.part}); });
+    return {hubs:hubs,plan:plan,s:s}; }
+  /* the orrery: three ring rails on posts over the plate, craft riding them (live) */
+  function orrery(c,cx,cy,rings,o){ o=o||{}; var P=c.P;
+    rings.forEach(function(r,i){ c.line(k.ring(cx,cy,r.r,r.z,P,96),'mid',[cx,cy,r.z],{bias:3e4+i,part:o.part});
+      for(var p=0;p<3;p++){ var a=p*2*PI/3+i*.35, px=cx+Math.cos(a)*r.r, py=cy+Math.sin(a)*r.r*(r.k||1);
+        c.cyl(px,py,r.z*.008,0,r.z,'mid',{steps:6,crease:'none',bias:2e4,part:o.part}); c.cyl(px,py,r.z*.03,0,r.z*.02,'lo',{steps:8,bias:-1e3}); } });
+    c.live.push({id:'orb',cx:cx,cy:cy,rings:rings,part:o.part}); }
+  function craftSvg(c,cx,cy,rings,t){ var P=c.P, out=[], S=rings[0].s||1;
+    rings.forEach(function(r,i){ var n=r.n||12; for(var j=0;j<n;j++){ var a=j*2*PI/n+t*(r.v||.08)*(i%2?-1:1)+i*.4, x=cx+Math.cos(a)*r.r, y=cy+Math.sin(a)*r.r*(r.k||1), z=r.z;
+      var bus=k.slabOf(PL(x-.45*S,y-.25*S,.9*S,.5*S,.05*S),z,.4*S,P,2), wa=k.slabOf(PL(x-2.2*S,y-.45*S,1.6*S,.9*S,.05*S),z+.2*S,.05*S,P,2), wb=k.slabOf(PL(x+.6*S,y-.45*S,1.6*S,.9*S,.05*S),z+.2*S,.05*S,P,2), rad=k.slabOf(PL(x-.03*S,y-.6*S,.06*S,1.2*S,.01*S),z+.4*S,.9*S,P,1);
+      out.push({key:k.depthOf([x,y,z],P),svg:k.solidSvg(wa,{tone:'mid',crease:'none'})+k.solidSvg(wb,{tone:'mid',crease:'none'})+k.solidSvg(rad,{tone:'hi',crease:'none'})+k.solidSvg(bus,{tone:'hi'})}); } });
+    out.sort(function(a,b){ return a.key-b.key; }); return out.map(function(o){ return o.svg; }).join(''); }
+
+  /* ---------- the campus kit, reused at two scales (the Today campus; the AGI training campus) ---------- */
+  function trainingCampus(c,ox,oy,s,o){ o=o||{}; var P=c.P, pid=o.part;
+    /* ten 1 MW halls in two rows, a dry-cooler row between, electrical pads behind each, roads with lamps */
+    for(var hr=0;hr<2;hr++) for(var hi=0;hi<5;hi++){ var hx=ox+(30+hi*110)*s, hy=oy+(hr?330:250)*s;
+      hall(c,hx,hy,100*s,35*s,12*s,{rtu:[6,2],pent:true,docks:hr?4:0,pitch:10*s,part:o.hallPart||pid});
+      var sg=hr?1:-1; pad(c,hx+2*s,hy+(hr?37:-21)*s,96*s,16*s,4,{s:s*1.1,part:pid}); }
+    coolers(c,ox+(36)*s,oy+(304)*s,8,12*s,9*s,3*s,3.2*s,{part:pid}); coolers(c,ox+(146)*s,oy+(304)*s,8,12*s,9*s,3*s,3.2*s,{part:pid});
+    coolers(c,ox+(256)*s,oy+(304)*s,8,12*s,9*s,3*s,3.2*s,{part:pid}); coolers(c,ox+(366)*s,oy+(304)*s,8,12*s,9*s,3*s,3.2*s,{part:pid}); coolers(c,ox+(476)*s,oy+(304)*s,8,12*s,9*s,3*s,3.2*s,{part:pid});
+    road(c,ox+20*s,oy+300*s-6*s,560*s,12*s); road(c,ox+20*s,oy+395*s,560*s,14*s); road(c,ox+20*s,oy+190*s,560*s,14*s);
+    lamps(c,[0,1,2,3,4,5,6].map(function(i){ return [ox+(50+i*85)*s,oy+293*s]; }),9*s);
+    /* the plant behind: six modules, the landmark dome, two turbine halls, dry coolers, the lattice, batteries */
+    for(var ri=0;ri<6;ri++) reactor(c,ox+(100+ri*50)*s,oy+70*s,12*s,30*s,{part:o.plantPart||pid});
+    c.cyl(ox+40*s,oy+90*s,45*s,0,20*s,'hi',{steps:40,crease:'lo',part:o.plantPart||pid}); c.dome(ox+40*s,oy+90*s,45*s,20*s,'hi',{part:o.plantPart||pid,bias:.05});
+    hall(c,ox+100*s,oy+150*s,160*s,40*s,15*s,{rtu:[5,1],pitch:20*s,part:pid}); hall(c,ox+280*s,oy+150*s,160*s,40*s,15*s,{rtu:[5,1],pitch:20*s,part:pid});
+    pad(c,ox+100*s,oy+194*s,160*s,14*s,3,{s:s*1.4,house:false,part:pid}); pad(c,ox+280*s,oy+194*s,160*s,14*s,3,{s:s*1.4,house:false,part:pid});
+    coolers(c,ox+460*s,oy+60*s,6,22*s,18*s,12*s,8*s,{part:pid}); coolers(c,ox+460*s,oy+100*s,6,22*s,18*s,12*s,8*s,{part:pid});
+    lattice(c,ox+520*s,oy+170*s,8*s,60*s,{part:pid,lineTo:o.lineTo});
+    containers(c,ox+470*s,oy+150*s,8,2,16*s,8*s,12*s,3*s,3*s,{part:pid}); }
+
+  /* ---------- the stops ---------- */
+  var S={};
+  /* CLOUD · overview: the metro block and the regional campus on one lawn, tied by one duct */
+  S.cloud=function(){ var c=figure([[0,0,0],[150,0,0],[0,90,0],[150,90,0],[20,30,24]],{pad:26,az:42,el:32}); var P=c.P;
+    c.base(PL(0,0,150,90,2),-3,3,{inset:3});
+    /* the city: a street with manholes, office towers round the block */
+    road(c,0,30,58,5); c.dots([6,14,22,30,38,46,54].map(function(x){ return [x,32.5,.05]; }),{size:.5,tone:'lo',bias:-4e4});
+    [[2,2,10,10,14],[16,2,9,9,19],[30,4,8,8,11],[44,2,10,9,16],[2,16,8,8,12],[2,42,9,9,17],[14,44,8,8,13],[40,44,9,9,15],[50,16,6,6,9]].forEach(function(t){ hall(c,t[0],t[1],t[2],t[3],t[4],{pitch:3.5,rtu:[1,1]}); });
+    /* the carrier hotel: eighteen floors of brick, towers, a generator, two dishes on the roof */
+    var HT=hall(c,14,38,12,15,22,{pitch:4,part:'hotel'}); var fl=''; for(var f=1;f<18;f++){ fl+=k.sideSeam(HT,22*f/18,P,3); } c.line(fl,'faint',[20,53,11],{bias:.02,part:'hotel'});
+    c.cyl(17,42,1.6,22,2.6,'mid',{steps:14,part:'hotel',bias:.03}); c.cyl(22,42,1.6,22,2.6,'mid',{steps:14,part:'hotel',bias:.03}); c.box(PL(16,48,4,2.4,.2),22,1.4,'mid',{steps:2,part:'hotel',bias:.03});
+    c.cyl(23,50,1.1,22,.3,'hi',{steps:12,part:'hotel',bias:.04}); c.cyl(20,51,.8,22,.3,'hi',{steps:12,part:'hotel',bias:.04});
+    /* the colo: a windowless box, eight diesels in the rear yard, two chillers on the side pad */
+    hall(c,30,14,18,12,5,{pitch:6,rtu:[3,1],pent:false,docks:2,part:'colo'});
+    for(var i=0;i<8;i++) c.box(PL(31+i*2.1,27.5,1.6,1,.1),0,1.1,'mid',{steps:2,part:'colo'});
+    c.box(PL(49,16,2.2,3,.2),0,1.4,'mid',{steps:2,part:'colo'}); c.box(PL(49,20,2.2,3,.2),0,1.4,'mid',{steps:2,part:'colo'});
+    /* the duct: from the hotel's vault along the street to the fiber hut */
+    c.box(PL(20,35.4,44,1.4,.2),0,.5,'mid',{steps:2}); c.line(k.lineOnTop([21,36.1],[63,36.1],.5,P),'hi',[42,36.1,.5],{bias:.02,flow:!RM});
+    c.box(PL(18,34,2,3,.2),0,.6,'lo',{steps:2});
+    /* the regional campus: substation, fiber hut, diesels on the fence, four buildings with their towers, office, parking, spine road, trees */
+    c.flat(PL(62,6,86,82,2),.02,'lo',{bias:-4.9e4}); c.line(k.planOutline(PL(62,6,86,82,2),.03,P,4),'lo',[105,47,0],{bias:-4.8e4});
+    c.flat(PL(65,10,20,14,.5),.04,'lo',{bias:-4.7e4}); c.box(PL(68,14,6,4,.3),0,4,'mid',{steps:2,part:'grid'}); c.line(k.rise([69.5,18],0,3.2,P)+k.rise([71,18],0,3.2,P)+k.rise([72.5,18],0,3.2,P),'faint',[71,18,2],{bias:.02,part:'grid'});
+    lattice(c,80,16,2.2,14,{part:'grid',lineTo:[80,0]});
+    c.box(PL(64,36,4,4,.3),0,3,'mid',{steps:2}); 
+    for(var d2=0;d2<20;d2++) c.box(PL(88+d2*2.9,8,2.2,1,.1),0,1.2,'mid',{steps:2,part:'diesels'});
+    [[88,28],[120,28],[88,54],[120,54]].forEach(function(b,bi){ hall(c,b[0],b[1],27,15,5,{rtu:[3,2],pent:true,docks:3,pitch:5,part:'bld'});
+      c.flat(PL(b[0]+28,b[1]+2,5,11,.3),.04,'lo',{bias:-4.6e4}); c.cyl(b[0]+30.5,b[1]+5,1.6,0,2.6,'mid',{steps:14,part:'bld'}); c.cyl(b[0]+30.5,b[1]+10,1.6,0,2.6,'mid',{steps:14,part:'bld'});
+      if(bi===0){ c.box(PL(b[0]-7,b[1]+3,7,8,.4),0,3,'mid',{steps:3,part:'bld',bias:.02}); } });
+    road(c,114,10,4,76); road(c,64,48,84,4);
+    c.flat(PL(64,58,18,24,.6),.04,'lo',{bias:-4.7e4}); var pk=''; for(var q=0;q<5;q++) pk+=k.lineOnTop([66+q*3.6,60],[66+q*3.6,80],.05,P); c.line(pk,'faint',[73,70,.05],{bias:-4.6e4});
+    for(var t=0;t<14;t++){ c.cyl(66+t*6,86,.9,0,1.6,'mid',{steps:8,crease:'none'}); }
+    c.tag('Carrier hotel',[20,45.5,22],{up:22}); c.tag('Colocation facility',[39,20,5],{up:30,dx:34}); c.tag('Regional cloud campus',[133,35.5,5],{up:22});
+    return c; };
+
+  /* TODAY · campus: the 1 GW site plan from above */
+  S.tcamp=function(){ var c=figure([[0,0,0],[200,0,0],[0,122,0],[200,122,0],[20,20,16]],{pad:26,az:40,el:34}); var P=c.P;
+    c.base(PL(0,0,200,122,3),-3,3,{inset:3});
+    /* substation */
+    c.flat(PL(2,2,44,28,.5),.03,'lo',{bias:-4.8e4}); c.line(k.planOutline(PL(2,2,44,28,.5),.04,P,4),'lo',[24,16,0],{bias:-4.7e4});
+    [[8,14],[22,14]].forEach(function(t){ c.box(PL(t[0],t[1],8,5,.3),0,4,'mid',{steps:2,part:'grid'}); var fins=''; for(var f=1;f<5;f++) fins+=k.rise([t[0]+8*f/5,t[1]+5],0,3.2,P); c.line(fins,'faint',[t[0]+4,t[1]+5,2],{bias:.02,part:'grid'}); c.cyl(t[0]+2,t[1]+2.5,.5,4,1.6,'mid',{steps:8,part:'grid',bias:.03}); c.cyl(t[0]+6,t[1]+2.5,.5,4,1.6,'mid',{steps:8,part:'grid',bias:.03}); });
+    for(var b=0;b<8;b++){ c.cyl(32+b*1.7,8,.4,0,3,'mid',{steps:8,crease:'none',part:'grid'}); c.cyl(32+b*1.7,8,.6,3,1.2,'hi',{steps:8,part:'grid',bias:.02}); }
+    c.box(PL(30,16,14,.6,.1),4.2,.6,'mid',{steps:1,part:'grid'}); c.box(PL(30,20,14,.6,.1),4.2,.6,'mid',{steps:1,part:'grid'}); for(var p=0;p<3;p++){ c.cyl(31+p*6,16.3,.3,0,4.2,'mid',{steps:6,crease:'none',part:'grid'}); c.cyl(31+p*6,20.3,.3,0,4.2,'mid',{steps:6,crease:'none',part:'grid'}); }
+    lattice(c,8,26,2.4,14,{part:'grid',lineTo:[0,40]});
+    /* gas island: 34 packages in two rows of 17, a fire road, control building, metering skid, fire-water tank */
+    road(c,90,1,108,2.2,{line:false}); road(c,90,44,108,2.2,{line:false}); road(c,90,1,2.2,45,{line:false}); road(c,196,1,2.2,45,{line:false});
+    for(var r=0;r<2;r++) for(var i=0;i<17;i++) turbine(c,94+i*5.6,6+r*20,.3,{part:'gas'});
+    c.box(PL(96,34,8,4,.3),0,2.4,'mid',{steps:2}); c.box(PL(112,35,4,2,.2),0,1,'mid',{steps:2}); c.cyl(190,38,3,0,3.2,'mid',{steps:24,crease:'lo'});
+    /* ESS yard: 120 containers in twelve by ten, the MV line beside the substation */
+    c.flat(PL(2,34,34,24,.4),.03,'lo',{bias:-4.8e4}); containers(c,4,35.5,12,10,2.6,2.2,1.7,.7,.7,{part:'bess'});
+    for(var q=0;q<10;q++) c.box(PL(37,35.5+q*2.2,1.4,1.2,.1),0,1,'mid',{steps:2,part:'bess'});
+    /* four buildings, each with its pad on the west and its coolers on the east, the admin building, the spine road */
+    [[30,62,'A'],[118,62,'B'],[30,96,'C'],[118,96,'D']].forEach(function(bd){ var hp=hall(c,bd[0],bd[1],44,18,2.6,{rtu:[6,2],pent:true,docks:4,pitch:8,part:'bld'});
+      var bays=''; for(var h=0;h<4;h++) bays+=k.planOutline(PL(bd[0]+.6+h*11,bd[1]+1.2,10,14,.3),2.6,P,3); c.line(bays,'faint',[bd[0]+22,bd[1]+9,2.6],{bias:.025,part:'bld'});
+      pad(c,bd[0]-9,bd[1],8,18,3,{s:.5,part:'power'}); for(var cr=0;cr<5;cr++) coolers(c,bd[0]+47,bd[1]+1+cr*3.4,2,3.4,2.6,1.2,1,{part:'cool'});
+      c.tag('Building '+bd[2]+' · 250 MW',[bd[0]+22,bd[1]+9,2.6],{up:20}); });
+    road(c,95.6,48,4.8,74); road(c,20,88,170,4);
+    c.box(PL(84,50,8,4,.4),0,1.4,'mid',{steps:2}); c.box(PL(78,50,3,3,.3),0,1.8,'mid',{steps:2});
+    return c; };
+
+  /* TODAY · one building: building A open, four halls, the power block */
+  S.tbld=function(){ var s=.6, c=figure([[0,0,0],[160,0,0],[0,70,0],[160,70,0],[0,0,10]],{pad:30,az:40,el:36}); var P=c.P;
+    c.base(PL(0,0,160,70,2),-3,3,{inset:3});
+    var bx=22,by=8,bw=132,bd=54,bh=7.2;
+    c.flat(PL(bx,by,bw,bd,.2),.02,'lo',{bias:-4.9e4}); c.line(k.planOutline(k.insetPlan(PL(bx,by,bw,bd,.2),.6),.04,P,3),'faint',[bx+bw/2,by+bd/2,0],{bias:-4.8e4});
+    c.box(PL(bx,by,bw,.5,.1),0,bh,'mid',{steps:1,part:'shell'}); c.box(PL(bx,by,.5,bd,.1),0,bh,'mid',{steps:1,part:'shell'});
+    for(var h=0;h<4;h++){ var hx=bx+1+h*33; if(h>0) c.box(PL(hx-.4,by+.5,.3,bd-6,.05),0,bh*.9,'mid',{steps:1,part:'shell'});
+      var bay=k.planOutline(PL(hx,by+1,32,46,.2),.05,P,3); c.line(bay,'lo',[hx+16,by+24,0],{bias:-4.7e4});
+      for(var r=0;r<8;r++){ var rx=hx+2.4+r*3.6; c.box(PL(rx,by+5,.7,33.6,.05),0,1.5,'hi',{steps:1,crease:'lo',part:'hall'});
+        var seams=''; for(var q=1;q<14;q++) seams+=k.segment([rx+.7,by+5+q*2.4,0],[rx+.7,by+5+q*2.4,1.5],P); c.line(seams,'faint',[rx+.7,by+22,.75],{bias:.02,part:'hall'}); }
+      for(var cd=0;cd<14;cd++) c.box(PL(hx+2+cd*2.1,by+bd-4.5,1.4,1.2,.1),0,1.3,'mid',{steps:2,part:'hall'});
+      c.box(PL(hx+1,by+bd-2.6,30,.5,.05),0,.5,'mid',{steps:1,part:'hall'}); c.line(k.lineOnTop([hx+1,by+bd-2.3],[hx+31,by+bd-2.3],.5,P),'hi',[hx+16,by+bd-2.3,.5],{bias:.02,part:'hall'}); }
+    pad(c,4,by+2,16,bd-4,4,{s:1.2,part:'power'}); c.line(k.planOutline(PL(4,by+2,16,bd-4,.4),.05,P,3),'lo',[12,by+bd/2,0],{bias:-4.7e4});
+    c.box(PL(20.2,by+6,1.8,2,.1),0,1,'mid',{steps:2,part:'power'}); c.box(PL(20.2,by+30,1.8,2,.1),0,1,'mid',{steps:2,part:'power'});
+    c.tag('Power block',[12,by+10,2.4],{up:22}); c.tag('Hall 1',[bx+17,by+6,1.5],{up:18}); c.tag('Hall 2',[bx+50,by+6,1.5],{up:18}); c.tag('Hall 3',[bx+83,by+6,1.5],{up:18}); c.tag('Hall 4',[bx+116,by+6,1.5],{up:18});
+    return c; };
+
+  /* TODAY · inside a hall: fourteen racks of every row, the aisles, the trays and busways, the support strip */
+  S.thall=function(){ var c=figure([[0,0,0],[58,0,0],[0,112,0],[58,112,0],[0,0,12]],{pad:26,az:36,el:30}); var P=c.P;
+    c.base(PL(0,0,58,112,2),-3,3,{inset:3});
+    c.flat(PL(6,6,46,100,.3),.02,'lo',{bias:-4.9e4}); c.box(PL(6,6,46,.5,.1),0,9,'mid',{steps:1,part:'shell'}); c.box(PL(6,6,.5,100,.1),0,9,'mid',{steps:1,part:'shell'});
+    var pitch=10.5, n=14, rw=1.5, rd=2.75, rh=6.25, x0=14;
+    for(var r=0;r<8;r++){ var ry=14+r*pitch, face=r%2?-1:1;
+      racks(c,x0,ry-rd/2,n,rw,rd,rh,18,{face:face,part:'racks'});
+      c.box(PL(x0,ry-.5+face*1.2,n*rw,.9,.1),rh+1.8,.7,'mid',{steps:1,part:'racks',bias:.1}); c.line(k.lineOnTop([x0,ry+face*1.2],[x0+n*rw,ry+face*1.2],rh+2.5,P),'hi',[x0+n*rw/2,ry,rh+2.5],{bias:.11,part:'racks'});
+      c.box(PL(x0,ry-.9,n*rw,1.8,.1),rh+2.9,.3,'mid',{steps:1,part:'racks',bias:.12}); var tr=''; [-.5,0,.5].forEach(function(o){ tr+=k.lineOnTop([x0,ry+o],[x0+n*rw,ry+o],rh+3.25,P); }); c.line(tr,'lo',[x0+n*rw/2,ry,rh+3.25],{bias:.13,part:'racks'});
+      c.box(PL(x0,ry-face*2.2-.25,n*rw,.5,.1),.2,.5,'mid',{steps:1,part:'cool',bias:.05}); c.box(PL(x0,ry-face*2.2-.25,n*rw,.5,.1),.9,.5,'mid',{steps:1,part:'cool',bias:.06});
+      if(r%2===0){ var cold=k.dotGrid(x0+1,ry+rd/2+1.2,20,4,1.4,.05,P); items_dots(c,cold); } }
+    for(var cd=0;cd<7;cd++){ var cx=12+cd*5.2; c.box(PL(cx,99,3.5,3,.2),0,5.5,'mid',{steps:2,part:'cool'}); c.cyl(cx+.9,100.5,.3,5.5,3.5,'mid',{steps:6,crease:'none',part:'cool',bias:.02}); c.cyl(cx+2.6,100.5,.3,5.5,3.5,'mid',{steps:6,crease:'none',part:'cool',bias:.02}); c.line(k.lineOnTop([cx+.3,99.2],[cx+3.2,99.2],4.6,P),'hi',[cx+1.7,99,4.6],{bias:.03,part:'cool'}); }
+    c.box(PL(10,97.4,40,.9,.3),.3,.9,'mid',{steps:1,part:'cool',bias:.01}); c.box(PL(10,97.4,40,.9,.3),1.6,.9,'mid',{steps:1,part:'cool',bias:.02});
+    c.tag('Cold aisle',[x0+n*rw-3,14+pitch/2,.1],{up:16,dx:26}); c.tag('Hot aisle',[x0+n*rw-3,14+pitch*1.5,.1],{up:16,dx:26}); c.tag('Busway · live strip',[x0+2,14+pitch*4+1.2,rh+2.5],{up:20,dx:-30}); c.tag('Fibre tray · 3 trunks',[x0+6,14+pitch*6,rh+3.25],{up:18,dx:-30}); c.tag('CDUs · supply and return',[12+3*5.2+1.7,100.5,9],{up:18,dx:20});
+    return c; };
+  function items_dots(c,screenPts){ c.items.push({key:-4.8e4,svg:k.dotsSvg(screenPts,{size:.3,tone:'lo'})}); }
+
+  /* TODAY · power: the gas island and the grid substation */
+  S.tpow=function(){ var c=figure([[0,0,0],[220,0,0],[0,90,0],[220,90,0],[20,40,30]],{pad:28,az:40,el:30}); var P=c.P;
+    c.base(PL(0,0,220,90,3),-3,3,{inset:4});
+    var s=.45; road(c,60,4,156,3,{line:false}); road(c,60,80,156,3,{line:false}); road(c,60,4,3,79,{line:false}); road(c,213,4,3,79,{line:false});
+    for(var r=0;r<2;r++) for(var i=0;i<17;i++) turbine(c,66+i*8.6,16+r*34,s,{part:'gas'});
+    c.box(PL(70,62,14,6,.4),0,4,'mid',{steps:2}); c.line(k.sideSeam(PL(70,62,14,6,.4),2,P,2),'faint',[77,68,2],{bias:.02}); c.box(PL(92,63,6,3,.3),0,1.8,'mid',{steps:2}); c.cyl(200,66,6,0,6,'mid',{steps:28,crease:'lo',inner:k.lineSvg(k.sideArc(200,66,6,3,P,16),{tone:'faint'})});
+    /* the substation: two main transformers, the bus on steel, eight breakers, the dead-end tower, the incoming line */
+    c.flat(PL(4,8,48,70,.6),.03,'lo',{bias:-4.8e4}); c.line(k.planOutline(PL(4,8,48,70,.6),.04,P,4),'lo',[28,43,0],{bias:-4.7e4});
+    [[10,40],[30,40]].forEach(function(t){ c.box(PL(t[0],t[1],14,8,.4),0,7,'mid',{steps:3,bevel:.4,part:'grid'}); var fins=''; for(var f=1;f<8;f++) fins+=k.rise([t[0]+14*f/8,t[1]+8],0,5.6,P); c.line(fins,'faint',[t[0]+7,t[1]+8,3],{bias:.02,part:'grid'});
+      [3,7,11].forEach(function(o){ c.cyl(t[0]+o,t[1]+4,.7,7,2.6,'hi',{steps:10,part:'grid',bias:.03}); }); c.box(PL(t[0]+2,t[1]+8.4,10,2,.2),0,2.5,'mid',{steps:2,part:'grid',bias:.01}); });
+    for(var b=0;b<8;b++){ c.cyl(10+b*4.6,24,.6,0,5,'mid',{steps:8,crease:'none',part:'grid'}); c.cyl(10+b*4.6,24,1.1,5,2,'hi',{steps:10,part:'grid',bias:.02}); }
+    c.box(PL(8,17,40,.8,.1),8,.8,'mid',{steps:1,part:'grid'}); c.box(PL(8,31,40,.8,.1),8,.8,'mid',{steps:1,part:'grid'}); for(var p=0;p<5;p++){ c.cyl(9+p*9.5,17.4,.45,0,8,'mid',{steps:6,crease:'none',part:'grid'}); c.cyl(9+p*9.5,31.4,.45,0,8,'mid',{steps:6,crease:'none',part:'grid'}); }
+    lattice(c,14,64,4,22,{part:'grid',lineTo:[0,88]});
+    c.tag('Gas turbines · 34 × 35 MW',[132,20,2*s*4],{up:26}); c.tag('345 kV grid substation',[24,44,7],{up:26,dx:14});
+    return c; };
+
+  /* TODAY · ESS batteries: the yard of 120 containers, the switchgear, the duct to the bus */
+  S.tess=function(){ var c=figure([[0,0,0],[120,0,0],[0,70,0],[120,70,0],[0,0,8]],{pad:30,az:40,el:32}); var P=c.P;
+    c.base(PL(0,0,120,70,2),-3,3,{inset:3});
+    c.flat(PL(8,6,78,58,.5),.03,'lo',{bias:-4.9e4}); c.line(k.planOutline(PL(8,6,78,58,.5),.04,P,4),'lo',[47,35,0],{bias:-4.8e4});
+    containers(c,10,8,12,10,6.2,5.5,4.5,2,2.2,{part:'bess'});
+    for(var q=0;q<10;q++){ c.box(PL(90,8+q*5.5,3.2,3,.2),0,2.4,'mid',{steps:2,part:'sw'}); c.line(k.lineOnTop([90.3,9],[92.9,9],1.8,P),'hi',[91.6,9,1.8],{bias:.02,part:'sw'}); }
+    c.box(PL(94,6,2.2,58,.2),.8,1.2,'mid',{steps:1,part:'sw'}); c.line(k.lineOnTop([95.1,7],[95.1,63],2,P),'hi',[95.1,35,2],{bias:.02,flow:!RM,part:'sw'});
+    c.box(PL(96,30,20,2.2,.2),.8,1.2,'mid',{steps:1,part:'sw'}); c.line(k.lineOnTop([96,31.1],[115,31.1],2,P),'hi',[106,31.1,2],{bias:.02,flow:!RM,part:'sw'}); c.dots([[115.5,31.1,2]],{size:.7,tone:'hi',bias:1e4});
+    c.tag('ESS batteries · 120 containers',[40,36,2.2],{up:26}); c.tag('MV switchgear',[91.6,36,2.4],{up:22,dx:10});
+    return c; };
+
+  /* AGI · overview: the training campus, the world, the depot, the orrery above */
+  S.agi=function(){ var c=figure([[0,0,0],[330,0,0],[0,120,0],[330,120,0],[160,60,52]],{pad:24,az:42,el:32}); var P=c.P;
+    c.base(PL(0,0,330,120,3),-3,3,{inset:4});
+    trainingCampus(c,4,8,.14,{part:'campus',plantPart:'plant'});
+    var w=world(c,112,30,104,1.2,{part:'cities',cities:true,hub:1.5,site:null});
+    orrery(c,164,54,[{r:34,k:.5,z:16,n:8,s:.9,v:.06},{r:27,k:.5,z:20,n:6,s:.9,v:-.05},{r:20,k:.5,z:24,n:5,s:.9,v:.07}],{part:'orb'});
+    /* the depot, at 1:1 within the overview's scale */
+    var dx=236, dy=22; c.flat(PL(dx,dy,88,86,.6),.02,'lo',{bias:-4.9e4});
+    hall(c,dx+30,dy+4,46,22,8,{rtu:[3,1],docks:4,pitch:12,part:'phys'}); for(var a=0;a<3;a++) arm(c,dx+38+a*14,dy+34,2.2,{part:'phys'});
+    [[dx+6,dy+6],[dx+14,dy+6]].forEach(function(p){ c.box(PL(p[0],p[1],7,3,.2),0,3,'mid',{steps:2,part:'phys'}); c.box(PL(p[0],p[1],7,3,.2),3,3,'mid',{steps:2,part:'phys',bias:.02}); });
+    truck(c,dx+40,dy+48,1.3,{part:'phys'}); truck(c,dx+62,dy+58,1.3,{part:'phys'}); for(var g=0;g<4;g++) c.box(PL(dx+10+g*7,dy+50,2.4,1.6,.2),0,1,'mid',{steps:2,part:'phys'});
+    for(var v=0;v<5;v++){ car(c,dx+8+v*9,dy+72,6,2.8,{part:'phys'}); c.cyl(dx+15+v*9,dy+76.4,.3,0,2.2,'mid',{steps:6,crease:'none',part:'phys'}); }
+    humanoid(c,dx+30,dy+62,3.2,{part:'phys'}); humanoid(c,dx+76,dy+40,3.2,{part:'phys'}); drone(c,dx+80,dy+14,2.6,{part:'phys'}); drone(c,dx+10,dy+26,2.6,{part:'phys'});
+    c.tag('5–10 GW training campus',[44,60,8],{up:30}); c.tag('Global inference',[164,54,1.2],{up:24}); c.tag('Orbital compute',[164,44,24],{up:22}); c.tag('Physical AI',[dx+53,dy+15,8],{up:24});
+    return c; };
+
+  /* AGI · global inference: the world plate close, hubs, arcs, cities */
+  S.ainf=function(){ var c=figure([[0,0,0],[260,0,0],[0,130,0],[260,130,0],[130,65,30]],{pad:26,az:40,el:34}); var P=c.P;
+    c.base(PL(0,0,260,130,3),-3,3,{inset:4});
+    var w=world(c,10,4,240,2,{part:'cities',cities:true,hub:3.2,site:'West Texas · training campus'});
+    w.hubs.forEach(function(h,i){ if([1,4,5,7,8,9,10,11].indexOf(i)>=0) c.tag(SITES[i][0],[h[0],h[1],2.8],{up:16+(i%3)*5}); });
+    return c; };
+
+  /* AGI · orbital: the orrery over the world */
+  S.aorb=function(){ var c=figure([[0,0,0],[260,0,0],[0,130,0],[260,130,0],[130,65,60]],{pad:26,az:40,el:30}); var P=c.P;
+    c.base(PL(0,0,260,130,3),-3,3,{inset:4});
+    world(c,10,4,240,2,{part:'cities',cities:true,hub:3.2});
+    orrery(c,130,59,[{r:88,k:.5,z:28,n:16,s:2.4,v:.05},{r:72,k:.5,z:36,n:14,s:2.4,v:-.045},{r:56,k:.5,z:44,n:12,s:2.4,v:.06}],{part:'orb'});
+    c.tag('Orbital compute',[130,59-.5*56,44],{up:26});
+    return c; };
+
+  /* AGI · training campus: the plant and ten halls */
+  S.acamp=function(){ var c=figure([[0,0,0],[200,0,0],[0,140,0],[200,140,0],[20,30,28]],{pad:28,az:40,el:34}); var P=c.P;
+    c.base(PL(0,0,200,140,3),-3,3,{inset:4});
+    trainingCampus(c,8,6,.32,{part:'campus',plantPart:'plant',hallPart:'halls',lineTo:[200,60]});
+    c.tag('Nuclear power',[8+100*.32,6+70*.32,30*.32+12*.32*.4],{up:30}); c.tag('1 MW halls',[8+(30+2*110+50)*.32,6+(330+17)*.32,12*.32],{up:22});
+    return c; };
+
+  /* AGI · nuclear: the reactor row and the landmark dome, close */
+  S.anuc=function(){ var c=figure([[0,0,0],[220,0,0],[0,100,0],[220,100,0],[40,40,60]],{pad:28,az:42,el:30}); var P=c.P;
+    c.base(PL(0,0,220,100,3),-3,3,{inset:4});
+    c.flat(PL(70,20,140,46,1),.03,'lo',{bias:-4.9e4}); c.line(k.planOutline(PL(70,20,140,46,1),.04,P,4),'lo',[140,43,0],{bias:-4.8e4});
+    for(var i=0;i<6;i++) reactor(c,86+i*22,40,8,22,{part:'react'});
+    c.cyl(34,46,26,0,14,'hi',{steps:48,crease:'lo',part:'react',inner:k.lineSvg(k.sideArc(34,46,26,7,P,30),{tone:'faint'})}); c.dome(34,46,26,14,'hi',{part:'react',bias:.05});
+    hall(c,76,70,130,22,10,{rtu:[6,1],pitch:14,part:'turb'}); pad(c,76,94,130,5,4,{s:1,house:false});
+    for(var p=0;p<6;p++){ c.box(PL(92+p*22,52,2.2,16,.2),2.4,1.2,'mid',{steps:1,part:'turb',bias:.05}); c.cyl(93.1,60,.4,0,2.4,'mid',{steps:6,crease:'none',part:'turb'}); }
+    lattice(c,196,12,5,30,{part:'turb',lineTo:[220,0]});
+    c.tag('Nuclear power',[130,40,8*.14+22],{up:30}); c.tag('Turbine hall',[141,81,10],{up:20});
+    return c; };
+
+  /* AGI · the 1 MW rack, exploded: frame, eighteen trays, the NVSwitch band, manifolds, the busbar */
+  S.arack=function(){ var c=figure([[0,0,0],[90,0,0],[0,60,0],[90,60,0],[45,30,118]],{pad:28,az:48,el:26}); var P=c.P;
+    c.base(PL(0,0,90,60,2),-3,3,{inset:3});
+    var x=22,y=12,w=34,d=40,ht=96, units=18, uh=ht/units;
+    /* the frame: base plate, four posts, top plate, the CDU ports at the base */
+    c.box(PL(x-1,y-1,w+2,d+2,.6),0,2.4,'mid',{steps:3,bevel:.4,part:'frame'});
+    [[x,y],[x+w-1.6,y],[x,y+d-1.6],[x+w-1.6,y+d-1.6]].forEach(function(p){ c.box(PL(p[0],p[1],1.6,1.6,.2),2.4,ht+2,'mid',{steps:2,crease:'none',part:'frame'}); });
+    c.box(PL(x-1,y-1,w+2,d+2,.6),ht+4.4,2,'mid',{steps:3,bevel:.4,part:'frame',bias:50});
+    c.cyl(x+8,y+d+2.5,1.4,0,2.4,'mid',{steps:12,part:'cool'}); c.cyl(x+13,y+d+2.5,1.4,0,2.4,'mid',{steps:12,part:'cool'});
+    /* the manifolds on both flanks with a branch stub to every tray; the busbar at the back */
+    c.cyl(x-2.4,y+d/2,1.1,2.4,ht,'mid',{steps:10,crease:'none',part:'cool'}); c.cyl(x+w+2.4,y+d/2,1.1,2.4,ht,'mid',{steps:10,crease:'none',part:'cool',bias:40});
+    c.box(PL(x+2,y-2.4,w-4,1.2,.2),2.4,ht,'hi',{steps:2,crease:'lo',part:'bus'}); c.line(k.segment([x+w/2,y-2.4,2.4],[x+w/2,y-2.4,ht+2.4],P),'hi',[x+w/2,y-2.4,ht/2],{bias:.02,part:'bus'});
+    for(var u=0;u<units;u++){ var z=2.4+u*uh, band=(u>=7&&u<11), tone=band?'mid':'hi';
+      var tray=c.box(PL(x+1.6,y+1.6,w-3.2,d-3.2,.4),z+.4,uh-1.0,tone,{steps:2,crease:'lo',part:band?'nvs':'tray',bias:u*.001});
+      c.line(k.segment([x+2.4,y+d-1.6,z+uh*.35],[x+w-2.4,y+d-1.6,z+uh*.35],P)+k.segment([x+2.4,y+d-1.6,z+uh*.65],[x+w-2.4,y+d-1.6,z+uh*.65],P),'faint',[x+w/2,y+d-1.6,z+uh/2],{bias:u*.001+.01,part:band?'nvs':'tray'});
+      c.dots([[x+5,y+d-1.6,z+uh*.5],[x+8,y+d-1.6,z+uh*.5]],{size:.5,tone:'hi',pulse:true,bias:u*.001+.02,part:band?'nvs':'tray'});
+      c.box(PL(x-2.2,y+d/2-.6,2.4,1.2,.1),z+uh*.4,1.2,'mid',{steps:1,part:'cool',bias:u*.001});
+      c.box(PL(x+w-.2,y+d/2-.6,2.4,1.2,.1),z+uh*.4,1.2,'mid',{steps:1,part:'cool',bias:u*.001+30}); }
+    c.tag('Compute trays · 18',[x+w/2,y+d-1.6,2.4+uh*15],{up:30,dx:30}); c.tag('NVSwitch band',[x+w-1.6,y+d-1.6,2.4+uh*9],{up:16,dx:30}); c.tag('Coolant manifolds',[x+w+2.4,y+d/2,ht*.72],{up:20,dx:26}); c.tag('800 V DC busbar',[x+w/2,y-2.4,ht+2],{up:22,dx:-30}); c.tag('CDU supply · return',[x+10.5,y+d+2.5,2.4],{up:18,dx:40});
+    return c; };
+
+  /* AGI · physical AI: the port depot */
+  S.aphys=function(){ var c=figure([[0,0,0],[200,0,0],[0,120,0],[200,120,0],[60,20,30]],{pad:28,az:40,el:32}); var P=c.P;
+    c.base(PL(0,0,200,120,3),-3,3,{inset:4});
+    c.flat(PL(6,6,188,108,1),.02,'lo',{bias:-4.9e4}); var lanes=''; for(var l=0;l<6;l++) lanes+=k.lineOnTop([10,30+l*14],[190,30+l*14],.04,P); c.line(lanes,'faint',[100,60,.04],{bias:-4.8e4,dashed:true});
+    hall(c,66,8,80,34,16,{rtu:[5,2],pent:true,docks:5,pitch:12,part:'wh'});
+    for(var a=0;a<3;a++) arm(c,80+a*24,52,4.2,{part:'arms'}); c.box(PL(76,46,70,2,.2),0,1,'mid',{steps:1,part:'arms'});
+    [[10,10],[24,10],[10,22],[24,22]].forEach(function(p,i){ c.box(PL(p[0],p[1],12,6,.3),0,5.2,'mid',{steps:2,part:'cont'}); if(i<2) c.box(PL(p[0],p[1],12,6,.3),5.2,5.2,'mid',{steps:2,part:'cont',bias:.02}); });
+    c.cyl(44,12,.6,0,14,'mid',{steps:8,crease:'none',part:'cont'}); c.cyl(44,30,.6,0,14,'mid',{steps:8,crease:'none',part:'cont'}); c.box(PL(43.4,12,1.2,18,.1),14,1,'mid',{steps:1,part:'cont',bias:.02});
+    truck(c,60,70,2.6,{part:'trucks'}); truck(c,110,84,2.6,{part:'trucks'});
+    for(var g=0;g<5;g++) c.box(PL(14+g*10,56,4,2.6,.3),0,1.6,'mid',{steps:2,part:'agv'});
+    for(var v=0;v<5;v++){ car(c,20+v*14,98,9.4,3.7,{part:'cars',tone:v%2?'mid':'hi'}); c.cyl(31.4+v*14,104,.5,0,3.2,'mid',{steps:6,crease:'none',part:'cars'}); c.box(PL(30.9+v*14,103.5,1,1,.1),3.2,.4,'hi',{steps:1,part:'cars',bias:.02}); }
+    humanoid(c,120,62,4.4,{part:'bots'}); humanoid(c,150,74,4.4,{part:'bots'});
+    drone(c,176,20,4,{part:'drones'}); drone(c,176,40,4,{part:'drones'});
+    c.tag('Industrial robots',[104,52,14],{up:26,dx:30}); c.tag('AGVs',[36,57,1.6],{up:18,dx:-14}); c.tag('Humanoids',[150,74,8.4],{up:20,dx:24}); c.tag('Autonomous trucks',[128,86,8],{up:22,dx:30}); c.tag('Autonomous cars',[25,100,3.3],{up:22,dx:-10}); c.tag('Drones',[176,40,2],{up:20,dx:10});
+    return c; };
+
+  /* ---------- the storyline: the same stops as the film ---------- */
+  var ERA=[{n:'Cloud',y:'2023',c:'#8b93a6'},{n:'Today',y:'2026',c:'#e0a355'},{n:'AGI',y:'2031',c:'#57c7dd'}];
+  var STOPS=[
+    {id:'cloud',era:0,n:'Overview',title:'Cloud era',fig:S.cloud,lit:['hotel','colo','bld'],hint:'Hover a building',rows:'Rack power 4–8 kW · Downtown: carrier hotel · colocation · Out of town: regional cloud campus',hold:9},
+    {id:'tcamp',era:1,n:'Campus',title:'1 GW campus',fig:S.tcamp,lit:['bld'],hint:'Hover a part',rows:'Rack power ~140 kW · IT load 1 GW · Facility load ~1.2 GW · PUE ~1.2 · Racks ~7,100',hold:8},
+    {id:'tbld',era:1,n:'Data halls',title:'One building',fig:S.tbld,lit:['hall'],hint:'Hover a hall',rows:'Campus 4 buildings · Building 4 halls · 250 MW · Hall ~440 racks · ~62 MW · Total 16 halls · 1 GW',hold:7},
+    {id:'thall',era:1,n:'Inside a hall',title:'Inside a hall',fig:S.thall,lit:['racks'],hint:'Hover the racks, the cooling, the walls',rows:'GB200 NVL72 racks, liquid-cooled, in rows · Per rack ~140 kW · Per hall ~440 racks · ~62 MW',hold:7},
+    {id:'tpow',era:1,n:'Power',title:'Power',fig:S.tpow,lit:['gas','grid'],hint:'Hover the turbines or the substation',rows:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines · Gas turbines 34 × 35 MW',hold:7},
+    {id:'tess',era:1,n:'ESS batteries',title:'ESS batteries',fig:S.tess,lit:['bess'],hint:'Hover the yard',rows:'Load shaping, ramp and backup · Containers 120',hold:6},
+    {id:'agi',era:2,n:'Overview',title:'AGI era',fig:S.agi,lit:['plant','halls','cities','orb','phys'],hint:'Hover a region',rows:'5–10 GW training campus · Global inference · Orbital compute · Physical AI',hold:9},
+    {id:'ainf',era:2,n:'Global inference',title:'Global inference',fig:S.ainf,lit:['cities'],hint:'Hover a hub',rows:'Inference buildings in every metro, connected · Per building 10–50 MW · Racks 20–60 kW',hold:7},
+    {id:'aorb',era:2,n:'Orbital',title:'Orbital compute',fig:S.aorb,lit:['orb'],hint:'The craft ride the rails',rows:'',hold:6},
+    {id:'acamp',era:2,n:'Training campus',title:'Training campus',fig:S.acamp,lit:['halls','plant'],hint:'Hover the plant or the halls',rows:'5–10 GW · Power: nuclear',hold:7},
+    {id:'anuc',era:2,n:'Nuclear power',title:'Nuclear power',fig:S.anuc,lit:['react'],hint:'Hover a module',rows:'5–10 GW',hold:6},
+    {id:'arack',era:2,n:'1 MW racks',title:'1 MW rack',fig:S.arack,lit:['tray','nvs'],hint:'Hover a tray, the manifolds, the busbar',rows:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled · Fed at 800 V DC through solid-state transformers',hold:8},
+    {id:'aphys',era:2,n:'Physical AI',title:'Physical AI',fig:S.aphys,lit:['arms','trucks','cars','bots','drones','agv'],hint:'Hover a machine',rows:'Robots, humanoids, autonomous vehicles, drones, served from the edge',hold:8}];
+  var PARTNAME={hotel:'Carrier hotel',colo:'Colocation facility',bld:'Buildings',grid:'Grid substation',diesels:'Diesel generators',gas:'Gas turbines',bess:'ESS batteries',power:'Power block',cool:'Cooling',hall:'Data halls',shell:'Shell',racks:'Racks',sw:'Switchgear',campus:'Training campus',plant:'Nuclear plant',halls:'1 MW halls',cities:'Global inference',orb:'Orbital compute',phys:'Physical AI',react:'Reactor modules',turb:'Turbine hall',frame:'Rack frame',tray:'Compute trays',nvs:'NVSwitch band',bus:'800 V DC busbar',wh:'Warehouse',arms:'Industrial robots',cont:'Containers',trucks:'Autonomous trucks',agv:'AGVs',cars:'Autonomous cars',bots:'Humanoids',drones:'Drones',site:'Training campus'};
+
+  /* ---------- the chrome: a paper plate, corners, era bar, chips, play ---------- */
+  host.classList.add('ana-host'); host.innerHTML='<div class="ana"><div class="ana-plate iso" data-theme="light"><div class="ana-stage"></div>'+
+    '<div class="ana-corner ana-fig"></div><div class="ana-corner ana-title"></div><div class="ana-corner ana-hint"></div><div class="ana-corner ana-read"></div></div>'+
+    '<div class="e3d ana-chrome in"><div class="e3d-bar">'+ERA.map(function(e,i){ return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+e.c+'"><i></i>'+e.n+'<b>'+e.y+'</b></button>'; }).join('')+'<span class="e3d-gap"></span><button class="e3d-play" data-play title="Play (space)"></button></div>'+
+    '<div class="e3d-chips">'+ERA.map(function(e,i){ return (i===2?'<i class="ana-brk"></i>':'')+'<div class="e3d-grp" style="--ec:'+e.c+'"><div class="e3d-row">'+STOPS.filter(function(s){ return s.era===i; }).map(function(s){ return '<button class="e3d-chip" data-spot="'+s.id+'">'+s.n+'</button>'; }).join('')+'</div></div>'; }).join('')+'</div></div></div>';
+  var root=host.querySelector('.ana'), stage=root.querySelector('.ana-stage'), ui=root.querySelector('.ana-chrome'), cache={}, cur=-1, raf=0, disposed=false, t0=0, playing=false, hold=0, sel=null, hoverPart=null, liveCtx=null;
+  function built(i){ var st=STOPS[i]; if(!cache[st.id]){ var c=st.fig(); cache[st.id]={c:c,svg:k.figureSvg({width:W,height:H,label:st.title,body:c.render()})}; } return cache[st.id]; }
+  function litAll(on){ stage.querySelectorAll('.iso-solid[data-lit]').forEach(function(e){ e.removeAttribute('data-lit'); }); stage.querySelectorAll('[data-part].glow').forEach(function(e){ e.classList.remove('glow'); }); }
+  function light(parts,cls){ parts.forEach(function(p){ stage.querySelectorAll('[data-part="'+p+'"]').forEach(function(g){ (cls||'glow').split(' ').forEach(function(x){ g.classList.add(x); }); g.querySelectorAll('.iso-solid').forEach(function(e){ e.setAttribute('data-lit',''); }); }); }); }
+  function show(i,why){ if(i===cur) return; cur=i; var st=STOPS[i], b=built(i);
+    var old=stage.querySelector('svg'); if(old){ old.classList.add('out'); setTimeout(function(){ if(old.parentNode) old.parentNode.removeChild(old); },420); }
+    stage.insertAdjacentHTML('beforeend',b.svg); var svg=stage.lastElementChild; svg.classList.add('in'); liveCtx=b.c;
+    root.querySelector('.ana-fig').textContent='Fig '+(i+1)+' · '+ERA[st.era].n.toUpperCase()+' '+ERA[st.era].y;
+    root.querySelector('.ana-title').textContent=st.title; root.querySelector('.ana-hint').textContent=st.hint; root.querySelector('.ana-read').textContent=st.rows;
+    sel=null; setTimeout(function(){ if(cur!==i||disposed) return; light(st.lit,'glow flash'); setTimeout(function(){ stage.querySelectorAll('.flash').forEach(function(g){ g.classList.remove('flash'); }); },1800); },RM?0:500);
+    ui.querySelectorAll('.e3d-era').forEach(function(bt){ bt.classList.toggle('on',+bt.dataset.era===st.era); });
+    ui.querySelectorAll('.e3d-chip').forEach(function(bt){ bt.classList.toggle('on',bt.dataset.spot===st.id); });
+    hold=0; }
+  function idx(id){ for(var i=0;i<STOPS.length;i++) if(STOPS[i].id===id) return i; return 0; }
+  function setPlay(on){ playing=on; ui.querySelector('[data-play]').classList.toggle('on',on); hold=0; }
+  ui.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.spot){ setPlay(false); show(idx(b.dataset.spot)); }
+    else if(b.dataset.era!=null){ setPlay(false); show(STOPS.findIndex(function(s){ return s.era===+b.dataset.era; })); }
+    else if(b.hasAttribute('data-play')) setPlay(!playing); });
+  function keys(e){ if(!root.isConnected){ return; } if(e.key===' '){ e.preventDefault(); setPlay(!playing); } else if(e.key==='1'||e.key==='2'||e.key==='3'){ setPlay(false); show(STOPS.findIndex(function(s){ return s.era===+e.key-1; })); }
+    else if(e.key==='ArrowRight'){ setPlay(false); show((cur+1)%STOPS.length); } else if(e.key==='ArrowLeft'){ setPlay(false); show((cur+STOPS.length-1)%STOPS.length); } }
+  addEventListener('keydown',keys);
+  /* hover lights a part and names it in the readout; a click keeps it */
+  stage.addEventListener('pointerover',function(e){ var g=e.target.closest&&e.target.closest('[data-part]'); var p=g?g.getAttribute('data-part'):null; if(p===hoverPart) return;
+    if(hoverPart&&hoverPart!==sel) stage.querySelectorAll('[data-part="'+hoverPart+'"]').forEach(function(x){ x.classList.remove('hover'); });
+    hoverPart=p; if(p){ stage.querySelectorAll('[data-part="'+p+'"]').forEach(function(x){ x.classList.add('hover'); }); root.querySelector('.ana-read').textContent=(PARTNAME[p]||p)+' · '+STOPS[cur].rows; }
+    else root.querySelector('.ana-read').textContent=STOPS[cur].rows; });
+  stage.addEventListener('pointerleave',function(){ if(hoverPart) stage.querySelectorAll('[data-part="'+hoverPart+'"]').forEach(function(x){ x.classList.remove('hover'); }); hoverPart=null; root.querySelector('.ana-read').textContent=STOPS[cur].rows; });
+  /* the loop: the tour's clock and the live craft */
+  var last=0; function frame(now){ if(disposed) return; raf=requestAnimationFrame(frame); var dt=last?Math.min((now-last)/1000,1/30):1/60; last=now; t0+=dt;
+    if(playing&&!RM){ hold+=dt; if(hold>STOPS[cur].hold){ show((cur+1)%STOPS.length); } }
+    if(liveCtx&&liveCtx.live.length&&!RM){ liveCtx.live.forEach(function(l){ var g=stage.querySelector('svg.in [data-live="'+l.id+'"]')||stage.querySelector('[data-live="'+l.id+'"]'); if(g) g.innerHTML=craftSvg(liveCtx,l.cx,l.cy,l.rings,t0); }); } }
+  show(0); raf=requestAnimationFrame(frame);
+  return {dispose:function(){ disposed=true; cancelAnimationFrame(raf); removeEventListener('keydown',keys); host.classList.remove('ana-host'); host.innerHTML=''; },
+    go:function(id){ setPlay(false); show(idx(id)); }, play:function(){ setPlay(true); }, stops:STOPS.map(function(s){ return s.id; }), fit:FIT};
+};
+
+let __iso=null;
+function loadIsoKit(){
+  if(__iso) return __iso;
+  __iso=new Promise((res,rej)=>{
+    if(window.ISO) return res(window.ISO);
+    const t=document.createElement('script');
+    t.src='vendor/iso-kit.js'; t.async=true;
+    t.onload=()=>window.ISO?res(window.ISO):rej(new Error('iso-kit'));
+    t.onerror=()=>rej(new Error('iso-kit'));
+    document.head.appendChild(t);
+  });
+  return __iso;
+}
 function mountScene(el){
-  if(!el)return; const my=++sceneTok;
-  loadThree().then(()=>{ if(my!==sceneTok||!el.isConnected)return;
-    liveScene=(el.dataset.scene==='orbit'?window.mountOrbit:window.mountEras)(el);
+  if(!el)return; const my=++sceneTok; const kind=el.dataset.scene;
+  (kind==='anatomy'?loadIsoKit():loadThree()).then(()=>{ if(my!==sceneTok||!el.isConnected)return;
+    liveScene=(kind==='orbit'?window.mountOrbit:kind==='anatomy'?window.mountAnatomy:window.mountEras)(el);
   }).catch(()=>{});
 }
 
