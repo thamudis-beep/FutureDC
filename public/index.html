@@ -290,6 +290,10 @@
   .e3d-enter{flex-direction:column;gap:12px}
   .e3d-gpu{display:none;margin:0;max-width:440px;text-align:center;font:12px/1.5 var(--mono);color:var(--dim)}
   .e3d.nogpu .e3d-gpu{display:block}
+  .nogpu .e3d-gpu{display:block}
+  .rm .e3d-rm{display:block}
+  .e3d-rm{display:none;margin:0;max-width:440px;text-align:center;font:12px/1.5 var(--mono);color:var(--dim)}
+  .e3d.rm .e3d-rm{display:block}
   .e3d.in .e3d-enter button{pointer-events:none}
   .e3d-enter button{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.01em;color:var(--ink);
     padding:12px 22px;background:rgba(8,10,14,.66);border-color:rgba(255,255,255,.16);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 18px 50px rgba(0,0,0,.5)}
@@ -523,7 +527,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v121 · anatomy plays</div>
+<div class="ver">v122 · films play under reduce motion</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1512,7 +1516,7 @@ function sceneRig(T,host,K,scene,cfg){
   host.appendChild(renderer.domElement);
   var camera=new T.PerspectiveCamera(cfg.fov||42,1,cfg.near||.3,cfg.far||1400);
   camera.layers.enable(1); camera.layers.enable(2);   /* 1: the glow proxies · 2: sky, kept out of the bloom's depth pass */
-  if(soft) host.classList.add('nogpu');
+  if(soft) host.classList.add('nogpu'); if(RM) host.classList.add('rm');
 
   var stops=cfg.stops, wide=cfg.wide, views=cfg.views, groups=cfg.groups, chapters=cfg.chapters;
   var byId={}; stops.forEach(function(s){byId[s.id]=s;});
@@ -1531,7 +1535,6 @@ function sceneRig(T,host,K,scene,cfg){
   function flyTo(v){
     cur=v; zoomed=false; idle=0; if(cfg.onChapter) cfg.onChapter(v);
     var dist=tgt.distanceTo(v.t), to={t:v.t.clone(),r:fitRadius(v),th:unwrap(v.th,th),ph:v.ph,up:(v.up||YUP).clone()};
-    if(RM){ tgt.copy(to.t); gTgt.copy(to.t); rad=gRad=to.r; th=gTh=to.th; ph=gPh=to.ph; up.copy(to.up); mv=null; syncUI(); return; }
     var L=cfg.liftScale||1;
     mv={from:{t:tgt.clone(),r:rad,th:th,ph:ph,up:up.clone()},to:to,t:0,dur:1.6+Math.min(1.4,dist/(120*L)),lift:Math.min(90*L,dist*.4)};
     syncUI();}
@@ -1612,7 +1615,7 @@ function sceneRig(T,host,K,scene,cfg){
     '<div class="e3d-chips">'+groups.map(function(gp,e){
       return '<div class="e3d-grp" style="--ec:'+hex(gp.color)+'"><div class="e3d-row">'+
         stops.filter(function(sp){return sp.era===e&&sp.n;}).map(function(sp){return '<button class="e3d-chip" data-spot="'+sp.id+'">'+sp.n+'</button>';}).join('')+'</div></div>'; }).join('')+'</div>'+
-    '<div class="e3d-enter"><button data-enter>Enter</button><p class="e3d-gpu">This browser is drawing without a GPU. Turn on hardware acceleration (chrome://settings/system) for the 3D scene.</p></div>'+
+    '<div class="e3d-enter"><button data-enter>Enter</button><p class="e3d-gpu">This browser is drawing without a GPU. Turn on hardware acceleration (chrome://settings/system) for the 3D scene.</p><p class="e3d-rm">Reduce Motion is on in your system settings. The film plays; the ambient motion is off.</p></div>'+
     (cfg.panel?'<div class="e3d-panel">'+cfg.panel+'</div>':'')+
     (cfg.notes?'<svg class="e3d-svg"><defs><filter id="e3dsoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
       '<g class="dims" filter="url(#e3dsoft)"></g><line/><circle class="o" r="11" fill="none" stroke-width="1.5"/><circle class="i" r="2.2"/></svg><div class="e3d-note"></div>':'');
@@ -1757,7 +1760,7 @@ function sceneRig(T,host,K,scene,cfg){
     ui.querySelectorAll('.e3d-chip').forEach(function(b){ b.classList.toggle('on',b.dataset.spot===chipId); });
     var pb=ui.querySelector('[data-play]'); pb.classList.toggle('on',tour.on); pb.title=tour.on?'Pause (space)':'Play (space)';
     ui.classList.toggle('in',tour.entered);}
-  function enter(){ tour.entered=true; if(!RM){ tour.i=0; startTour(); } else syncUI(); }
+  function enter(){ tour.entered=true; tour.i=0; startTour(); }
   function toggleTour(){ if(!tour.entered){enter();return;} if(tour.on) pauseTour(); else startTour(); }
   ui.addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b) return;
@@ -1801,14 +1804,14 @@ function sceneRig(T,host,K,scene,cfg){
     var raw=clock.getDelta(), dt=Math.min(raw,.05), t=clock.elapsedTime;
     if(!soft&&!RM&&tier<3&&t>2){ ft+=raw; fn++; if(fn>=45){ if(ft/fn>.055) stepDown(); ft=0; fn=0; } }
     if(mv) stepMove(dt);
-    else if(tour.on&&!RM) tourStep(dt);
+    else if(tour.on) tourStep(dt);
     else{
       if(!drag&&!RM){ idle+=dt; if(idle>4){ if(cur===wide) gTh=wide.th+Math.sin((idle-4)*.11)*.085; else gTh+=dt*.022; } }
       var k=RM?1:1-Math.pow(.002,dt);
       th+=(gTh-th)*k; ph+=(gPh-ph)*k; rad+=(gRad-rad)*k; tgt.lerp(gTgt,k);
     }
     place();
-    cfg.tick(RM?0:dt,t,camera); pinsTick(t); notesTick(dt,t);
+    cfg.tick(dt,t,camera); pinsTick(t); notesTick(dt,t);
     var bl=bloom&&glowing&&!glowOff;
     if(bl){ noteIds.forEach(function(id){ notes[id].glow.pass(true); }); bloom.render(); noteIds.forEach(function(id){ notes[id].glow.pass(false); }); }
     renderer.render(scene,camera);
@@ -2991,7 +2994,7 @@ function mountOrbit(host){
   };
 
   var tmp=new T.Vector3(), sceneT=0;
-  function onChapter(v){ curId=v.id; if(RM) return; if(v.id==='rack') sleds.forEach(function(q,i){ q.t0=sceneT+1.8+i*.25; }); }
+  function onChapter(v){ curId=v.id; if(v.id==='rack') sleds.forEach(function(q,i){ q.t0=sceneT+1.8+i*.25; }); }
   function tick(dt,t,cam){
     earth.rotation.y+=dt*.003; earthM.uniforms.cloudOff.value+=dt*.0006/(Math.PI*2);
     sceneT+=dt; t=sceneT;
@@ -3370,7 +3373,7 @@ window.mountAnatomy=function(host){
   host.innerHTML='<div class="ana"><div class="ana-plate iso"><div class="ana-stage"><svg class="iso-svg ana-world" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The physical footprint: the Cloud era, Today and the AGI era on one rail">'+body+'</svg>'+
     '<svg class="iso-svg ana-sky" xmlns="http://www.w3.org/2000/svg">'+live.map(function(l){ return '<g class="ana-live" data-live="'+l.id+'"></g>'; }).join('')+'</svg><svg class="ana-svg"><circle class="ana-ring"/><circle class="ana-dot"/><line class="ana-lead"/></svg><div class="ana-tags"></div><div class="ana-note"></div><div class="ana-cards"></div></div>'+
     '<div class="ana-corner ana-title"></div><div class="ana-corner ana-hint">Drag to pan · wheel to zoom · space plays</div></div>'+
-    '<div class="e3d ana-chrome"><div class="e3d-enter"><button data-enter>Enter</button></div><div class="e3d-bar">'+ERA.map(function(e,i){ return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+e.c+'"><i></i>'+e.n+'<b>'+e.y+'</b></button>'; }).join('')+'<span class="e3d-gap"></span><button class="e3d-play" data-play title="Play (space)"></button></div>'+
+    '<div class="e3d ana-chrome'+(RM?' rm':'')+'"><div class="e3d-enter"><button data-enter>Enter</button><p class="e3d-rm">Reduce Motion is on in your system settings. The film plays; the ambient motion is off.</p></div><div class="e3d-bar">'+ERA.map(function(e,i){ return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+e.c+'"><i></i>'+e.n+'<b>'+e.y+'</b></button>'; }).join('')+'<span class="e3d-gap"></span><button class="e3d-play" data-play title="Play (space)"></button></div>'+
     '<div class="e3d-chips">'+ERA.map(function(e,i){ return (i===2?'<i class="ana-brk"></i>':'')+'<div class="e3d-grp" style="--ec:'+e.c+'"><div class="e3d-row">'+STOPS.filter(function(s){ return s.era===i; }).map(function(s){ return '<button class="e3d-chip" data-spot="'+s.id+'">'+s.n+'</button>'; }).join('')+'</div></div>'; }).join('')+'</div></div></div>';
   var root=host.querySelector('.ana'), stage=root.querySelector('.ana-stage'), svg=root.querySelector('.ana-world'), sky=root.querySelector('.ana-sky'), ov=root.querySelector('.ana-svg'), tagsEl=root.querySelector('.ana-tags'), note=root.querySelector('.ana-note'), cardsEl=root.querySelector('.ana-cards'), ui=root.querySelector('.ana-chrome');
   var ring=ov.querySelector('.ana-ring'), dot=ov.querySelector('.ana-dot'), lead=ov.querySelector('.ana-lead');
@@ -3387,7 +3390,7 @@ window.mountAnatomy=function(host){
     if(svg.style.transform!==t){ svg.style.transform=t; sky.style.transform=t; } }
   function setVB(v){ cam=v; applyCam(); }
   function rebase(){ if(cam&&(base.w!==cam.w||base.x!==cam.x||base.y!==cam.y)){ setBase(cam); applyCam(); } svg.classList.remove('moving'); }
-  function crane(v,secs){ from=cam; to=v; mt=0; mT=RM?0:(secs||1.8); settled=false; svg.classList.add('moving'); if(!from||mT===0){ to=null; setVB(v); rebase(); settled=true; } }
+  function crane(v,secs){ from=cam; to=v; mt=0; mT=(secs||1.8); settled=false; svg.classList.add('moving'); if(!from||mT===0){ to=null; setVB(v); rebase(); settled=true; } }
   function step(dt){ if(!to) return; mt+=dt; var u=mT?Math.min(1,mt/mT):1, e=u*u*(3-2*u);
     var lw=Math.exp(Math.log(from.w)*(1-e)+Math.log(to.w)*e), lh=lw*SH/SW, cx=(from.x+from.w/2)*(1-e)+(to.x+to.w/2)*e, cy=(from.y+from.h/2)*(1-e)+(to.y+to.h/2)*e;
     setVB({x:cx-lw/2,y:cy-lh/2,w:lw,h:lh}); if(u>=1){ to=null; rebase(); settled=true; onSettle(); } }
@@ -3447,7 +3450,7 @@ window.mountAnatomy=function(host){
   /* ---------- the loop: the crane, the film's clock, the glides, the craft ---------- */
   function frame(now){ if(disposed) return; raf=requestAnimationFrame(frame); var raw=last?(now-last)/1000:1/60, dt=Math.min(raw,1/30); last=now; t0+=dt; fps.push(raw); if(fps.length>40) fps.shift();
     if(to) step(dt);
-    else if(playing&&!RM){ var st=STOPS[cur]; hold+=dt;
+    else if(playing){ var st=STOPS[cur]; hold+=dt;
       if(st&&st.glide&&settled&&!free&&!glideDone){ glideT+=dt; var u=Math.min(1,glideT/Math.max(.1,CH[chap][1]-2.2)); var a=vbOf(st.f), b=vbOf(st.glide); setVB({x:a.x+(b.x-a.x)*u,y:a.y+(b.y-a.y)*u,w:a.w+(b.w-a.w)*u,h:a.h+(b.h-a.h)*u}); if(u>=1){ glideDone=true; rebase(); } }
       if(hold>CH[chap][1]){ var prev=STOPS[cur]; chap=(chap+1)%CH.length; var nid=CH[chap][0]; show(idx(nid),{force:true,secs:nid==='wide'||prev.era!==byId[nid].era?2.8:1.9}); } }
     placeNotes();

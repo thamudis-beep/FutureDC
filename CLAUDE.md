@@ -489,6 +489,19 @@ sky layer. What the skill's 4× sweep would still add: the explode on
 hover, true domes from `kit/lathe.mjs`, turned wheels, and the skill's
 line-end and depth audits.
 
+**Reduce Motion never stops a film** (v122, "video not working...
+maybe check browser settings, it's forcing"): with `prefers-reduced-motion:
+reduce` on (an iPad or laptop accessibility setting), the rig used to
+skip `startTour()` on Enter, snap every crane and freeze the scene
+tick, and the Anatomy tab's clock never advanced — both films looked
+dead. Now the storytelling motion (the crane, the holds, the glides, the
+docking casings, the vehicles and craft) always plays; reduced motion
+only stills the ambient layer: the idle drift, the pin pulse, the
+dash flows, and the glow flashes (a steady half glow instead). A
+line under the Enter pill says so (`.e3d-rm`, shown by an `rm` class
+on the host and on the tab's chrome). Keep it that way: a film that
+does not play reads as broken, not as considerate.
+
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map
 is rendered ONCE (`staticShadow`: `shadowMap.autoUpdate=false`), so
