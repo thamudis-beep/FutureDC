@@ -452,7 +452,34 @@ overridden on `.ana-plate` to the site's own near-black (#0b0d12 paper,
 faces a step lighter, lines from #262c37 faint to #c9d2de hi), the lit
 tone is the amber (#e0a355), the cards, tags and chips are the film's
 own dark glass, and the glow is stronger than it was on paper because
-on black the halo is the light. Probes: `scratchpad/ana/dev.html` mounts the tab alone
+on black the halo is the light. v121 fixed three things the user saw on his laptop ("doesn't
+work at all, no animation, no film, no glow as we move"): (1) the tab
+now opens behind an ENTER pill like the film and plays on Enter (or
+space), instead of waiting for a play press; (2) THE CAMERA NEVER
+RE-RASTERISES DURING A MOVE: the viewBox is a `base` set only at rest,
+and the crane, the glides, drag and wheel drive a CSS `transform`
+(translate + scale, `transform-origin:0 0`, `will-change:transform`)
+on the world and sky SVGs, so the compositor scales a cached raster;
+`applyCam` re-bases (sets the viewBox to the current view, one
+raster) only when the upscale passes 2.5× or the downscale 0.4×, at
+settle, at a glide's end, on pointer-up and 180 ms after the last
+wheel — frame time under SwiftShader fell from 100–250 ms to 17–30 ms
+everywhere, and a GPU-less Chrome gets a moving film instead of a
+freeze; the flow dashes stop while moving and at the far LOD, and
+step at 5 Hz otherwise; the cards lost their `backdrop-filter`; (3)
+the glow is now in two beats and costs no per-frame paint: `show()`
+marks the destination parts `lit` (the kit's `data-lit` recolour,
+free during the move since it lands in the next re-base) and
+`onSettle` swaps that for `glow` + `flash` (a strong `drop-shadow`,
+held 1.3 s by a timeout, then the quiet one — no keyframes, since a
+filter animation on a group of hundreds of paths is a repaint per
+frame). Hover is ignored while playing or moving: a still cursor over
+a moving world fires `pointerover` and lit random parts mid-crane.
+Hall detail added at the fine LOD: a fibre tray with three trunks and a
+drop to every rack over every row, supply and return headers with a
+branch to every rack beside it, cross trays to the strip, CDU risers
+and lit strips, two mains along the strip, in both Hall 1 and the 1 MW
+hall. Probes: `scratchpad/ana/dev.html` mounts the tab alone
 (`shot.js` waits for `settled()` and reports frame time; no WebGL, so
 no SwiftShader wait) and `scratchpad/anapage.js` shoots it inside the
 page and checks dispose. Frame time under SwiftShader is 100–250 ms at
