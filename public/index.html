@@ -527,7 +527,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v122 · films play under reduce motion</div>
+<div class="ver">v123 · play moves on</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -1553,7 +1553,7 @@ function sceneRig(T,host,K,scene,cfg){
     for(var i=0;i<chapters.length;i++) if(chapters[i][0]===v){ tour.i=i; tour.hold=0; break; } }
   function pauseTour(){ if(!tour.on) return; tour.on=false; mv=null; gTgt.copy(tgt); gRad=rad; gTh=th; gPh=ph; syncUI(); }
   /* play: from the stop you are on, or on from where you paused; only a stop outside the film restarts it */
-  function startTour(){ tour.on=true; if(cur!==chapters[tour.i][0]){ tour.hold=0; flyTo(chapters[tour.i][0]); } syncUI(); }
+  function startTour(){ tour.on=true; if(cur!==chapters[tour.i][0]){ tour.hold=0; flyTo(chapters[tour.i][0]); } else if(!mv&&tour.hold>1.5){ tour.hold=chapters[tour.i][1]; } syncUI(); }
   function tourStep(dt){
     if(mv) return;
     tour.hold+=dt;
@@ -3345,7 +3345,7 @@ window.mountAnatomy=function(host){
       rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
       tags:[{at:[T(204,445)[0],T(204,445)[1],2*S],l:'Power block'},{at:[T(246,441)[0],T(246,441)[1],2.5*S],l:'Hall 1'},{at:[T(302,441)[0],T(302,441)[1],2.5*S],l:'Hall 2'},{at:[T(358,441)[0],T(358,441)[1],2.5*S],l:'Hall 3'},{at:[T(414,441)[0],T(414,441)[1],2.5*S],l:'Hall 4'}]},
     {id:'nvl',era:1,n:'Inside a hall',f:F([T(234,446)[0],T(234,446)[1],.3],4.2),glide:F([T(234,462)[0],T(234,462)[1],.3],3.4),hold:7,title:'Inside a hall',slot:'tr',at:[T(232.1,452)[0],T(232.1,452)[1],2.6*S],glow:['racks'],desc:'GB200 NVL72 racks, liquid-cooled, in rows. Networking and cooling at the end of the hall.',
-      rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']],tags:[{at:[T(232.1,436)[0],T(232.1,436)[1],.2],l:'Cold aisle'},{at:[T(236.3,458)[0],T(236.3,458)[1],.2],l:'Hot aisle'},{at:[T(240,476.5)[0],T(240,476.5)[1],2*S],l:'CDUs'}]},
+      rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
     {id:'onsite',era:1,n:'Power',f:F([(gasC[0]+subC[0])/2,(gasC[1]+subC[1])/2,1],40),hold:6,title:'Power',slot:'bl',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],tags:[{at:[gasC[0],gasC[1],9*S],l:'Gas turbines · 34 × 35 MW'},{at:[subC[0],subC[1],12*S],l:'345 kV grid substation'}]},
     {id:'bess',era:1,n:'ESS batteries',f:F([essC[0],essC[1],0],9),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
@@ -3422,7 +3422,8 @@ window.mountAnatomy=function(host){
     ui.querySelectorAll('.e3d-era').forEach(function(bt){ bt.classList.toggle('on',+bt.dataset.era===st.era); }); ui.querySelectorAll('.e3d-chip').forEach(function(bt){ bt.classList.toggle('on',bt.dataset.spot===st.id); });
     crane(vbOf(st.f),o.secs==null?(cam?1.9:0):o.secs); placeNotes(); if(settled&&!to) onSettle(); }
   function idx(id){ for(var i=0;i<STOPS.length;i++) if(STOPS[i].id===id) return i; return 0; }
-  function setPlay(on){ playing=on; if(on&&hoverPart){ svg.querySelectorAll('[data-part="'+hoverPart+'"]').forEach(function(x){ x.classList.remove('hover'); }); hoverPart=null; } ui.querySelector('[data-play]').classList.toggle('on',on); if(on){ if(free||cur<0){ chap=0; show(idx(CH[0][0]),{force:true}); } hold=0; } }
+  function setPlay(on){ var was=playing; playing=on; if(on&&hoverPart){ svg.querySelectorAll('[data-part="'+hoverPart+'"]').forEach(function(x){ x.classList.remove('hover'); }); hoverPart=null; } ui.querySelector('[data-play]').classList.toggle('on',on);
+    if(on&&!was){ if(free||cur<0){ chap=0; show(idx(CH[0][0]),{force:true}); hold=0; } else if(settled&&!to&&hold>1.5){ hold=CH[chap][1]; } } }
   function pause(){ if(playing) setPlay(false); if(hoverPart){ svg.querySelectorAll('[data-part="'+hoverPart+'"]').forEach(function(x){ x.classList.remove('hover'); }); hoverPart=null; } }
   ui.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
     if(b.dataset.spot){ pause(); chap=CH.findIndex(function(ch){ return ch[0]===b.dataset.spot; }); show(idx(b.dataset.spot)); }

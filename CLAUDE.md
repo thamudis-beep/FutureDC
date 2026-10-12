@@ -502,6 +502,16 @@ line under the Enter pill says so (`.e3d-rm`, shown by an `rm` class
 on the host and on the tab's chrome). Keep it that way: a film that
 does not play reads as broken, not as considerate.
 
+**Play always does something** (v123, "play thing doesn't work"): in
+both films, pressing play after a pause on a stop already held more
+than 1.5 s moves on to the next chapter at once (`startTour` sets
+`tour.hold` to the chapter's hold; the tab's `setPlay` does the same
+with `hold`) instead of silently finishing the remaining hold, which
+on the 8 s wide shot read as a dead button. The Anatomy tab's stops
+carry exactly the film's tags and no others: the "Cold aisle", "Hot
+aisle" and "CDUs" tags on the hall stop were an invention and were
+removed ("you are showing labels which we had killed").
+
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map
 is rendered ONCE (`staticShadow`: `shadowMap.autoUpdate=false`), so
