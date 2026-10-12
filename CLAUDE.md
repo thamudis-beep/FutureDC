@@ -411,8 +411,8 @@ and the tab's own `.ana-*` rules sit in the page's `<style>`; nothing
 else of the skill ships. v118 was thirteen separate figures, one per
 stop, and was wrong: "to be clear, I want to replicate the existing
 scene". v119 is ONE WORLD: one SVG of the whole rail (about 18,000
-paths, built in about 2 s) on one projection (azimuth 42°, elevation
-30°, `P.scale` 100, `K` user units per world unit), the three pedestals
+paths, built in about 2 s) on one projection (azimuth 90°, elevation
+55° since v125 — see below, `P.scale` 100, `K` user units per world unit), the three pedestals
 at the film's own X0/X1/X2 and sizes, every stage laid out from the
 film's plans through the film's own metre→world maps (`T` = the film's
 `W`, `TC` = its `WC`, the AGI stage at the film's 1:12 diorama origin,
@@ -433,7 +433,7 @@ unit lines, LEDs, rooftop rings — when they would be sub-pixel); the
 LEDs are faint amber dots (`.ana-led`, size in world units × K — a size
 in the old px convention gave 30-unit amber discs that read as an orange
 pad, v119's one real bug); the craft ride the orrery rails on a second
-SVG (`.ana-sky`, same viewBox, its own layer, rebuilt every third frame
+SVG (`.ana-sky`, same viewBox, its own layer, rebuilt every fourth frame
 and only while the orrery is in view) so the world SVG never repaints
 at rest. The stops, framings, holds, cards, rows, tags, glows and
 chapter order are the film's (`STOPS`, `CH`): wide (the three thesis
@@ -512,32 +512,49 @@ carry exactly the film's tags and no others: the "Cold aisle", "Hot
 aisle" and "CDUs" tags on the hall stop were an invention and were
 removed ("you are showing labels which we had killed").
 
-**v124, the user's four asks on the Anatomy tab** ("its a little slow,
-can we optimize it? delete all labels for the cities in agi; want to
-make the video angles a bit more from the top; in opening scene unveil
-one by one w/ 2-3 seconds difference"): (1) the projection's elevation
-is 40° (was 30°), so every stop looks down more; the framings that the
-higher camera broke were re-measured (`scratchpad/ana/geo.js` projects
-anchors through the tab's exported `screen()` and prints the chrome's
-boxes) and moved: the wide shot is `F([36,18,62],232)` so the Cloud
-thesis card clears the era bar, the data halls `F([bA,1.65],10.5)` so
-the "Power block" tag clears it, the campus `F([X1+3,-3.4,2],58)` so
-Building D's tag is not under the card, the AGI overview
-`F([X2,0,17.5],104)` so the training-campus tag is not clipped, and
-Power `F([..,-2.1],50)` with the card top-right, so the substation and
-both turbine rows are in frame. When a framing changes, measure the
-tag and card boxes against the bar (top, to y≈43) and the chip rows
-(bottom, from y≈403) rather than eyeballing. (2) The Global inference
-stop has no hub tags: rows only. (3) The wide shot unveils: on Enter
-(and on the closing wide), the three thesis cards and their parts come
-on one era at a time, 0.4 s, 2.9 s and 5.4 s in (`unveilTimers`, cleared
-by `show()`), each card fading up over its pedestal (`.ana-card.show`)
-while that era's parts glow and flash; the wide holds 11 s (12 s at the
-end) to fit; with Reduce Motion all three show at once. (4) Perf: the
-kit's halo blur is 14 px, the crane re-bases only past 3× or below
-0.33×, `placeNotes` runs only when `dirty` (a camera change or a new
-note), and the craft are rebuilt every fourth frame: 17–30 ms a frame
-in the harness, 42–53 ms in the page at 1440×820 under SwiftShader.
+**v125, THE RAIL IS HORIZONTAL AND SEEN FROM ABOVE** (the user, after
+v124's 40° elevation on the 42° azimuth: "more horizontal shot.. its
+like weird angle.. want more straight down top and inclined from an
+angle"; "need to be horizontal"; "who looks at stuff in 45 degree"):
+the projection is azimuth 90°, elevation 55°. In the kit's projection
+screen x = x·sinA − y·cosA, so at azimuth 90 world x runs straight
+across the screen (the rail is a level band, the three pedestals side
+by side), world y runs down the screen foreshortened by sin 55° (0.82)
+and height z rises by cos 55° (0.57). Never a diagonal rail again; the
+45° iso was the complaint. Framings are now written from measured
+extents: `scratchpad/ana/bbox.js` prints every `data-part` group's
+extent in world x and in ground-y units (screen y / sin E, so a part's
+height is folded in), and a stop is `F([cx, gy_c + 0.047·hw, 0], hw)`
+— the centre of the subject, pushed down by 0.047·hw so the subject sits
+in the usable band between the era bar (to y≈43) and the chip rows
+(from y≈403) on the 1046×490 panel; hw from the subject's width (the
+card takes the right 29% at `tr`) or its ground-y extent × 0.82 over
+350 px. `scratchpad/ana/stops.js` shoots every stop settled and prints
+the tag and card boxes; `geo.js` projects anchors through the tab's
+exported `screen()`. The stops after the re-measure: wide
+`F([48,-25,0],200)` (the AGI thesis card anchored at z 31 so it hangs
+above the orrery rings), Cloud `F([X0+8,5.15,0],49)` with the hotel tag
+at its foot so it clears the colo's, campus `F([X1,3.4,0],72)`, halls
+`F([-28,.6,0],13.5)`, Power `F([-13.5,18.8,0],50)` card top-right, ESS
+`F([-44,13.7,0],9)`, AGI overview `F([X2-1,-5.8,0],111)`, Global
+inference `F([X2+12,4.6,0],56)` with the card bottom-left (top-right
+covered East Asia), Orbital `F([X2+12,-8,0],85)`, the training-campus
+glide `F([86.5,-2.6,0],37)`, Nuclear `F([75,-13.5,0],24)`, Physical AI
+`F([X2+78,12.9,0],62)` (the depot is deep north–south, so from above it
+is a tall strip; the AGVs tag sits on the west AGV so it clears the
+humanoids'). The hall dolly and the 1 MW rack glide are unchanged: from
+above they read as a pan up the cold aisle and across the rows.
+
+The earlier v124 round still stands: the Global inference stop has no
+hub tags (rows only); the wide shot unveils on Enter and on the closing
+wide — the three thesis cards and their parts come on one era at a
+time, 0.4 s, 2.9 s and 5.4 s in (`unveilTimers`, cleared by `show()`),
+each card fading up (`.ana-card.show`) while that era's parts glow and
+flash, the wide holding 11 s (12 s at the end); with Reduce Motion all
+three show at once. Perf: the kit's halo blur is 14 px, the crane
+re-bases only past 3× or below 0.33×, `placeNotes` runs only when
+`dirty`, and the craft are rebuilt every fourth frame: 17–30 ms a frame
+in the harness, 34–47 ms in the page at 1440×820 under SwiftShader.
 
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map

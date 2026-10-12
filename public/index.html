@@ -529,7 +529,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v124 · higher camera, unveil</div>
+<div class="ver">v125 · horizontal rail, from above</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -3092,10 +3092,19 @@ function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){
    shot, a card, tags and an amber iso-glow flash at every stop.
    Nothing here touches the 3D scenes.
    ============================================================ */
+/* ============================================================
+   THE ANATOMY — the physical footprint film again, as ONE isometric
+   paper world on the Anatomy kit (vendor/iso-kit.js): the three eras
+   on one rail at the film's own positions and scales, every part a
+   solid painted back to front, a 2D crane that pans and zooms the
+   viewBox between the film's framings, the thesis cards on the wide
+   shot, a card, tags and an amber iso-glow flash at every stop.
+   Nothing here touches the 3D scenes.
+   ============================================================ */
 window.mountAnatomy=function(host){
   var k=window.ISO, RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false, PI=Math.PI;
   var X0=-110, X1=-5, X2=144, S=92/1400, SC=60/1000;           /* the film's stage positions and map scales */
-  var P={origin:[0,0],scale:100,azimuth:42,elevation:40}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
+  var P={origin:[0,0],scale:100,azimuth:90,elevation:55}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function f1(v){ return (Math.round(v*10)/10).toString(); }
   var PL=function(x,y,w,d,r){ return {x:x,y:y,w:w,d:d,r:r==null?Math.min(.8,w/6,d/6):r}; };
@@ -3344,33 +3353,33 @@ window.mountAnatomy=function(host){
   var F=function(center,hw,o){ return Object.assign({at:center,hw:hw},o||{}); };
   var hq=TC(30,45), bA=T(330,445), gasC=T(860,110), subC=T(140,100), essC=T(90,245), wt=HUBPOS[0]||[X2,0];
   var STOPS=[
-    {id:'wide',era:-1,n:null,f:F([36,18,62],232),hold:11,title:'The physical footprint',noRing:true,glow:[],
-      cards:[{at:[X0+6,-20,2],color:'#8b93a6',glow:['hotel','colo','bld1'],title:'Cloud era',rows:['Metro data center','Regional cloud campus','Grid power','4–8 kW rack density']},{at:[X1+4,-33,2],color:'#e0a355',glow:['bld','gas','grid'],title:'Today',rows:['1 GW campus','BTM and grid power','~140 kW rack density']},{at:[X2-10,-38,2],color:'#57c7dd',glow:['react','halls','cities','orb','phys'],title:'AGI',rows:['5–10 GW campuses + edge','Nuclear and orbital compute','1 MW rack density']}]},
-    {id:'cloudair',era:0,n:'Overview',f:F([X0,0,2],36),hold:9,title:'Cloud era',slot:'tr',at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],glow:['hotel','colo','bld1'],
+    {id:'wide',era:-1,n:null,f:F([48,-25,0],200),hold:11,title:'The physical footprint',noRing:true,glow:[],
+      cards:[{at:[X0+6,-20,2],color:'#8b93a6',glow:['hotel','colo','bld1'],title:'Cloud era',rows:['Metro data center','Regional cloud campus','Grid power','4–8 kW rack density']},{at:[X1+4,-33,2],color:'#e0a355',glow:['bld','gas','grid'],title:'Today',rows:['1 GW campus','BTM and grid power','~140 kW rack density']},{at:[X2-10,-38,31],color:'#57c7dd',glow:['react','halls','cities','orb','phys'],title:'AGI',rows:['5–10 GW campuses + edge','Nuclear and orbital compute','1 MW rack density']}]},
+    {id:'cloudair',era:0,n:'Overview',f:F([X0+8,5.15,0],49),hold:9,title:'Cloud era',slot:'tr',at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],glow:['hotel','colo','bld1'],
       rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
-      tags:[{at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],l:'Carrier hotel'},{at:[TC(80,130)[0]+30*SC,TC(80,130)[1]+20*SC,16*SC],l:'Colocation facility'},{at:[TC(630,300)[0]+45*SC,TC(630,300)[1]+25*SC,16*SC],l:'Regional cloud campus'}]},
-    {id:'campus',era:1,n:'Campus',f:F([X1+3,-3.4,2],58),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
+      tags:[{at:[hq[0]+20*SC,hq[1]+5*SC,0],l:'Carrier hotel'},{at:[TC(80,130)[0]+30*SC,TC(80,130)[1]+45*SC,26*SC],l:'Colocation facility'},{at:[TC(630,300)[0]+45*SC,TC(630,300)[1]+25*SC,16*SC],l:'Regional cloud campus'}]},
+    {id:'campus',era:1,n:'Campus',f:F([X1,3.4,0],72),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:[T(330,445)[0],T(330,445)[1],12*S],l:'Building A · 250 MW'},{at:[T(870,445)[0],T(870,445)[1],12*S],l:'Building B · 250 MW'},{at:[T(330,665)[0],T(330,665)[1],12*S],l:'Building C · 250 MW'},{at:[T(870,665)[0],T(870,665)[1],12*S],l:'Building D · 250 MW'}]},
-    {id:'halls',era:1,n:'Data halls',f:F([bA[0],bA[1],1.65],10.5),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
+    {id:'halls',era:1,n:'Data halls',f:F([-28,.6,0],13.5),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
       rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
       tags:[{at:[T(204,445)[0],T(204,445)[1],2*S],l:'Power block'},{at:[T(246,441)[0],T(246,441)[1],2.5*S],l:'Hall 1'},{at:[T(302,441)[0],T(302,441)[1],2.5*S],l:'Hall 2'},{at:[T(358,441)[0],T(358,441)[1],2.5*S],l:'Hall 3'},{at:[T(414,441)[0],T(414,441)[1],2.5*S],l:'Hall 4'}]},
     {id:'nvl',era:1,n:'Inside a hall',f:F([T(234,446)[0],T(234,446)[1],.3],4.2),glide:F([T(234,462)[0],T(234,462)[1],.3],3.4),hold:7,title:'Inside a hall',slot:'tr',at:[T(232.1,452)[0],T(232.1,452)[1],2.6*S],glow:['racks'],desc:'GB200 NVL72 racks, liquid-cooled, in rows. Networking and cooling at the end of the hall.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
-    {id:'onsite',era:1,n:'Power',f:F([(gasC[0]+subC[0])/2,(gasC[1]+subC[1])/2,-2.1],50),hold:6,title:'Power',slot:'tr',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
+    {id:'onsite',era:1,n:'Power',f:F([-13.5,18.8,0],50),hold:6,title:'Power',slot:'tr',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],tags:[{at:[gasC[0],gasC[1],9*S],l:'Gas turbines · 34 × 35 MW'},{at:[subC[0],subC[1],12*S],l:'345 kV grid substation'}]},
-    {id:'bess',era:1,n:'ESS batteries',f:F([essC[0],essC[1],0],9),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
-    {id:'agiair',era:2,n:'Overview',f:F([X2,0,17.5],104),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
+    {id:'bess',era:1,n:'ESS batteries',f:F([-44,13.7,0],9),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
+    {id:'agiair',era:2,n:'Overview',f:F([X2-1,-5.8,0],111),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
       tags:[{at:[X2-65,-14,8],l:'5–10 GW training campus'},{at:[X2+12,-6,2],l:'Global inference'},{at:[X2+12,-8,30],l:'Orbital compute'},{at:[X2+78,-20,8],l:'Physical AI'}]},
-    {id:'cities',era:2,n:'Global inference',f:F([X2+12,-2,0],54),hold:6,title:'Global inference',slot:'tr',at:[(HUBPOS[1]||wt)[0],(HUBPOS[1]||wt)[1],1.5],glow:['cities','fab'],desc:'Inference buildings in every metro, connected.',
+    {id:'cities',era:2,n:'Global inference',f:F([X2+12,4.6,0],56),hold:6,title:'Global inference',slot:'bl',at:[(HUBPOS[1]||wt)[0],(HUBPOS[1]||wt)[1],1.5],glow:['cities','fab'],desc:'Inference buildings in every metro, connected.',
       rows:[['Per building','10–50 MW'],['Racks','20–60 kW']]},
-    {id:'orbit',era:2,n:'Orbital',f:F([X2+12,-4,18],62),hold:6,title:'Orbital compute',slot:'tl',at:[X2+12+26,0,38],glow:['orb']},
-    {id:'site',era:2,n:'Training campus',f:F([wt[0],wt[1],0],14),glide:F([X2-65,-8,0],30),hold:8,title:'Training campus',slot:'tr',at:[wt[0],wt[1],1.2],glow:['site','react','halls'],rows:[['5–10 GW'],['Power','Nuclear']],tags:[{at:[wt[0],wt[1],1.2],l:'West Texas'}]},
-    {id:'plant',era:2,n:'Nuclear power',f:F([X2-90+200/12,-21.3+95/12,2],24),hold:5,title:'Nuclear power',slot:'tr',at:[X2-90+100/12,-21.3+70/12,3.5],glow:['react'],rows:[['5–10 GW']]},
+    {id:'orbit',era:2,n:'Orbital',f:F([X2+12,-8,0],85),hold:6,title:'Orbital compute',slot:'tl',at:[X2+12+26,0,38],glow:['orb']},
+    {id:'site',era:2,n:'Training campus',f:F([wt[0],wt[1],0],14),glide:F([86.5,-2.6,0],37),hold:8,title:'Training campus',slot:'tr',at:[wt[0],wt[1],1.2],glow:['site','react','halls'],rows:[['5–10 GW'],['Power','Nuclear']],tags:[{at:[wt[0],wt[1],1.2],l:'West Texas'}]},
+    {id:'plant',era:2,n:'Nuclear power',f:F([75,-13.5,0],24),hold:5,title:'Nuclear power',slot:'tr',at:[X2-90+100/12,-21.3+70/12,3.5],glow:['react'],rows:[['5–10 GW']]},
     {id:'mono',era:2,n:'1 MW racks',f:F([X2-90+(30+2*110+50)/12,-21.3+(330+15)/12,.1],3.2),glide:F([X2-90+(30+2*110+50)/12,-21.3+(330+15)/12,.1],2.2),hold:6,title:'1 MW racks',slot:'tr',at:[X2-90+(30+2*110+50)/12,-21.3+(330+5+4.8*2)/12,.22],glow:['mono'],desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers.',
       rows:[['Per rack','1 MW'],['Power','800 V DC · solid-state transformers']]},
-    {id:'edge',era:2,n:'Physical AI',f:F([X2+78,0,1],34),hold:7,title:'Physical AI',slot:'tr',at:[X2+78,24,1.6],glow:['phys'],desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
-      tags:[{at:[X2+78,-11.4,3.2],l:'Industrial robots'},{at:[X2+78,20,.8],l:'AGVs'},{at:[X2+78,24,1.9],l:'Humanoids'},{at:[X2+89,12,2.4],l:'Autonomous trucks'},{at:[X2+75,31,1.4],l:'Autonomous cars'},{at:[X2+72,2,.8],l:'Drones'}]}];
+    {id:'edge',era:2,n:'Physical AI',f:F([X2+78,12.9,0],62),hold:7,title:'Physical AI',slot:'tr',at:[X2+78,24,1.6],glow:['phys'],desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
+      tags:[{at:[X2+78,-11.4,3.2],l:'Industrial robots'},{at:[X2+70.5,20,.8],l:'AGVs'},{at:[X2+78,24,1.9],l:'Humanoids'},{at:[X2+89,12,2.4],l:'Autonomous trucks'},{at:[X2+75,31,1.4],l:'Autonomous cars'},{at:[X2+72,2,.8],l:'Drones'}]}];
   var byId={}; STOPS.forEach(function(s){ byId[s.id]=s; });
   var CH=[['wide',11],['cloudair',9],['campus',7],['halls',6],['nvl',7],['onsite',6],['bess',5],['agiair',8],['cities',6],['orbit',6],['site',8],['plant',5],['mono',6],['edge',7],['wide',12]];
   var PARTNAME={hotel:'Carrier hotel',colo:'Colocation facility',bld1:'Regional cloud campus',grid1:'230 kV substation',diesels:'Diesel generators',bld:'Buildings',grid:'345 kV grid substation',gas:'Gas turbines',bess:'ESS batteries',power:'Power block',cool:'Cooling',hall:'Data halls',shell:'Building shell',racks:'GB200 NVL72 racks',campus:'Training campus',react:'Nuclear power',halls:'1 MW halls',mono:'1 MW racks',cities:'Global inference',fab:'The fabric',orb:'Orbital compute',phys:'Physical AI',site:'West Texas'};
