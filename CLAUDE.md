@@ -512,6 +512,33 @@ carry exactly the film's tags and no others: the "Cold aisle", "Hot
 aisle" and "CDUs" tags on the hall stop were an invention and were
 removed ("you are showing labels which we had killed").
 
+**v124, the user's four asks on the Anatomy tab** ("its a little slow,
+can we optimize it? delete all labels for the cities in agi; want to
+make the video angles a bit more from the top; in opening scene unveil
+one by one w/ 2-3 seconds difference"): (1) the projection's elevation
+is 40° (was 30°), so every stop looks down more; the framings that the
+higher camera broke were re-measured (`scratchpad/ana/geo.js` projects
+anchors through the tab's exported `screen()` and prints the chrome's
+boxes) and moved: the wide shot is `F([36,18,62],232)` so the Cloud
+thesis card clears the era bar, the data halls `F([bA,1.65],10.5)` so
+the "Power block" tag clears it, the campus `F([X1+3,-3.4,2],58)` so
+Building D's tag is not under the card, the AGI overview
+`F([X2,0,17.5],104)` so the training-campus tag is not clipped, and
+Power `F([..,-2.1],50)` with the card top-right, so the substation and
+both turbine rows are in frame. When a framing changes, measure the
+tag and card boxes against the bar (top, to y≈43) and the chip rows
+(bottom, from y≈403) rather than eyeballing. (2) The Global inference
+stop has no hub tags: rows only. (3) The wide shot unveils: on Enter
+(and on the closing wide), the three thesis cards and their parts come
+on one era at a time, 0.4 s, 2.9 s and 5.4 s in (`unveilTimers`, cleared
+by `show()`), each card fading up over its pedestal (`.ana-card.show`)
+while that era's parts glow and flash; the wide holds 11 s (12 s at the
+end) to fit; with Reduce Motion all three show at once. (4) Perf: the
+kit's halo blur is 14 px, the crane re-bases only past 3× or below
+0.33×, `placeNotes` runs only when `dirty` (a camera change or a new
+note), and the craft are rebuilt every fourth frame: 17–30 ms a frame
+in the harness, 42–53 ms in the page at 1440×820 under SwiftShader.
+
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map
 is rendered ONCE (`staticShadow`: `shadowMap.autoUpdate=false`), so

@@ -437,7 +437,7 @@
   .ana .iso-line[data-flow]{animation-duration:2.4s;animation-timing-function:steps(12)}
   .ana-world path,.ana-world circle,.ana-sky path{vector-effect:none}
   .ana-world[data-lod="far"] [data-lod="fine"],.ana-world[data-lod="far"] [data-lod="mid"],.ana-world[data-lod="near"] [data-lod="fine"]{display:none}
-  .ana .iso-halo{filter:blur(40px)}
+  .ana .iso-halo{filter:blur(14px)}
   .ana-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;transition:opacity .4s}
   .ana-ring{r:9;fill:none;stroke:var(--anatomy-lit);stroke-width:1}
   .ana-dot{r:1.6;fill:var(--anatomy-lit)}
@@ -456,7 +456,9 @@
   .ana-note i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--anatomy-muted);line-height:1.35;align-self:baseline}
   .ana-note em{font-style:normal;font-size:11.5px;color:var(--anatomy-strong);line-height:1.35;text-align:right;align-self:baseline}
   .ana-note i.w{grid-column:1/-1;text-transform:none;letter-spacing:0;font-size:11.5px;color:var(--anatomy-strong)}
-  .ana-card{position:absolute;transform:translate(-50%,-100%);width:170px;padding:7px 10px 6px;background:rgba(10,12,17,.95);border:1px solid rgba(255,255,255,.12);border-radius:4px}
+  .ana-card{opacity:0;transition:opacity .6s ease,transform .6s ease}
+  .ana-card.show{opacity:1!important;transform:translate(-50%,-100%)!important}
+  .ana-card{position:absolute;transform:translate(-50%,-92%);width:170px;padding:7px 10px 6px;background:rgba(10,12,17,.95);border:1px solid rgba(255,255,255,.12);border-radius:4px}
   .ana-card b{display:block;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--anatomy-strong);padding-bottom:4px;margin-bottom:6px;border-bottom:1.5px solid var(--ec)}
   .ana-card i{display:block;font-style:normal;font:10.5px/1.45 var(--mono);color:var(--anatomy-strong)}
   .ana-led circle{fill:#e0a355;opacity:.85}
@@ -527,7 +529,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v123 · play moves on</div>
+<div class="ver">v124 · higher camera, unveil</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -3081,10 +3083,19 @@ function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){
    shot, a card, tags and an amber iso-glow flash at every stop.
    Nothing here touches the 3D scenes.
    ============================================================ */
+/* ============================================================
+   THE ANATOMY — the physical footprint film again, as ONE isometric
+   paper world on the Anatomy kit (vendor/iso-kit.js): the three eras
+   on one rail at the film's own positions and scales, every part a
+   solid painted back to front, a 2D crane that pans and zooms the
+   viewBox between the film's framings, the thesis cards on the wide
+   shot, a card, tags and an amber iso-glow flash at every stop.
+   Nothing here touches the 3D scenes.
+   ============================================================ */
 window.mountAnatomy=function(host){
   var k=window.ISO, RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false, PI=Math.PI;
   var X0=-110, X1=-5, X2=144, S=92/1400, SC=60/1000;           /* the film's stage positions and map scales */
-  var P={origin:[0,0],scale:100,azimuth:42,elevation:30}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
+  var P={origin:[0,0],scale:100,azimuth:42,elevation:40}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function f1(v){ return (Math.round(v*10)/10).toString(); }
   var PL=function(x,y,w,d,r){ return {x:x,y:y,w:w,d:d,r:r==null?Math.min(.8,w/6,d/6):r}; };
@@ -3333,26 +3344,26 @@ window.mountAnatomy=function(host){
   var F=function(center,hw,o){ return Object.assign({at:center,hw:hw},o||{}); };
   var hq=TC(30,45), bA=T(330,445), gasC=T(860,110), subC=T(140,100), essC=T(90,245), wt=HUBPOS[0]||[X2,0];
   var STOPS=[
-    {id:'wide',era:-1,n:null,f:F([54,-2,48],226),hold:8,title:'The physical footprint',noRing:true,glow:['hotel','colo','bld1','bld','gas','grid','react','halls','cities','orb','phys'],
-      cards:[{at:[X0+6,-20,2],color:'#8b93a6',title:'Cloud era',rows:['Metro data center','Regional cloud campus','Grid power','4–8 kW rack density']},{at:[X1+4,-33,2],color:'#e0a355',title:'Today',rows:['1 GW campus','BTM and grid power','~140 kW rack density']},{at:[X2-10,-38,2],color:'#57c7dd',title:'AGI',rows:['5–10 GW campuses + edge','Nuclear and orbital compute','1 MW rack density']}]},
+    {id:'wide',era:-1,n:null,f:F([36,18,62],232),hold:11,title:'The physical footprint',noRing:true,glow:[],
+      cards:[{at:[X0+6,-20,2],color:'#8b93a6',glow:['hotel','colo','bld1'],title:'Cloud era',rows:['Metro data center','Regional cloud campus','Grid power','4–8 kW rack density']},{at:[X1+4,-33,2],color:'#e0a355',glow:['bld','gas','grid'],title:'Today',rows:['1 GW campus','BTM and grid power','~140 kW rack density']},{at:[X2-10,-38,2],color:'#57c7dd',glow:['react','halls','cities','orb','phys'],title:'AGI',rows:['5–10 GW campuses + edge','Nuclear and orbital compute','1 MW rack density']}]},
     {id:'cloudair',era:0,n:'Overview',f:F([X0,0,2],36),hold:9,title:'Cloud era',slot:'tr',at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],glow:['hotel','colo','bld1'],
       rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
       tags:[{at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],l:'Carrier hotel'},{at:[TC(80,130)[0]+30*SC,TC(80,130)[1]+20*SC,16*SC],l:'Colocation facility'},{at:[TC(630,300)[0]+45*SC,TC(630,300)[1]+25*SC,16*SC],l:'Regional cloud campus'}]},
-    {id:'campus',era:1,n:'Campus',f:F([X1,0,2],54),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
+    {id:'campus',era:1,n:'Campus',f:F([X1+3,-3.4,2],58),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:[T(330,445)[0],T(330,445)[1],12*S],l:'Building A · 250 MW'},{at:[T(870,445)[0],T(870,445)[1],12*S],l:'Building B · 250 MW'},{at:[T(330,665)[0],T(330,665)[1],12*S],l:'Building C · 250 MW'},{at:[T(870,665)[0],T(870,665)[1],12*S],l:'Building D · 250 MW'}]},
-    {id:'halls',era:1,n:'Data halls',f:F([bA[0],bA[1],1],9.5),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
+    {id:'halls',era:1,n:'Data halls',f:F([bA[0],bA[1],1.65],10.5),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
       rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
       tags:[{at:[T(204,445)[0],T(204,445)[1],2*S],l:'Power block'},{at:[T(246,441)[0],T(246,441)[1],2.5*S],l:'Hall 1'},{at:[T(302,441)[0],T(302,441)[1],2.5*S],l:'Hall 2'},{at:[T(358,441)[0],T(358,441)[1],2.5*S],l:'Hall 3'},{at:[T(414,441)[0],T(414,441)[1],2.5*S],l:'Hall 4'}]},
     {id:'nvl',era:1,n:'Inside a hall',f:F([T(234,446)[0],T(234,446)[1],.3],4.2),glide:F([T(234,462)[0],T(234,462)[1],.3],3.4),hold:7,title:'Inside a hall',slot:'tr',at:[T(232.1,452)[0],T(232.1,452)[1],2.6*S],glow:['racks'],desc:'GB200 NVL72 racks, liquid-cooled, in rows. Networking and cooling at the end of the hall.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
-    {id:'onsite',era:1,n:'Power',f:F([(gasC[0]+subC[0])/2,(gasC[1]+subC[1])/2,1],40),hold:6,title:'Power',slot:'bl',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
+    {id:'onsite',era:1,n:'Power',f:F([(gasC[0]+subC[0])/2,(gasC[1]+subC[1])/2,-2.1],50),hold:6,title:'Power',slot:'tr',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],tags:[{at:[gasC[0],gasC[1],9*S],l:'Gas turbines · 34 × 35 MW'},{at:[subC[0],subC[1],12*S],l:'345 kV grid substation'}]},
     {id:'bess',era:1,n:'ESS batteries',f:F([essC[0],essC[1],0],9),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
-    {id:'agiair',era:2,n:'Overview',f:F([X2,0,6],98),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
+    {id:'agiair',era:2,n:'Overview',f:F([X2,0,17.5],104),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
       tags:[{at:[X2-65,-14,8],l:'5–10 GW training campus'},{at:[X2+12,-6,2],l:'Global inference'},{at:[X2+12,-8,30],l:'Orbital compute'},{at:[X2+78,-20,8],l:'Physical AI'}]},
     {id:'cities',era:2,n:'Global inference',f:F([X2+12,-2,0],54),hold:6,title:'Global inference',slot:'tr',at:[(HUBPOS[1]||wt)[0],(HUBPOS[1]||wt)[1],1.5],glow:['cities','fab'],desc:'Inference buildings in every metro, connected.',
-      rows:[['Per building','10–50 MW'],['Racks','20–60 kW']],tags:[1,2,4,5,7,8,9,10,11].map(function(i){ var h=HUBPOS[i]||wt; return {at:[h[0],h[1],1.6],l:SITES[i][0]}; })},
+      rows:[['Per building','10–50 MW'],['Racks','20–60 kW']]},
     {id:'orbit',era:2,n:'Orbital',f:F([X2+12,-4,18],62),hold:6,title:'Orbital compute',slot:'tl',at:[X2+12+26,0,38],glow:['orb']},
     {id:'site',era:2,n:'Training campus',f:F([wt[0],wt[1],0],14),glide:F([X2-65,-8,0],30),hold:8,title:'Training campus',slot:'tr',at:[wt[0],wt[1],1.2],glow:['site','react','halls'],rows:[['5–10 GW'],['Power','Nuclear']],tags:[{at:[wt[0],wt[1],1.2],l:'West Texas'}]},
     {id:'plant',era:2,n:'Nuclear power',f:F([X2-90+200/12,-21.3+95/12,2],24),hold:5,title:'Nuclear power',slot:'tr',at:[X2-90+100/12,-21.3+70/12,3.5],glow:['react'],rows:[['5–10 GW']]},
@@ -3361,7 +3372,7 @@ window.mountAnatomy=function(host){
     {id:'edge',era:2,n:'Physical AI',f:F([X2+78,0,1],34),hold:7,title:'Physical AI',slot:'tr',at:[X2+78,24,1.6],glow:['phys'],desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
       tags:[{at:[X2+78,-11.4,3.2],l:'Industrial robots'},{at:[X2+78,20,.8],l:'AGVs'},{at:[X2+78,24,1.9],l:'Humanoids'},{at:[X2+89,12,2.4],l:'Autonomous trucks'},{at:[X2+75,31,1.4],l:'Autonomous cars'},{at:[X2+72,2,.8],l:'Drones'}]}];
   var byId={}; STOPS.forEach(function(s){ byId[s.id]=s; });
-  var CH=[['wide',8],['cloudair',9],['campus',7],['halls',6],['nvl',7],['onsite',6],['bess',5],['agiair',8],['cities',6],['orbit',6],['site',8],['plant',5],['mono',6],['edge',7],['wide',10]];
+  var CH=[['wide',11],['cloudair',9],['campus',7],['halls',6],['nvl',7],['onsite',6],['bess',5],['agiair',8],['cities',6],['orbit',6],['site',8],['plant',5],['mono',6],['edge',7],['wide',12]];
   var PARTNAME={hotel:'Carrier hotel',colo:'Colocation facility',bld1:'Regional cloud campus',grid1:'230 kV substation',diesels:'Diesel generators',bld:'Buildings',grid:'345 kV grid substation',gas:'Gas turbines',bess:'ESS batteries',power:'Power block',cool:'Cooling',hall:'Data halls',shell:'Building shell',racks:'GB200 NVL72 racks',campus:'Training campus',react:'Nuclear power',halls:'1 MW halls',mono:'1 MW racks',cities:'Global inference',fab:'The fabric',orb:'Orbital compute',phys:'Physical AI',site:'West Texas'};
 
   /* ---------- render the world once ---------- */
@@ -3385,10 +3396,10 @@ window.mountAnatomy=function(host){
   var base=null;
   function setBase(v){ base=v; var vb=f1(v.x)+' '+f1(v.y)+' '+f1(v.w)+' '+f1(v.h); svg.setAttribute('viewBox',vb); sky.setAttribute('viewBox',vb); var z=SW/v.w, wpx=Math.max(.3,Math.min(.8,.32+.22*Math.log10(Math.max(1,z*900))));
     svg.style.setProperty('--anatomy-weight',(wpx/z).toFixed(3)+'px'); sky.style.setProperty('--anatomy-weight',(wpx/z).toFixed(3)+'px'); svg.style.setProperty('--ana-land-w',((v.w>K*230?.18:.35)/z).toFixed(3)+'px'); var lod=v.w>K*230?'far':v.w>K*60?'near':'close'; if(svg.getAttribute('data-lod')!==lod) svg.setAttribute('data-lod',lod); }
-  function applyCam(){ if(!base) setBase(cam); var sc=base.w/cam.w; if(sc>2.5||sc<.4){ setBase(cam); sc=1; }
+  function applyCam(){ if(!base) setBase(cam); var sc=base.w/cam.w; if(sc>3||sc<.33){ setBase(cam); sc=1; }
     var tx=(base.x-cam.x)/cam.w*SW, ty=(base.y-cam.y)/cam.h*SH, t=(Math.abs(sc-1)<1e-6&&Math.abs(tx)<.05&&Math.abs(ty)<.05)?'none':'translate('+tx.toFixed(2)+'px,'+ty.toFixed(2)+'px) scale('+sc.toFixed(5)+')';
     if(svg.style.transform!==t){ svg.style.transform=t; sky.style.transform=t; } }
-  function setVB(v){ cam=v; applyCam(); }
+  var dirty=true; function setVB(v){ cam=v; dirty=true; applyCam(); }
   function rebase(){ if(cam&&(base.w!==cam.w||base.x!==cam.x||base.y!==cam.y)){ setBase(cam); applyCam(); } svg.classList.remove('moving'); }
   function crane(v,secs){ from=cam; to=v; mt=0; mT=(secs||1.8); settled=false; svg.classList.add('moving'); if(!from||mT===0){ to=null; setVB(v); rebase(); settled=true; } }
   function step(dt){ if(!to) return; mt+=dt; var u=mT?Math.min(1,mt/mT):1, e=u*u*(3-2*u);
@@ -3398,17 +3409,20 @@ window.mountAnatomy=function(host){
 
   /* ---------- notes: the card, the ring and leader, the tags, the thesis cards ---------- */
   function rowsHtml(rows){ return rows&&rows.length?'<div class="rows">'+rows.map(function(r){ return r[1]!=null?'<i>'+esc(r[0])+'</i><em>'+esc(r[1])+'</em>':'<i class="w">'+esc(r[0])+'</i>'; }).join('')+'</div>':''; }
-  function fillNote(st){ note.className='ana-note '+(st.slot||'tr')+((st.desc||(st.rows&&st.rows.length))?'':' t'); note.innerHTML='<b>'+esc(st.title)+'</b>'+(st.desc?'<p>'+esc(st.desc)+'</p>':'')+rowsHtml(st.rows); note.style.opacity=0; note.style.display=st.cards?'none':'';
+  function fillNote(st){ dirty=true; note.className='ana-note '+(st.slot||'tr')+((st.desc||(st.rows&&st.rows.length))?'':' t'); note.innerHTML='<b>'+esc(st.title)+'</b>'+(st.desc?'<p>'+esc(st.desc)+'</p>':'')+rowsHtml(st.rows); note.style.opacity=0; note.style.display=st.cards?'none':'';
     tagsEl.innerHTML=(st.tags||[]).map(function(t){ return '<div class="ana-tag"><span>'+esc(t.l)+'</span></div>'; }).join(''); tagsEl.style.opacity=0;
     cardsEl.innerHTML=(st.cards||[]).map(function(cd){ return '<div class="ana-card" style="--ec:'+cd.color+'"><b>'+esc(cd.title)+'</b>'+cd.rows.map(function(r){ return '<i>'+esc(r)+'</i>'; }).join('')+'</div>'; }).join(''); cardsEl.style.opacity=0;
     ov.style.opacity=0; }
   function litAll(){ svg.querySelectorAll('.iso-solid[data-lit]').forEach(function(e){ e.removeAttribute('data-lit'); }); svg.querySelectorAll('[data-part].glow,[data-part].flash,[data-part].lit').forEach(function(e){ e.classList.remove('glow'); e.classList.remove('flash'); e.classList.remove('lit'); }); }
   function light(parts,cls){ parts.forEach(function(p){ svg.querySelectorAll('[data-part="'+p+'"]').forEach(function(g){ g.classList.add(cls); g.querySelectorAll('.iso-solid').forEach(function(e){ e.setAttribute('data-lit',''); }); }); }); }
   var flashTimer=0;
+  var unveilTimers=[]; function clearUnveil(){ unveilTimers.forEach(clearTimeout); unveilTimers=[]; }
   function onSettle(){ var st=STOPS[cur]; if(!st) return; note.style.opacity=1; tagsEl.style.opacity=1; cardsEl.style.opacity=1; ov.style.opacity=1;
+    if(st.cards){ clearUnveil(); if(!entered) return; var cs=cardsEl.children, me=cur; st.cards.forEach(function(cd,i){ var go=function(){ if(cur!==me) return; cs[i].classList.add('show'); light(cd.glow||[],'glow'); if(!RM){ light(cd.glow||[],'flash'); unveilTimers.push(setTimeout(function(){ (cd.glow||[]).forEach(function(p){ svg.querySelectorAll('[data-part="'+p+'"]').forEach(function(g){ g.classList.remove('flash'); }); }); },1300)); } };
+      if(RM) go(); else unveilTimers.push(setTimeout(go,400+i*2500)); }); return; }
     if(!free){ var gs=svg.querySelectorAll('[data-part].lit'); gs.forEach(function(g){ g.classList.remove('lit'); g.classList.add('glow'); if(!RM) g.classList.add('flash'); });
       clearTimeout(flashTimer); flashTimer=setTimeout(function(){ svg.querySelectorAll('[data-part].flash').forEach(function(g){ g.classList.remove('flash'); }); },1300); } }
-  function placeNotes(){ var st=STOPS[cur]; if(!st||!cam) return;
+  function placeNotes(){ var st=STOPS[cur]; if(!st||!cam||!dirty) return; dirty=false;
     if(st.cards){ var cs=cardsEl.children; st.cards.forEach(function(cd,i){ var p=screen(cd.at); cs[i].style.left=p[0]+'px'; cs[i].style.top=p[1]+'px'; }); }
     var tg=tagsEl.children; (st.tags||[]).forEach(function(t,i){ var p=screen(t.at); tg[i].style.left=p[0]+'px'; tg[i].style.top=p[1]+'px'; });
     if(st.at&&!st.noRing){ var a=screen(st.at); ring.setAttribute('cx',a[0]); ring.setAttribute('cy',a[1]); dot.setAttribute('cx',a[0]); dot.setAttribute('cy',a[1]);
@@ -3417,7 +3431,7 @@ window.mountAnatomy=function(host){
       lead.setAttribute('x1',a[0]+dx/dl*12); lead.setAttribute('y1',a[1]+dy/dl*12); lead.setAttribute('x2',lx); lead.setAttribute('y2',ly); ov.style.visibility=dl<24?'hidden':'visible'; }
     else ov.style.visibility='hidden'; }
 
-  function show(i,o){ o=o||{}; if(i===cur&&!o.force) return; cur=i; var st=STOPS[i]; free=false; glideT=0; hold=0;
+  function show(i,o){ o=o||{}; if(i===cur&&!o.force) return; cur=i; clearUnveil(); var st=STOPS[i]; free=false; glideT=0; hold=0;
     fillNote(st); root.querySelector('.ana-title').textContent=st.title; litAll(); light(st.glow||[],'lit'); glideDone=false;
     ui.querySelectorAll('.e3d-era').forEach(function(bt){ bt.classList.toggle('on',+bt.dataset.era===st.era); }); ui.querySelectorAll('.e3d-chip').forEach(function(bt){ bt.classList.toggle('on',bt.dataset.spot===st.id); });
     crane(vbOf(st.f),o.secs==null?(cam?1.9:0):o.secs); placeNotes(); if(settled&&!to) onSettle(); }
@@ -3430,7 +3444,7 @@ window.mountAnatomy=function(host){
     else if(b.dataset.era!=null){ pause(); var id=STOPS.find(function(s){ return s.era===+b.dataset.era; }).id; chap=CH.findIndex(function(ch){ return ch[0]===id; }); show(idx(id)); }
     else if(b.hasAttribute('data-play')) setPlay(!playing);
     else if(b.hasAttribute('data-enter')) enter(); });
-  function enter(){ if(entered) return; entered=true; ui.classList.add('in'); chap=0; hold=0; setPlay(true); }
+  function enter(){ if(entered) return; entered=true; ui.classList.add('in'); chap=0; hold=0; setPlay(true); if(settled&&!to) onSettle(); }
   function keys(e){ if(!root.isConnected) return; if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)) return;
     if(e.key===' '){ e.preventDefault(); if(!entered) enter(); else setPlay(!playing); } else if(e.key==='1'||e.key==='2'||e.key==='3'){ pause(); var id=STOPS.find(function(s){ return s.era===+e.key-1; }).id; chap=CH.findIndex(function(ch){ return ch[0]===id; }); show(idx(id)); }
     else if(e.key==='ArrowRight'){ pause(); chap=Math.min(CH.length-1,chap+1); show(idx(CH[chap][0]),{force:true}); } else if(e.key==='ArrowLeft'){ pause(); chap=Math.max(0,chap-1); show(idx(CH[chap][0]),{force:true}); } }
@@ -3455,10 +3469,10 @@ window.mountAnatomy=function(host){
       if(st&&st.glide&&settled&&!free&&!glideDone){ glideT+=dt; var u=Math.min(1,glideT/Math.max(.1,CH[chap][1]-2.2)); var a=vbOf(st.f), b=vbOf(st.glide); setVB({x:a.x+(b.x-a.x)*u,y:a.y+(b.y-a.y)*u,w:a.w+(b.w-a.w)*u,h:a.h+(b.h-a.h)*u}); if(u>=1){ glideDone=true; rebase(); } }
       if(hold>CH[chap][1]){ var prev=STOPS[cur]; chap=(chap+1)%CH.length; var nid=CH[chap][0]; show(idx(nid),{force:true,secs:nid==='wide'||prev.era!==byId[nid].era?2.8:1.9}); } }
     placeNotes();
-    fr3=(fr3+1)%3; if(live.length&&!RM&&fr3===0&&cam){ live.forEach(function(l){ var g=sky.querySelector('[data-live="'+l.id+'"]'); var bx=k.iso([l.cx,l.cy,l.rings[0].z],P); if(g&&cam.w<K*260&&bx[0]>cam.x-l.rings[0].r*K*2&&bx[0]<cam.x+cam.w+l.rings[0].r*K*2) g.innerHTML=craftSvg(l.cx,l.cy,l.rings,t0); }); } }
+    fr3=(fr3+1)%4; if(live.length&&!RM&&fr3===0&&cam){ live.forEach(function(l){ var g=sky.querySelector('[data-live="'+l.id+'"]'); var bx=k.iso([l.cx,l.cy,l.rings[0].z],P); if(g&&cam.w<K*260&&bx[0]>cam.x-l.rings[0].r*K*2&&bx[0]<cam.x+cam.w+l.rings[0].r*K*2) g.innerHTML=craftSvg(l.cx,l.cy,l.rings,t0); }); } }
   size(); show(0,{secs:0}); raf=requestAnimationFrame(frame);
   return {dispose:function(){ disposed=true; cancelAnimationFrame(raf); removeEventListener('keydown',keys); if(ro) ro.disconnect(); host.classList.remove('ana-host'); host.innerHTML=''; },
-    go:function(id){ pause(); chap=Math.max(0,CH.findIndex(function(ch){ return ch[0]===id; })); show(idx(id),{force:true}); }, play:function(){ setPlay(true); }, enter:enter, stops:STOPS.map(function(s){ return s.id; }), paths:svg.querySelectorAll('path').length, settled:function(){ return settled&&!to; }, frame:function(){ var a=fps.slice(-30); return a.length?a.reduce(function(x,y){ return x+y; },0)/a.length:0; }};
+    go:function(id){ pause(); chap=Math.max(0,CH.findIndex(function(ch){ return ch[0]===id; })); show(idx(id),{force:true}); }, play:function(){ setPlay(true); }, enter:enter, stops:STOPS.map(function(s){ return s.id; }), paths:svg.querySelectorAll('path').length, screen:screen, settled:function(){ return settled&&!to; }, frame:function(){ var a=fps.slice(-30); return a.length?a.reduce(function(x,y){ return x+y; },0)/a.length:0; }};
 };
 
 let __iso=null;
