@@ -423,7 +423,7 @@
 
   /* ---- the anatomy tab: one paper world inside the dark panel ---- */
   .ana{position:absolute;inset:0;font-family:var(--mono)}
-  .ana-plate{position:absolute;inset:0;background:var(--anatomy-card);--anatomy-lit:#b8741f;overflow:hidden}
+  .ana-plate{position:absolute;inset:0;background:var(--anatomy-card);--anatomy-card:#0b0d12;--anatomy-paper:#0b0d12;--anatomy-face:#141821;--anatomy-top:#171c26;--anatomy-shade-0:#0d1016;--anatomy-shade-1:#10131a;--anatomy-shade-2:#12161e;--anatomy-shade-3:#151a23;--anatomy-lit-top:#2a2420;--anatomy-lit-shade:#1c1915;--anatomy-hi:#c9d2de;--anatomy-mid:#6b7686;--anatomy-lo:#3e4654;--anatomy-faint:#262c37;--anatomy-lit:#e0a355;--anatomy-dot:#c9d2de;--anatomy-halo:#000;--anatomy-strong:#eef1f5;--anatomy-text:#aab3c0;--anatomy-muted:#6b7686;overflow:hidden}
   .ana-stage{position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;cursor:grab;touch-action:none}
   .ana-stage:active{cursor:grabbing}
   .ana-world,.ana-sky{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -439,35 +439,32 @@
   .ana-tag{position:absolute;transform:translate(-50%,-100%);padding-bottom:16px}
   .ana-tag::before{content:'';position:absolute;left:50%;bottom:0;width:0;height:14px;border-left:1px solid var(--anatomy-mid)}
   .ana-tag::after{content:'';position:absolute;left:50%;bottom:-2px;width:3px;height:3px;margin-left:-2px;border-radius:50%;background:var(--anatomy-dot)}
-  .ana-tag span{display:block;padding:2px 6px 3px;font:10.5px var(--mono);letter-spacing:.03em;color:var(--anatomy-strong);background:var(--anatomy-paper);border:1px solid var(--anatomy-mid);border-radius:2px;white-space:nowrap}
-  .ana-note{position:absolute;top:50px;width:300px;padding:11px 14px 10px;background:rgba(251,251,250,.92);border:1px solid rgba(24,24,26,.22);border-radius:4px;pointer-events:none;transition:opacity .4s}
+  .ana-tag span{display:block;padding:2px 6px 3px;font:10.5px var(--mono);letter-spacing:.03em;color:var(--anatomy-strong);background:rgba(8,10,14,.9);border:1px solid var(--anatomy-mid);border-radius:2px;white-space:nowrap}
+  .ana-note{position:absolute;top:50px;width:300px;padding:11px 14px 10px;background:rgba(8,10,14,.84);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:4px;pointer-events:none;transition:opacity .4s}
   .ana-note.tr{right:16px}.ana-note.tl{left:16px}.ana-note.br{right:16px;top:auto;bottom:96px}.ana-note.bl{left:16px;top:auto;bottom:96px}
   .ana-note.t{width:auto;min-width:0;padding:8px 12px 7px}
   .ana-note b{display:block;font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:-.005em;color:var(--anatomy-strong);line-height:1.2}
   .ana-note p{margin:6px 0 0;font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--anatomy-text)}
-  .ana-note .rows{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(24,24,26,.12)}
+  .ana-note .rows{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.10)}
   .ana-note i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--anatomy-muted);line-height:1.35;align-self:baseline}
   .ana-note em{font-style:normal;font-size:11.5px;color:var(--anatomy-strong);line-height:1.35;text-align:right;align-self:baseline}
   .ana-note i.w{grid-column:1/-1;text-transform:none;letter-spacing:0;font-size:11.5px;color:var(--anatomy-strong)}
-  .ana-card{position:absolute;transform:translate(-50%,-100%);width:170px;padding:7px 10px 6px;background:rgba(251,251,250,.94);border:1px solid rgba(24,24,26,.2);border-radius:4px}
+  .ana-card{position:absolute;transform:translate(-50%,-100%);width:170px;padding:7px 10px 6px;background:rgba(8,10,14,.86);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:4px}
   .ana-card b{display:block;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--anatomy-strong);padding-bottom:4px;margin-bottom:6px;border-bottom:1.5px solid var(--ec)}
   .ana-card i{display:block;font-style:normal;font:10.5px/1.45 var(--mono);color:var(--anatomy-strong)}
-  .ana-led circle{fill:#e0a355;opacity:.7}
+  .ana-led circle{fill:#e0a355;opacity:.85}
   .ana-corner{position:absolute;font:10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--anatomy-muted);white-space:nowrap;pointer-events:none;max-width:60%;overflow:hidden;text-overflow:ellipsis}
   .ana-title{right:18px;top:18px;color:var(--anatomy-strong);font-weight:600}
   .ana-hint{left:18px;bottom:88px;font-size:10px;max-width:50%}
-  .ana-land{fill:var(--anatomy-shade-1);stroke:var(--anatomy-lo);stroke-width:var(--ana-land-w,.4px);stroke-linejoin:round}
+  .ana-land{fill:var(--anatomy-shade-3);stroke:var(--anatomy-mid);stroke-width:var(--ana-land-w,.4px);stroke-linejoin:round}
   /* iso-glow: the lit part's edges go amber with a soft bloom; a flash as the crane settles, an echo on hover */
-  .ana [data-part].glow{filter:drop-shadow(0 0 1px rgba(224,163,85,.55))}
+  .ana [data-part].glow{filter:drop-shadow(0 0 2px rgba(224,163,85,.7))}
   .ana [data-part].flash{animation:ana-flash 1.8s ease both}
-  @keyframes ana-flash{0%{filter:none}18%{filter:drop-shadow(0 0 4px rgba(224,163,85,.75))}60%{filter:drop-shadow(0 0 4px rgba(224,163,85,.6))}100%{filter:drop-shadow(0 0 1px rgba(224,163,85,.55))}}
+  @keyframes ana-flash{0%{filter:none}18%{filter:drop-shadow(0 0 7px rgba(224,163,85,.95))}60%{filter:drop-shadow(0 0 7px rgba(224,163,85,.8))}100%{filter:drop-shadow(0 0 2px rgba(224,163,85,.7))}}
   .ana [data-part].hover .iso-edge{stroke:var(--anatomy-lit)}
-  .ana [data-part].hover{filter:drop-shadow(0 0 3px rgba(224,163,85,.6))}
+  .ana [data-part].hover{filter:drop-shadow(0 0 5px rgba(224,163,85,.75))}
   /* the chrome on paper */
-  .ana .e3d button{background:rgba(251,251,250,.9);color:var(--anatomy-text);border-color:rgba(24,24,26,.18);backdrop-filter:none;-webkit-backdrop-filter:none}
-  .ana .e3d button:hover{color:var(--anatomy-strong);border-color:rgba(24,24,26,.4)}
-  .ana .e3d-era.on,.ana .e3d-chip.on{color:var(--anatomy-strong);background:#fff;border-color:var(--ec)}
-  .ana .e3d-grp+.e3d-grp{border-left-color:rgba(24,24,26,.16);padding-left:10px}
+  .ana .e3d-grp+.e3d-grp{padding-left:10px}
   .ana .e3d-play.on{color:var(--anatomy-strong)}
   .ana .e3d-chips{bottom:12px;flex-wrap:wrap;gap:8px 10px}
   .ana .e3d-chip{padding:4px 9px 4px 18px;font-size:10px;white-space:nowrap}
@@ -524,7 +521,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v119 · anatomy, one world</div>
+<div class="ver">v120 · anatomy, dark</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -3061,6 +3058,15 @@ function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){
    shot, a card, tags and an amber iso-glow flash at every stop.
    Nothing here touches the 3D scenes.
    ============================================================ */
+/* ============================================================
+   THE ANATOMY — the physical footprint film again, as ONE isometric
+   paper world on the Anatomy kit (vendor/iso-kit.js): the three eras
+   on one rail at the film's own positions and scales, every part a
+   solid painted back to front, a 2D crane that pans and zooms the
+   viewBox between the film's framings, the thesis cards on the wide
+   shot, a card, tags and an amber iso-glow flash at every stop.
+   Nothing here touches the 3D scenes.
+   ============================================================ */
 window.mountAnatomy=function(host){
   var k=window.ISO, RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false, PI=Math.PI;
   var X0=-110, X1=-5, X2=144, S=92/1400, SC=60/1000;           /* the film's stage positions and map scales */
@@ -3336,7 +3342,7 @@ window.mountAnatomy=function(host){
 
   /* ---------- the chrome ---------- */
   host.classList.add('ana-host');
-  host.innerHTML='<div class="ana"><div class="ana-plate iso" data-theme="light"><div class="ana-stage"><svg class="iso-svg ana-world" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The physical footprint: the Cloud era, Today and the AGI era on one rail">'+body+'</svg>'+
+  host.innerHTML='<div class="ana"><div class="ana-plate iso"><div class="ana-stage"><svg class="iso-svg ana-world" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The physical footprint: the Cloud era, Today and the AGI era on one rail">'+body+'</svg>'+
     '<svg class="iso-svg ana-sky" xmlns="http://www.w3.org/2000/svg">'+live.map(function(l){ return '<g class="ana-live" data-live="'+l.id+'"></g>'; }).join('')+'</svg><svg class="ana-svg"><circle class="ana-ring"/><circle class="ana-dot"/><line class="ana-lead"/></svg><div class="ana-tags"></div><div class="ana-note"></div><div class="ana-cards"></div></div>'+
     '<div class="ana-corner ana-title"></div><div class="ana-corner ana-hint">Drag to pan · wheel to zoom · space plays</div></div>'+
     '<div class="e3d ana-chrome in"><div class="e3d-bar">'+ERA.map(function(e,i){ return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+e.c+'"><i></i>'+e.n+'<b>'+e.y+'</b></button>'; }).join('')+'<span class="e3d-gap"></span><button class="e3d-play" data-play title="Play (space)"></button></div>'+

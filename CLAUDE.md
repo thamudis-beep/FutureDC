@@ -446,7 +446,13 @@ the stage, projected each frame; the iso-glow is the kit's `data-lit`
 (amber edges, lighter top) on the stop's `[data-part]` groups plus a
 1 px amber `drop-shadow`, a stronger flash as the crane settles
 (`ana-flash`, 1.8 s) and an echo on hover, which also names the part in
-the hint corner. Probes: `scratchpad/ana/dev.html` mounts the tab alone
+the hint corner. The tab is DARK (v120, "dark background is preferred",
+with the Raptor frame as the reference): the kit's dark tokens are
+overridden on `.ana-plate` to the site's own near-black (#0b0d12 paper,
+faces a step lighter, lines from #262c37 faint to #c9d2de hi), the lit
+tone is the amber (#e0a355), the cards, tags and chips are the film's
+own dark glass, and the glow is stronger than it was on paper because
+on black the halo is the light. Probes: `scratchpad/ana/dev.html` mounts the tab alone
 (`shot.js` waits for `settled()` and reports frame time; no WebGL, so
 no SwiftShader wait) and `scratchpad/anapage.js` shoots it inside the
 page and checks dispose. Frame time under SwiftShader is 100–250 ms at
