@@ -429,6 +429,8 @@
   .ana{position:absolute;inset:0;font-family:var(--mono)}
   .ana-plate{position:absolute;inset:0;background:var(--anatomy-card);--anatomy-card:#0b0d12;--anatomy-paper:#0b0d12;--anatomy-face:#141821;--anatomy-top:#171c26;--anatomy-shade-0:#0d1016;--anatomy-shade-1:#10131a;--anatomy-shade-2:#12161e;--anatomy-shade-3:#151a23;--anatomy-lit-top:#2a2420;--anatomy-lit-shade:#1c1915;--anatomy-hi:#c9d2de;--anatomy-mid:#6b7686;--anatomy-lo:#3e4654;--anatomy-faint:#262c37;--anatomy-lit:#e0a355;--anatomy-dot:#c9d2de;--anatomy-halo:#000;--anatomy-strong:#eef1f5;--anatomy-text:#aab3c0;--anatomy-muted:#6b7686;overflow:hidden}
   .ana-stage{position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;cursor:grab;touch-action:none}
+  .ana-stage{perspective:1400px}
+  .ana-3d{position:absolute;inset:0;transform-origin:50% 50%;transform-style:flat;will-change:transform}
   .ana-stage:active{cursor:grabbing}
   .ana-world,.ana-sky{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
   .ana-world,.ana-sky{transform-origin:0 0;will-change:transform}
@@ -443,8 +445,8 @@
   .ana-dot{r:1.6;fill:var(--anatomy-lit)}
   .ana-lead{stroke:var(--anatomy-lit);stroke-width:.8;opacity:.8}
   .ana-tags,.ana-cards{position:absolute;inset:0;pointer-events:none;transition:opacity .4s}
-  .ana-tag{position:absolute;transform:translate(-50%,-100%);padding-bottom:16px}
-  .ana-tag::before{content:'';position:absolute;left:50%;bottom:0;width:0;height:14px;border-left:1px solid var(--anatomy-mid)}
+  .ana-tag{position:absolute;transform:translate(-50%,-100%);padding-bottom:var(--stem,16px)}
+  .ana-tag::before{content:'';position:absolute;left:50%;bottom:0;width:0;height:calc(var(--stem,16px) - 2px);border-left:1px solid var(--anatomy-mid)}
   .ana-tag::after{content:'';position:absolute;left:50%;bottom:-2px;width:3px;height:3px;margin-left:-2px;border-radius:50%;background:var(--anatomy-dot)}
   .ana-tag span{display:block;padding:2px 6px 3px;font:10.5px var(--mono);letter-spacing:.03em;color:var(--anatomy-strong);background:rgba(8,10,14,.9);border:1px solid var(--anatomy-mid);border-radius:2px;white-space:nowrap}
   .ana-note{position:absolute;top:50px;width:300px;padding:11px 14px 10px;background:rgba(10,12,17,.94);border:1px solid rgba(255,255,255,.12);border-radius:4px;pointer-events:none;transition:opacity .4s}
@@ -529,7 +531,7 @@
   <div class="body s0" id="stackBody"><div class="stack" id="stack"></div><div class="panel" id="panel"></div><div class="s0hint">Choose a layer</div></div>
 </section>
 
-<div class="ver">v125 · horizontal rail, from above</div>
+<div class="ver">v126 · middle angle, 3D crane</div>
 
 <script>
 const C_PRE='#8b93a6',C_TOD='#e0a355',C_FUT='#57c7dd';
@@ -3101,10 +3103,19 @@ function killScene(){sceneTok++;if(liveScene){try{liveScene.dispose();}catch(e){
    shot, a card, tags and an amber iso-glow flash at every stop.
    Nothing here touches the 3D scenes.
    ============================================================ */
+/* ============================================================
+   THE ANATOMY — the physical footprint film again, as ONE isometric
+   paper world on the Anatomy kit (vendor/iso-kit.js): the three eras
+   on one rail at the film's own positions and scales, every part a
+   solid painted back to front, a 2D crane that pans and zooms the
+   viewBox between the film's framings, the thesis cards on the wide
+   shot, a card, tags and an amber iso-glow flash at every stop.
+   Nothing here touches the 3D scenes.
+   ============================================================ */
 window.mountAnatomy=function(host){
   var k=window.ISO, RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false, PI=Math.PI;
   var X0=-110, X1=-5, X2=144, S=92/1400, SC=60/1000;           /* the film's stage positions and map scales */
-  var P={origin:[0,0],scale:100,azimuth:90,elevation:55}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
+  var P={origin:[0,0],scale:100,azimuth:70,elevation:45}, K=P.scale*Math.sqrt(1.6);   /* user px per world unit */
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function f1(v){ return (Math.round(v*10)/10).toString(); }
   var PL=function(x,y,w,d,r){ return {x:x,y:y,w:w,d:d,r:r==null?Math.min(.8,w/6,d/6):r}; };
@@ -3350,36 +3361,36 @@ window.mountAnatomy=function(host){
 
   /* ---------- the storyline: the film's stops, framings, cards and tags ---------- */
   var ERA=[{n:'Cloud',y:'2023',c:'#8b93a6'},{n:'Today',y:'2026',c:'#e0a355'},{n:'AGI',y:'2031',c:'#57c7dd'}];
-  var F=function(center,hw,o){ return Object.assign({at:center,hw:hw},o||{}); };
+  var F=function(center,hw,o){ return Object.assign({at:center,hw:hw},o||{}); }, FB=function(o){ return o; };   /* FB: a framing fitted at show time to the drawn parts and/or world boxes, inside the chrome's margins */
   var hq=TC(30,45), bA=T(330,445), gasC=T(860,110), subC=T(140,100), essC=T(90,245), wt=HUBPOS[0]||[X2,0];
   var STOPS=[
-    {id:'wide',era:-1,n:null,f:F([48,-25,0],200),hold:11,title:'The physical footprint',noRing:true,glow:[],
+    {id:'wide',era:-1,n:null,f:FB({parts:['orb'],boxes:[[-150,260,-43,43,0,0]],m:{t:125}}),hold:11,title:'The physical footprint',noRing:true,glow:[],
       cards:[{at:[X0+6,-20,2],color:'#8b93a6',glow:['hotel','colo','bld1'],title:'Cloud era',rows:['Metro data center','Regional cloud campus','Grid power','4–8 kW rack density']},{at:[X1+4,-33,2],color:'#e0a355',glow:['bld','gas','grid'],title:'Today',rows:['1 GW campus','BTM and grid power','~140 kW rack density']},{at:[X2-10,-38,31],color:'#57c7dd',glow:['react','halls','cities','orb','phys'],title:'AGI',rows:['5–10 GW campuses + edge','Nuclear and orbital compute','1 MW rack density']}]},
-    {id:'cloudair',era:0,n:'Overview',f:F([X0+8,5.15,0],49),hold:9,title:'Cloud era',slot:'tr',at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],glow:['hotel','colo','bld1'],
+    {id:'cloudair',era:0,n:'Overview',f:FB({boxes:[[TC(0,0)[0],TC(1000,0)[0],TC(0,667)[1],TC(0,0)[1],0,24*SC]],m:{r:120,t:95}}),hold:9,title:'Cloud era',slot:'tr',at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],glow:['hotel','colo','bld1'],
       rows:[['Rack power','4–8 kW'],['Downtown','Carrier hotel · colocation'],['Out of town','Regional cloud campus']],
-      tags:[{at:[hq[0]+20*SC,hq[1]+5*SC,0],l:'Carrier hotel'},{at:[TC(80,130)[0]+30*SC,TC(80,130)[1]+45*SC,26*SC],l:'Colocation facility'},{at:[TC(630,300)[0]+45*SC,TC(630,300)[1]+25*SC,16*SC],l:'Regional cloud campus'}]},
-    {id:'campus',era:1,n:'Campus',f:F([X1,3.4,0],72),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
+      tags:[{at:[hq[0]+20*SC,hq[1]+25*SC,72*SC],l:'Carrier hotel',stem:52},{at:[TC(80,130)[0]+30*SC,TC(80,130)[1]+20*SC,16*SC],l:'Colocation facility'},{at:[TC(630,300)[0]+45*SC,TC(630,300)[1]+25*SC,16*SC],l:'Regional cloud campus'}]},
+    {id:'campus',era:1,n:'Campus',f:FB({boxes:[[T(0,0)[0],T(1400,0)[0],T(0,900)[1],T(0,0)[1],0,12*S]],m:{r:120,t:95}}),hold:7,title:'1 GW campus',slot:'tr',at:[bA[0],bA[1],12*S],glow:['bld','hall','shell'],desc:'Four buildings of four liquid-cooled halls, hybrid power: grid, gas and batteries.',
       rows:[['Rack power','~140 kW'],['IT load','1 GW'],['Facility load','~1.2 GW · PUE ~1.2'],['Racks','~7,100']],
       tags:[{at:[T(330,445)[0],T(330,445)[1],12*S],l:'Building A · 250 MW'},{at:[T(870,445)[0],T(870,445)[1],12*S],l:'Building B · 250 MW'},{at:[T(330,665)[0],T(330,665)[1],12*S],l:'Building C · 250 MW'},{at:[T(870,665)[0],T(870,665)[1],12*S],l:'Building D · 250 MW'}]},
-    {id:'halls',era:1,n:'Data halls',f:F([-28,.6,0],13.5),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
+    {id:'halls',era:1,n:'Data halls',f:FB({boxes:[[T(195,0)[0],T(445,0)[0],T(0,495)[1],T(0,395)[1],0,12*S]],m:{r:310,t:95}}),hold:6,title:'One building',slot:'tr',at:[T(246,441)[0],T(246,441)[1],2.5*S],glow:['hall','racks'],
       rows:[['Campus','4 buildings'],['Building','4 halls · 250 MW'],['Hall','~440 racks · ~62 MW'],['Total','16 halls · 1 GW']],
       tags:[{at:[T(204,445)[0],T(204,445)[1],2*S],l:'Power block'},{at:[T(246,441)[0],T(246,441)[1],2.5*S],l:'Hall 1'},{at:[T(302,441)[0],T(302,441)[1],2.5*S],l:'Hall 2'},{at:[T(358,441)[0],T(358,441)[1],2.5*S],l:'Hall 3'},{at:[T(414,441)[0],T(414,441)[1],2.5*S],l:'Hall 4'}]},
     {id:'nvl',era:1,n:'Inside a hall',f:F([T(234,446)[0],T(234,446)[1],.3],4.2),glide:F([T(234,462)[0],T(234,462)[1],.3],3.4),hold:7,title:'Inside a hall',slot:'tr',at:[T(232.1,452)[0],T(232.1,452)[1],2.6*S],glow:['racks'],desc:'GB200 NVL72 racks, liquid-cooled, in rows. Networking and cooling at the end of the hall.',
       rows:[['Per rack','~140 kW'],['Per hall','~440 racks · ~62 MW']]},
-    {id:'onsite',era:1,n:'Power',f:F([-13.5,18.8,0],50),hold:6,title:'Power',slot:'tr',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
+    {id:'onsite',era:1,n:'Power',f:FB({parts:['gas','grid'],m:{r:310,t:95}}),hold:6,title:'Power',slot:'tr',at:[gasC[0],gasC[1],9*S],glow:['gas','grid'],desc:'Hybrid: a 345 kV grid substation and behind-the-meter gas turbines.',
       rows:[['Gas turbines','34 × 35 MW'],['Grid','345 kV substation']],tags:[{at:[gasC[0],gasC[1],9*S],l:'Gas turbines · 34 × 35 MW'},{at:[subC[0],subC[1],12*S],l:'345 kV grid substation'}]},
-    {id:'bess',era:1,n:'ESS batteries',f:F([-44,13.7,0],9),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
-    {id:'agiair',era:2,n:'Overview',f:F([X2-1,-5.8,0],111),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
+    {id:'bess',era:1,n:'ESS batteries',f:FB({parts:['bess'],m:{r:310}}),hold:5,title:'ESS batteries',slot:'tr',at:[essC[0],essC[1],3*S],glow:['bess'],desc:'Load shaping, ramp and backup.',rows:[['Containers','120']]},
+    {id:'agiair',era:2,n:'Overview',f:FB({parts:['react','campus','cities','orb','phys'],m:{t:95}}),hold:8,title:'AGI era',slot:'tl',at:[X2,0,4],noRing:true,glow:['react','halls','mono','cities','fab','orb','phys'],
       tags:[{at:[X2-65,-14,8],l:'5–10 GW training campus'},{at:[X2+12,-6,2],l:'Global inference'},{at:[X2+12,-8,30],l:'Orbital compute'},{at:[X2+78,-20,8],l:'Physical AI'}]},
-    {id:'cities',era:2,n:'Global inference',f:F([X2+12,4.6,0],56),hold:6,title:'Global inference',slot:'bl',at:[(HUBPOS[1]||wt)[0],(HUBPOS[1]||wt)[1],1.5],glow:['cities','fab'],desc:'Inference buildings in every metro, connected.',
+    {id:'cities',era:2,n:'Global inference',f:FB({parts:['cities'],m:{l:320}}),hold:6,title:'Global inference',slot:'bl',at:[(HUBPOS[1]||wt)[0],(HUBPOS[1]||wt)[1],1.5],glow:['cities','fab'],desc:'Inference buildings in every metro, connected.',
       rows:[['Per building','10–50 MW'],['Racks','20–60 kW']]},
-    {id:'orbit',era:2,n:'Orbital',f:F([X2+12,-8,0],85),hold:6,title:'Orbital compute',slot:'tl',at:[X2+12+26,0,38],glow:['orb']},
-    {id:'site',era:2,n:'Training campus',f:F([wt[0],wt[1],0],14),glide:F([86.5,-2.6,0],37),hold:8,title:'Training campus',slot:'tr',at:[wt[0],wt[1],1.2],glow:['site','react','halls'],rows:[['5–10 GW'],['Power','Nuclear']],tags:[{at:[wt[0],wt[1],1.2],l:'West Texas'}]},
-    {id:'plant',era:2,n:'Nuclear power',f:F([75,-13.5,0],24),hold:5,title:'Nuclear power',slot:'tr',at:[X2-90+100/12,-21.3+70/12,3.5],glow:['react'],rows:[['5–10 GW']]},
+    {id:'orbit',era:2,n:'Orbital',f:FB({parts:['orb'],m:{t:95}}),hold:6,title:'Orbital compute',slot:'tl',at:[X2+12+26,0,38],glow:['orb']},
+    {id:'site',era:2,n:'Training campus',f:F([wt[0],wt[1],0],14),glide:FB({parts:['react','campus'],m:{r:310,t:95}}),hold:8,title:'Training campus',slot:'tr',at:[wt[0],wt[1],1.2],glow:['site','react','halls'],rows:[['5–10 GW'],['Power','Nuclear']],tags:[{at:[wt[0],wt[1],1.2],l:'West Texas'}]},
+    {id:'plant',era:2,n:'Nuclear power',f:FB({parts:['react'],m:{r:310}}),hold:5,title:'Nuclear power',slot:'tr',at:[X2-90+100/12,-21.3+70/12,3.5],glow:['react'],rows:[['5–10 GW']]},
     {id:'mono',era:2,n:'1 MW racks',f:F([X2-90+(30+2*110+50)/12,-21.3+(330+15)/12,.1],3.2),glide:F([X2-90+(30+2*110+50)/12,-21.3+(330+15)/12,.1],2.2),hold:6,title:'1 MW racks',slot:'tr',at:[X2-90+(30+2*110+50)/12,-21.3+(330+5+4.8*2)/12,.22],glow:['mono'],desc:'Next-generation racks (Rubin Ultra, Feynman) at 1 MW each, liquid-cooled. Fed at 800 V DC through solid-state transformers.',
       rows:[['Per rack','1 MW'],['Power','800 V DC · solid-state transformers']]},
-    {id:'edge',era:2,n:'Physical AI',f:F([X2+78,12.9,0],62),hold:7,title:'Physical AI',slot:'tr',at:[X2+78,24,1.6],glow:['phys'],desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
-      tags:[{at:[X2+78,-11.4,3.2],l:'Industrial robots'},{at:[X2+70.5,20,.8],l:'AGVs'},{at:[X2+78,24,1.9],l:'Humanoids'},{at:[X2+89,12,2.4],l:'Autonomous trucks'},{at:[X2+75,31,1.4],l:'Autonomous cars'},{at:[X2+72,2,.8],l:'Drones'}]}];
+    {id:'edge',era:2,n:'Physical AI',f:FB({boxes:[[X2+66,X2+90,-16,34,0,6]],m:{r:310,t:95}}),hold:7,title:'Physical AI',slot:'tr',at:[X2+78,24,1.6],glow:['phys'],desc:'Robots, humanoids, autonomous vehicles, drones, served from the edge.',
+      tags:[{at:[X2+78,-11.4,3.2],l:'Industrial robots'},{at:[X2+70.5,20,.8],l:'AGVs',stem:50},{at:[X2+78,24,1.9],l:'Humanoids'},{at:[X2+89,12,2.4],l:'Autonomous trucks',stem:24},{at:[X2+75,33,1.4],l:'Autonomous cars'},{at:[X2+72,2,.8],l:'Drones'}]}];
   var byId={}; STOPS.forEach(function(s){ byId[s.id]=s; });
   var CH=[['wide',11],['cloudair',9],['campus',7],['halls',6],['nvl',7],['onsite',6],['bess',5],['agiair',8],['cities',6],['orbit',6],['site',8],['plant',5],['mono',6],['edge',7],['wide',12]];
   var PARTNAME={hotel:'Carrier hotel',colo:'Colocation facility',bld1:'Regional cloud campus',grid1:'230 kV substation',diesels:'Diesel generators',bld:'Buildings',grid:'345 kV grid substation',gas:'Gas turbines',bess:'ESS batteries',power:'Power block',cool:'Cooling',hall:'Data halls',shell:'Building shell',racks:'GB200 NVL72 racks',campus:'Training campus',react:'Nuclear power',halls:'1 MW halls',mono:'1 MW racks',cities:'Global inference',fab:'The fabric',orb:'Orbital compute',phys:'Physical AI',site:'West Texas'};
@@ -3390,17 +3401,25 @@ window.mountAnatomy=function(host){
 
   /* ---------- the chrome ---------- */
   host.classList.add('ana-host');
-  host.innerHTML='<div class="ana"><div class="ana-plate iso"><div class="ana-stage"><svg class="iso-svg ana-world" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The physical footprint: the Cloud era, Today and the AGI era on one rail">'+body+'</svg>'+
-    '<svg class="iso-svg ana-sky" xmlns="http://www.w3.org/2000/svg">'+live.map(function(l){ return '<g class="ana-live" data-live="'+l.id+'"></g>'; }).join('')+'</svg><svg class="ana-svg"><circle class="ana-ring"/><circle class="ana-dot"/><line class="ana-lead"/></svg><div class="ana-tags"></div><div class="ana-note"></div><div class="ana-cards"></div></div>'+
+  host.innerHTML='<div class="ana"><div class="ana-plate iso"><div class="ana-stage"><div class="ana-3d"><svg class="iso-svg ana-world" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The physical footprint: the Cloud era, Today and the AGI era on one rail">'+body+'</svg>'+
+    '<svg class="iso-svg ana-sky" xmlns="http://www.w3.org/2000/svg">'+live.map(function(l){ return '<g class="ana-live" data-live="'+l.id+'"></g>'; }).join('')+'</svg></div><svg class="ana-svg"><circle class="ana-ring"/><circle class="ana-dot"/><line class="ana-lead"/></svg><div class="ana-tags"></div><div class="ana-note"></div><div class="ana-cards"></div></div>'+
     '<div class="ana-corner ana-title"></div><div class="ana-corner ana-hint">Drag to pan · wheel to zoom · space plays</div></div>'+
     '<div class="e3d ana-chrome'+(RM?' rm':'')+'"><div class="e3d-enter"><button data-enter>Enter</button><p class="e3d-rm">Reduce Motion is on in your system settings. The film plays; the ambient motion is off.</p></div><div class="e3d-bar">'+ERA.map(function(e,i){ return '<button class="e3d-era" data-era="'+i+'" style="--ec:'+e.c+'"><i></i>'+e.n+'<b>'+e.y+'</b></button>'; }).join('')+'<span class="e3d-gap"></span><button class="e3d-play" data-play title="Play (space)"></button></div>'+
     '<div class="e3d-chips">'+ERA.map(function(e,i){ return (i===2?'<i class="ana-brk"></i>':'')+'<div class="e3d-grp" style="--ec:'+e.c+'"><div class="e3d-row">'+STOPS.filter(function(s){ return s.era===i; }).map(function(s){ return '<button class="e3d-chip" data-spot="'+s.id+'">'+s.n+'</button>'; }).join('')+'</div></div>'; }).join('')+'</div></div></div>';
-  var root=host.querySelector('.ana'), stage=root.querySelector('.ana-stage'), svg=root.querySelector('.ana-world'), sky=root.querySelector('.ana-sky'), ov=root.querySelector('.ana-svg'), tagsEl=root.querySelector('.ana-tags'), note=root.querySelector('.ana-note'), cardsEl=root.querySelector('.ana-cards'), ui=root.querySelector('.ana-chrome');
+  var root=host.querySelector('.ana'), stage=root.querySelector('.ana-stage'), wrap=root.querySelector('.ana-3d'), svg=root.querySelector('.ana-world'), sky=root.querySelector('.ana-sky'), ov=root.querySelector('.ana-svg'), tagsEl=root.querySelector('.ana-tags'), note=root.querySelector('.ana-note'), cardsEl=root.querySelector('.ana-cards'), ui=root.querySelector('.ana-chrome');
   var ring=ov.querySelector('.ana-ring'), dot=ov.querySelector('.ana-dot'), lead=ov.querySelector('.ana-lead');
 
   /* ---------- the camera: a viewBox, and one crane between framings ---------- */
   var SW=1,SH=1; function size(){ SW=stage.clientWidth||1000; SH=stage.clientHeight||400; }
-  function vbOf(f){ var sc=k.iso(f.at,P); var w=f.hw*2*K; var h=w*SH/SW; return {x:sc[0]-w/2,y:sc[1]-h/2,w:w,h:h}; }
+  var bbCache={}; function partBox(n){ if(bbCache[n]!==undefined) return bbCache[n]; var b=null; svg.querySelectorAll('[data-part="'+n+'"]').forEach(function(g){ var r; try{ r=g.getBBox(); }catch(e){ return; } if(!r.width&&!r.height) return; b=b?[Math.min(b[0],r.x),Math.min(b[1],r.y),Math.max(b[2],r.x+r.width),Math.max(b[3],r.y+r.height)]:[r.x,r.y,r.x+r.width,r.y+r.height]; }); return bbCache[n]=b; }
+  function boxOf(f){ var b=null, grow=function(x0,y0,x1,y1){ b=b?[Math.min(b[0],x0),Math.min(b[1],y0),Math.max(b[2],x1),Math.max(b[3],y1)]:[x0,y0,x1,y1]; };
+    (f.parts||[]).forEach(function(n){ var r=partBox(n); if(r) grow(r[0],r[1],r[2],r[3]); });
+    (f.boxes||[]).forEach(function(bx){ for(var i=0;i<8;i++){ var sc=k.iso([bx[i&1],bx[2+((i>>1)&1)],bx[4+(i>>2)]],P); grow(sc[0],sc[1],sc[0],sc[1]); } }); return b||[0,0,1,1]; }
+  /* a framing is either a world point and a half-width, or a fit: the drawn parts' and world boxes' screen extent placed inside the margins (the era bar, the chips, a card's column) */
+  function vbOf(f){ if(f.at){ var sc=k.iso(f.at,P); var w=f.hw*2*K; var h=w*SH/SW; return {x:sc[0]-w/2,y:sc[1]-h/2,w:w,h:h}; }
+    var b=boxOf(f), m=f.m||{}, lx=m.l||0, rx=m.r||0, ty=m.t||60, by=m.b||95, pad=f.pad||1.06;
+    var bw=Math.max(1,(b[2]-b[0])*pad), bh=Math.max(1,(b[3]-b[1])*pad), s=Math.min((SW-lx-rx)/bw,(SH-ty-by)/bh), W=SW/s, H=SH/s;
+    return {x:(b[0]+b[2])/2-(lx+(SW-lx-rx)/2)/s, y:(b[1]+b[3])/2-(ty+(SH-ty-by)/2)/s, w:W, h:H}; }
   var fr3=0, fps=[], entered=false, glideDone=false, cam=null, from=null, to=null, mt=0, mT=0, cur=-1, chap=0, playing=false, hold=0, free=false, settled=false, glideT=0, raf=0, disposed=false, t0=0, last=0;
   var base=null;
   function setBase(v){ base=v; var vb=f1(v.x)+' '+f1(v.y)+' '+f1(v.w)+' '+f1(v.h); svg.setAttribute('viewBox',vb); sky.setAttribute('viewBox',vb); var z=SW/v.w, wpx=Math.max(.3,Math.min(.8,.32+.22*Math.log10(Math.max(1,z*900))));
@@ -3410,16 +3429,21 @@ window.mountAnatomy=function(host){
     if(svg.style.transform!==t){ svg.style.transform=t; sky.style.transform=t; } }
   var dirty=true; function setVB(v){ cam=v; dirty=true; applyCam(); }
   function rebase(){ if(cam&&(base.w!==cam.w||base.x!==cam.x||base.y!==cam.y)){ setBase(cam); applyCam(); } svg.classList.remove('moving'); }
-  function crane(v,secs){ from=cam; to=v; mt=0; mT=(secs||1.8); settled=false; svg.classList.add('moving'); if(!from||mT===0){ to=null; setVB(v); rebase(); settled=true; } }
-  function step(dt){ if(!to) return; mt+=dt; var u=mT?Math.min(1,mt/mT):1, e=u*u*(3-2*u);
-    var lw=Math.exp(Math.log(from.w)*(1-e)+Math.log(to.w)*e), lh=lw*SH/SW, cx=(from.x+from.w/2)*(1-e)+(to.x+to.w/2)*e, cy=(from.y+from.h/2)*(1-e)+(to.y+to.h/2)*e;
-    setVB({x:cx-lw/2,y:cy-lh/2,w:lw,h:lh}); if(u>=1){ to=null; rebase(); settled=true; onSettle(); } }
+  /* the crane is the film's: rise, cross, settle. Crossing a distance it pulls up (a zoom hump of up to 1.5x) and pitches the world away (a rotateX under perspective on the wrapper, up to 8 deg), both on a sine over the move, so the camera reads as flying over the rail rather than sliding a map; a zoom in place neither rises nor tilts */
+  var rise=0, tilt=0;
+  function crane(v,secs){ from=cam; to=v; mt=0; mT=(secs||1.8); settled=false; svg.classList.add('moving'); if(!from||mT===0){ to=null; setVB(v); rebase(); settled=true; return; }
+    var dist=Math.hypot((to.x+to.w/2)-(from.x+from.w/2),(to.y+to.h/2)-(from.y+from.h/2)); var eff=dist/Math.min(from.w,to.w)+Math.abs(Math.log(to.w/from.w)); rise=Math.min(.42,Math.max(0,dist/Math.max(from.w,to.w)-.15)*.8); tilt=Math.min(8,Math.max(0,eff-.4)*3.5); }
+  function step(dt){ if(!to) return; mt+=dt; var u=mT?Math.min(1,mt/mT):1, e=u*u*(3-2*u), hump=Math.sin(Math.PI*e);
+    var lw=Math.exp(Math.log(from.w)*(1-e)+Math.log(to.w)*e+rise*hump), lh=lw*SH/SW, cx=(from.x+from.w/2)*(1-e)+(to.x+to.w/2)*e, cy=(from.y+from.h/2)*(1-e)+(to.y+to.h/2)*e;
+    setVB({x:cx-lw/2,y:cy-lh/2,w:lw,h:lh}); wrap.style.transform=u<1?'rotateX('+(-tilt*hump).toFixed(2)+'deg)':''; if(u>=1){ to=null; rebase(); settled=true; onSettle(); } }
+  /* on a hold the world breathes: a slow pitch and yaw of about a degree under the same perspective, which moves a tag's anchor by under a pixel, so the notes stay put */
+  function breathe(){ if(RM||to){ return; } wrap.style.transform='rotateX('+(1.1*Math.sin(t0*.31)).toFixed(3)+'deg) rotateY('+(.5*Math.sin(t0*.23+1.3)).toFixed(3)+'deg)'; }
   function screen(p3){ var sc=k.iso(p3,P); return [(sc[0]-cam.x)/cam.w*SW,(sc[1]-cam.y)/cam.h*SH]; }
 
   /* ---------- notes: the card, the ring and leader, the tags, the thesis cards ---------- */
   function rowsHtml(rows){ return rows&&rows.length?'<div class="rows">'+rows.map(function(r){ return r[1]!=null?'<i>'+esc(r[0])+'</i><em>'+esc(r[1])+'</em>':'<i class="w">'+esc(r[0])+'</i>'; }).join('')+'</div>':''; }
   function fillNote(st){ dirty=true; note.className='ana-note '+(st.slot||'tr')+((st.desc||(st.rows&&st.rows.length))?'':' t'); note.innerHTML='<b>'+esc(st.title)+'</b>'+(st.desc?'<p>'+esc(st.desc)+'</p>':'')+rowsHtml(st.rows); note.style.opacity=0; note.style.display=st.cards?'none':'';
-    tagsEl.innerHTML=(st.tags||[]).map(function(t){ return '<div class="ana-tag"><span>'+esc(t.l)+'</span></div>'; }).join(''); tagsEl.style.opacity=0;
+    tagsEl.innerHTML=(st.tags||[]).map(function(t){ return '<div class="ana-tag"'+(t.stem?' style="--stem:'+t.stem+'px"':'')+'><span>'+esc(t.l)+'</span></div>'; }).join(''); tagsEl.style.opacity=0;
     cardsEl.innerHTML=(st.cards||[]).map(function(cd){ return '<div class="ana-card" style="--ec:'+cd.color+'"><b>'+esc(cd.title)+'</b>'+cd.rows.map(function(r){ return '<i>'+esc(r)+'</i>'; }).join('')+'</div>'; }).join(''); cardsEl.style.opacity=0;
     ov.style.opacity=0; }
   function litAll(){ svg.querySelectorAll('.iso-solid[data-lit]').forEach(function(e){ e.removeAttribute('data-lit'); }); svg.querySelectorAll('[data-part].glow,[data-part].flash,[data-part].lit').forEach(function(e){ e.classList.remove('glow'); e.classList.remove('flash'); e.classList.remove('lit'); }); }
@@ -3473,8 +3497,8 @@ window.mountAnatomy=function(host){
 
   /* ---------- the loop: the crane, the film's clock, the glides, the craft ---------- */
   function frame(now){ if(disposed) return; raf=requestAnimationFrame(frame); var raw=last?(now-last)/1000:1/60, dt=Math.min(raw,1/30); last=now; t0+=dt; fps.push(raw); if(fps.length>40) fps.shift();
-    if(to) step(dt);
-    else if(playing){ var st=STOPS[cur]; hold+=dt;
+    if(to) step(dt); else breathe();
+    if(!to&&playing){ var st=STOPS[cur]; hold+=dt;
       if(st&&st.glide&&settled&&!free&&!glideDone){ glideT+=dt; var u=Math.min(1,glideT/Math.max(.1,CH[chap][1]-2.2)); var a=vbOf(st.f), b=vbOf(st.glide); setVB({x:a.x+(b.x-a.x)*u,y:a.y+(b.y-a.y)*u,w:a.w+(b.w-a.w)*u,h:a.h+(b.h-a.h)*u}); if(u>=1){ glideDone=true; rebase(); } }
       if(hold>CH[chap][1]){ var prev=STOPS[cur]; chap=(chap+1)%CH.length; var nid=CH[chap][0]; show(idx(nid),{force:true,secs:nid==='wide'||prev.era!==byId[nid].era?2.8:1.9}); } }
     placeNotes();

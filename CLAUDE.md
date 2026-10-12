@@ -411,8 +411,8 @@ and the tab's own `.ana-*` rules sit in the page's `<style>`; nothing
 else of the skill ships. v118 was thirteen separate figures, one per
 stop, and was wrong: "to be clear, I want to replicate the existing
 scene". v119 is ONE WORLD: one SVG of the whole rail (about 18,000
-paths, built in about 2 s) on one projection (azimuth 90°, elevation
-55° since v125 — see below, `P.scale` 100, `K` user units per world unit), the three pedestals
+paths, built in about 2 s) on one projection (azimuth 70°, elevation
+45° since v126 — see below, `P.scale` 100, `K` user units per world unit), the three pedestals
 at the film's own X0/X1/X2 and sizes, every stage laid out from the
 film's plans through the film's own metre→world maps (`T` = the film's
 `W`, `TC` = its `WC`, the AGI stage at the film's 1:12 diorama origin,
@@ -512,38 +512,49 @@ carry exactly the film's tags and no others: the "Cold aisle", "Hot
 aisle" and "CDUs" tags on the hall stop were an invention and were
 removed ("you are showing labels which we had killed").
 
-**v125, THE RAIL IS HORIZONTAL AND SEEN FROM ABOVE** (the user, after
-v124's 40° elevation on the 42° azimuth: "more horizontal shot.. its
-like weird angle.. want more straight down top and inclined from an
-angle"; "need to be horizontal"; "who looks at stuff in 45 degree"):
-the projection is azimuth 90°, elevation 55°. In the kit's projection
-screen x = x·sinA − y·cosA, so at azimuth 90 world x runs straight
-across the screen (the rail is a level band, the three pedestals side
-by side), world y runs down the screen foreshortened by sin 55° (0.82)
-and height z rises by cos 55° (0.57). Never a diagonal rail again; the
-45° iso was the complaint. Framings are now written from measured
-extents: `scratchpad/ana/bbox.js` prints every `data-part` group's
-extent in world x and in ground-y units (screen y / sin E, so a part's
-height is folded in), and a stop is `F([cx, gy_c + 0.047·hw, 0], hw)`
-— the centre of the subject, pushed down by 0.047·hw so the subject sits
-in the usable band between the era bar (to y≈43) and the chip rows
-(from y≈403) on the 1046×490 panel; hw from the subject's width (the
-card takes the right 29% at `tr`) or its ground-y extent × 0.82 over
-350 px. `scratchpad/ana/stops.js` shoots every stop settled and prints
-the tag and card boxes; `geo.js` projects anchors through the tab's
-exported `screen()`. The stops after the re-measure: wide
-`F([48,-25,0],200)` (the AGI thesis card anchored at z 31 so it hangs
-above the orrery rings), Cloud `F([X0+8,5.15,0],49)` with the hotel tag
-at its foot so it clears the colo's, campus `F([X1,3.4,0],72)`, halls
-`F([-28,.6,0],13.5)`, Power `F([-13.5,18.8,0],50)` card top-right, ESS
-`F([-44,13.7,0],9)`, AGI overview `F([X2-1,-5.8,0],111)`, Global
-inference `F([X2+12,4.6,0],56)` with the card bottom-left (top-right
-covered East Asia), Orbital `F([X2+12,-8,0],85)`, the training-campus
-glide `F([86.5,-2.6,0],37)`, Nuclear `F([75,-13.5,0],24)`, Physical AI
-`F([X2+78,12.9,0],62)` (the depot is deep north–south, so from above it
-is a tall strip; the AGVs tag sits on the west AGV so it clears the
-humanoids'). The hall dolly and the 1 MW rack glide are unchanged: from
-above they read as a pan up the cold aisle and across the rows.
+**v126, THE MIDDLE ANGLE AND A 3D CRANE** (the user's three
+corrections in a row: v124's 40° on the 42° azimuth was "weird angle..
+who looks at stuff in 45 degree"; v125's azimuth 90 / elevation 55
+was "totally on top"; "think need a slight angle vs totally on top and
+play more with camera movements on 3d dimensionalities. Prob a baby
+btwn this and few versions back?"): the projection is azimuth 70°,
+elevation 45°. In the kit's projection screen x = x·sinA − y·cosA, so
+the rail runs across the screen with a slope of about 14° and the
+walls show; never the 45° diagonal, never flat plan. FRAMINGS ARE FITTED,
+NOT HAND-PLACED: a stop's `f` is `FB({parts, boxes, m, pad})` and
+`vbOf` resolves it at show time from the drawn geometry — the union of
+the named `data-part` groups' `getBBox` (cached in `bbCache`) and of
+world boxes `[x0,x1,y0,y1,z0,z1]` projected at their eight corners —
+placed inside pixel margins `m` (`t` the era bar, default 60, 95 where
+the top item carries a tag; `b` the chips, 95; `r` 310 keeps the whole
+subject left of a `tr` card, 120 lets the card over an empty corner;
+`l` 320 for a `bl` card). So a change of azimuth or elevation reframes
+every stop; only the dollies (the hall aisle, the 1 MW rows, the West
+Texas marker) stay as world points. The wide fits the rail box plus
+the orrery with `t:125` for the thesis cards; Cloud, campus and Building
+A are world boxes in the plans' metres through `TC`/`T`; Physical AI is
+the machines' box only (the depot is deep north–south). Tags that would
+pile up carry a longer `stem` (px, a CSS var on the tag): the hotel's
+52 so it clears the colo's, the AGVs' 50 and the trucks' 24 in the
+depot. `scratchpad/ana/stops.js` shoots every stop settled and prints
+the tag and card boxes; `bbox.js` prints part extents; `mid.js` shoots
+mid-crane frames and the wrapper's tilt.
+
+THE CRANE IS THE FILM'S — rise, cross, settle. The two SVGs sit in a
+`.ana-3d` wrapper under `perspective:1400px` on the stage. On a move,
+`crane()` sizes a rise (a zoom hump of up to e^.42 from the distance
+in the larger frame) and a tilt (up to 8° from the distance in the
+smaller frame plus the zoom ratio), and `step()` applies both on
+sin(π·e) over the move: the viewBox pulls up as it crosses, and the
+wrapper pitches the world away (`rotateX`) and back, so the camera
+reads as flying over the rail rather than sliding a map. A zoom in
+place neither rises nor tilts. The chrome is hidden during a move, so
+the pitch never misplaces a tag; at settle the transform is cleared.
+On a hold `breathe()` drifts the wrapper about a degree of pitch and
+half a degree of yaw under the same perspective, which moves an
+anchor by under a pixel, so the notes stay put; it is ambient, so it
+is off under Reduce Motion. Frame time is unchanged (17–19 ms in the
+harness) because the transforms composite the cached raster.
 
 The earlier v124 round still stands: the Global inference stop has no
 hub tags (rows only); the wide shot unveils on Enter and on the closing
