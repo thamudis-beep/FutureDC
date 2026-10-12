@@ -392,63 +392,69 @@ line, no cabinets, no "thick cyan", no world map, no SMR count on a card.
 Earlier rejects still stand: a wireframe globe on a stem, a circular site
 with glowing pads, a race-drone flythrough, the back-to-front frame.
 
-**The Anatomy tab** (`mountAnatomy`, Data Center topic 08, `#stack/dc/7`,
-v118) is the footprint again, drawn as an instrument on paper instead
-of the 3D film: the user asked for "an alternative version... a new
-tab... current remains as is / unchanged", in the look of a reference
-frame (an isometric paper diagram: white cubes with faint face shading,
-graphite lines, tiled belts, boxed mono tags with a stem to the roof,
-one pastel accent) and of the Anatomy skill he attached
-(github.com/wheresryan22/anatomy) and iso-glow. THE 3D SCENES ARE NOT
-TOUCHED BY IT: the topic is appended last so every existing route keeps
-its index, and the only shared code is `mountScene`, which routes
-`scene:'anatomy'` to `loadIsoKit()` + `mountAnatomy` the way the others
-go through `loadThree()`. The kit is vendored once as
-`public/vendor/iso-kit.js` (the skill's `kit/iso-kit.mjs` with its
-exports gathered on `window.ISO`; MIT, licence beside it), its
-stylesheet (`kit/iso.css`) and the tab's own `.ana-*` rules are in the
-page's `<style>`, and nothing else of the skill ships. The skill's own
-rules that apply here: every part is a solid painted back to front
-(`figure()` sorts items by `depthOf` of their centre, the base plate
-first, floors at a large negative bias, tags last); four-tone shading
-from the kit, never a wireframe; base plate on a halo with a groove and
-corner screws; structure `mid`, the subject `hi`, floors `lo`; every
-line ends on something (a tag's stem lands on a roof point with a dot,
-a tower's line on a plate-edge anchor); light theme, paper
-`--anatomy-card`. The two departures from the skill are the user's:
-boxed tags in the drawing (the reference frame has them) and the
-iso-glow — the lit subject's edges go amber (`--anatomy-lit`) with a
-soft `drop-shadow` bloom on its `[data-part]` groups, a stronger flash
-on arrival (`ana-flash`, 1.8 s) and an echo on hover. The skill sizes
-this request as an Epic (three eras, thirteen figures); it was built as
-thirteen Figure-grade drawings (60–760 solids each) on a shared parts
-vocabulary — `hall` (louvre band, pilasters, rooftop units, penthouse,
-dock doors), `pad` (gravel, finned transformers, switchgear), `coolers`,
-`lattice` (with the incoming line), `turbine`, `reactor` (drum, seams,
-a stepped dome), `containers`, `racks` (unit lines, pulsing LEDs),
-`road`, `lamps`, `car`, `truck`, `humanoid`, `drone`, `arm`,
-`trainingCampus`, `world` (the embedded `MAP.land` laid on the plate
-top by `topMatrix`, hubs at real lat/lon through a Natural Earth 1 fit
-to the embedded `HUBS` — `FIT`, about 4 px off — arcs as screen-space
-quadratics with the kit's flowing dash, fifty cities as pulsing dots)
-and `orrery` (ring rails on posts over the world, craft rebuilt each
-frame in the loop). The stops are the film's, in the film's order,
-with the film's figures and wording on the corners: Cloud overview ·
-Today campus, one building, inside a hall (fourteen racks of every row,
-said so), power, ESS · AGI overview, global inference, orbital,
-training campus, nuclear power, the 1 MW rack (an exploded anatomy:
-frame, eighteen trays, the NVSwitch band, manifolds with a stub to every
-tray, the 800 V DC busbar, CDU ports), physical AI. Chrome is the
-film's own classes restyled for paper (`.ana .e3d-*`), two chip rows
-(`.ana-brk` breaks before the AGI group — one row overflowed), the
-corners of the skill's card (title top right, hint bottom left, the
-rows bottom right; hover names the part there), play/pause with holds,
-keys 1/2/3, arrows, space. Probes: `scratchpad/ana/dev.html` mounts
-the tab alone (`shot.js` shoots every stop in seconds — no WebGL, so
+**The Anatomy tab** (`mountAnatomy`, Data Center topic 08, `#stack/dc/7`)
+is THE SAME SCENE AS THE FILM, drawn as an isometric instrument on paper:
+the user's ask, stated twice, is "replicate the existing physical
+footprint scene of the 3 data center eras in this new look and feel,
+in a NEW TAB", with the 3D film left "as is / unchanged and backed up".
+The look is his reference frame (an isometric paper diagram: white
+cubes with faint face shading, graphite lines, boxed mono tags on a stem
+to the roof) and the Anatomy skill he attached
+(github.com/wheresryan22/anatomy), plus iso-glow. THE 3D SCENES ARE NOT
+TOUCHED: the topic is appended last so every route keeps its index, and
+the only shared code is `mountScene`, which routes `scene:'anatomy'` to
+`loadIsoKit()` + `mountAnatomy` the way the others go through
+`loadThree()`. The kit is vendored once as `public/vendor/iso-kit.js`
+(the skill's `kit/iso-kit.mjs` with its exports gathered on
+`window.ISO`; MIT, licence beside it); its stylesheet (`kit/iso.css`)
+and the tab's own `.ana-*` rules sit in the page's `<style>`; nothing
+else of the skill ships. v118 was thirteen separate figures, one per
+stop, and was wrong: "to be clear, I want to replicate the existing
+scene". v119 is ONE WORLD: one SVG of the whole rail (about 18,000
+paths, built in about 2 s) on one projection (azimuth 42°, elevation
+30°, `P.scale` 100, `K` user units per world unit), the three pedestals
+at the film's own X0/X1/X2 and sizes, every stage laid out from the
+film's plans through the film's own metre→world maps (`T` = the film's
+`W`, `TC` = its `WC`, the AGI stage at the film's 1:12 diorama origin,
+world plate, orrery centre and depot x), every part a solid painted
+back to front (`items` sorted by `depthOf` of the part's centre, the
+plates and floors at large negative biases, adjacent items of one part
+and level of detail coalesced into one `<g data-part data-lod>` so a
+glow filter costs one group, not hundreds), and a 2D CRANE: a stop is a
+framing `{at, hw}` (a world point and a half-width in world units);
+`vbOf` turns it into a viewBox, `crane()` eases between viewBoxes in
+log-scale over 1.9 s (2.8 s across eras), a stop may `glide` to a second
+framing over its hold (the hall dolly, the campus marker → the campus),
+and drag pans, wheel zooms, both pausing the film. Stroke weight is set
+in user units from the zoom (`--anatomy-weight`, `vector-effect:none`)
+so lines stay 0.3–0.8 px; three levels of detail by viewBox width
+(`data-lod` far/near/close hide `[data-lod=fine]` and `mid` items — rack
+unit lines, LEDs, rooftop rings — when they would be sub-pixel); the
+LEDs are faint amber dots (`.ana-led`, size in world units × K — a size
+in the old px convention gave 30-unit amber discs that read as an orange
+pad, v119's one real bug); the craft ride the orrery rails on a second
+SVG (`.ana-sky`, same viewBox, its own layer, rebuilt every third frame
+and only while the orrery is in view) so the world SVG never repaints
+at rest. The stops, framings, holds, cards, rows, tags, glows and
+chapter order are the film's (`STOPS`, `CH`): wide (the three thesis
+cards hung over each pedestal's back edge) → Cloud overview → campus ·
+data halls · inside a hall · power · ESS → AGI overview · global
+inference · orbital · training campus · nuclear · 1 MW racks · physical
+AI → wide. The card sits in a corner (`slot` tl/tr/bl/br, bottom slots
+clear the chips) with a ring and leader on the thing; tags are DOM over
+the stage, projected each frame; the iso-glow is the kit's `data-lit`
+(amber edges, lighter top) on the stop's `[data-part]` groups plus a
+1 px amber `drop-shadow`, a stronger flash as the crane settles
+(`ana-flash`, 1.8 s) and an echo on hover, which also names the part in
+the hint corner. Probes: `scratchpad/ana/dev.html` mounts the tab alone
+(`shot.js` waits for `settled()` and reports frame time; no WebGL, so
 no SwiftShader wait) and `scratchpad/anapage.js` shoots it inside the
-page and checks dispose. What a 4× sweep would still add: the explode
-on hover for the rack, true domes (`kit/lathe.mjs`), wheels as turned
-parts, and the skill's line-end and depth audits.
+page and checks dispose. Frame time under SwiftShader is 100–250 ms at
+the close stops (CPU raster of thousands of paths); a real GPU is
+faster but SVG raster is still CPU-bound, so keep the LOD gates and the
+sky layer. What the skill's 4× sweep would still add: the explode on
+hover, true domes from `kit/lathe.mjs`, turned wheels, and the skill's
+line-end and depth audits.
 
 **Rendering on any computer** (v116, "frozen in my work laptop
 chrome"): the rig keeps three safeguards. The eras scene's shadow map
